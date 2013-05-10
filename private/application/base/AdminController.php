@@ -1,9 +1,9 @@
 <?php
-namespace application\controller
+namespace application\base
 {
 	use nutshell\plugin\mvc\Controller;
 	
-	class Index extends Controller
+	class AdminController extends Controller
 	{
 		public function index()
 		{

@@ -1,16 +1,16 @@
 <?php
 namespace application\controller
 {
-	use nutshell\plugin\mvc\Controller;
+	use application\base\AdminController;
 	
-	class Index extends Controller
+	class Admin extends AdminController
 	{
 		public function index()
 		{
 			$websiteTitle	="Nuts n' Bolts";
 			$brandTitle		="Nuts n' Bolts";
 			
-			$this->view->setTemplate('index');
+			$this->view->setTemplate('admin');
 			$this->view->setVar('NS_ENV',NS_ENV);
 			
 			
