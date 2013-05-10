@@ -6,10 +6,7 @@ namespace application\controller
 	class Index extends Controller
 	{
 		public function index()
-		{
-			$websiteTitle	="Nuts n' Bolts";
-			$brandTitle		="Nuts n' Bolts";
-			
+		{\
 			$this->view->setTemplate('index');
 			$this->view->setVar('NS_ENV',NS_ENV);
 			

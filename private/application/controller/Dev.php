@@ -27,10 +27,15 @@ namespace application\controller
 		public function generateModels()
 		{
 			$this->guard();
-
+			
+			// $db=Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database;
+			// die(Nutshell::getInstance()->config->plugin->Mvc->connection);
+			$db=$this->plugin->Db->{Nutshell::getInstance()->config->plugin->Mvc->connection};
+			var_dump(get_class($db));
 			// Get list of Table Names
 			$query = "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = ?";
-			$tables = $this->plugin->MvcQuery->db->getResultFromQuery($query, Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database);
+			$db->select($query,array(Nutshell::getInstance()->config->plugin->Mvc->connection));
+			$tables = $db->result('assoc');
 			$models = array();
 			foreach($tables as $tableData)
 			{
@@ -70,7 +75,7 @@ namespace application\controller
 					printf("Processing %s...\n", $dbFile);
 					if($query = file_get_contents(sprintf('%s../../doc/%s.sql', APP_HOME, $dbFile)))
 					{
-						$this->plugin->MvcQuery->db->getResultFromQuery($query, Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database);
+						$this->plugin->Db->getResultFromQuery($query, Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database);
 					}
 				}
 
@@ -112,7 +117,7 @@ namespace application\controller
 					printf("Processing %s...\n", $dbFile);
 					if($query = file_get_contents(sprintf('%s../../doc/%s.sql', APP_HOME, $dbFile)))
 					{
-						$this->plugin->MvcQuery->db->getResultFromQuery($query, Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database);
+						$this->plugin->Db->getResultFromQuery($query, Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database);
 					}
 				}
 

@@ -7,15 +7,19 @@ namespace application\controller
 	{
 		public function index()
 		{
-			$websiteTitle	="Nuts n' Bolts";
-			$brandTitle		="Nuts n' Bolts";
+			$this->dashboard();
+		}
+		
+		public function dashboard()
+		{
+			$this->addBreadcrumb('Dashboard','icon-dashboard');
 			
-			$this->view->setTemplate('admin');
-			$this->view->setVar('NS_ENV',NS_ENV);
-			
-			
-			$this->view->setVar('websiteTitle',	$websiteTitle);
-			$this->view->setVar('brandTitle',	$brandTitle);
+			$this->view->render();
+		}
+		
+		public function articles()
+		{
+			$this->addBreadcrumb('Articles','icon-list');
 			
 			$this->view->render();
 		}
