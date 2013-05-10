@@ -15,22 +15,8 @@
 				<i class="icon-caret-down"></i>
 			</span>
 		</a>
-		<ul id="content-subs" class="collapse ">
-			<li class="">
-				<a href="/admin/content/create/1">
-					<i class="icon-list"></i> News Article
-				</a>
-			</li>
-			<li class="">
-				<a href="/admin/content/create/2">
-					<i class="icon-file"></i> Blog Entry
-				</a>
-			</li>
-			<li class="">
-				<a href="/admin/content/create/3">
-					<i class="icon-picture"></i> Gallery
-				</a>
-			</li>
+		<ul id="content-subs" class="collapse">
+			<?php $tpl->navContentTypes(); ?>
 		</ul>
 	</li>
 	<li class="dark-nav">

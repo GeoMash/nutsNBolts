@@ -18,6 +18,8 @@ Content Types
 id
 name
 description
+icon
+status
 
 
 

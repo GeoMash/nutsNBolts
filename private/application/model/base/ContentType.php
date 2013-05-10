@@ -24,6 +24,7 @@ namespace application\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'name' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
+			'icon' => 'varchar(50) NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 
 		);
 	}

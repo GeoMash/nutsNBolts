@@ -1,9 +1,9 @@
 <?php
-namespace application\controller
+namespace application\controller\admin
 {
 	use application\base\AdminController;
 	
-	class Admin extends AdminController
+	class Index extends AdminController
 	{
 		public function index()
 		{
@@ -12,8 +12,8 @@ namespace application\controller
 		
 		public function dashboard()
 		{
+			$this->setContentView('admin/dashboard');
 			$this->addBreadcrumb('Dashboard','icon-dashboard');
-			
 			$this->view->render();
 		}
 		
