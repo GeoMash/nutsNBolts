@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Docs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Always force latest IE rendering engine or request Chrome Frame -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+  <!-- Use title if it's in the page YAML frontmatter -->
+  <title>Docs</title>
+
+  <link href="stylesheets/application.css" media="screen" rel="stylesheet" type="text/css" />
+  <script src="javascripts/application.js" type="text/javascript"></script>
+
+  <!--[if lt IE 9]>
+    <script src="javascripts/html5shiv.js" type="text/javascript"></script>
+  <![endif]-->
+
+</head>
+
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <a class="brand" href="./">Docs</a>
+
+      <div class="nav-collapse collapse">
+        <ul class="nav">
+
+          
+
+              
+              <li>
+                <a href="index.html">Home</a>
+              </li>
+
+          
+
+              
+              <li>
+                <a href="files.html">Files</a>
+              </li>
+
+          
+
+              
+              <li>
+                <a href="general_layout.html">Layout</a>
+              </li>
+
+          
+
+              
+              <li>
+                <a href="widgets.html">Widgets</a>
+              </li>
+
+          
+
+              
+              <li>
+                <a href="help.html">Help</a>
+              </li>
+
+          
+
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+
+  <!-- Docs nav
+  ================================================== -->
+  <div class="row-fluid">
+    <div class="span3 bs-docs-sidebar">
+      <ul class="nav nav-list bs-docs-sidenav">
+
+        
+            <li><a href="#structure">General Structure</a></li>
+        
+            <li><a href="#stylesheets">Stylesheet files</a></li>
+        
+            <li><a href="#javascripts">JavaScript files</a></li>
+        
+            <li><a href="#html_files">HTML files</a></li>
+        
+
+      </ul>
+    </div>
+
+    <div class="span9">
+
+      
+
+      
+          <section id="structure">
+            <div class="page-header">
+              <h4>General Structure</h4>
+            </div>
+            <p>
+  Core Admin is a theme built with <a href="http://middlemanapp.com" target="_blank">middleman</a>. What this means is you get a lot of goodies that you can use to easily maintain the theme's structure in all aspects. You get by default the full power of SCSS, Compass, CoffeeScript, Sprockets, and much more!
+</p>
+
+<p>
+  The structure of the <b>source</b> folder looks like this:
+</p>
+
+<ul>
+  <li><i class="icon-folder-open"></i> <b>font</b></li>
+  <li><i class="icon-folder-open"></i> <b>images</b></li>
+  <li>
+    <i class="icon-folder-open"></i> <b>javascripts</b>
+    <ul>
+      <li><i class="icon-folder-close"></i> <b>vendor</b> - here are all the vendored javascript plugins</li>
+      <li><b>other files</b> - things that are not in the vendor folder, which are theme specific (initializers etc)</li>
+    </ul>
+  </li>
+  <li>
+    <i class="icon-folder-open"></i> <b>stylesheets</b>
+    <ul>
+      <li>
+        <i class="icon-folder-close"></i> <b>bootstrap</b> - all the bootstrap files in SCSS format, using assets from the
+        <a href="https://github.com/thomas-mcdonald/bootstrap-sass" target="_blank">bootstrap-sass</a> gem
+      </li>
+      <li><b>other files</b> - any plugins or custom code goes here</li>
+    </ul>
+  </li>
+  <li><i class="icon-folder-open"></i> <b>layouts</b> - contains the layout files and things that look the same on every page</li>
+  <li><i class="icon-folder-open"></i> <b>pages</b> - the actual pages that you'll find in this theme</li>
+  <li><i class="icon-folder-open"></i> <b>partials</b> - common pieces of html that define components and get rendered in multiple pages (easier to follow than going through the whole html page)</li>
+</ul>
+
+          </section>
+      
+          <section id="stylesheets">
+            <div class="page-header">
+              <h4>Stylesheet files</h4>
+            </div>
+            <p>
+  The structure of the <b>stylesheets</b> folder looks like this:
+</p>
+
+<ul>
+  <li>
+    <i class="icon-folder-close"></i> <b>bootstrap</b> - all the bootstrap files in SCSS format, using assets from the
+    <a href="https://github.com/thomas-mcdonald/bootstrap-sass" target="_blank">bootstrap-sass</a> gem
+  </li>
+  <li><b>application.css</b> - the theme manifest in which all imports are declared</li>
+  <li><b>accordion.css.scss</b> - restyled boostrap accordion plugin</li>
+  <li><b>action_nav.css.scss</b> - the big buttons you see on top on the dashboard</li>
+  <li><b>_arrow.css.scss</b> - custom mixin for generating arrow boxes (based on cssarrowplease)</li>
+  <li><b>badges.css.scss</b> - restyled bootstrap badges and labels</li>
+  <li><b>base.css.scss</b> - theme basic elements styles</li>
+  <li><b>bootstrap_alerts.css.scss</b> - restyled bootstrap alerts</li>
+  <li><b>bootstrap-editable.css.scss</b> - modified <a href="https://github.com/vitalets/x-editable" target="_blank">boostrap-editable</a> css file - removed any background images except the loading spinner, added fontawesome characters instead</li>
+  <li><b>bootstrap-editable-fix.css.scss</b> - custom code for the datepicker included in bootstrap-editable</li>
+  <li><b>bootstrap_include.css.scss</b> - base file for importing the bootstrap library to get all of Bootstrap's styles, mixins and variables! (this is the file that the manifest actually imports, and NOT the boostrap folder itself)</li>
+  <li><b>bootstrap-wizard.css.scss</b> - theme file for the <a href="https://github.com/amoffat/bootstrap-application-wizard" target="_blank">wizard plugin</a></li>
+  <li><b>bootstrap-wysihtml5.css.scss</b> - theme file for the <a href="https://github.com/jhollingworth/bootstrap-wysihtml5">boostrap wysihtml5</a> plugin</li>
+  <li><b>box.css.scss</b> - code for the boxes you'll see in every page of the theme</li>
+  <li><b>breadcrumbs.css.scss</b> - breadcrumbs and code for the right menu on the breadcrumbs bar</li>
+  <li><b>buttons.css.scss</b> - all the goodies that make up the buttons - you can generate new button classes/colors by modifying the variables file</li>
+  <li><b>charts.css.scss</b> - (dashboard) main chart size</li>
+  <li><b>chat-box.css.scss</b> - defines the chat component which you can see in the widgets page</li>
+  <li><b>content_progress.css.scss</b> - custom progress bars</li>
+  <li><b>dataTables.css.scss</b> - data tables theme, changed to use different pagination styles, and fontawesome</li>
+  <li><b>dropdowns.css.scss</b> - restyled bootstrap's dropdowns (contains dark/light colors)</li>
+  <li><b>easy_pie_chart.css.scss</b> - easy pie chart, sizes and positioning</li>
+  <li><b>error_pages.css.scss</b> - code for the 404 error page</li>
+  <li><b>font-awesome.css.scss</b></li>
+  <li><b>font-awesome-mixins.css.scss</b> - custom mixins based on fontawesome, which can help include font characters easily anywhere, without html markup</li>
+  <li><b>form_elements.css.scss</b> - all form components</li>
+  <li><b>fullcalendar.css.scss</b> - <a href="https://github.com/arshaw/fullcalendar" target="_blank">full calendar</a> plugin stylesheet</li>
+  <li><b>gritter.css.scss</b> - <a href="https://github.com/jboesch/Gritter" target="_blank">jQuery Gritter</a> (Growl) notifications plugin theme</li>
+  <li><b>ibutton.css.scss</b> - remake of the iButton plugin from <a href="http://www.givainc.com/labs/ibutton_jquery_plugin.htm" target="_blank">giva labs</a>, to use css3 gradients and shadows</li>
+  <li><b>justgage.css.scss</b> - <a href="http://justgage.com/" target="_blank">justgage</a> stylesheet for dimensions</li>
+  <li><b>message_box.css.scss</b> - stylesheet for the (closable) message box widget</li>
+  <li><b>mixin_helpers.css.scss</b> - a collection of mixins used throughout the theme</li>
+  <li><b>modal.css.scss</b> - modal stylesheet</li>
+  <li><b>navigation.css.scss</b> - custom mods for the top navigation/sub-navigation</li>
+  <li><b>numeric_stats.css.scss</b> - stylesheet for the numeric statistics (used in sidebar, top-bar and widgets)</li>
+  <li><b>pagination.css.scss</b> - restyled boostrap pagination</li>
+  <li><b>responsive480.css.scss</b> - responsive code</li>
+  <li><b>responsive768.css.scss</b> - responsive code</li>
+  <li><b>responsive979.css.scss</b> - responsive code</li>
+  <li><b>responsive-tables.css.scss</b> - <a href="http://www.zurb.com/playground/responsive-tables">Zurb's responsive tables</a> sheet</li>
+  <li><b>scrollable.css.scss</b> - stylesheet for scrollable boxes</li>
+  <li><b>select2.css.scss</b> - <a href="https://github.com/ivaynberg/select2" target="_blank">select2</a> stylesheet - only removed the use of background images</li>
+  <li><b>select2_overrides.css.scss</b> select2 overrides, changed color theme, and using fontawesome</li>
+  <li><b>sidebar.css.scss</b> - stylesheet for sidebar code and some of it's components</li>
+  <li><b>sparkline_box.css.scss</b> - stylesheet for custom sparkline charts</li>
+  <li><b>stats.css.scss</b> - the statistics widget on the front page (before the main chart)</li>
+  <li><b>tables.css.scss</b> - adds new optional class for styling tables</li>
+  <li><b>tags.css.scss</b> - stylesheet for the tags plugin</li>
+  <li><b>tooltips.css.scss</b> - sparkline tooltips</li>
+  <li><b>touchTouch.css.scss</b> - <a href="https://github.com/martinaglv/touchTouch" target="_blank">touchTouch</a> photo gallery stylesheet</li>
+  <li><b>triangle_button.css.scss</b> - triangle buttons generator classes (see the buttons page)</li>
+  <li><b>ui_custom.css.scss</b> - custom jquery ui stylesheet for sliders</li>
+  <li><b>uniform_default.css</b> - <a href="http://uniformjs.com/" target="_blank">uniform js</a> default stylesheet</li>
+  <li><b>validation_engine.css.scss</b> - <a href="https://github.com/posabsolute/jQuery-Validation-Engine">validation engine</a> customized stylesheet</li>
+  <li><b>variables.css.scss</b> - list of variables used in the theme. you can resize some components and change various colors here</li>
+  <li><b>widgets.css.scss</b> - custom news widgets stylesheet</li>
+  <li><b>xcharts.css.scss</b> - <a href="https://github.com/tenXer/xcharts/" target="_blank">xCharts</a> default stylesheet</li>
+</ul>
+
+          </section>
+      
+          <section id="javascripts">
+            <div class="page-header">
+              <h4>JavaScript files</h4>
+            </div>
+            <p>
+  The structure of the <b>javascripts</b> folder looks like this:
+</p>
+
+
+<ul>
+
+  <li>
+    <i class="icon-folder-open"></i> <b>vendor</b>
+
+    <ul>
+      <li><i class="icon-folder-close"></i> <b>bootstrap</b> - bootstrap js folder</li>
+      <li><i class="icon-folder-close"></i> <b>boostrap_wysihtml5</b> - the <a href="https://github.com/jhollingworth/bootstrap-wysihtml5">boostrap wysihtml5</a> plugin</li>
+      <li><i class="icon-folder-close"></i> <b>editable</b> - <a href="https://github.com/vitalets/x-editable" target="_blank">boostrap-x-editable</a> plugin files</li>
+      <li><i class="icon-folder-close"></i> <b>fullcalendar</b> - the <a href="https://github.com/arshaw/fullcalendar" target="_blank">full calendar</a> plugin</li>
+      <li><i class="icon-folder-close"></i> <b>ibutton</b> - iButton plugin from <a href="http://www.givainc.com/labs/ibutton_jquery_plugin.htm" target="_blank">giva labs</a></li>
+      <li><i class="icon-folder-close"></i> <b>justgage</b> - <a href="http://justgage.com/" target="_blank">justgage</a> plugin for making cool animated gauges</li>
+      <li><i class="icon-folder-close"></i> <b>validation</b> - <a href="https://github.com/posabsolute/jQuery-Validation-Engine">jquery validation engine</a></li>
+      <li><i class="icon-folder-close"></i> <b>wizard</b> <a href="https://github.com/amoffat/bootstrap-application-wizard" target="_blank">wizard plugin</a></li>
+      <li><b>bootstrap_dropdown_hover.js</b> - bootstrap <a href="https://github.com/CWSpear/twitter-bootstrap-hover-dropdown" target="_blank">dropdown on hover plugin</a></li>
+      <li><b>bootstrap-editable.js</b> - manifest file for bootstrap x-editable</li>
+      <li><b>bootstrap-wysihtml5.js</b> - manifest file for bootstrap wysihtml5</li>
+      <li><b>d3.js</b> - d3 v2 for the xCharts plugin</li>
+      <li><b>dataTables.js</b> - jQuery <a href="http://www.datatables.net/" target="_blank">dataTables</a> plugin</li>
+      <li><b>html5shiv.js</b> - support for ie6-8 html5 tags</li>
+      <li><b>ibutton.js</b> - manifest file for the iButton plugin</li>
+      <li><b>jquery-182.js</b> - jQuery 1.8.2</li>
+      <li><b>jquery.easy-pie-chart.coffee</b> - jQuery <a href="http://rendro.github.com/easy-pie-chart/" target="_blank">easy pie charts</a></li>
+      <li><b>jquery_gritter.js</b> - <a href="https://github.com/jboesch/Gritter" target="_blank">jQuery Gritter</a></li>
+      <li><b>jqueryui1102.js</b> - jQuery UI 1.10.2</li>
+      <li><b>jquery_uniform.js</b> - <a href="http://uniformjs.com/" target="_blank">jQuery Uniform</a> - currently used only for file input styling, feel free to remove if you don't need it</li>
+      <li><b>justgage.js</b> - manifest file for justGage</li>
+      <li><b>responsive-tables.js</b> - <a href="http://www.zurb.com/playground/responsive-tables">Zurb's responsive tables</a></li>
+      <li><b>select2.js</b> - <a href="https://github.com/ivaynberg/select2" target="_blank">select2</a> jquery plugin</li>
+      <li><b>sparkline.js</b> - <a href="http://omnipotent.net/jquery.sparkline">jQuery Sparklines</a></li>
+      <li><b>tags_input.js</b> - <a href="https://github.com/xoxco/jQuery-Tags-Input">jQuery TagsInput</a></li>
+      <li><b>touchTouch.js</b> - <a href="https://github.com/martinaglv/touchTouch" target="_blank">touchTouch</a> photo gallery</li>
+      <li><b>xcharts.js</b> - <a href="https://github.com/tenXer/xcharts/" target="_blank">xCharts</a> plugin for making cool d3-based charts</li>
+      <li><b>jquery.icheck.js</b> - <a href="https://github.com/damirfoy/iCheck" target="_blank">iCheck</a> plugin for styling checkboxes and radios</li>
+    </ul>
+  </li>
+
+  <li>
+    <i class="icon-folder-open"></i> <b>charts</b> - the following are all initializers for different charts from the theme's pages
+
+    <ul>
+      <li><b>horizontal_bar_charts.coffee</b></li>
+      <li><b>sparkline_samples.coffee</b></li>
+      <li><b>xcharts_bar.js</b></li>
+      <li><b>xcharts_left_sine.js</b></li>
+      <li><b>xcharts_sine.js</b></li>
+    </ul>
+  </li>
+  <li><b>application.js</b> - the manifest file where all the imports are done - here you can enable or disable the javascript plugins - remember the order is important</li>
+  <li><b>generic.coffee</b> - initializers for all the components - also defines a Theme object which contains the theme's colors, which are used throughout other initializers</li>
+  <li><b>calendar.coffee</b> - initializer for fullcalendar</li>
+  <li><b>custom_actions.coffee</b> - holds theme functionality for opening/closing sidebar buttons, these are mandatory for the theme to work</li>
+  <li><b>gritter.coffee</b> - gritter module to ease using of the jQuery gritter plugin</li>
+</ul>
+
+
+
+
+          </section>
+      
+          <section id="html_files">
+            <div class="page-header">
+              <h4>HTML files</h4>
+            </div>
+            <p>
+  The html files and partials are organized like this (files that begin with _ are partials - included in other files)
+</p>
+
+<ul>
+  <li>
+    <i class="icon-folder-open"></i> <b>layouts</b>
+
+    <ul>
+      <li><b>layout.erb</b> - general layout file</li>
+      <li><b>only_topbar.html.erb</b> - layout for login/signup/404 pages</li>
+      <li><b>_side_navigation.html.erb</b> - contains the sidebars, is rendered in layout</li>
+      <li><b>_top_navigation.html.erb</b> - top bar menu</li>
+    </ul>
+  </li>
+  <li>
+    <i class="icon-folder-open"></i> <b>pages</b> - this folder contains all the pages in the theme demo, structured exactly as the main menu on the left
+  </li>
+  <li>
+    <i class="icon-folder-open"></i> <b>partials</b> - contains different extracted modules/widgets (for simple navigation and DRY purposes)
+
+    <ul>
+      <li><b>_accordions.html.erb</b> - bootstrap accordion</li>
+      <li><b>_action_nav_normal.html.erb</b> - the big normal buttons in 3*2 style (dashboard)</li>
+      <li><b>_action_nav_normal_one_row.html.erb</b> - the big normal buttons in one line</li>
+      <li><b>_action_nav_normal_rounded.html.erb</b> - the big rounded buttons</li>
+      <li><b>_activity.html.erb</b> - the activity feed on the dashboard</li>
+      <li><b>_alerts.html.erb</b> - extracted alert bars</li>
+      <li><b>_big_chart.html.erb</b> - main chart from the dashboard, with progressbars</li>
+      <li><b>_bootstrap_editable.html.erb</b> - bootstrap editable sample markup</li>
+      <li><b>_chat.html.erb</b> - chat layout</li>
+      <li><b>_closable_chat.html.erb</b> - extracted 'add-a-comment' widget from the activity feed component</li>
+      <li><b>_data_tables_custom.html.erb</b> - data tables markup</li>
+      <li><b>_gallery.html.erb</b> - touchTouch gallery</li>
+      <li><b>_jquery_sliders.html.erb</b> - all the jQuery sliders</li>
+      <li><b>_modal_form.html.erb</b> - modal with a form</li>
+      <li><b>_modal_simple.html.erb</b>  - modal with simple layout</li>
+      <li><b>_modal_tables.html.erb</b>  - modal with (data) tables </li>
+      <li><b>_news_with_avatars.html.erb</b> - the news module, with avatars</li>
+      <li><b>_news_with_icons.html.erb</b> - the news module, with fontawesome icons</li>
+      <li><b>_sidebar_tabnav_buttons.html.erb</b> - demo for the line-x sidebar buttons</li>
+      <li><b>_small_chat.html.erb</b> - smaller variant of the chat layout, with a cool send text bar</li>
+      <li><b>_stats_table.html.erb</b> - a sample table with sparklines and stats</li>
+      <li><b>_tasks_table.html.erb</b> - a sample table with a task list</li>
+      <li><b>_widget_boxes.html.erb</b> - the widget boxes with top-right toolbar, from the bottom of the widgets page</li>
+    </ul>
+  </li>
+</ul>
+
+          </section>
+      
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

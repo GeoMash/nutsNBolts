@@ -1,0 +1,3 @@
+[submodule "private/lib/nutshell"]
+	path = private/lib/nutshell
+	url = git@github.com:SpinifexGroup/nutshell.git

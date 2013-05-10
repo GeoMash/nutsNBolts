@@ -1,0 +1,17 @@
+{
+	"extends":	"production",
+	"config":
+	{
+		"application":
+		{
+			"mode": "development"
+		},
+		"plugin":
+		{
+			"BtlViewer":
+			{
+				"dir":		""
+			}
+		}
+	}
+}

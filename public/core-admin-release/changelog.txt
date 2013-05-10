@@ -1,0 +1,50 @@
+Changelog for v1.2
+
+- Updated bootstrap to v2.3.1
+- Added jQuery 1.9.1 and fixed all the other plugins issues with this version
+- Updated the following javascript plugins to their latest versions: select2, uniform, ibutton, icheck
+- Fixed a bug where in mobile view the menu-toggles were not always opening the menus
+- Fixed a bug where in Firefox, the timeline widget's new comment box would show the avatar in the wrong place
+
+File changelog for v1.2
+
+===========================  JAVASCRIPTS  ===========================
+
+application.js - changed some plugin versions, removed un-necessary stuff
+
+vendor/ibutton/jquery.ibutton.js
+- removed all $.browser calls, changed attr("checked") calls to prop("checked") - jq191 compatibilities
+
+vendor/jquery-182.js - removed (using the jquery191 file now)
+
+vendor/jquery.icheck.js - updated to 0.8
+
+vendor/jquery_uniform.js - updated to 2.1
+
+vendor/select2.js - updated to 3.3.2
+
+vendor/bootstrap_dropdown_hover.js - removed
+
+/custom_actions.coffee - removed
+
+/generic.coffee
+  - added sparkline_display_visible call when the dropdown toggle from the top-bar is clicked. this was located in the custom_actions.coffee file before
+  - changed the file button label (default) option for uniform js to be compatible with the update
+
+=========================== SCSS ===========================
+
+renamed all the .css.scss files to .scss to be compatible with compass
+updated all bootstrap files to 2.3.1
+navigation.scss - adjusted margin-top for .navbar .btn, .navbar .btn-group
+select2.scss - added .select2-display-none selector at the bottom
+message_box.scss - fixed a firefox bug (+55, +76)
+
+=========================== HTML ===========================
+
+layouts/_top_navigation.html.erb - Fixed a bug where in mobile view the menu-toggles were not always opening the menus (lines 11,13,20)
+pages/other/wizard.html.erb - removed chzn-select classes on single selects
+
+=========================== MIDDLEMAN CONFIG ===========================
+
+removed debug_assets directive from config.rb
+updated gemfile

@@ -1,0 +1,73 @@
+<!-- find me in partials/bootstrap_editable -->
+
+<table id="user" class="table table-striped responsive" style="clear: both">
+  <tbody>
+
+  <tr>
+    <td width="15%">Username</td>
+    <td width="50%"><a href="#" class="editable" id="username" data-type="text" data-pk="1" data-original-title="Enter username">superuser</a></td>
+    <td width="35%"><span class="muted">Simple text field</span></td>
+  </tr>
+
+  <tr>
+    <td>First name</td>
+    <td><a href="#" id="firstname" class="editable" data-type="text" data-pk="1" data-placement="right" data-placeholder="Required" data-original-title="Enter your firstname"></a></td>
+    <td><span class="muted">Required text field, originally empty</span></td>
+  </tr>
+
+  <tr>
+    <td>Sex</td>
+    <td><a href="#" id="sex" class="editable" data-type="select" data-pk="1" data-value="" data-original-title="Select sex"></a></td>
+    <td><span class="muted">Select, loaded from js array. Custom display</span></td>
+  </tr>
+
+  <tr>
+    <td>Group</td>
+    <td><a href="#" id="group" class="editable" data-type="select" data-pk="1" data-value="5" data-source="/groups" data-original-title="Select group">Admin</a></td>
+    <td><span class="muted">Select, loaded from server. <strong>No buttons</strong> mode</span></td>
+  </tr>
+
+  <tr>
+    <td>Status</td>
+    <td><a href="#" id="status" class="editable" data-type="select" data-pk="1" data-value="0" data-original-title="Select status">Active</a></td>
+    <td><span class="muted">Error when loading list items</span></td>
+  </tr>
+
+  <tr>
+    <td>Plan vacation?</td>
+    <td><a href="#" id="vacation" class="editable" data-type="date" data-viewformat="dd.mm.yyyy" data-pk="1" data-placement="right" data-original-title="When you want vacation to start?">25.02.2013</a></td>
+    <td><span class="muted">Datepicker</span></td>
+  </tr>
+
+  <tr>
+    <td>Comments</td>
+    <td><a href="#" id="comments" class="editable" data-type="textarea" data-pk="1" data-placeholder="Your comments here..." data-original-title="Enter comments">awesome<br>user!</a></td>
+    <td><span class="muted">Textarea. Submit by ctrl+enter</span></td>
+  </tr>
+
+  <tr>
+    <td>Type State <sup><span class="editable" class="label label-success">new</span></sup></td>
+    <td><a href="#" id="state" data-type="typeahead" data-pk="1" data-placement="right" data-original-title="Start typing State.."></a></td>
+    <td><span class="muted">Typeahead (bootstrap only)</span></td>
+  </tr>
+
+  <tr>
+    <td>Fresh fruits</td>
+    <td><a href="#" id="fruits" class="editable" data-type="checklist" data-value="2,3" data-original-title="Select fruits"></a></td>
+    <td><span class="muted">Checklist</span></td>
+  </tr>
+
+  <tr>
+    <td>Country</td>
+    <td><a href="#" id="country" class="editable" data-type="select2" data-pk="1" data-value="BS" data-original-title="Select country"></a></td>
+    <td><span class="muted">Select2 (dropdown mode)</span></td>
+  </tr>
+
+  <tr>
+    <td>Address</td>
+    <td><a href="#" id="address" class="editable" data-type="address" data-pk="1" data-original-title="Please, fill address"></a></td>
+    <td><span class="muted">Your custom input, several fields</span></td>
+  </tr>
+
+  </tbody>
+</table>

@@ -1,0 +1,116 @@
+{
+	"config":
+	{
+		"core":
+		{
+			"exception":
+			{
+				"details":
+				[
+					"POST",
+					"GET",
+					"RAW"
+				]
+			} 
+		},
+		"php":
+		{
+			
+		},
+		"application":
+		{
+			"mode": 		"production",
+			"dataDir":		"./data/"
+		},
+		"google":
+		{
+			"clientId":		"gme-praxisbtsdnbhd",
+			"privateKey":	"-ytal-5XYwLCVvUlKhRheqKvWTE="
+		},
+		"plugin":
+		{
+			"Session":
+			{
+				"storage": "file"
+			},
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"nutsnbolts"
+					}
+				}
+			},
+			"Logger": 
+			{
+				"writers": 
+				{
+					"rootLog": 
+					{
+						"class":			"DailyFileWriter",
+						"output":			"{APP_HOME}/logs/root-{DATE}.log",
+						"mode":				666
+					}
+				},
+				"loggers": 
+				{
+					"__ROOT__": 
+					{
+						"writers":
+						[
+							{
+								"writer":	"rootLog",
+								"level" :	"INFO" 
+							}
+						]
+					}
+				}
+			},
+			"Email":
+			{
+				"sendConfig": 
+				{
+					"smtp": 
+					{
+						"mode": "smtp",
+						"host": "mail.gaia.geomash.com",
+						"port": 25,
+						"keepAlive": true
+					}
+				}
+			},
+			"Router":
+			{
+				"mode":
+				[
+					{
+						"cond": 
+						{
+							"interface": "cli"
+						},
+						"mode": "Cli"
+					},
+					{
+						"mode": "Simple"
+					}
+				]
+			},
+			"Mvc":
+			{
+				"connection":		"nutsnbolts"
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"D:/tmp/",
+				"completed_dir":	"D:/www/praxisbt/nutsnbolts/private/application/data/uploads/"
+			}
+		}
+	}
+}
