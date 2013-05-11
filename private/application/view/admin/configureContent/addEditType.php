@@ -2,19 +2,19 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="box">
-					<div class="box-header">
-						<span class="title">Content Type</span>
-						<ul class="box-toolbar">
-							<li>
-								<span>Enabled: </span>
-							</li>
-							<li>
-								<input type="checkbox" class="iButton-icons" checked="checked" />
-							</li>
-						</ul>
-					</div>
-					<div class="box-content">
-						<form class="form-horizontal fill-up validatable">
+					<form class="form-horizontal fill-up validatable" method="post">
+						<div class="box-header">
+							<span class="title">Content Type</span>
+							<ul class="box-toolbar">
+								<li>
+									<span>Enabled: </span>
+								</li>
+								<li>
+									<input type="checkbox" class="iButton-icons" checked="checked" name="status" value="1" />
+								</li>
+							</ul>
+						</div>
+						<div class="box-content">
 							<div class="padded">
 								<div class="control-group">
 									<label class="control-label">Name</label>
@@ -35,12 +35,26 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-actions">
-								<button type="submit" class="btn btn-blue">Save Changes</button>
-								<button type="button" class="btn btn-default">Cancel</button>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-beaker"></i> Content Widgets</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<button type="button" class="btn btn-green" data-action="addWidgetSelectionRow"><i class="icon-plus"></i> Add Widget</button>
+										</div>
+									</div>
+								</div>
 							</div>
-						</form>
-					</div>
+							<div class="form-actions">
+								<div class="pull-right">
+									<button type="submit" class="btn btn-blue">Save Changes</button>
+									<button type="button" class="btn btn-red">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>

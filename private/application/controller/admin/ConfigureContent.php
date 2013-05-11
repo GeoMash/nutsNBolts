@@ -45,13 +45,13 @@ namespace application\controller\admin
 		
 		private function addType()
 		{
-			$this->addBreadcrumb('Adding Content Type','icon-plus');
+			$this->addBreadcrumb('Add Content Type','icon-plus');
 			$this->setContentView('admin/configureContent/addEditType');
 		}
 		
 		private function editType()
 		{
-			$this->addBreadcrumb('Editing Content Type','icon-edit');
+			$this->addBreadcrumb('Edit Content Type','icon-edit');
 			$this->setContentView('admin/configureContent/addEditType');
 		}
 		
@@ -77,6 +77,19 @@ namespace application\controller\admin
 HTML;
 			}
 			return implode('',$html);
+		}
+		
+		public function getAddContentTypeWidgetOptions()
+		{
+			$options=array();
+			$contentWidgets=$this->model->ContentWidget->read();
+			for ($i=0,$j=count($contentWidgets); $i<$j; $i++)
+			{
+				$options[]='<option value="'.$contentWidgets[$i]['id'].'">'.$contentWidgets[$i]['name'].'</option>';
+			}
+			$this->plugin	->Responder('html')
+							->setData(implode('',$options))
+							->send();
 		}
 	}
 }

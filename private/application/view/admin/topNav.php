@@ -24,8 +24,6 @@
 				<li class="divider"></li>
 
 				<li><a href="#"><i class="icon-user"></i> <span>Profile</span></a></li>
-				<li><a href="#"><i class="icon-cog"></i> <span>Settings</span></a></li>
-				<li><a href="#"><i class="icon-envelope"></i> <span>Messages</span> <span class="label label-dark-red pull-right">5</span></a></li>
 				<li><a href="#"><i class="icon-off"></i> <span>Logout</span></a></li>
 			</ul>
 		</li>
