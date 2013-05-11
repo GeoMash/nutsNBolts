@@ -10,21 +10,49 @@ namespace application\controller\admin
 			$this->show404();
 		}
 		
-		public function types()
+		public function types($action=null)
 		{
-			$this->setContentView('admin/configureContent/types');
 			$this->addBreadcrumb('Configure Content','icon-cogs');
 			$this->addBreadcrumb('Types','icon-th');
-			$this->view->getContext()
-				->registerCallback
-				(
-					'getContentTypesList',
-					function()
-					{
-						print $this->generateContentTypeList();
-					}
-				);
+			switch ($action)
+			{
+				case 'add':
+				{
+					$this->addType();
+					break;
+				}
+				case 'edit':
+				{
+					$this->editType();
+					break;
+				}
+				default:
+				{
+					$this->setContentView('admin/configureContent/types');
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getContentTypesList',
+						function()
+						{
+							print $this->generateContentTypeList();
+						}
+					);
+				}
+			}
 			$this->view->render();
+		}
+		
+		private function addType()
+		{
+			$this->addBreadcrumb('Adding Content Type','icon-plus');
+			$this->setContentView('admin/configureContent/addEditType');
+		}
+		
+		private function editType()
+		{
+			$this->addBreadcrumb('Editing Content Type','icon-edit');
+			$this->setContentView('admin/configureContent/addEditType');
 		}
 		
 		public function widgets()
@@ -41,11 +69,8 @@ namespace application\controller\admin
 				$html[]=<<<HTML
 <div class="box-section news with-icons">
 	<div class="avatar blue"><i class="{$contentTypes[$i]['icon']} icon-2x"></i></div>
-	<div class="news-time">
-		<button><i class="icon-edit icon-2x"></i></button>
-	</div>
 	<div class="news-content">
-		<div class="news-title"><a href="#">{$contentTypes[$i]['name']}</a></div>
+		<div class="news-title"><a href="/admin/configurecontent/types/edit/{$contentTypes[$i]['id']}">{$contentTypes[$i]['name']}</a></div>
 		<div class="news-text">{$contentTypes[$i]['description']}</div>
 	</div>
 </div>
