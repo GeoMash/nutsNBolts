@@ -3,6 +3,7 @@
 			<div class="span12">
 				<div class="box">
 					<form class="form-horizontal fill-up validatable" method="post">
+						<input type="hidden" name="id" value="<?php $tpl->id; ?>">
 						<div class="box-header">
 							<span class="title">Content Type</span>
 							<ul class="box-toolbar">
@@ -19,19 +20,19 @@
 								<div class="control-group">
 									<label class="control-label">Name</label>
 									<div class="controls">
-										<input type="text" name="name" class="validate[required]" data-prompt-position="topLeft"/>
+										<input type="text" name="name" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->name; ?>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Description</label>
 									<div class="controls">
-										<textarea name="description" rows="6"></textarea>
+										<textarea name="description" rows="6"><?php $tpl->description; ?></textarea>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Icon</label>
 									<div class="controls">
-										<input type="text" name="icon" />
+										<input type="text" name="icon" value="<?php $tpl->icon; ?>">
 									</div>
 								</div>
 							</div>
@@ -42,6 +43,7 @@
 									</div>
 									<div class="content-box">
 										<div class="padded">
+											<?php $tpl->parts; ?>
 											<button type="button" class="btn btn-green" data-action="addWidgetSelectionRow"><i class="icon-plus"></i> Add Widget</button>
 										</div>
 									</div>

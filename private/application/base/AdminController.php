@@ -114,6 +114,12 @@ HTML;
 			}
 			return implode('',$html);
 		}
+		
+		public function redirect($path)
+		{
+			header('location:'.$path);
+			exit();
+		}
 	}
 }
 ?>

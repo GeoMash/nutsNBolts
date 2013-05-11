@@ -69,13 +69,13 @@ $JSKK.Class.create
 								'<div class="control-group">',
 									'<label class="control-label">Label</label>',
 									'<div class="controls">',
-										'<input type="text" name="widget_label[]" class="validate[required]" data-prompt-position="topLeft">',
+										'<input type="text" name="label[]" class="validate[required]" data-prompt-position="topLeft">',
 									'</div>',
 								'</div>',
 								'<div class="control-group">',
 									'<label class="control-label">Type</label>',
 									'<div class="controls">',
-										'<select class="chzn-select" name="widget_type[]">',
+										'<select class="chzn-select" name="content_widget_id[]">',
 										'</select>',
 									'</div>',
 								'</div>',
@@ -89,7 +89,7 @@ $JSKK.Class.create
 			)
 		},
 		removeWidgetRow: function(btn)
-		{console.debug('removeWidgetRow');
+		{
 			btn.parents('.well.relative').remove();
 		}
 	}

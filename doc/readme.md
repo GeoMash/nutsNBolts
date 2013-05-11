@@ -1,8 +1,16 @@
 TODO
 ====
+User Feedback
 Tags
 Templates
 Plugins
+Comments
+User Groups
+User Permissions
+User Registration
+User Registration - Facebook, Twitter (Any Open ID?)
+User Login
+
 
 
 

@@ -6,7 +6,7 @@
 				<ul class="box-toolbar">
 					<li>
 						<a href="/admin/configurecontent/types/add">
-							<span class="triangle-button red"><i class="icon-plus"></i></span>
+							<span class="triangle-button green"><i class="icon-plus"></i></span>
 						</a>
 					</li>
 				</ul>
