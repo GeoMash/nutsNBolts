@@ -106,7 +106,7 @@ HTML;
 			{
 				$html[]	=<<<HTML
 <li class="">
-	<a href="/admin/content/list/{$contentTypes[$i]['id']}">
+	<a href="/admin/content/view/{$contentTypes[$i]['id']}">
 		<i class="{$contentTypes[$i]['icon']}"></i> {$contentTypes[$i]['name']}
 	</a>
 </li>
@@ -119,6 +119,11 @@ HTML;
 		{
 			header('location:'.$path);
 			exit();
+		}
+		
+		public function __call($action,$args)
+		{
+			$this->view->render();
 		}
 	}
 }
