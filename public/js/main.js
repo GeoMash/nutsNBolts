@@ -29,6 +29,7 @@ requirejs
 		'jquery/validationEngine-en',
 		'jquery/ibutton',
 		'jquery/select2',
+		'jquery/dataTables',
 		'bootstrap/bootstrap',
 		'jskk',
 		'plupload/plupload.full'

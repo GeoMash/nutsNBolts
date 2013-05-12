@@ -30,10 +30,38 @@ $JSKK.Class.create
 					handleWidth:	30
 				}
 			);
- 			$(".iButton").iButton();
- 			$('.chzn-select:not(.select2-container)').select2();
- 			
- 			this.bindActions();
+			$(".iButton").iButton();
+			$('.chzn-select:not(.select2-container)').select2();
+			
+			$.extend
+			(
+			 	$.fn.dataTableExt.oStdClasses,
+				{"sWrapper": "dataTables_wrapper form-inline"}
+			);
+			
+			$('.dTable').dataTable
+			(
+				{
+					bJQueryUI:			false,
+					bAutoWidth:			false,
+					sPaginationType:	'full_numbers',
+					sDom:				'<"table-header"fl>t<"table-footer"ip>'
+				}
+			);
+
+			$('.dTable-small').dataTable
+			(
+				{
+					iDisplayLength:		5,
+					bJQueryUI:			false,
+					bAutoWidth:			false,
+					sPaginationType:	'full_numbers',
+					sDom:				'<"table-header"fl>t<"table-footer"ip>'
+				}
+			);
+			
+			
+			this.bindActions();
 		},
 		bindActions: function()
 		{
