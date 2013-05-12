@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 10/05/2013 
+ * @since 11/05/2013 
  */
 namespace application\model\base
 {
@@ -23,9 +23,10 @@ namespace application\model\base
 		(
 			'id' => 'int(10) NOT NULL ' ,
 			'content_type_id' => 'int(10) NOT NULL ' ,
-			'date_created' => 'datetime NOT NULL ' ,
-			'date_updated' => 'datetime NOT NULL ' ,
-			'date_published' => 'datetime' ,
+			'title' => 'varchar(100) NOT NULL ' ,
+			'date_created' => 'timestamp NOT NULL ' ,
+			'date_updated' => 'timestamp NOT NULL ' ,
+			'date_published' => 'timestamp' ,
 			'original_user_id' => 'int(10) NOT NULL ' ,
 			'last_user_id' => 'int(10) NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 
