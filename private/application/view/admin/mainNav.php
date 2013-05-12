@@ -1,7 +1,7 @@
 <ul class="nav nav-collapse collapse nav-collapse-primary">
 	<li class="active">
 		<span class="glow"></span>
-		<a href="dashboard.html">
+		<a href="/admin">
 			<i class="icon-dashboard icon-2x"></i>
 			<span>Dashboard</span>
 		</a>
