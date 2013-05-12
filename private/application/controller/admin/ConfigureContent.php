@@ -28,7 +28,7 @@ namespace application\controller\admin
 				}
 				case 'remove':
 				{
-					$this->deleteType($id);
+					$this->removeType($id);
 					break;
 				}
 				default:
@@ -103,7 +103,7 @@ namespace application\controller\admin
 			}
 		}
 		
-		public function deleteType($id)
+		public function removeType($id)
 		{
 			$this->model->ContentType->handleDeleteRecord($id);
 			$this->redirect('/admin/configurecontent/types/');
