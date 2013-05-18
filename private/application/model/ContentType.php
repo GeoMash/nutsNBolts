@@ -7,6 +7,7 @@ namespace application\model
 	{
 		public function handleRecord($record)
 		{
+			if (!isset($record['status']))$record['status']=0;
 			//For Updates
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
@@ -89,6 +90,27 @@ namespace application\model
 			unset($record['content_widget_id']);
 			unset($record['label']);
 			return $contentParts;
+		}
+		
+		public function readWithParts($id)
+		{
+			$query=<<<SQL
+			SELECT	content_type.name,
+					content_type.icon,
+					content_part.id AS content_part_id,
+					content_part.label,
+					content_widget.template
+			FROM content_type
+			LEFT JOIN content_part ON content_part.content_type_id=content_type.id
+			LEFT JOIN content_widget ON content_widget.id=content_part.content_widget_id
+			WHERE content_type.id=?
+SQL;
+			if ($this->db->select($query,array($id)))
+			{
+				$records=$this->db->result('assoc');
+				return isset($records)?$records:false;
+			}
+			return false;
 		}
 	}
 }
