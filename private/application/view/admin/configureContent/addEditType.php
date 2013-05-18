@@ -11,7 +11,7 @@
 									<span>Enabled: </span>
 								</li>
 								<li>
-									<input type="checkbox" class="iButton-icons" checked="checked" name="status" value="1" />
+									<input type="checkbox" class="iButton-icons" <?php print (bool)$tpl->get('status')?'checked':''; ?> name="status" value="1" />
 								</li>
 							</ul>
 						</div>

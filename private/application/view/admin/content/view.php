@@ -2,7 +2,16 @@
 	<div class="row-fluid">
 		<div class="span12">
 			<div class="box">
-				<div class="box-header"><span class="title"><?php $tpl->tableHeaderText; ?></span></div>
+				<div class="box-header">
+					<span class="title"><?php $tpl->tableHeaderText; ?></span>
+					<ul class="box-toolbar">
+						<li>
+							<a href="/admin/content/add/<?php $tpl->contentTypeId; ?>">
+								<span class="triangle-button green"><i class="icon-plus"></i></span>
+							</a>
+						</li>
+					</ul>
+				</div>
 				<div class="box-content">
 					<div id="dataTables">
 						<table cellpadding="0" cellspacing="0" border="0" class="dTable responsive">

@@ -21,6 +21,38 @@
 	</li>
 	<li class="dark-nav">
 		<span class="glow"></span>
+		<a data-toggle="collapse" href="#pages-config-subs">
+			<i class="icon-qrcode icon-2x"></i>
+			<span>
+				Configure Pages
+				<i class="icon-caret-down"></i>
+			</span>
+		</a>
+		<ul id="pages-config-subs" class="collapse">
+			<li class="">
+				<a href="/admin/configurepages/types">
+					<i class="icon-th"></i> Types
+				</a>
+			</li>
+			<li class="">
+				<a href="/admin/configurepages/pages">
+					<i class="icon-copy"></i> Pages
+				</a>
+			</li>
+			<li class="">
+				<a href="/admin/configurepages/templates">
+					<i class="icon-file-alt"></i> Templates
+				</a>
+			</li>
+			<li class="">
+				<a href="/admin/configurecontent/navigation">
+					<i class="icon-tasks"></i> Navigation
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li class="dark-nav">
+		<span class="glow"></span>
 		<a data-toggle="collapse" href="#content-config-subs">
 			<i class="icon-cogs icon-2x"></i>
 			<span>
@@ -31,7 +63,7 @@
 		<ul id="content-config-subs" class="collapse">
 			<li class="">
 				<a href="/admin/configurecontent/types">
-					<i class="icon-th"></i> Types
+					<i class="icon-th"></i> Content Types
 				</a>
 			</li>
 			<li class="">
@@ -59,6 +91,16 @@
 			<li class="">
 				<a href="/admin/settings/users">
 					<i class="icon-user"></i> Users
+				</a>
+			</li>
+			<li class="">
+				<a href="/admin/settings/files">
+					<i class="icon-folder-open"></i> File Manager
+				</a>
+			</li>
+			<li class="">
+				<a href="/admin/settings/plugins">
+					<i class="icon-bolt"></i> Plugins
 				</a>
 			</li>
 		</ul>

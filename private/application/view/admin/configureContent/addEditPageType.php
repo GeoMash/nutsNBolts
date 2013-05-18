@@ -5,10 +5,10 @@
 					<form class="form-horizontal fill-up validatable" method="post">
 						<input type="hidden" name="id" value="<?php $tpl->id; ?>">
 						<div class="box-header">
-							<span class="title"><i class="<?php $tpl->contentTypeIcon; ?>"></i> <?php $tpl->contentType; ?></span>
+							<span class="title">Page Type</span>
 							<ul class="box-toolbar">
 								<li>
-									<span>Published: </span>
+									<span>Enabled: </span>
 								</li>
 								<li>
 									<input type="checkbox" class="iButton-icons" <?php print (bool)$tpl->get('status')?'checked':''; ?> name="status" value="1" />
@@ -18,12 +18,17 @@
 						<div class="box-content">
 							<div class="padded">
 								<div class="control-group">
-									<label class="control-label">Title</label>
+									<label class="control-label">Name</label>
 									<div class="controls">
-										<input type="text" name="title" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->title; ?>">
+										<input type="text" name="name" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->name; ?>">
 									</div>
 								</div>
-								<?php $tpl->parts; ?>
+								<div class="control-group">
+									<label class="control-label">Description</label>
+									<div class="controls">
+										<textarea name="description" rows="6"><?php $tpl->description; ?></textarea>
+									</div>
+								</div>
 							</div>
 							<div class="form-actions">
 								<div class="pull-right">
