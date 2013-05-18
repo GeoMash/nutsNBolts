@@ -79,11 +79,18 @@ namespace application\model
 			for ($i=0,$j=count($record['label']); $i<$j; $i++)
 			{
 				$id=(isset($record['part_id'][$i]))?$record['part_id'][$i]:0;
+				$ref=str_replace
+				(
+					array(' '),
+					array('_'),
+					strtolower($record['label'][$i])
+				);
 				$contentParts[]=array
 				(
 				 	'id'				=>$id,
 					'content_widget_id'	=>$record['content_widget_id'][$i],
-					'label'				=>$record['label'][$i]
+					'label'				=>$record['label'][$i],
+					'ref'				=>$ref
 				);
 			}
 			unset($record['part_id']);
