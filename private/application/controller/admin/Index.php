@@ -31,6 +31,11 @@ namespace application\controller\admin
 					$this->routedController=new Content($this->MVC);
 					break;
 				}
+				case 'configurepages':
+				{
+					$this->routedController=new ConfigurePages($this->MVC);
+					break;
+				}
 				case 'configurecontent':
 				{
 					$this->routedController=new ConfigureContent($this->MVC);
