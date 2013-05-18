@@ -98,7 +98,12 @@
 						"mode": "Cli"
 					},
 					{
-						"mode": "Simple"
+						"mode": "Regex",
+						"map":
+						{
+							"/admin/":	"admin/Index",
+							".":		"Index"
+						}
 					}
 				]
 			},
