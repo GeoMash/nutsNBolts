@@ -24,7 +24,8 @@ namespace application\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'content_type_id' => 'int(10) NOT NULL ' ,
 			'content_widget_id' => 'int(10) NOT NULL ' ,
-			'label' => 'varchar(100) NOT NULL ' 
+			'label' => 'varchar(100) NOT NULL ' ,
+			'ref' => 'varchar(100) NOT NULL ' 
 		);
 	}
 }
