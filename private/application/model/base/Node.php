@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 18/05/2013 
+ * @since 20/05/2013 
  */
 namespace application\model\base
 {
@@ -29,6 +29,7 @@ namespace application\model\base
 			'date_published' => 'timestamp' ,
 			'original_user_id' => 'int(10) NOT NULL ' ,
 			'last_user_id' => 'int(10) NOT NULL ' ,
+			'order' => 'int(5) NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 
 		);
 	}

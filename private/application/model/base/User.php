@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 18/05/2013 
+ * @since 20/05/2013 
  */
 namespace application\model\base
 {
