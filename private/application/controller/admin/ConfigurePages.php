@@ -58,7 +58,7 @@ namespace application\controller\admin
 			else
 			{
 				$id=$this->model->PageType->handleRecord($this->request->getAll());
-				$this->redirect('/admin/configurePages/types/edit/'.$id);
+				$this->redirect('/admin/configurepages/types/edit/'.$id);
 			}
 		}
 		
