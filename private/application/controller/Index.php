@@ -39,13 +39,13 @@ namespace application\controller
 						print $this->defineZone($config);
 					}
 				);
-				
-				$this->view->render();
-				exit();
 			}
-			die('404');
-			
-			
+			else
+			{
+				$this->view->setTemplate('site/404');
+			}
+			$this->view->render();
+			exit();
 		}
 		
 		private function getPath()
