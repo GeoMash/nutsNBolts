@@ -8,13 +8,13 @@ namespace application\controller
 		private $validZones=array
 		(
 			'template',
-			'content',
+			'node',
 			'nav',
 			'widget'
 		);
 		
 		public $page	=null;
-		public $content	=null;
+		public $nodes	=null;
 		
 		public function index()
 		{
@@ -23,12 +23,12 @@ namespace application\controller
 			if (count($page))
 			{
 				$this->page		=$page[0];
-				$this->content	=$this->model->NodeMap->getNodesForPath($path);
+				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
 				
 				$this->view->setTemplate('site/page/'.$this->page['page_type_id'].'/index');
 				$this->view->setVar('NS_ENV',NS_ENV);
 				$this->view->setVar('SITEPATH','/sites/1/');
-				
+				$this->view->setVar('node',$this->nodes);
 				
 				$this->view->getContext()
 				->registerCallback
@@ -38,6 +38,13 @@ namespace application\controller
 					{
 						print $this->defineZone($config);
 					}
+				)->registerCallback
+				(
+					'getNode',
+					function($filter)
+					{
+						return $this->getNode($filter);
+					}
 				);
 			}
 			else
@@ -46,19 +53,6 @@ namespace application\controller
 			}
 			$this->view->render();
 			exit();
-		}
-		
-		private function getPath()
-		{
-			$nodes=$this->request->getNodes();
-			if (count($nodes)===1 && empty($nodes[0]))
-			{
-				return '/';
-			}
-			else
-			{
-				return implode('/',$nodes).'/';
-			}
 		}
 		
 		public function defineZone($config)
@@ -91,11 +85,11 @@ namespace application\controller
 						
 						break;
 					}
-					case 'content':
+					case 'node':
 					{
 						if (isset($config['typeConfig']))
 						{
-							$filteredContent=$this->getContentByType($config['typeConfig']['type']);
+							$filteredContent=$this->getNodesByContentType($config['typeConfig']['type']);
 							//Multiple of the same content type.
 							if ($config['typeConfig']['multiple'])
 							{
@@ -173,23 +167,75 @@ namespace application\controller
 			}
 		}
 		
+		private function getPath()
+		{
+			$nodes=$this->request->getNodes();
+			if (count($nodes)===1 && empty($nodes[0]))
+			{
+				return '/';
+			}
+			else
+			{
+				return '/'.implode('/',$nodes).'/';
+			}
+		}
+		
 		private function isValidZone($zone)
 		{
 			return ((isset($zone['type']) && in_array($zone['type'],$this->validZones))
-			        && isset($zone['name']));
+					&& isset($zone['name']));
 		}
 		
-		private function getContentByType($type)
+		private function getNodesByContentType($type)
 		{
 			$return=array();
-			for ($i=0,$j=count($this->content); $i<$j; $i++)
+			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
 			{
-				if ($this->content[$i]['content_type_id']=$type)
+				if ($this->nodes[$i]['content_type_id']==$type)
 				{
-					$return[]=&$this->content[$i];
+					$return[]=&$this->nodes[$i];
 				}
 			}
 			return $return;
+		}
+		
+		public function getNode($filter)
+		{
+			//ID
+			if (is_numeric($filter))
+			{
+				$return=array();
+				for ($i=0,$j=count($this->nodes); $i<$j; $i++)
+				{
+					if ($this->nodes[$i]['id']==$filter)
+					{
+						return $this->nodes[$i];
+					}
+				}
+			}
+			//Search
+			else if (is_array($filter))
+			{
+				$matches=$this->nodes;
+				
+				foreach ($filter as $key=>$value)
+				{
+					for ($i=0,$j=count($matches); $i<$j; $i++)
+					{
+						if (!isset($this->nodes[$i][$key])
+						|| $this->nodes[$i][$key]!=$value)
+						{
+							unset($matches[$i]);
+						}
+					}
+					sort($matches);
+				}
+				if (isset($matches[0]))
+				{
+					return $matches[0];
+				}
+			}
+			return false;
 		}
 	}
 }
