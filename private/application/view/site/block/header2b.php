@@ -5,10 +5,10 @@
 </nav>
 <nav class="main">
 	<ul>
-		<li><a href="/about.shtml">ABOUT US</a></li>
-		<li><a href="/library.shtml">ONLINE LIBRARY</a></li>
-		<li><a href="/programs.shtml">EDUCATIONAL PROGRAMS</a></li>
-		<li><a href="#">SME CONTEST</a></li>
-		<li><a href="/contact.shtml">CONTACT</a></li>
+		<li><a href="/about/">ABOUT US</a></li>
+		<li><a href="/library/">ONLINE LIBRARY</a></li>
+		<li><a href="/programs/">EDUCATIONAL PROGRAMS</a></li>
+		<li><a href="/contest/">SME CONTEST</a></li>
+		<li><a href="/contact/">CONTACT</a></li>
 	</ul>
 </nav>

@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 	<head>
-		<?php #$tpl->loadView('/site/blocks/head'); ?>
+		<?php
+			$tpl->defineZone
+			(
+				array
+				(
+					'name'			=>'Head',
+					'type'			=>'template',
+					'template'		=>'global.head'
+				)
+			);
+		?>
 	</head>
 	<body id="template-default" class="is-full-width home">
 		<!-- #wrapper -->
 		<div id="wrapper">
 			<!-- #header-->
 			<header id="header">
-				<?php #$tpl->loadView('/site/blocks/header'); ?>
 				<?php
 					$tpl->defineZone
 					(
@@ -16,17 +25,36 @@
 						(
 							'name'			=>'Header',
 							'type'			=>'template',
-							'template'		=>'global.header',
-							'multiple'		=>true
+							'template'		=>'global.header'
 						)
 					);
 				?>
 			</header>
 			<header id="header2a">
-				<?php #$tpl->loadView('/site/blocks/header2a'); ?>
+				<?php
+					$tpl->defineZone
+					(
+						array
+						(
+							'name'			=>'Header 2A',
+							'type'			=>'template',
+							'template'		=>'global.header2a'
+						)
+					);
+				?>
 			</header>
 			<header id="header2b">
-				<?php #$tpl->loadView('/site/blocks/header2b'); ?>
+				<?php
+					$tpl->defineZone
+					(
+						array
+						(
+							'name'			=>'Header 2B',
+							'type'			=>'template',
+							'template'		=>'global.header2b'
+						)
+					);
+				?>
 			</header>
 			<!-- #content-->
 			<section id="content-home">
@@ -36,10 +64,10 @@
 						array
 						(
 							'name'			=>'Home Ticker Content',
-							'type'			=>'content',
+							'type'			=>'node',
 							'typeConfig'	=>array
 							(
-								'type'		=>'Home Ticker',
+								'type'		=>7,
 								'multiple'	=>true
 							),
 							'template'		=>'local.contentItem'
@@ -66,7 +94,17 @@
 		<!-- #footer -->
 		<div class="mark"></div>
 		<footer id="footer">
-			<?php #$tpl->loadView('/site/blocks/footer'); ?>
+			<?php
+					$tpl->defineZone
+					(
+						array
+						(
+							'name'			=>'Footer',
+							'type'			=>'template',
+							'template'		=>'global.footer'
+						)
+					);
+				?>
 		</footer>
 	</body>
 </html>

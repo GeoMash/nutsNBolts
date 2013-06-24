@@ -4,7 +4,7 @@
 		<span class="ticker-text">
 			<img src="<?php $tpl->SITEPATH; ?>images/sic.png">
 			<p>&nbsp;</p>
-			Alliance Bank would love to give the local SMEs a kick start and Alliance BizSmart Accademy was born.
+			<?php $tpl->main_text ?>;
 			<p>&nbsp;</p>
 			<a href="/about/">
 				<img border="0" src="<?php $tpl->SITEPATH; ?>images/discover.png">
