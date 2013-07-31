@@ -34,7 +34,8 @@ namespace nutsnbolts
 		public function __construct()
 		{
 			// Set the application path.
-			Nutshell::setAppPath(__DIR__);
+			// Nutshell::setAppPath(__DIR__);
+			Nutshell::registerApplication('nutsnbolts',__DIR__);
 
 			//get the nutshell instance (create nutshell).
 			$this->nutshell	= Nutshell::getInstance();
