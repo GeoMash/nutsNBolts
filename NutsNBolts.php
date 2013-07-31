@@ -1,5 +1,5 @@
 <?php
-namespace nutsnbolts
+namespace application\nutsnbolts
 {
 	use nutshell\Nutshell;
 	use nutshell\core\exception\NutshellException;
