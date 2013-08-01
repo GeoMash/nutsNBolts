@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\Node as NodeBase;
+	use application\nutsnbolts\model\base\Node as NodeBase;
 	
 	class Node extends NodeBase	
 	{

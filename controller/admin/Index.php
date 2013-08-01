@@ -1,10 +1,10 @@
 <?php
-namespace application\controller\admin
+namespace application\nutsnbolts\controller\admin
 {
-	use application\base\AdminController;
-	use application\controller\admin\ConfigureContent;
-	use application\controller\admin\Content;
-	use application\controller\admin\Dashboard;
+	use application\nutsnbolts\base\AdminController;
+	use application\nutsnbolts\controller\admin\ConfigureContent;
+	use application\nutsnbolts\controller\admin\Content;
+	use application\nutsnbolts\controller\admin\Dashboard;
 	
 	class Index extends AdminController
 	{

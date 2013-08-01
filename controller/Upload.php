@@ -1,11 +1,9 @@
 <?php
-namespace application\controller
+namespace application\nutsnbolts\controller
 {
 	use nutshell\Nutshell;
 	use nutshell\plugin\mvc\Controller;
 	use nutshell\plugin\formatParser\FormatParserBase;
-	use application\plugin\kml\Kml;
-	use application\plugin\shape\Polygon as PolygonShape;
 	
 	class Upload extends Controller
 	{

@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\Page as PageBase;
+	use application\nutsnbolts\model\base\Page as PageBase;
 	
 	class Page extends PageBase	
 	{

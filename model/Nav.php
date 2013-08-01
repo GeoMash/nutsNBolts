@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\Nav as NavBase;
+	use application\nutsnbolts\model\base\Nav as NavBase;
 	
 	class Nav extends NavBase	
 	{

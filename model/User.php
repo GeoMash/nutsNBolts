@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\User as UserBase;
+	use application\nutsnbolts\model\base\User as UserBase;
 	
 	class User extends UserBase	
 	{

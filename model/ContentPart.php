@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\ContentPart as ContentPartBase;
+	use application\nutsnbolts\model\base\ContentPart as ContentPartBase;
 	
 	class ContentPart extends ContentPartBase	
 	{

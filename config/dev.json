@@ -1,0 +1,10 @@
+{
+	"extends":	"production",
+	"config":
+	{
+		"application":
+		{
+			"mode": "development"
+		}
+	}
+}

@@ -1,5 +1,5 @@
 <?php
-namespace application\base
+namespace application\nutsnbolts\base
 {
 	use nutshell\plugin\mvc\Mvc;
 	

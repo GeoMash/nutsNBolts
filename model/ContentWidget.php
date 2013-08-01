@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\ContentWidget as ContentWidgetBase;
+	use application\nutsnbolts\model\base\ContentWidget as ContentWidgetBase;
 	
 	class ContentWidget extends ContentWidgetBase	
 	{

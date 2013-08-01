@@ -8,9 +8,9 @@
  * @package application-model
  * @since 20/05/2013 
  */
-namespace application\model\base
+namespace application\nutsnbolts\model\base
 {
-	use application\model\common\Base;
+	use application\nutsnbolts\model\common\Base;
 	
 	class Nav extends Base	
 	{

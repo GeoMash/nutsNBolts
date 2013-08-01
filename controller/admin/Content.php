@@ -1,7 +1,7 @@
 <?php
-namespace application\controller\admin
+namespace application\nutsnbolts\controller\admin
 {
-	use application\base\AdminController;
+	use application\nutsnbolts\base\AdminController;
 	
 	class Content extends AdminController
 	{

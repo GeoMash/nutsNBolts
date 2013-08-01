@@ -1,7 +1,7 @@
 <?php
-namespace application\controller
+namespace application\nutsnbolts\controller
 {
-	use application\base\Controller;
+	use application\nutsnbolts\base\Controller;
 	
 	class Index extends Controller
 	{

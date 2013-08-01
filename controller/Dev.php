@@ -1,7 +1,7 @@
 <?php
-namespace application\controller
+namespace application\nutsnbolts\controller
 {
-	use application\helper\CryptoHelper;
+	use application\nutsnbolts\helper\CryptoHelper;
 
 	use nutshell\Nutshell;
 	use nutshell\helper\StringHelper;

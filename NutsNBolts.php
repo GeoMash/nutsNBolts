@@ -2,6 +2,7 @@
 namespace application\nutsnbolts
 {
 	use nutshell\Nutshell;
+	use nutshell\core\application\Application;
 	use nutshell\core\exception\NutshellException;
 	use \DirectoryIterator;
 
@@ -11,7 +12,7 @@ namespace application\nutsnbolts
 	 * @version 1.0.0
 	 * @author Timothy Chandler <tim@geomash.com>
 	 */
-	class NutsNBolts
+	class NutsNBolts extends Application
 	{
 		const VERSION					='1.0.0-dev';
 		const VERSION_MAJOR				=1;
@@ -19,23 +20,13 @@ namespace application\nutsnbolts
 		const VERSION_MICRO				=0;
 		const VERSION_STAGE				='dev';
 		const VERSION_STAGE_NUM			=0;
-
-		protected $nutshell				=null;
 		
-		static public function getInstance()
+		public function init()
 		{
-			if (!isset($GLOBALS['NUTSNBOLTS']))
-			{
-				$GLOBALS['NUTSNBOLTS']=new self();
-			}
-			return $GLOBALS['NUTSNBOLTS'];
-		}
-		
-		public function __construct()
-		{
+			// print_r(Nutshell::getInstance()->config);exit();
 			// Set the application path.
 			// Nutshell::setAppPath(__DIR__);
-			Nutshell::registerApplication('nutsnbolts',__DIR__);
+			// Nutshell::registerApplication('nutsnbolts',__DIR__);
 
 			//get the nutshell instance (create nutshell).
 			$this->nutshell	= Nutshell::getInstance();
@@ -57,7 +48,7 @@ namespace application\nutsnbolts
 			$this->loadApplicationExceptionHandlers();
 		}
 		
-		public function init()
+		public function exec()
 		{
 			//Initiate the MVC.
 			try
@@ -69,16 +60,17 @@ namespace application\nutsnbolts
 				}
 				if (NS_INTERFACE!= Nutshell::INTERFACE_PHPUNIT)
 				{
-					$this->nutshell->plugin->Mvc();
+					$this->plugin->Mvc('nutsnbolts');
 				}
 			}
 			catch(NutshellException $exception)//TODO: Change this - its not always a 404 (It can sometimes be a 500).
 			{
+				//exit('mvc failed');
 				if(NS_INTERFACE != Nutshell::INTERFACE_CLI)
 				{
 					header('HTTP/1.1 404 Controller Not Found');
 				}
-				if (Nutshell::getInstance()->config->application->mode == 'development')
+				if ($this->config->application->mode == 'development')
 				{
 					throw $exception;
 				}

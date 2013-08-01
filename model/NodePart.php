@@ -1,7 +1,7 @@
 <?php
-namespace application\model
+namespace application\nutsnbolts\model
 {
-	use application\model\base\NodePart as NodePartBase;
+	use application\nutsnbolts\model\base\NodePart as NodePartBase;
 	
 	class NodePart extends NodePartBase	
 	{
