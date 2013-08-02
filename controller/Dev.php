@@ -27,11 +27,10 @@ namespace application\nutsnbolts\controller
 		public function generateModels()
 		{
 			$this->guard();
-			
 			// $db=Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database;
 			// die(Nutshell::getInstance()->config->plugin->Mvc->connection);
 			$db=$this->plugin->Db->{Nutshell::getInstance()->config->plugin->Mvc->connection};
-			var_dump(get_class($db));
+			// var_dump(get_class($db));
 			// Get list of Table Names
 			$query = "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = ?";
 			$db->select($query,array(Nutshell::getInstance()->config->plugin->Mvc->connection));
@@ -47,10 +46,11 @@ namespace application\nutsnbolts\controller
 			// Get the Model Generator, configure it
 			$generator = $this->plugin->ModelGenerator;
 			$generator->setBaseClass('Base');
-			$generator->setBaseClassNamespace('application\\model\\common\\');
+			$generator->setAppliacationNamespace('application\\nutsnbolts\\');
+			$generator->setBaseClassNamespace('application\\nutsnbolts\\model\\common\\');
 			
 			// Define the location to put the generated models
-			$modelsFolder = APP_HOME . _DS_ . 'model';
+			$modelsFolder = APP_HOME . _DS_ . 'nutsnbolts'._DS_.'model';
 			$subfolder = _DS_ . 'base';
 			
 			foreach($models as $tableName => $modelName)
