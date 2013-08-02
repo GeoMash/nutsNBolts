@@ -2,6 +2,7 @@
 namespace application\nutsnbolts\controller
 {
 	use application\nutsnbolts\base\Controller;
+	use nutshell\helper\ObjectHelper;
 	
 	class Index extends Controller
 	{
@@ -13,25 +14,62 @@ namespace application\nutsnbolts\controller
 			'widget'
 		);
 		
-		public $page	=null;
-		public $nodes	=null;
+		public $page		=null;
+		public $viewPath	=null;
+		public $nodes		=null;
+		private $site		=null;
 		
 		public function index()
 		{
-			$path=$this->getPath();
-			$page=$this->model->Page->read(array('url'=>$path));
+			$result=$this->model->site->read(array('domain'=>$_SERVER['HTTP_HOST']));
+			if (isset($result[0]))
+			{
+				$this->site=$result[0];
+			}
+			else
+			{
+				die('No site registered for this domain!');
+			}
+			$binding=$this->application->nutsnbolts->getSiteBinding($this->site['ref']);
+			if (!$binding)
+			{
+				die('No site bound for this domain!');
+			}
+			$applicationName=strtolower(ObjectHelper::getBaseClassName(get_class($binding['application'])));
+			$path			=$this->getPath();
+			$page			=$this->model->Page->read(array('url'=>$path));
+			
 			if (count($page))
 			{
 				$this->page		=$page[0];
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
+				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 				
-				$this->view->setTemplate('site/page/'.$this->page['page_type_id'].'/index');
+				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->page['ref']._DS_.'index');
 				$this->view->setVar('NS_ENV',NS_ENV);
 				$this->view->setVar('SITEPATH','/sites/1/');
 				$this->view->setVar('node',$this->nodes);
 				
-				$this->view->getContext()
-				->registerCallback
+				$scope		=$this->view;
+				$viewPath	=$this->viewPath;
+				$this->view->getContext()->registerCallback
+				(
+					'loadView',
+					function($viewName,$viewKeyVals=array(),$print=true) use ($scope,$viewPath)
+					{
+						$template=$scope->plugin->Template($scope->buildViewPath($viewPath.$viewName));
+						$scope->templateContext->setKeyValArray($viewKeyVals);
+						$template->setContext($scope->templateContext);
+						if ($print)
+						{
+							print $template->compile();
+						}
+						else
+						{
+							return $template->compile();
+						}
+					}
+				)->registerCallback
 				(
 					'defineZone',
 					function($config)
@@ -68,14 +106,14 @@ namespace application\nutsnbolts\controller
 						{
 							$this->view->getContext()->loadView
 							(
-								'site/page/'.$this->page['page_type_id'].'/block/'.$template
+								'page'._DS_.$this->page['ref'].'/block/'.$template
 							);
 						}
 						else if ($scope=='global')
 						{
 							$this->view->getContext()->loadView
 							(
-								'site/block/'.$template
+								'block'._DS_.$template
 							);
 						}
 						else

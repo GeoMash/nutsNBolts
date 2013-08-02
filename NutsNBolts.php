@@ -21,6 +21,8 @@ namespace application\nutsnbolts
 		const VERSION_STAGE				='dev';
 		const VERSION_STAGE_NUM			=0;
 		
+		private $siteBindings=array();
+		
 		public function init()
 		{
 			// print_r(Nutshell::getInstance()->config);exit();
@@ -118,6 +120,28 @@ namespace application\nutsnbolts
 		private function loadPatches()
 		{
 			$this->loadAllFilesFromFolder(__DIR__ . _DS_ . 'patches' . _DS_);
+		}
+		
+		public function bindToSite($application,$site)
+		{
+			$this->siteBindings[]=array
+			(
+				'application'	=>$application,
+				'site'			=>$site
+			);
+			return $this;
+		}
+		
+		public function getSiteBinding($site)
+		{
+			for($i=0,$j=count($this->siteBindings); $i<$j; $i++)
+			{
+				if ($this->siteBindings[$i]['site']==$site)
+				{
+					return $this->siteBindings[$i];
+				}
+			}
+			return false;
 		}
 	}	
 }
