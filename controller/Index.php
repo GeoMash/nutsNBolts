@@ -47,7 +47,7 @@ namespace application\nutsnbolts\controller
 				
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->page['ref']._DS_.'index');
 				$this->view->setVar('NS_ENV',NS_ENV);
-				$this->view->setVar('SITEPATH','/sites/1/');
+				$this->view->setVar('SITEPATH','/sites/'.$this->site['ref'].'/');
 				$this->view->setVar('node',$this->nodes);
 				
 				$scope		=$this->view;
