@@ -20,18 +20,15 @@ namespace
 	 */
 	function bootstrap()
 	{
-		define('PUBLIC_DIR', __DIR__ . '/../../../public/');
+		Nutshell::setApplictionPath(__DIR__.'/../../');
+		Nutshell::registerDefaultConfig('Alliance');
 		
-		//Include the Connect application.
-		include __DIR__ . '/../NutsNBolts.php';
-
-		$GLOBALS['NUTSNBOLTS'] = new NutsNBolts();
-		$GLOBALS['NUTSNBOLTS'] ->init();
+		Nutshell::getInstance()->application->NutsNBolts->exec();
 	}
 	
 	/* By including nutshell below, the framework will
 	 * auto-initiate. Nutshell will detect our custom bootstrap
 	 * and execute it.
 	 */
-	require __DIR__ . '/../../lib/nutshell/Nutshell.php';
+	require __DIR__ . '/../../../lib/nutshell/Nutshell.php';
 }
