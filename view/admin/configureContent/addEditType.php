@@ -35,6 +35,12 @@
 										<input type="text" name="icon" value="<?php $tpl->icon; ?>">
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Reference</label>
+									<div class="controls">
+										<input type="text" name="ref" value="<?php $tpl->ref; ?>">
+									</div>
+								</div>
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">
