@@ -2,9 +2,11 @@
 namespace application\nutsnbolts\controller\admin
 {
 	use application\nutsnbolts\base\AdminController;
+	use nutshell\helper\ObjectHelper;
 	
 	class ConfigureContent extends AdminController
 	{
+		
 		public function index()
 		{
 			$this->show404();
@@ -57,8 +59,11 @@ namespace application\nutsnbolts\controller\admin
 			}
 			else
 			{
-				$id=$this->model->ContentType->handleRecord($this->request->getAll());
-				$this->redirect('/admin/configurecontent/types/edit/'.$id);
+				$record=$this->request->getAll();
+				$record['site_id']=$this->getSiteId();
+				
+				$id=$this->model->ContentType->handleRecord($record);
+				$this->redirect('/admin/configureContent/types/edit/'.$id);
 			}
 		}
 		
@@ -79,21 +84,66 @@ namespace application\nutsnbolts\controller\admin
 				
 				if (count($parts))
 				{
-					$contentWidgets=$this->model->ContentWidget->read();
+				// var_dump($parts);exit();
+					$contentWidgets=$this->application->nutsnbolts->getWidgetList();
 					for ($i=0,$j=count($parts); $i<$j; $i++)
 					{
-						$template=$this->plugin->Template();
-						$template->setTemplate($this->view->buildViewPath('admin/configureContent/addWidgetSelection'));
-						$template->setKeyValArray($parts[$i]);
-						$options=array();
-						for ($k=0,$l=count($contentWidgets); $k<$l; $k++)
-						{
-							$selected=($parts[$i]['content_widget_id']==$contentWidgets[$k]['id'])?'selected':'';
-							$options[]='<option '.$selected.' value="'.$contentWidgets[$k]['id'].'">'.$contentWidgets[$k]['name'].'</option>';
-						}
-						$template->setKeyVal('widgetTypes',implode('',$options));
-						$partHTML.=$template->compile();
+						 $partHTML.=$this->buildWidgetHTML($contentWidgets,$i,$parts[$i]);
 					}
+					$scripts=$this->getFormattedJsScriptList();
+					$exec=array();
+					$execClasses=$this->getJSClassesToExecute();
+					if (count($execClasses))
+					{
+						for ($i=0,$j=count($execClasses); $i<$j; $i++)
+						{
+							$exec[]='new '.$execClasses[$i].'();';
+						}
+					}
+					$exec=implode("\n",$exec);
+					$partHTML.=<<<JS
+<script type="text/javascript">
+requirejs.config
+(
+	{
+		waitSeconds:	3,
+		baseUrl:		'/js',
+		paths:
+		{
+			jskk:				'vendor/jskk/jskk-1.1.0.min',
+			'jskk-optional':	'vendor/jskk/jskk-1.1.0-optional.min',
+			\$JSKK:				'vendor/jskk'
+		}
+	}
+);
+requirejs
+(
+	[
+		'jskk',
+		'jskk-optional',
+		'nutsnbolts/Application',
+		{$scripts}
+	],
+	function()
+	{
+		\$JSKK.when
+		(
+			function()
+			{
+				return Object.isDefined(window.\$application);
+			}
+		).isTrue
+		(
+			function()
+			{
+				{$exec}
+			}
+		);
+		
+	}
+);
+</script>
+JS;
 				}
 				$this->view->setVar('parts',$partHTML);
 			}
@@ -139,13 +189,27 @@ HTML;
 		public function getAddContentTypeWidgetOptions()
 		{
 			$options=array();
-			$contentWidgets=$this->model->ContentWidget->read();
+			$contentWidgets=$this->application->nutsnbolts->getWidgetList();
 			for ($i=0,$j=count($contentWidgets); $i<$j; $i++)
 			{
-				$options[]='<option value="'.$contentWidgets[$i]['id'].'">'.$contentWidgets[$i]['name'].'</option>';
+				$options[]='<option value="'.$contentWidgets[$i]['namespace'].'">'.$contentWidgets[$i]['name'].'</option>';
 			}
 			$this->plugin	->Responder('html')
 							->setData(implode('',$options))
+							->send();
+		}
+		
+		public function getConfigForWidget()
+		{
+			$widgetOptions=$this->getWidgetInstance($this->request->get('widget'))
+								->getConfigHTML($this->request->get('index'));
+			
+			if (empty($widgetOptions))
+			{
+				$widgetOptions='None';
+			}
+			$this->plugin	->Responder('html')
+							->setData($widgetOptions)
 							->send();
 		}
 	}

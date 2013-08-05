@@ -43,7 +43,14 @@ namespace application\nutsnbolts\controller\admin
 			else
 			{
 				$record=$this->request->getAll();
-				$record['content_type_id']=$typeID;
+				
+				$record['site_id']			=$this->getSiteId();
+				$record['content_type_id']	=$typeID;
+				$record['last_user_id']		=$this->getUserId();
+				if (!isset($record['id']))
+				{
+					$record['original_user_id']=$this->getUserId();
+				}
 				//TODO last_user_id
 				$id=$this->model->Node->handleRecord($record);
 				$this->redirect('/admin/content/edit/'.$id);
@@ -73,12 +80,20 @@ namespace application\nutsnbolts\controller\admin
 				}
 				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_';
 				$formElId.=($thisNodePart)?$thisNodePart['id']:'0';
-				$input=str_replace
-				(
-					array('{name}','{value}'),
-					array($formElId,$thisNodePart?$thisNodePart['value']:''),
-					$contentType[$i]['template']
-				);
+				
+				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
+				// var_dump($input);
+				// exit();
+				
+				// $input=str_replace
+				// (
+				// 	array('{name}','{value}'),
+				// 	array($formElId,$thisNodePart?$thisNodePart['value']:''),
+				// 	$contentType[$i]['template']
+				// );
+				
+				
 				$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType[$i]['label']}</label>
@@ -108,12 +123,14 @@ HTML;
 			for ($i=0,$j=count($contentType); $i<$j; $i++)
 			{
 				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_0';
-				$input=str_replace
-				(
-					array('{name}','{value}'),
-					array($formElId,''),
-					$contentType[$i]['template']
-				);
+				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
+				// $input=str_replace
+				// (
+				// 	array('{name}','{value}'),
+				// 	array($formElId,''),
+				// 	$contentType[$i]['template']
+				// );
 				$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType[$i]['label']}</label>
