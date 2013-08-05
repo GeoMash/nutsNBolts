@@ -1,5 +1,5 @@
 <?php
-namespace application\helper 
+namespace application\nutsnbolts\helper 
 {
 	use nutshell\Nutshell;
 	
