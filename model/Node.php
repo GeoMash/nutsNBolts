@@ -31,6 +31,7 @@ namespace application\nutsnbolts\model
 			//For Inserts
 			else
 			{
+				unset($record['id']);
 				$nodeParts=$this->extractContentParts($record);
 				if ($id=$this->insertAssoc($record))
 				{

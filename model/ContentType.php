@@ -52,6 +52,7 @@ namespace application\nutsnbolts\model
 			//For Inserts
 			else
 			{
+				unset($record['id']);
 				$contentParts=$this->extractContentParts($record);
 				if ($id=$this->insertAssoc($record))
 				{
@@ -76,7 +77,7 @@ namespace application\nutsnbolts\model
 		private function extractContentParts(&$record)
 		{
 			$contentParts=array();
-			for ($i=0,$j=count($record['label']); $i<$j; $i++)
+			for ($i=0,$j=count($record['widget']); $i<$j; $i++)
 			{
 				$id=(isset($record['part_id'][$i]))?$record['part_id'][$i]:0;
 				$ref=str_replace
@@ -85,16 +86,22 @@ namespace application\nutsnbolts\model
 					array('_'),
 					strtolower($record['label'][$i])
 				);
-				$contentParts[]=array
+				$contentParts[$i]=array
 				(
 				 	'id'				=>$id,
-					'content_widget_id'	=>$record['content_widget_id'][$i],
+					'widget'			=>$record['widget'][$i]['namespace'],
 					'label'				=>$record['label'][$i],
-					'ref'				=>$ref
+					'ref'				=>$ref,
+					'config'			=>''
 				);
+				
+				if (isset($record['widget'][$i]['config']))
+				{
+					$contentParts[$i]['config']=json_encode($record['widget'][$i]['config']);
+				}
 			}
 			unset($record['part_id']);
-			unset($record['content_widget_id']);
+			unset($record['widget']);
 			unset($record['label']);
 			return $contentParts;
 		}
@@ -106,10 +113,10 @@ namespace application\nutsnbolts\model
 					content_type.icon,
 					content_part.id AS content_part_id,
 					content_part.label,
-					content_widget.template
+					content_part.widget,
+					content_part.config
 			FROM content_type
 			LEFT JOIN content_part ON content_part.content_type_id=content_type.id
-			LEFT JOIN content_widget ON content_widget.id=content_part.content_widget_id
 			WHERE content_type.id=?
 SQL;
 			if ($this->db->select($query,array($id)))
