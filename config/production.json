@@ -96,8 +96,9 @@
 						"mode": "Regex",
 						"map":
 						{
-							"/admin/":	"admin/Index",
-							".":		"Index"
+							"/admin/":		"admin/Index",
+							"/sandbox/":	"Sandbox",
+							".":			"Index"
 						}
 					}
 				]
