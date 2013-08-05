@@ -35,25 +35,25 @@ namespace application\nutsnbolts\widget\base
 			
 		}
 		
-		// public function setProperty($key,$val)
-		// {
-		// 	$this->properties[$key]=$val;
-		// 	return $this;
-		// }
+		public function setProperty($key,$val)
+		{
+			$this->properties[$key]=$val;
+			return $this;
+		}
 		
-		// public function setProperties($keyVals)
-		// {
-		// 	foreach ($keyvals as $key=>$val)
-		// 	{
-		// 		$this->setProperty($key,$val);
-		// 	}
-		// 	return $this;
-		// }
+		public function setProperties($keyVals)
+		{
+			foreach ($keyvals as $key=>$val)
+			{
+				$this->setProperty($key,$val);
+			}
+			return $this;
+		}
 		
-		// public function getProperty($key)
-		// {
-		// 	return $this->properties[$key];
-		// }
+		public function getProperty($key)
+		{
+			return $this->properties[$key];
+		}
 		
 		public function getProperties()
 		{
@@ -62,18 +62,22 @@ namespace application\nutsnbolts\widget\base
 		
 		public function getWidgetHTML($config=array())
 		{
-			$template=$this->plugin->Template(ObjectHelper::getClassPath($this).'assets'._DS_.$this->mainTemplateFile);
-			if (!empty($config) && count($config))
+			$template	=$this->plugin->Template(ObjectHelper::getClassPath($this).'assets'._DS_.$this->mainTemplateFile);
+			
+			if (is_string($config))
 			{
 				$config=json_decode($config);
 			}
+			if (!is_null($config) && count($config))
+			{
+				$config=array_merge((array)$config,$this->getProperties());
+			}
 			else
 			{
-				$config=false;
+				$config=$this->getProperties();
 			}
-			$template->setKeyVal('config',$config);
+			$template->setKeyValArray($config);
 			$template->compile();
-			
 			return $template->getCompiled();
 		} 
 		
@@ -92,7 +96,7 @@ namespace application\nutsnbolts\widget\base
 				{
 					$config=false;
 				}
-				$template->setKeyVal('config',$config);
+				$template->setKeyValArray($config);
 				$template->compile();
 				return $template->getCompiled();
 			}
