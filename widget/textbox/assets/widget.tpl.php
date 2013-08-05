@@ -1,0 +1,1 @@
+<input type="text" name="<?php $tpl->name; ?>" value="<?php $tpl->value; ?>" />
