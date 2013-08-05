@@ -82,6 +82,8 @@ namespace application\nutsnbolts\controller\admin
 				$formElId.=($thisNodePart)?$thisNodePart['id']:'0';
 				
 				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+				$widget->setProperty('name',$formElId);
+				$widget->setProperty('value','');
 				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
 				// var_dump($input);
 				// exit();
@@ -124,6 +126,8 @@ HTML;
 			{
 				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_0';
 				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+				$widget->setProperty('name',$formElId);
+				$widget->setProperty('value','');
 				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
 				// $input=str_replace
 				// (
