@@ -21,20 +21,7 @@ namespace application\nutsnbolts\controller
 		
 		public function index()
 		{
-			$result=$this->model->site->read(array('domain'=>$_SERVER['HTTP_HOST']));
-			if (isset($result[0]))
-			{
-				$this->site=$result[0];
-			}
-			else
-			{
-				die('No site registered for this domain!');
-			}
-			$binding=$this->application->nutsnbolts->getSiteBinding($this->site['ref']);
-			if (!$binding)
-			{
-				die('No site bound for this domain!');
-			}
+			$binding		=$this->application->nutsnbolts->getSiteBinding($this->getSiteRef());
 			$applicationName=strtolower(ObjectHelper::getBaseClassName(get_class($binding['application'])));
 			$path			=$this->getPath();
 			$page			=$this->model->Page->read(array('url'=>$path));
@@ -47,7 +34,7 @@ namespace application\nutsnbolts\controller
 				
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->page['ref']._DS_.'index');
 				$this->view->setVar('NS_ENV',NS_ENV);
-				$this->view->setVar('SITEPATH','/sites/'.$this->site['ref'].'/');
+				$this->view->setVar('SITEPATH','/sites/'.$this->getSite()['ref'].'/');
 				$this->view->setVar('node',$this->nodes);
 				
 				$scope		=$this->view;
@@ -127,9 +114,11 @@ namespace application\nutsnbolts\controller
 					{
 						if (isset($config['typeConfig']))
 						{
-							$filteredContent=$this->getNodesByContentType($config['typeConfig']['type']);
+							//TODO: get the id from the ref.
+							
+							$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
 							//Multiple of the same content type.
-							if ($config['typeConfig']['multiple'])
+							if (isset($config['typeConfig']['multiple']) && $config['typeConfig']['multiple'])
 							{
 								$content=$filteredContent;
 							}
@@ -142,7 +131,7 @@ namespace application\nutsnbolts\controller
 								{
 									for ($i=0,$j=count($filteredContent); $i<$j; $i++)
 									{
-										if ($filteredContent[$i]['id']==$config['typeConfig']['id'])
+										if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
 										{
 											$content[]=$filteredContent[$i];
 											break;
@@ -162,16 +151,16 @@ namespace application\nutsnbolts\controller
 						}
 						else
 						{
-							return 'INVALID ZONE - NO TEMPLATE TYPE CONFIG FOR TYPE "content"';
+							return 'INVALID ZONE - NO TEMPLATE TYPE CONFIG FOR TYPE "'.$config['typeConfig'].'"';
 						}
 						list($scope,$template)=explode('.',$config['template']);
 						if ($scope=='local')
 						{
-							$template='site/page/'.$this->page['page_type_id'].'/block/'.$template;
+							$template='page/'.$this->page['ref'].'/block/'.$template;
 						}
 						else if ($scope=='global')
 						{
-							$template='site/block/'.$template;
+							$template='block/'.$template;
 						}
 						else
 						{
@@ -224,12 +213,17 @@ namespace application\nutsnbolts\controller
 					&& isset($zone['name']));
 		}
 		
-		private function getNodesByContentType($type)
+		private function getNodesByContentTypeRef($ref)
 		{
 			$return=array();
+			$result=$this->model->contentType->read(array('ref'=>$ref));
+			if (!isset($result[0]))
+			{
+				return $return;
+			}
 			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
 			{
-				if ($this->nodes[$i]['content_type_id']==$type)
+				if ($this->nodes[$i]['content_type_id']==$result[0]['id'])
 				{
 					$return[]=&$this->nodes[$i];
 				}
