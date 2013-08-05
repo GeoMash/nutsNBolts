@@ -9,8 +9,17 @@ namespace application\nutsnbolts\controller
 	{
 		public function index()
 		{
-			print 'SANDBOX';
+			$list=$this->application->nutsnbolts->getWidgetList();
+			var_dump($list);
+			// $this->testWidgets();
 		}
+		
+		public function testWidgets()
+		{
+			$this->application->nutsnbolts->widget->Textbox();
+		}
+		
+		
 	}
 }
 ?>
