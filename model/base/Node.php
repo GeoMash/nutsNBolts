@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 02/08/2013 
+ * @since 04/08/2013 
  */
 namespace application\nutsnbolts\model\base
 {
@@ -22,13 +22,13 @@ namespace application\nutsnbolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
-			'page_id' => 'int(10) NOT NULL ' ,
+			'site_id' => 'int(10) NOT NULL ' ,
 			'content_type_id' => 'int(10) NOT NULL ' ,
 			'title' => 'varchar(100) NOT NULL ' ,
 			'date_created' => 'timestamp NOT NULL ' ,
 			'date_updated' => 'timestamp NOT NULL ' ,
 			'date_published' => 'timestamp' ,
-			'original_user_id' => 'int(10) NOT NULL ' ,
+			'original_user_id' => 'int(10)' ,
 			'last_user_id' => 'int(10) NOT NULL ' ,
 			'order' => 'int(5) NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 

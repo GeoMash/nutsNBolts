@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 02/08/2013 
+ * @since 04/08/2013 
  */
 namespace application\nutsnbolts\model\base
 {
@@ -22,11 +22,11 @@ namespace application\nutsnbolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
-			'siet_id' => 'int(10) NOT NULL ' ,
-			'content_widget_id' => 'int(10) NOT NULL ' ,
+			'widget' => 'varchar(100) NOT NULL ' ,
 			'label' => 'varchar(100) NOT NULL ' ,
 			'ref' => 'varchar(100) NOT NULL ' ,
-			'content_type_id' => 'int(10) NOT NULL ' 
+			'content_type_id' => 'int(10) unsigned NOT NULL ' ,
+			'config' => 'text NOT NULL ' 
 		);
 	}
 }
