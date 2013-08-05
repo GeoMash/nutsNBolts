@@ -2,9 +2,10 @@
 namespace application\nutsnbolts\controller\admin
 {
 	use application\nutsnbolts\base\AdminController;
-	use application\nutsnbolts\controller\admin\ConfigureContent;
-	use application\nutsnbolts\controller\admin\Content;
-	use application\nutsnbolts\controller\admin\Dashboard;
+	use nutshell\helper\ArrayHelper;
+	// use application\nutsnbolts\controller\admin\ConfigureContent;
+	// use application\nutsnbolts\controller\admin\Content;
+	// use application\nutsnbolts\controller\admin\Dashboard;
 	
 	class Index extends AdminController
 	{
@@ -21,6 +22,16 @@ namespace application\nutsnbolts\controller\admin
 			$this->MVC=$this->plugin->Mvc;
 			switch ($this->request->node(1))
 			{
+				case 'script':
+				{
+					$this->routedController=new Script($this->MVC);
+					break;
+				}
+				case 'template':
+				{
+					$this->template();
+					return;
+				}
 				case 'dashboard':
 				{
 					$this->routedController=new Dashboard($this->MVC);
@@ -31,11 +42,13 @@ namespace application\nutsnbolts\controller\admin
 					$this->routedController=new Content($this->MVC);
 					break;
 				}
+				case 'configurePages':
 				case 'configurepages':
 				{
 					$this->routedController=new ConfigurePages($this->MVC);
 					break;
 				}
+				case 'configureContent':
 				case 'configurecontent':
 				{
 					$this->routedController=new ConfigureContent($this->MVC);
@@ -90,6 +103,35 @@ namespace application\nutsnbolts\controller\admin
 			$this->addBreadcrumb('Articles','icon-list');
 			
 			$this->view->render();
+		}
+		
+		public function template()
+		{
+			$nodes=$this->request->getNodes();
+			ArrayHelper::without
+			(
+				$nodes,
+				array
+				(
+					$this->request->node(0),
+					$this->request->node(1)
+				)
+			);
+			$templatePath	='admin/'.implode('/',$nodes);
+			// $template		=$this->plugin->Template();
+			// $template->setTemplate($this->view->buildViewPath($templatePath));
+			
+			switch ($templatePath)
+			{
+				case 'admin/configureContent/addWidgetSelection':
+				{
+					$html=$this->buildWidgetHTML($this->application->nutsnbolts->getWidgetList());
+					break;
+				}
+			}
+			$this->plugin	->Responder('html')
+							->setData($html)
+							->send();
 		}
 	}
 }
