@@ -2,6 +2,7 @@
 namespace application\nutsnbolts
 {
 	use nutshell\Nutshell;
+	use nutshell\core\loader\Loader;
 	use nutshell\core\application\Application;
 	use nutshell\core\exception\NutshellException;
 	use \DirectoryIterator;
@@ -23,6 +24,8 @@ namespace application\nutsnbolts
 		
 		private $siteBindings=array();
 		
+		public $widget=null;
+		
 		public function init()
 		{
 			// print_r(Nutshell::getInstance()->config);exit();
@@ -32,6 +35,9 @@ namespace application\nutsnbolts
 
 			//get the nutshell instance (create nutshell).
 			$this->nutshell	= Nutshell::getInstance();
+			
+			$this->widget=new Loader();
+			$this->widget->registerContainer('widget',__DIR__._DS_.'widget'._DS_,'application\nutsnbolts\widget\\');
 			
 			if (defined('TESTRUNNER') && TESTRUNNER && NS_INTERFACE!==Nutshell::INTERFACE_PHPUNIT)
 			{
@@ -143,6 +149,29 @@ namespace application\nutsnbolts
 			}
 			return false;
 		}
-	}	
+		
+		public function getWidgetList()
+		{
+			//preg_match_all('/((?:^|[A-Z])[a-z]+)/',$str,$matches);
+			$folder	=__DIR__._DS_.'widget';
+			$list	=array();
+			foreach (new DirectoryIterator($folder) as $iteration)
+			{
+				//We don't load folders or files from within folders.
+				if ($iteration->isDir() && !$iteration->isDot()
+				&& $iteration->getFilename()!='base')
+				{
+					$list[]=array
+					(
+						'namespace'	=>'application\\nutsnbolts\\widget\\'.$iteration->getFilename(),
+						'name'		=>ucwords($iteration->getFilename())
+					);
+				}
+			}
+			//TODO: Registered widgets from other applications.
+			
+			return $list;
+		}
+	}
 }
 ?>
