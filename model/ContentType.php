@@ -11,14 +11,20 @@ namespace application\nutsnbolts\model
 			//For Updates
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
+
 				$existingParts	=$this->model->ContentPart->read(array('content_type_id'=>$record['id']));
 				$contentParts	=$this->extractContentParts($record);
 				$this->update($record,array('id'=>$record['id']));
 				//Update parts.
 				for ($i=0,$j=count($contentParts); $i<$j; $i++)
 				{
+
 					//For Update
-					if ($contentParts[$i]['id']!==0)
+					/*
+						# MD 8 August 2012
+						# bug: the else condition of the statement would not ne true, now checking for empty id as well
+					*/
+					if ($contentParts[$i]['id']!==0 && !empty($contentParts[$i]['id']))
 					{
 						$this->model->ContentPart->update($contentParts[$i],array('id'=>$contentParts[$i]['id']));
 					}
@@ -45,9 +51,7 @@ namespace application\nutsnbolts\model
 					{
 						$this->model->ContentPart->delete($existingParts[$i]);
 					}
-				}
-				
-				
+				}	
 			}
 			//For Inserts
 			else
