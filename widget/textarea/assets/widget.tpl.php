@@ -1,3 +1,3 @@
 <textarea name="<?php $tpl->name; ?>">
-	<?php $tpl->value; ?>
+<?php $tpl->value; ?>
 </textarea>

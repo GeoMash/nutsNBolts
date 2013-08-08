@@ -26,11 +26,12 @@ namespace application\nutsnbolts\controller
 			$applicationName=strtolower(ObjectHelper::getBaseClassName(get_class($binding['application'])));
 			$path			=$this->getPath();
 			$page			=$this->model->Page->read(array('url'=>$path));
-			
+
 			if (count($page))
 			{
 				$this->page		=$page[0];
 				$this->pageType	=$this->model->PageType->read(array('id'=>$this->page['page_type_id']))[0];
+
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
 				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 				
