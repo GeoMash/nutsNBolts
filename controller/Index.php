@@ -15,6 +15,7 @@ namespace application\nutsnbolts\controller
 		);
 		
 		public $page		=null;
+		public $pageType	=null;
 		public $viewPath	=null;
 		public $nodes		=null;
 		private $site		=null;
@@ -29,10 +30,11 @@ namespace application\nutsnbolts\controller
 			if (count($page))
 			{
 				$this->page		=$page[0];
+				$this->pageType	=$this->model->PageType->read(array('id'=>$this->page['page_type_id']))[0];
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
 				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 				
-				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->page['ref']._DS_.'index');
+				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
 				$this->view->setVar('NS_ENV',NS_ENV);
 				$this->view->setVar('SITEPATH','/sites/'.$this->getSite()['ref'].'/');
 				$this->view->setVar('node',$this->nodes);
@@ -93,7 +95,7 @@ namespace application\nutsnbolts\controller
 						{
 							$this->view->getContext()->loadView
 							(
-								'page'._DS_.$this->page['ref'].'/block/'.$template
+								'page'._DS_.$this->pageType['ref'].'/block/'.$template
 							);
 						}
 						else if ($scope=='global')
@@ -115,8 +117,11 @@ namespace application\nutsnbolts\controller
 						if (isset($config['typeConfig']))
 						{
 							//TODO: get the id from the ref.
-							
 							$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
+							if (!count($filteredContent))
+							{
+								return '';
+							}
 							//Multiple of the same content type.
 							if (isset($config['typeConfig']['multiple']) && $config['typeConfig']['multiple'])
 							{
@@ -156,7 +161,7 @@ namespace application\nutsnbolts\controller
 						list($scope,$template)=explode('.',$config['template']);
 						if ($scope=='local')
 						{
-							$template='page/'.$this->page['ref'].'/block/'.$template;
+							$template='page/'.$this->pageType['ref'].'/block/'.$template;
 						}
 						else if ($scope=='global')
 						{
