@@ -1,0 +1,24 @@
+{
+	"extends":	"dev",
+	"config":
+	{
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"nutsnbolts"
+					}
+				}
+			}
+		}
+	}
+}
