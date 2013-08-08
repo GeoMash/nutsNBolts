@@ -83,7 +83,7 @@ namespace application\nutsnbolts\controller\admin
 				
 				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
 				$widget->setProperty('name',$formElId);
-				$widget->setProperty('value','');
+				$widget->setProperty('value',$thisNodePart['value']);
 				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
 				// var_dump($input);
 				// exit();
