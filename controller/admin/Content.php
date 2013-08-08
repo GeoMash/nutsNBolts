@@ -7,13 +7,19 @@ namespace application\nutsnbolts\controller\admin
 	{
 		private $typeID=null;
 		
+		public function index()
+		{
+			$this->show404();
+			$this->view->render();
+		}
+		
 		public function view($typeID)
 		{
 			$this->typeID=$typeID;
 			$contentType=$this->model->ContentType->read($this->typeID);
 			
-			$this->addBreadcrumb('Content','icon-edit');
-			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon']);
+			$this->addBreadcrumb('Content','icon-edit','content');
+			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$contentType[0]['id']);
 			$this->setContentView('admin/content/view');
 			$this->view->setVar('contentTypeId',$this->typeID);
 			$this->view->setVar('tableHeaderText',$contentType[0]['name']);
@@ -35,9 +41,12 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('title'))
 			{
+				$contentType=$this->model->ContentType->read($this->request->node(3));
 				$this->generateContentParts($typeID);
 				$this->setContentView('admin/content/addEdit');
-				$this->addBreadcrumb('Add Content','icon-pencil');
+				$this->addBreadcrumb('Content','icon-edit','content');
+				$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$typeID);
+				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
 				$this->view->render();
 			}
 			else
@@ -113,7 +122,9 @@ HTML;
 			
 			
 			$this->setContentView('admin/content/addEdit');
-			$this->addBreadcrumb('Edit Content','icon-pencil');
+			$this->addBreadcrumb('Content','icon-edit','content');
+			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
+			$this->addBreadcrumb('Edit Content','icon-pencil','edit/'.$id);
 			$this->view->render();
 		}
 		

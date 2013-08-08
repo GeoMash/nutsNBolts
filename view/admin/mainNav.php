@@ -1,12 +1,12 @@
 <ul class="nav nav-collapse collapse nav-collapse-primary">
-	<li class="active">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='dashboard')print 'active'; ?>">
 		<span class="glow"></span>
 		<a href="/admin">
 			<i class="icon-dashboard icon-2x"></i>
 			<span>Dashboard</span>
 		</a>
 	</li>
-	<li class="dark-nav">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='content')print 'active'; ?>">
 		<span class="glow"></span>
 		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#content-subs">
 			<i class="icon-edit icon-2x"></i>
@@ -15,11 +15,11 @@
 				<i class="icon-caret-down"></i>
 			</span>
 		</a>
-		<ul id="content-subs" class="collapse">
+		<ul id="content-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='content')print 'in'; ?>">
 			<?php $tpl->navContentTypes(); ?>
 		</ul>
 	</li>
-	<li class="dark-nav">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurepages')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#pages-config-subs">
 			<i class="icon-qrcode icon-2x"></i>
@@ -28,30 +28,30 @@
 				<i class="icon-caret-down"></i>
 			</span>
 		</a>
-		<ul id="pages-config-subs" class="collapse">
-			<li class="">
+		<ul id="pages-config-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='configurepages')print 'in'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='types')print 'active'; ?>">
 				<a href="/admin/configurepages/types">
 					<i class="icon-th"></i> Types
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='pages')print 'active'; ?>">
 				<a href="/admin/configurepages/pages">
 					<i class="icon-copy"></i> Pages
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='templates')print 'active'; ?>" style="display:none;">
 				<a href="/admin/configurepages/templates">
 					<i class="icon-file-alt"></i> Templates
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='navigation')print 'active'; ?>" style="display:none;">
 				<a href="/admin/configurecontent/navigation">
 					<i class="icon-tasks"></i> Navigation
 				</a>
 			</li>
 		</ul>
 	</li>
-	<li class="dark-nav">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurecontent')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#content-config-subs">
 			<i class="icon-cogs icon-2x"></i>
@@ -60,20 +60,20 @@
 				<i class="icon-caret-down"></i>
 			</span>
 		</a>
-		<ul id="content-config-subs" class="collapse">
-			<li class="">
+		<ul id="content-config-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='configurecontent')print 'in'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='types')print 'active'; ?>">
 				<a href="/admin/configurecontent/types">
 					<i class="icon-th"></i> Content Types
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='widgets')print 'active'; ?>" style="display:none;">
 				<a href="/admin/configurecontent/widgets">
 					<i class="icon-beaker"></i> Widgets
 				</a>
 			</li>
 		</ul>
 	</li>
-	<li class="dark-nav">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>" style="display:none;">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#settings-subs">
 			<i class="icon-wrench icon-2x"></i>
@@ -82,23 +82,23 @@
 				<i class="icon-caret-down"></i>
 			</span>
 		</a>
-		<ul id="settings-subs" class="collapse">
-			<li class="">
+		<ul id="settings-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='settings')print 'in'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
 				<a href="/admin/settings/general">
 					<i class="icon-circle-blank"></i> General
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='users')print 'active'; ?>">
 				<a href="/admin/settings/users">
 					<i class="icon-user"></i> Users
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='files')print 'active'; ?>">
 				<a href="/admin/settings/files">
 					<i class="icon-folder-open"></i> File Manager
 				</a>
 			</li>
-			<li class="">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>">
 				<a href="/admin/settings/plugins">
 					<i class="icon-bolt"></i> Plugins
 				</a>

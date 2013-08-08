@@ -10,12 +10,13 @@ namespace application\nutsnbolts\controller\admin
 		public function index()
 		{
 			$this->show404();
+			$this->view->render();
 		}
 		
 		public function types($action=null,$id=null)
 		{
-			$this->addBreadcrumb('Configure Content','icon-cogs');
-			$this->addBreadcrumb('Types','icon-th');
+			$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
+			$this->addBreadcrumb('Types','icon-th','types');
 			switch ($action)
 			{
 				case 'add':
@@ -54,7 +55,7 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('name'))
 			{
-				$this->addBreadcrumb('Add Content Type','icon-plus');
+				$this->addBreadcrumb('Add Content Type','icon-plus','add');
 				$this->setContentView('admin/configureContent/addEditType');
 			}
 			else
@@ -73,7 +74,7 @@ namespace application\nutsnbolts\controller\admin
 			{
 				$this->model->ContentType->handleRecord($this->request->getAll());
 			}
-			$this->addBreadcrumb('Edit Content Type','icon-edit');
+			$this->addBreadcrumb('Edit Content Type','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configureContent/addEditType');
 			if ($record=$this->model->ContentType->read($id))
 			{

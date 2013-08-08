@@ -27,9 +27,14 @@ namespace application\nutsnbolts\base
 			$this->view->setVar('NS_ENV',		NS_ENV);
 			$this->view->setVar('websiteTitle',	$this->websiteTitle);
 			$this->view->setVar('brandTitle',	$this->brandTitle);
+			
+			$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
+			$this->view->setVar('nav_active_main',$mainNav);
+			$this->view->setVar('nav_active_sub',$this->request->node(2));
+			
 			$this->show404();
 			
-			$this->addBreadcrumb('Home','icon-home');
+			$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 			
 			//TODO: Change this once users are actually implemented.
 			$this->user=array('id'=>1);
@@ -64,12 +69,13 @@ namespace application\nutsnbolts\base
 			return $this;
 		}
 		
-		public function addBreadcrumb($label,$icon)
+		public function addBreadcrumb($label,$icon,$urlNode)
 		{
 			$this->breadcrumbs[]=array
 			(
-				'label'	=>$label,
-				'icon'	=>$icon
+				'label'		=>$label,
+				'icon'		=>$icon,
+				'urlNode'	=>$urlNode
 			);
 			return $this;
 		}
@@ -79,24 +85,40 @@ namespace application\nutsnbolts\base
 			$html			=array('<div id="breadcrumbs">');
 			$itemTemplate	=<<<HTML
 <div class="breadcrumb-button {first}">
-	<span class="breadcrumb-label">
-		<i class="{icon}"></i> {label}
-	</span>
+	<a href="{href}">
+		<span class="breadcrumb-label">
+			<i class="{icon}"></i> {label}
+		</span>
+	</a>
 	<span class="breadcrumb-arrow"><span></span></span>
 </div>
 
 HTML;
 			for ($i=0,$j=count($this->breadcrumbs); $i<$j; $i++)
 			{
-				$first=($i===0)?'blue':'';
+				$first='';
+				if ($i===0)
+				{
+					$first='blue';
+					$href='/admin/dashboard/';
+				}
+				elseif ($i===1)
+				{
+					$href='/admin/'.$this->breadcrumbs[$i]['urlNode'].'/';
+				}
+				else
+				{
+					$href.=$this->breadcrumbs[$i]['urlNode'].'/';
+				}
 				$html[]=str_replace
 				(
-					array('{label}','{icon}','{first}'),
+					array('{label}','{icon}','{first}','{href}'),
 					array
 					(
 						$this->breadcrumbs[$i]['label'],
 						$this->breadcrumbs[$i]['icon'],
-						$first
+						$first,
+						$href
 					),
 					$itemTemplate
 				);
@@ -111,8 +133,9 @@ HTML;
 			$contentTypes=$this->model->ContentType->read();
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
+				$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
 				$html[]	=<<<HTML
-<li class="">
+<li class="{$active}">
 	<a href="/admin/content/view/{$contentTypes[$i]['id']}">
 		<i class="{$contentTypes[$i]['icon']}"></i> {$contentTypes[$i]['name']}
 	</a>

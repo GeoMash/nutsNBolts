@@ -8,12 +8,13 @@ namespace application\nutsnbolts\controller\admin
 		public function index()
 		{
 			$this->show404();
+			$this->view->render();
 		}
 		
 		public function types($action=null,$id=null)
 		{
-			$this->addBreadcrumb('Configure Pages','icon-cogs');
-			$this->addBreadcrumb('Types','icon-th-large');
+			$this->addBreadcrumb('Configure Pages','icon-cogs','configurepages');
+			$this->addBreadcrumb('Types','icon-th-large','types');
 			switch ($action)
 			{
 				case 'add':		$this->addType();		break;
@@ -38,8 +39,8 @@ namespace application\nutsnbolts\controller\admin
 		
 		public function pages($action=null,$id=null)
 		{
-			$this->addBreadcrumb('Configure Pages','icon-cogs');
-			$this->addBreadcrumb('Pages','icon-copy');
+			$this->addBreadcrumb('Configure Pages','icon-cogs','configurepages');
+			$this->addBreadcrumb('Pages','icon-copy','pages');
 			switch ($action)
 			{
 				case 'add':		$this->addPage();		break;
@@ -75,7 +76,7 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('name'))
 			{
-				$this->addBreadcrumb('Add Page','icon-copy');
+				$this->addBreadcrumb('Add Page','icon-copy','add');
 				$this->setContentView('admin/configurePages/addEditType');
 			}
 			else
@@ -89,7 +90,7 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('name'))
 			{
-				$this->addBreadcrumb('Add Page','icon-plus');
+				$this->addBreadcrumb('Add Page','icon-plus','add');
 				$this->setContentView('admin/configurePages/addEditPage');
 			}
 			else
@@ -105,7 +106,7 @@ namespace application\nutsnbolts\controller\admin
 			{
 				$this->model->PageType->handleRecord($this->request->getAll());
 			}
-			$this->addBreadcrumb('Edit Page Type','icon-edit');
+			$this->addBreadcrumb('Edit Page Type','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditType');
 			if ($record=$this->model->PageType->read($id))
 			{
@@ -123,7 +124,7 @@ namespace application\nutsnbolts\controller\admin
 			{
 				$this->model->Page->handleRecord($this->request->getAll());
 			}
-			$this->addBreadcrumb('Edit Page','icon-edit');
+			$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditPage');
 			if ($record=$this->model->Page->read($id))
 			{
