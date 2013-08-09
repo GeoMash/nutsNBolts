@@ -7,15 +7,15 @@ namespace application\nutsnbolts\base
 	
 	class AdminController extends BaseController
 	{
-		public $websiteTitle	="Nuts n' Bolts";
-		public $brandTitle		="Nuts n' Bolts";
+		public $websiteTitle		="Nuts n' Bolts";
+		public $brandTitle			="Nuts n' Bolts";
 		
-		private $breadcrumbs	=array();
+		private $breadcrumbs		=array();
 		
 		private $jsScriptsToLoad	=array();
 		private $jsClassesToExecute	=array();
 		
-		private $user			=null;
+		private $user				=null;
 		
 		public function __construct(Mvc $MVC)
 		{
@@ -53,6 +53,13 @@ namespace application\nutsnbolts\base
 					function()
 					{
 						print $this->generateContentTypesforNav();
+					}
+				)->registerCallback
+				(
+					'getNotifications',
+					function()
+					{
+						print $this->getNotifications();
 					}
 				);
 		}
@@ -240,6 +247,15 @@ HTML;
 			return $template->compile();
 		}
 		
+		public function getNotifications()
+		{
+			$ret=$this->plugin->Notification->getErrorsHTML()
+					.$this->plugin->Notification->getWarningsHTML()
+					.$this->plugin->Notification->getInfosHTML()
+					.$this->plugin->Notification->getSucessesHTML();
+			$this->plugin->Notification->clearAll();
+			return $ret;
+		}
 	}
 }
 ?>

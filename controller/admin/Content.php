@@ -62,7 +62,15 @@ namespace application\nutsnbolts\controller\admin
 				}
 				//TODO last_user_id
 				$id=$this->model->Node->handleRecord($record);
-				$this->redirect('/admin/content/edit/'.$id);
+				if (is_numeric($id))
+				{
+					$this->plugin->Notification->setSuccess('Content successfully added. Would you like to <a href="/admin/content/add/'.$typeID.'">Add another one?</a>');
+					$this->redirect('/admin/content/edit/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 		}
 		
@@ -70,7 +78,14 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				$this->model->Node->handleRecord($this->request->getAll());
+				if ($this->model->Node->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Content successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));

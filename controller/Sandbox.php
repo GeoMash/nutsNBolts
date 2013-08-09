@@ -9,14 +9,9 @@ namespace application\nutsnbolts\controller
 	{
 		public function index()
 		{
-			$list=$this->application->nutsnbolts->getWidgetList();
-			var_dump($list);
-			// $this->testWidgets();
-		}
-		
-		public function testWidgets()
-		{
-			$this->application->nutsnbolts->widget->Textbox();
+			$this->plugin->Notification->setSuccess('Yay! It works!');
+			print $this->plugin->Notification->getSucessesHTML();
+			$this->plugin->Notification->clearAll();
 		}
 		
 		

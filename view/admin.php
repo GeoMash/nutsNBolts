@@ -22,20 +22,13 @@
 		<div class="navbar navbar-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-
 					<a class="brand" href="#"><?php $tpl->brandTitle; ?></a>
-
 					<!-- the new toggle buttons -->
-
 					<ul class="nav pull-right">
-
 						<li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary"><button type="button" class="btn btn-navbar"><i class="icon-th-list"></i></button></li>
-
 						<li class="hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-top"><button type="button" class="btn btn-navbar"><i class="icon-align-justify"></i></button></li>
-
 					</ul>
 					<?php $tpl->loadView('admin/topNav'); ?>
-
 				</div>
 			</div>
 		</div>
@@ -52,19 +45,20 @@
 						<div class="pull-left header">
 							<h3 class="title">
 								<i class="icon-dashboard"></i>
-								Dashboard
+								CHANGEME
 							</h3>
 						</div>
 					</div>
 				</div>
 			</div>
-
 			<div class="container-fluid padded">
 				<div class="row-fluid">
 					<?php $tpl->breadcrumbs(); ?>
 				</div>
+				<div class="container-fluid padded">
+					<?php $tpl->getNotifications(); ?>
+				</div>
 			</div>
-
 			<?php $tpl->loadView($tpl->get('contentView')); ?>
 	</body>
 </html>
