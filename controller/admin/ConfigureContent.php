@@ -105,60 +105,7 @@ namespace application\nutsnbolts\controller\admin
 					{
 						 $partHTML.=$this->buildWidgetHTML($contentWidgets,$i,$parts[$i]);
 					}
-					$scripts=$this->getFormattedJsScriptList();
-					$exec=array();
-					$execClasses=$this->getJSClassesToExecute();
-					if (count($execClasses))
-					{
-						for ($i=0,$j=count($execClasses); $i<$j; $i++)
-						{
-							$exec[]='new '.$execClasses[$i].'();';
-						}
-					}
-					$exec=implode("\n",$exec);
-					$partHTML.=<<<JS
-<script type="text/javascript">
-requirejs.config
-(
-	{
-		waitSeconds:	3,
-		baseUrl:		'/js',
-		paths:
-		{
-			jskk:				'vendor/jskk/jskk-1.1.0.min',
-			'jskk-optional':	'vendor/jskk/jskk-1.1.0-optional.min',
-			\$JSKK:				'vendor/jskk'
-		}
-	}
-);
-requirejs
-(
-	[
-		'jskk',
-		'jskk-optional',
-		'nutsnbolts/Application',
-		{$scripts}
-	],
-	function()
-	{
-		\$JSKK.when
-		(
-			function()
-			{
-				return Object.isDefined(window.\$application);
-			}
-		).isTrue
-		(
-			function()
-			{
-				{$exec}
-			}
-		);
-		
-	}
-);
-</script>
-JS;
+					$partHTML.=$this->JSLoader->getLoaderHTML();
 				}
 				$this->view->setVar('parts',$partHTML);
 			}
@@ -223,10 +170,21 @@ HTML;
 		
 		public function getConfigForWidget()
 		{
-			$widgetOptions=$this->getWidgetInstance($this->request->get('widget'))
-								->getConfigHTML($this->request->get('index'));
+			$widget			=$this->getWidgetInstance($this->request->get('widget'));
+			$widgetOptions	=$widget->getConfigHTML($this->request->get('index'));
 			
-			if (empty($widgetOptions))
+			if (!empty($widgetOptions))
+			{
+				$exec=str_replace
+				(
+					array('application\\','\\'),
+					array('','.'),
+					$this->request->get('widget')
+				).'.Config';
+				$this->JSLoader->loadScript('/admin/script/widget/config/'.$this->request->get('widget'),$exec);
+				$widgetOptions.=$this->JSLoader->getLoaderHTML();
+			}
+			else
 			{
 				$widgetOptions='None';
 			}
