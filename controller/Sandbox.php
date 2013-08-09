@@ -15,8 +15,8 @@ namespace application\nutsnbolts\controller
 			// $this->testWidgets();
 			//print_r($this->plugin->FaceBookPlugin->getUserProfile());
 			//$this->plugin->FaceBookPlugin->fbLogin();
-			print_r($this->plugin->FaceBookPlugin->getUserProfile());
-			//echo $this->plugin->FaceBookPlugin->fbLogout();
+			//print_r($this->plugin->FaceBookPlugin->getUserProfile());
+			 $this->plugin->FaceBookPlugin->fbLogout();
 		}
 		
 		public function testWidgets()

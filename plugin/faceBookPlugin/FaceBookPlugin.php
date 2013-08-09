@@ -75,7 +75,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 				try
 				{
 				// Proceed knowing you have a logged in user who's authenticated.
-			    $me=$fb->api('/me');
+			    $me=$fb->api('/me?fields=picture,first_name,last_name,email,gender');
 			    $userInfo=array();
 				// print('Hi');
 				 $streamQuery = <<<STREAMQUERY
