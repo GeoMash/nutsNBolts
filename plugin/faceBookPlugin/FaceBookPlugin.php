@@ -31,43 +31,74 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 					)
 				);
 		}
+		public function setAppPerms()
+		{
+
+		}
 
 		public function getAppPerms()
 		{
 
 		}
 
+		//params include 'scope', 'redirect_uri' and 'display'
+		//read the fb dev api docs for more info
+		/*
+		*works up to the login dialog part, but does not
+		*/
 		public function fbLogin()
 		{
-			print('login');
+			$params=
+					array(
+						'scope'=>' email',
+						'redirect_uri'=>'http://bizsmart.dev.lan/'
+						);
+			$fb=$this->facebook;
+			if(isset($params))
+			{
+				return header('Location:'.$fb->getLoginUrl($params));
+			}
+			else
+			{
+				return header('Location:'.$fb->getLoginUrl());
+			}
+			
 		}
 
+		//we have email and profile picture returned for processing
 		public function getUserProfile()
 		{
 			$fb=$this->facebook;
 			if ($fb->getUser()!=0) 
 			{
-			  try
-			  {
 			    // Proceed knowing you have a logged in user who's authenticated.
-			    return $fb->api('/me');
-			  } 
-			  catch (Exception $e)
-			  {
-			   // error_log($e);
-			   exit('bla');
-			  }
+			    $me=$fb->api('/me');
+			    $userInfo=array();
 				// print('Hi');
+				 $streamQuery = <<<STREAMQUERY
+{
+"basicinfo": "SELECT uid,name,pic_square,email,sex,
+ first_name,last_name FROM user WHERE uid=me()",
+}
+STREAMQUERY;
+			    $streamParams = array(
+			                          'method' => 'fql.multiquery',
+			                          'queries' => $streamQuery
+			                   );
+			   // return array_merge($fb->api($streamParams),$me);
+			    return $fb->api($streamParams);
 			}
-			else
-			{
-				return $this->fbLogin();
-			}
+			// else
+			// {
+			// 	return $this->fbLogin();
+			// }
 		}
 
 		public function fbLogout()
 		{
-			// $logoutUrl = $facebook->getLogoutUrl();
+			//session_unset();
+			$params = array( 'next' => 'http://bizsmart.dev.lan/' );
+			return header('Location:'.$this->facebook->getLogoutUrl($params)); // $params is optional. 
 		}
 
 
