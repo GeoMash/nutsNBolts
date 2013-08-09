@@ -7,13 +7,19 @@ namespace application\nutsnbolts\controller\admin
 	{
 		private $typeID=null;
 		
+		public function index()
+		{
+			$this->show404();
+			$this->view->render();
+		}
+		
 		public function view($typeID)
 		{
 			$this->typeID=$typeID;
 			$contentType=$this->model->ContentType->read($this->typeID);
 			
-			$this->addBreadcrumb('Content','icon-edit');
-			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon']);
+			$this->addBreadcrumb('Content','icon-edit','content');
+			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$contentType[0]['id']);
 			$this->setContentView('admin/content/view');
 			$this->view->setVar('contentTypeId',$this->typeID);
 			$this->view->setVar('tableHeaderText',$contentType[0]['name']);
@@ -35,9 +41,12 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('title'))
 			{
+				$contentType=$this->model->ContentType->read($this->request->node(3));
 				$this->generateContentParts($typeID);
 				$this->setContentView('admin/content/addEdit');
-				$this->addBreadcrumb('Add Content','icon-pencil');
+				$this->addBreadcrumb('Content','icon-edit','content');
+				$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$typeID);
+				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
 				$this->view->render();
 			}
 			else
@@ -53,7 +62,15 @@ namespace application\nutsnbolts\controller\admin
 				}
 				//TODO last_user_id
 				$id=$this->model->Node->handleRecord($record);
-				$this->redirect('/admin/content/edit/'.$id);
+				if (is_numeric($id))
+				{
+					$this->plugin->Notification->setSuccess('Content successfully added. Would you like to <a href="/admin/content/add/'.$typeID.'">Add another one?</a>');
+					$this->redirect('/admin/content/edit/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 		}
 		
@@ -61,7 +78,14 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				$this->model->Node->handleRecord($this->request->getAll());
+				if ($this->model->Node->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Content successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
@@ -83,7 +107,7 @@ namespace application\nutsnbolts\controller\admin
 				
 				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
 				$widget->setProperty('name',$formElId);
-				$widget->setProperty('value','');
+				$widget->setProperty('value',$thisNodePart['value']);
 				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
 				// var_dump($input);
 				// exit();
@@ -113,7 +137,9 @@ HTML;
 			
 			
 			$this->setContentView('admin/content/addEdit');
-			$this->addBreadcrumb('Edit Content','icon-pencil');
+			$this->addBreadcrumb('Content','icon-edit','content');
+			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
+			$this->addBreadcrumb('Edit Content','icon-pencil','edit/'.$id);
 			$this->view->render();
 		}
 		

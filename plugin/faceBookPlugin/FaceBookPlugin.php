@@ -106,9 +106,9 @@ STREAMQUERY;
 
 		public function fbLogout()
 		{
-			//session_unset();
-			$params = array( 'next' => 'http://bizsmart.dev.lan/' );
-			$this->facebook->getLogoutUrl($params); // $params is optional. 
+			session_unset();
+			// $params = array( 'next' => 'http://bizsmart.dev.lan/' );
+			// $this->facebook->getLogoutUrl($params); // $params is optional. 
 		}
 
 

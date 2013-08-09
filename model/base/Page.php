@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 04/08/2013 
+ * @since 08/08/2013 
  */
 namespace application\nutsnbolts\model\base
 {
@@ -24,7 +24,6 @@ namespace application\nutsnbolts\model\base
 			'id' => 'int(10) unsigned NOT NULL ' ,
 			'site_id' => 'int(10) NOT NULL ' ,
 			'page_type_id' => 'int(11) NOT NULL ' ,
-			'ref' => 'varchar(100) NOT NULL ' ,
 			'title' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
 			'url' => 'varchar(100) NOT NULL ' ,

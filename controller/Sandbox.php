@@ -10,18 +10,9 @@ namespace application\nutsnbolts\controller
 	{
 		public function index()
 		{
-			// $list=$this->application->nutsnbolts->getWidgetList();
-			// var_dump($list);
-			// $this->testWidgets();
-			//print_r($this->plugin->FaceBookPlugin->getUserProfile());
-			//$this->plugin->FaceBookPlugin->fbLogin();
-			//print_r($this->plugin->FaceBookPlugin->getUserProfile());
-			 $this->plugin->FaceBookPlugin->fbLogout();
-		}
-		
-		public function testWidgets()
-		{
-			$this->application->nutsnbolts->widget->Textbox();
+			$this->plugin->Notification->setSuccess('Yay! It works!');
+			print $this->plugin->Notification->getSucessesHTML();
+			$this->plugin->Notification->clearAll();
 		}
 		
 		public function testFBPlugin()

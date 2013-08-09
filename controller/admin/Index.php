@@ -14,7 +14,6 @@ namespace application\nutsnbolts\controller\admin
 		public function index()
 		{
 			$this->route();
-			// $this->dashboard();
 		}
 		
 		private function route()
@@ -32,11 +31,6 @@ namespace application\nutsnbolts\controller\admin
 					$this->template();
 					return;
 				}
-				case 'dashboard':
-				{
-					$this->routedController=new Dashboard($this->MVC);
-					break;
-				}
 				case 'content':
 				{
 					$this->routedController=new Content($this->MVC);
@@ -52,6 +46,12 @@ namespace application\nutsnbolts\controller\admin
 				case 'configurecontent':
 				{
 					$this->routedController=new ConfigureContent($this->MVC);
+					break;
+				}
+				case '':
+				case 'dashboard':
+				{
+					$this->routedController=new Dashboard($this->MVC);
 					break;
 				}
 				default:
@@ -89,20 +89,6 @@ namespace application\nutsnbolts\controller\admin
 				array($this->routedController,$action),
 				$args
 			);
-		}
-		
-		public function dashboard()
-		{
-			$this->setContentView('admin/dashboard');
-			$this->addBreadcrumb('Dashboard','icon-dashboard');
-			$this->view->render();
-		}
-		
-		public function articles()
-		{
-			$this->addBreadcrumb('Articles','icon-list');
-			
-			$this->view->render();
 		}
 		
 		public function template()

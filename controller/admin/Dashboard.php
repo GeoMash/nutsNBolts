@@ -8,7 +8,6 @@ namespace application\nutsnbolts\controller\admin
 		public function index()
 		{
 			$this->setContentView('admin/dashboard');
-			$this->addBreadcrumb('Dashboard','icon-dashboard');
 			$this->view->render();
 		}
 	}

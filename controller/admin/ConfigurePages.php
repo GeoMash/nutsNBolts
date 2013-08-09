@@ -8,12 +8,13 @@ namespace application\nutsnbolts\controller\admin
 		public function index()
 		{
 			$this->show404();
+			$this->view->render();
 		}
 		
 		public function types($action=null,$id=null)
 		{
-			$this->addBreadcrumb('Configure Pages','icon-cogs');
-			$this->addBreadcrumb('Types','icon-th-large');
+			$this->addBreadcrumb('Configure Pages','icon-cogs','configurepages');
+			$this->addBreadcrumb('Types','icon-th-large','types');
 			switch ($action)
 			{
 				case 'add':		$this->addType();		break;
@@ -38,8 +39,8 @@ namespace application\nutsnbolts\controller\admin
 		
 		public function pages($action=null,$id=null)
 		{
-			$this->addBreadcrumb('Configure Pages','icon-cogs');
-			$this->addBreadcrumb('Pages','icon-copy');
+			$this->addBreadcrumb('Configure Pages','icon-cogs','configurepages');
+			$this->addBreadcrumb('Pages','icon-copy','pages');
 			switch ($action)
 			{
 				case 'add':		$this->addPage();		break;
@@ -75,13 +76,20 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('name'))
 			{
-				$this->addBreadcrumb('Add Page','icon-copy');
+				$this->addBreadcrumb('Add Page','icon-copy','add');
 				$this->setContentView('admin/configurePages/addEditType');
 			}
 			else
 			{
-				$id=$this->model->PageType->handleRecord($this->request->getAll());
-				$this->redirect('/admin/configurepages/types/edit/'.$id);
+				if ($id=$this->model->PageType->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Page type successfully added. Would you like to <a href="/admin/configurepages/types/add/">Add another one?</a>');
+					$this->redirect('/admin/configurepages/types/edit/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 		}
 		
@@ -89,13 +97,20 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if (!$this->request->get('name'))
 			{
-				$this->addBreadcrumb('Add Page','icon-plus');
+				$this->addBreadcrumb('Add Page','icon-plus','add');
 				$this->setContentView('admin/configurePages/addEditPage');
 			}
 			else
 			{
-				$id=$this->model->Page->handleRecord($this->request->getAll());
-				$this->redirect('/admin/configurepages/pages/edit/'.$id);
+				if ($id=$this->model->Page->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Page successfully added. Would you like to <a href="/admin/configurepages/pages/add/">Add another one?</a>');
+					$this->redirect('/admin/configurepages/pages/edit/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
 		}
 		
@@ -103,9 +118,16 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				$this->model->PageType->handleRecord($this->request->getAll());
+				if ($this->model->PageType->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Page type successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
-			$this->addBreadcrumb('Edit Page Type','icon-edit');
+			$this->addBreadcrumb('Edit Page Type','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditType');
 			if ($record=$this->model->PageType->read($id))
 			{
@@ -121,9 +143,16 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				$this->model->Page->handleRecord($this->request->getAll());
+				if ($this->model->Page->handleRecord($this->request->getAll()))
+				{
+					$this->plugin->Notification->setSuccess('Page successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
-			$this->addBreadcrumb('Edit Page','icon-edit');
+			$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditPage');
 			if ($record=$this->model->Page->read($id))
 			{
@@ -137,14 +166,28 @@ namespace application\nutsnbolts\controller\admin
 		
 		public function removeType($id)
 		{
-			$this->model->PageType->handleDeleteRecord($id);
-			$this->redirect('/admin/configurepages/types/');
+			if ($this->model->PageType->handleDeleteRecord($id))
+			{
+				$this->plugin->Notification->setSuccess('Page type successfully removed.');
+				$this->redirect('/admin/configurepages/types/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
 		}
 		
 		public function removePage($id)
 		{
-			$this->model->Page->handleDeleteRecord($id);
-			$this->redirect('/admin/configurepages/pages/');
+			if ($this->model->Page->handleDeleteRecord($id))
+			{
+				$this->plugin->Notification->setSuccess('Page successfully removed.');
+				$this->redirect('/admin/configurepages/pages/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
 		}
 		
 		public function generateTypeList()
