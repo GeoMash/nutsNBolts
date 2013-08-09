@@ -58,10 +58,10 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 			{
 				return header('Location:'.$fb->getLoginUrl($params));
 			}
-			else
-			{
-				return header('Location:'.$fb->getLoginUrl());
-			}
+			// else
+			// {
+			// 	return header('Location:'.$fb->getLoginUrl());
+			// }
 			
 		}
 
@@ -69,36 +69,46 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		public function getUserProfile()
 		{
 			$fb=$this->facebook;
+			$access_token = $fb->getAccessToken();
 			if ($fb->getUser()!=0) 
 			{
-			    // Proceed knowing you have a logged in user who's authenticated.
+				try
+				{
+				// Proceed knowing you have a logged in user who's authenticated.
 			    $me=$fb->api('/me');
 			    $userInfo=array();
 				// print('Hi');
 				 $streamQuery = <<<STREAMQUERY
-{
-"basicinfo": "SELECT uid,name,pic_square,email,sex,
- first_name,last_name FROM user WHERE uid=me()",
-}
+				{
+				"basicinfo": "SELECT uid,name,pic_square,email,sex,
+				 first_name,last_name FROM user WHERE uid=me()",
+				}
 STREAMQUERY;
 			    $streamParams = array(
 			                          'method' => 'fql.multiquery',
 			                          'queries' => $streamQuery
 			                   );
 			   // return array_merge($fb->api($streamParams),$me);
-			    return $fb->api($streamParams);
+			    return $me;
+			    //return $me;
+				}
+				catch(impl\FacebookApiException $e)
+				{
+					exit($e);
+				}
+			    
 			}
-			// else
-			// {
-			// 	return $this->fbLogin();
-			// }
+			else
+			{
+				return $this->fbLogin();
+			}
 		}
 
 		public function fbLogout()
 		{
 			//session_unset();
 			$params = array( 'next' => 'http://bizsmart.dev.lan/' );
-			return header('Location:'.$this->facebook->getLogoutUrl($params)); // $params is optional. 
+			$this->facebook->getLogoutUrl($params); // $params is optional. 
 		}
 
 
