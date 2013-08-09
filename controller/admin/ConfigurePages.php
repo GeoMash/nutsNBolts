@@ -74,6 +74,7 @@ namespace application\nutsnbolts\controller\admin
 		
 		private function addType()
 		{
+
 			if (!$this->request->get('name'))
 			{
 				$this->addBreadcrumb('Add Page','icon-copy','add');
@@ -95,7 +96,8 @@ namespace application\nutsnbolts\controller\admin
 		
 		private function addPage()
 		{
-			if (!$this->request->get('name'))
+			// MD we dont have field with "name", checking the next best thing which is URL
+			if (!$this->request->get('url'))
 			{
 				$this->addBreadcrumb('Add Page','icon-plus','add');
 				$this->setContentView('admin/configurePages/addEditPage');
