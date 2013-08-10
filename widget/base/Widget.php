@@ -94,7 +94,7 @@ namespace application\nutsnbolts\widget\base
 				}
 				else
 				{
-					$config=false;
+					$config=array();
 				}
 				$template->setKeyValArray($config);
 				$template->compile();
