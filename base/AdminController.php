@@ -227,8 +227,9 @@ HTML;
 				$widgetOptions='None';
 			}
 			$template->setKeyVal('options',$widgetOptions);
-			
-			return $template->compile();
+			$html=$template->compile();
+			$html.=$this->JSLoader->getLoaderHTML();
+			return $html;
 		}
 		
 		public function getNotifications()
