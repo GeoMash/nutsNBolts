@@ -1,9 +1,9 @@
 <?php
 $config		=$tpl->get('config');
 $checked	=false;
-if (isset($config->multiselect))
+if ($tpl->get('multiselect'))
 {
-	$checked=($config->multiselect=='yes');
+	$checked=($tpl->get('multiselect')=='yes');
 }
 ?>
 <div class="control-group">
@@ -34,15 +34,16 @@ if (isset($config->multiselect))
 		</thead>
 		<tbody>
 			<?php
-			if (isset($config->options)):
-				for ($i=0,$j=count($config->options); $i<$j; $i++):
+			if ($tpl->get('options')):
+				$options=$tpl->get('options');
+				for ($i=0,$j=count($options); $i<$j; $i++):
 			?>
 					<tr>
 						<td>
-							<input type="text" class="input-medium" value="<?php print $config->options[$i]->label; ?>" data-prompt-position="topLeft" class="validate[required]" name="widget[<?php $tpl->widgetIndex; ?>][config][options][<?php print $i; ?>][label]">
+							<input type="text" class="input-medium" value="<?php print $options[$i]->label; ?>" data-prompt-position="topLeft" class="validate[required]" name="widget[<?php $tpl->widgetIndex; ?>][config][options][<?php print $i; ?>][label]">
 						</td>
 						<td>
-							<input type="text" class="input-medium" value="<?php print $config->options[$i]->value; ?>" data-prompt-position="topLeft" class="validate[required]" name="widget[<?php $tpl->widgetIndex; ?>][config][options][<?php print $i; ?>][value]">
+							<input type="text" class="input-medium" value="<?php print $options[$i]->value; ?>" data-prompt-position="topLeft" class="validate[required]" name="widget[<?php $tpl->widgetIndex; ?>][config][options][<?php print $i; ?>][value]">
 						</td>
 						<td>
 							<button data-action="widget.select.config.removeOption" class="btn btn-danger btn-mini" type="button">&times;</button>
