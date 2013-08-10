@@ -83,7 +83,7 @@ namespace application\nutsnbolts\model
 			$contentParts=array();
 			for ($i=0,$j=count($record['widget']); $i<$j; $i++)
 			{
-				$id=(isset($record['part_id'][$i]))?$record['part_id'][$i]:0;
+				$id=(!empty($record['part_id'][$i]))?$record['part_id'][$i]:0;
 				$ref=str_replace
 				(
 					array(' '),
@@ -98,7 +98,6 @@ namespace application\nutsnbolts\model
 					'ref'				=>$ref,
 					'config'			=>''
 				);
-				
 				if (isset($record['widget'][$i]['config']))
 				{
 					$contentParts[$i]['config']=json_encode($record['widget'][$i]['config']);
