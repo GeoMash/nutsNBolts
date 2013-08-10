@@ -4,7 +4,7 @@ namespace application\nutsnbolts\controller
 	use nutshell\Nutshell;
 	use nutshell\core\exception\NutshellException;
 	use nutshell\plugin\mvc\Controller;
-	use application\plugin\FaceBookPlugin\FaceBookPlugin;
+	use application\plugin\FaceBook\FaceBook;
 	
 	class Sandbox extends Controller
 	{

@@ -1,14 +1,14 @@
 <?php
-namespace application\nutsnbolts\plugin\FaceBookPlugin
+namespace application\nutsnbolts\plugin\FaceBook
 {
-	use nutshell\behaviour\Native;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
+	use nutshell\behaviour\Native;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
 	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
 	use application\nutsnbolts\plugin\FaceBook\impl\BaseFacebook;
-	use application\nutsnbolts\plugin\FaceBook\impl\Facebook;
+	use application\nutsnbolts\plugin\FaceBook\impl\facebook as FaceBookBase;
 
 	class FaceBook extends Plugin implements Singleton, Native
 	{
@@ -26,7 +26,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		public function init()
 		{
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
-			$this->facebook=new Facebook(
+			$this->facebook=new FaceBookBase(
 				array(
 					'appId'  => '407520512686092',
   					'secret' => 'a7368dfd49ac3a66d1dd6881c7b032e3',
