@@ -22,13 +22,13 @@ namespace application\nutsnbolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
+			'fb_uid' => 'int(30) NOT NULL ' ,
 			'email' => 'varchar(150) NOT NULL ' ,
-			'name_first' => 'varchar(100) NOT NULL ' ,
-			'name_last' => 'varchar(100) NOT NULL ' ,
+			'firstName' => 'varchar(100) NOT NULL ' ,
+			'lastName' => 'varchar(100) NOT NULL ' ,
 			'gender' => 'tinyint(1) NOT NULL ' ,
-			'date_created' => 'datetime NOT NULL ' ,
-			'date_lastlogin' => 'datetime NOT NULL ' ,
-			'date_lastactive' => 'datetime NOT NULL ' ,
+			'access_token' => 'datetime NOT NULL ',
+			'date_last_access_token' => 'datetime NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 
 		);
 	}
