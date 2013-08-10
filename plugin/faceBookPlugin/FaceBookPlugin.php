@@ -15,7 +15,8 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		private $facebook;
 		private $isLoggedIn=FALSE;
 		private $user;
-		private $access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
+		private $access_token;
+		private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
 
 		public static function registerBehaviours()
 		{
@@ -33,12 +34,8 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 					)
 				);
 		}
-		public function setAppPerms()
-		{
-
-		}
-
-		public function getAppPerms()
+		
+		public function storeUserData()
 		{
 
 		}
@@ -67,6 +64,10 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 			// }
 			
 		}
+		public function setAccessToken()
+		{
+
+		}
 
 		//we have email and profile picture returned for processing
 		public function getUserProfile()
@@ -83,13 +84,13 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 			                          'method' => 'fql.multiquery',
 			                          'queries' => $streamQuery
 			                   );
-			   // return array_merge($fb->api($streamParams),$me);
-			    return $me;
+			    return ($fb->api($streamParams));
+			    //return $me;
 			    //return $me;
 				}
 				catch(impl\FacebookApiException $e)
 				{
-					exit($e);
+					exit($e->getResult());
 				}
 			    
 			}
@@ -100,6 +101,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		}
 		public function fbPostNew()
 		{
+			$fb=$this->facebook;
 			if($fb->getUser())
 			{
 
