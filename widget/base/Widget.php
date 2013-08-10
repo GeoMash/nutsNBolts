@@ -90,13 +90,13 @@ namespace application\nutsnbolts\widget\base
 				$template->setKeyVal('widgetIndex',$widgetIndex);
 				if (!empty($config) && count($config))
 				{
-					$config=json_decode($config);
+					$config=(array)json_decode($config);
 				}
 				else
 				{
-					$config=false;
+					$config=array();
 				}
-				$template->setKeyValArray((array)$config);
+				$template->setKeyValArray($config);
 				$template->compile();
 				return $template->getCompiled();
 			}

@@ -27,7 +27,7 @@
 
 			<div class="row-fluid">
 				<div class="span6 action-nav-button">
-					<a href="#" title="Files">
+					<a href="#fileManagerWindow" title="Files" role="button" data-toggle="bigmodal">
 						<i class="icon-folder-open-alt"></i>
 						<span>Files</span>
 					</a>

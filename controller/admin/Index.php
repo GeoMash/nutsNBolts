@@ -48,6 +48,11 @@ namespace application\nutsnbolts\controller\admin
 					$this->routedController=new ConfigureContent($this->MVC);
 					break;
 				}
+				case 'upload':
+				{
+					$this->routedController=new Upload($this->MVC);
+					break;
+				}
 				case '':
 				case 'dashboard':
 				{
@@ -111,7 +116,11 @@ namespace application\nutsnbolts\controller\admin
 			{
 				case 'admin/configureContent/addWidgetSelection':
 				{
-					$html=$this->buildWidgetHTML($this->application->nutsnbolts->getWidgetList());
+					$html=$this->buildWidgetHTML
+					(
+						$this->application->nutsnbolts->getWidgetList(),
+						$this->request->get('index')
+					);
 					break;
 				}
 			}

@@ -5,6 +5,7 @@
 		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
 		<link href="/css/application.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="/css/main.css" media="screen" rel="stylesheet" type="text/css" />
 
 		<meta charset="utf-8">
 
@@ -60,5 +61,6 @@
 				</div>
 			</div>
 			<?php $tpl->loadView($tpl->get('contentView')); ?>
+			<?php $tpl->loadView('admin/fileManager/main'); ?>
 	</body>
 </html>
