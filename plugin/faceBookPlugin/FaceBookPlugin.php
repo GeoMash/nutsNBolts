@@ -110,19 +110,19 @@ STREAMQUERY;
 			}
 		}
 
-		// public function isUserRegistered($email)
-		// {
-		// 	$isUser=False;
-		// 	if(!$this->model->User->read(array('email'=>$email)))
-		// 	{
-		// 		$this->model->User->create(array('email'=>$email));
-		// 	}
-		// 	else
-		// 	{
+		public function isUserRegistered($email)
+		{
+			// $isUser=False;
+			// if(!$this->model->Subsc->read(array('email'=>$email)))
+			// {
+			// 	$this->model->User->create(array('email'=>$email));
+			// }
+			// else
+			// {
 
-		// 	}
+			// }
 
-		// }
+		}
 		public function fbLogout()
 		{
 			session_unset();
