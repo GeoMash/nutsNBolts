@@ -4,11 +4,8 @@ namespace application\nutsnbolts\plugin\notification
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\helper\MimeHelper;
-	use application\nutsnbolts\plugin\responder\ResponderException;
-	// use nutshell\behaviour\session\NamedSession;
 
-	class Notification extends Plugin implements Singleton//,NamedSession
+	class Notification extends Plugin implements Singleton
 	{
 		private $session	=null;
 		

@@ -17,10 +17,13 @@ namespace application\nutsnbolts\base
 		
 		private $user				=null;
 		
+		public $JSLoader			=null;
+		
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
-			$this->MVC=$MVC;
+			$this->MVC		=$MVC;
+			$this->JSLoader	=$this->plugin->JsLoader();
 			
 			$this->view->setTemplate('admin');
 			
@@ -173,26 +176,6 @@ HTML;
 			return $this->user['id'];
 		}
 		
-		public function addToJSLoad($classPath,$exec=false)
-		{
-			$this->jsScriptsToLoad[]=str_replace('\\','.',$classPath);
-			if ($exec)
-			{
-				$this->jsClassesToExecute[]=$exec;
-			}
-			return $this;
-		}
-		
-		public function getFormattedJsScriptList()
-		{
-			return "'".implode("','",$this->jsScriptsToLoad)."'";
-		}
-		
-		public function getJSClassesToExecute()
-		{
-			return $this->jsClassesToExecute;
-		}
-		
 		public function getWidgetInstance($classPath)
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
@@ -236,15 +219,17 @@ HTML;
 					array('','.'),
 					$getOptionsFor
 				).'.Config';
-				$this->addToJSLoad('/admin/script/widget/config/'.$getOptionsFor,$exec);
+				
+				$this->JSLoader->loadScript('/admin/script/widget/config/'.$getOptionsFor,$exec);
 			}
 			else
 			{
 				$widgetOptions='None';
 			}
 			$template->setKeyVal('options',$widgetOptions);
-			
-			return $template->compile();
+			$html=$template->compile();
+			$html.=$this->JSLoader->getLoaderHTML();
+			return $html;
 		}
 		
 		public function getNotifications()
