@@ -48,19 +48,19 @@ HTML;
 			return $this;
 		}
 		
-		public function setInfos($message)
+		public function setInfo($message)
 		{
 			$this->session->infos[]=$message;
 			return $this;
 		}
 		
-		public function setWarnings($message)
+		public function setWarning($message)
 		{
 			$this->session->warnings[]=$message;
 			return $this;
 		}
 		
-		public function setErrors($message)
+		public function setError($message)
 		{
 			$this->session->errors[]=$message;
 			return $this;
