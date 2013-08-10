@@ -48,6 +48,11 @@ namespace application\nutsnbolts\controller\admin
 					$this->routedController=new ConfigureContent($this->MVC);
 					break;
 				}
+				case 'upload':
+				{
+					$this->routedController=new Upload($this->MVC);
+					break;
+				}
 				case '':
 				case 'dashboard':
 				{
