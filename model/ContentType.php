@@ -26,7 +26,8 @@ namespace application\nutsnbolts\model
 					*/
 					if ($contentParts[$i]['id']!==0 && !empty($contentParts[$i]['id']))
 					{
-						$this->model->ContentPart->update($contentParts[$i],array('id'=>$contentParts[$i]['id']));
+						// bug fixed by Tim
+						$return=$this->model->ContentPart->update($contentParts[$i],array('id'=>$contentParts[$i]['id']));
 					}
 					//For Insert
 					else
@@ -51,7 +52,8 @@ namespace application\nutsnbolts\model
 					{
 						$this->model->ContentPart->delete($existingParts[$i]);
 					}
-				}	
+				}
+				return $return;
 			}
 			//For Inserts
 			else
@@ -90,6 +92,7 @@ namespace application\nutsnbolts\model
 					array('_'),
 					strtolower($record['label'][$i])
 				);
+
 				$contentParts[$i]=array
 				(
 				 	'id'				=>$id,
@@ -98,8 +101,14 @@ namespace application\nutsnbolts\model
 					'ref'				=>$ref,
 					'config'			=>''
 				);
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> refs/remotes/origin/alliance
 				if (isset($record['widget'][$i]['config']))
 				{
+					
 					$contentParts[$i]['config']=json_encode($record['widget'][$i]['config']);
 				}
 			}
