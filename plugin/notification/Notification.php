@@ -50,19 +50,25 @@ HTML;
 		
 		public function setInfo($message)
 		{
-			$this->session->infos[]=$message;
+			$infos=$this->session->infos;
+			array_push($infos,$message);
+			$this->session->infos=$infos;
 			return $this;
 		}
 		
 		public function setWarning($message)
 		{
-			$this->session->warnings[]=$message;
+			$warnings=$this->session->warnings;
+			array_push($warnings,$message);
+			$this->session->warnings=$warnings;
 			return $this;
 		}
 		
 		public function setError($message)
 		{
-			$this->session->errors[]=$message;
+			$errors=$this->session->errors;
+			array_push($errors,$message);
+			$this->session->errors=$errors;
 			return $this;
 		}
 		
