@@ -10,9 +10,9 @@ namespace application\nutsnbolts\controller
 	{
 		public function index()
 		{
-			$this->plugin->Notification->setSuccess('Yay! It works!');
-			print $this->plugin->Notification->getSucessesHTML();
-			$this->plugin->Notification->clearAll();
+			$this->plugin->FaceBookPlugin->fbLogin();
+			// print $this->plugin->Notification->getSucessesHTML();
+			// $this->plugin->Notification->clearAll();
 		}
 		
 		public function testFBPlugin()
