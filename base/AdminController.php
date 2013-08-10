@@ -186,7 +186,7 @@ HTML;
 		public function buildWidgetHTML($contentWidgets,$widgetIndex='',$part=null)
 		{
 			$selectBoxOptions	=array();
-			$getOptionsFor		=$contentWidgets[0]['namespace'];
+			$getConfigFor		=$contentWidgets[0]['namespace'];
 			$template			=$this->plugin->Template();
 			$template->setTemplate($this->view->buildViewPath('admin/configureContent/addWidgetSelection'));
 			if ($part)
@@ -199,7 +199,7 @@ HTML;
 				if ($part['widget']==$contentWidgets[$k]['namespace'])
 				{
 					$selected='selected';
-					$getOptionsFor=$part['widget'];
+					$getConfigFor=$part['widget'];
 				}
 				$selectBoxOptions[]='<option '.$selected.' value="'.$contentWidgets[$k]['namespace'].'">'.$contentWidgets[$k]['name'].'</option>';
 			}
@@ -208,25 +208,25 @@ HTML;
 			$template->setKeyVal('optionIndex','0');
 			
 			$template->setKeyVal('widgetTypes',implode('',$selectBoxOptions));
-			$widgetOptions=$this->getWidgetInstance($getOptionsFor)->getConfigHTML($widgetIndex,$part['config']);
+			$widgetConfig=$this->getWidgetInstance($getConfigFor)->getConfigHTML($widgetIndex,$part['config']);
 			
-			if ($widgetOptions)
+			if ($widgetConfig)
 			{
-				$className=ucwords(ObjectHelper::getBaseClassName($getOptionsFor));
+				$className=ucwords(ObjectHelper::getBaseClassName($getConfigFor));
 				$exec=str_replace
 				(
 					array('application\\','\\'),
 					array('','.'),
-					$getOptionsFor
+					$getConfigFor
 				).'.Config';
 				
-				$this->JSLoader->loadScript('/admin/script/widget/config/'.$getOptionsFor,$exec);
+				$this->JSLoader->loadScript('/admin/script/widget/config/'.$getConfigFor,$exec);
 			}
 			else
 			{
-				$widgetOptions='None';
+				$widgetConfig='None';
 			}
-			$template->setKeyVal('options',$widgetOptions);
+			$template->setKeyVal('options',$widgetConfig);
 			$html=$template->compile();
 			$html.=$this->JSLoader->getLoaderHTML();
 			return $html;
