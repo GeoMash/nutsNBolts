@@ -15,6 +15,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		private $facebook;
 		private $isLoggedIn=FALSE;
 		private $user;
+		private $access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
 
 		public static function registerBehaviours()
 		{
@@ -45,24 +46,29 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		//read the fb dev api docs for more info
 		/*
 		*works up to the login dialog part, but does not
+		*for other apps it should take a scope array and a sring param for the redirect_url
 		*/
 		public function fbLogin()
 		{
 			$params=
 					array(
-						'scope'=>' email',
+						'scope'=>'email,publish_stream,publish_actions',
 						'redirect_uri'=>'http://bizsmart.dev.lan/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
 			{
-				return header('Location:'.$fb->getLoginUrl($params));
+				 die('<script> top.location.href="'.$this->facebook->getLoginUrl($params).'";</script>');
 			}
 			// else
 			// {
 			// 	return header('Location:'.$fb->getLoginUrl());
 			// }
 			
+		}
+		public function checkUserPerms()
+		{
+
 		}
 
 		//we have email and profile picture returned for processing
@@ -104,6 +110,19 @@ STREAMQUERY;
 			}
 		}
 
+		// public function isUserRegistered($email)
+		// {
+		// 	$isUser=False;
+		// 	if(!$this->model->User->read(array('email'=>$email)))
+		// 	{
+		// 		$this->model->User->create(array('email'=>$email));
+		// 	}
+		// 	else
+		// 	{
+
+		// 	}
+
+		// }
 		public function fbLogout()
 		{
 			session_unset();
