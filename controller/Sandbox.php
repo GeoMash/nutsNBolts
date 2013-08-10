@@ -10,7 +10,7 @@ namespace application\nutsnbolts\controller
 	{
 		public function index()
 		{
-			$this->plugin->FaceBookPlugin->fbLogin();
+			var_dump($this->plugin->FaceBookPlugin->postFeedToFB());
 			// print $this->plugin->Notification->getSucessesHTML();
 			// $this->plugin->Notification->clearAll();
 		}

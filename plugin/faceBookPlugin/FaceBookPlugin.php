@@ -52,7 +52,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		{
 			$params=
 					array(
-						'scope'=>'email,publish_stream,publish_actions',
+						'scope'=>'email,publish_actions',
 						'redirect_uri'=>'http://bizsmart.dev.lan/'
 						);
 			$fb=$this->facebook;
@@ -82,18 +82,19 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 				{
 				// Proceed knowing you have a logged in user who's authenticated.
 			    $me=$fb->api('/me?fields=picture,first_name,last_name,email,gender');
-			    $userInfo=array();
+			   // $userInfo=array();
 				// print('Hi');
-				 $streamQuery = <<<STREAMQUERY
-				{
-				"basicinfo": "SELECT uid,name,pic_square,email,sex,
-				 first_name,last_name FROM user WHERE uid=me()",
-				}
-STREAMQUERY;
-			    $streamParams = array(
-			                          'method' => 'fql.multiquery',
-			                          'queries' => $streamQuery
-			                   );
+// 				 $streamQuery = <<<STREAMQUERY
+// 				{
+// 				"basicinfo": "SELECT uid,name,pic_square,email,sex,
+// 				 first_name,last_name FROM user WHERE uid=me()",
+// 				}
+// STREAMQUERY;
+
+			    // $streamParams = array(
+			    //                       'method' => 'fql.multiquery',
+			    //                       'queries' => $streamQuery
+			    //                );
 			   // return array_merge($fb->api($streamParams),$me);
 			    return $me;
 			    //return $me;
@@ -109,20 +110,71 @@ STREAMQUERY;
 				return $this->fbLogin();
 			}
 		}
-
-		public function isUserRegistered($email)
+		public function likePost()
 		{
-			// $isUser=False;
-			// if(!$this->model->Subsc->read(array('email'=>$email)))
-			// {
-			// 	$this->model->User->create(array('email'=>$email));
-			// }
-			// else
-			// {
-
-			// }
 
 		}
+
+		public function sharePost()
+		{
+
+		}
+
+		//
+		public function isUserRegistered($email)
+		{
+			$isRegUser=False;
+			$whereVals = array('email'=>$email); 
+			$params = array('email'); 
+			if(!$this->model->Subscriber->read(array('email'=>$email)))
+			{
+				$this->model->Subscriber->create(array('email'=>$email));
+			}
+			else
+			{
+
+			}
+
+		}
+
+		public function postFeedToFB()
+		{
+			$fb=$this->facebook;
+			// if($this->request->get('link') && $this->request->get('message'))
+			// {
+				$attachment =  array(
+                              //'access_token' => $access_token,
+					//$this->request->get('message')
+                              'message' =>'Test Post' ,
+                              'name' => 'Test Name',
+                               //'name' => $this->request->get('name'),
+                              //'description' =>$this->request->get('description'),
+                              //'link' => $this->request->get('link'),
+                              //'picture' => $this->request->get('picture'),
+                              'actions' => array('name'=>'View full story', 'link' =>'http://bizsmart.dev.lan/')
+                          );
+				if($fb->getUser())
+				{
+					try
+					{
+						$publishNewItem=$fb->api('me/feed', 'POST',
+	                                   $attachment);
+						return $publishNewItem;
+					}
+					catch(impl\FacebookApiException $e)
+					{
+						exit($e);
+					}
+				}
+				else
+				{
+					// $this->fbLogin();
+				}
+			// }
+			
+			
+		}
+
 		public function fbLogout()
 		{
 			session_unset();
