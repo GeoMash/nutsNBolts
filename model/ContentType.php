@@ -101,11 +101,6 @@ namespace application\nutsnbolts\model
 					'ref'				=>$ref,
 					'config'			=>''
 				);
-<<<<<<< HEAD
-
-
-=======
->>>>>>> refs/remotes/origin/alliance
 				if (isset($record['widget'][$i]['config']))
 				{
 					
