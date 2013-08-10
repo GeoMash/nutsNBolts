@@ -6,11 +6,11 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 	use nutshell\behaviour\Singleton;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\plugin\FaceBookPlugin\FaceBookException;
-	use application\nutsnbolts\plugin\FaceBookPlugin\impl\BaseFacebook;
-	use application\nutsnbolts\plugin\FaceBookPlugin\impl\Facebook;
+	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
+	use application\nutsnbolts\plugin\FaceBook\impl\BaseFacebook;
+	use application\nutsnbolts\plugin\FaceBook\impl\Facebook;
 
-	class FaceBookPlugin extends Plugin implements Singleton, Native
+	class FaceBook extends Plugin implements Singleton, Native
 	{
 		private $facebook;
 		private $isLoggedIn=FALSE;
