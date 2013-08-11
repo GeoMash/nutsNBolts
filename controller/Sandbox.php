@@ -16,7 +16,7 @@ namespace application\nutsnbolts\controller
 			// {
 			// 	$this->plugin->FaceBook->storeUserData();
 			// }
-			// print_r($this->plugin->FaceBook->fbPostNew());
+			$this->plugin->FaceBook->fbPostNew();
 			// print_r($this->plugin->FaceBook->fbLogout());
 
 			// print $this->plugin->Notification->getSucessesHTML();
