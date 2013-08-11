@@ -110,7 +110,15 @@
 			"Plupload":
 			{
 				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/praxisbt/nutsnbolts/private/application/data/uploads/"
+				"completed_dir":	"D:/www/praxisbt/alliance/biz-smart-website/public/_collections/",
+				"thumbnails":
+				[
+					{
+						"width":		120,
+						"height":		120,
+						"constraint":	"crop"
+					}
+				]
 			}
 		}
 	}

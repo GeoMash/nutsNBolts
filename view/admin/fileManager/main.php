@@ -5,23 +5,20 @@
 	</div>
 	<div class="modal-body">
 		<div class="row-fluid">
-			<div class="span2">
+			<div id="collections" class="span2">
 				<?php $tpl->loadView('admin/fileManager/collections'); ?>
 			</div>
 			<div class="span10">
-				<div class="box">
-					<div id="myCarousel" class="carousel slide" data-interval="0">
-						<div class="carousel-inner">
-							<div class="active item">
-								<?php $tpl->loadView('admin/fileManager/files'); ?>
-							</div>
-							<div class="item">
-								<?php $tpl->loadView('admin/fileManager/uploader'); ?>
-							</div>
+				<div id="filesWrapper" class="carousel slide" data-interval="0">
+					<div class="carousel-inner">
+						<div id="files" class="active item">
+							<div></div>
+						</div>
+						<div id="uploader" class="item">
+							<?php $tpl->loadView('admin/fileManager/uploader'); ?>
 						</div>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	</div>

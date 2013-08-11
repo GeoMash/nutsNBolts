@@ -16,14 +16,15 @@ namespace application\nutsnbolts\base
 		private $jsClassesToExecute	=array();
 		
 		private $user				=null;
-		
 		public $JSLoader			=null;
+		public $config				=null;
 		
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
 			$this->MVC		=$MVC;
 			$this->JSLoader	=$this->plugin->JsLoader();
+			$this->config	=$this->application->nutsnbolts->config;
 			
 			$this->view->setTemplate('admin');
 			
