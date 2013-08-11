@@ -16,7 +16,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 		private $isLoggedIn=FALSE;
 		private $user;
 		private $access_token;
-		private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
+		//private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
 
 		public static function registerBehaviours()
 		{
@@ -28,8 +28,8 @@ namespace application\nutsnbolts\plugin\FaceBook
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '407520512686092',
-  					'secret' => 'bbd9c76580decdf3e7ef0e71a29d05bf',
+					'appId'  => '1376270492601764',
+  					'secret' => 'f9a2227c271826b65d04103a78048207',
   					'cookie'=>TRUE
 					)
 				);
