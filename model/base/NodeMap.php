@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 10/08/2013 
+ * @since 11/08/2013 
  */
 namespace application\nutsnbolts\model\base
 {
@@ -15,7 +15,7 @@ namespace application\nutsnbolts\model\base
 	class NodeMap extends Base	
 	{
 		public $name		= 'node_map';
-		public $primary		= array('node_id');
+		public $primary		= array('node_id','url');
 		public $primary_ai	= false;
 		public $autoCreate	= false;
 		
