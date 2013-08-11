@@ -36,6 +36,7 @@ namespace application\nutsnbolts\controller
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
 				$this->view->setVar('NS_ENV',NS_ENV);
 				$this->view->setVar('SITEPATH','/sites/'.$this->getSite()['ref'].'/');
+				$this->view->setVar('URI',$this->request->getNodes());
 				$this->view->setVar('node',$this->nodes);
 				
 				$scope		=$this->view;
@@ -248,6 +249,11 @@ namespace application\nutsnbolts\controller
 						return $this->nodes[$i];
 					}
 				}
+				//Fallback to DB
+				if ($record=$this->model->Node->read($filter))
+				{
+					return $record[0];
+				}
 			}
 			//Search
 			else if (is_array($filter))
@@ -270,6 +276,8 @@ namespace application\nutsnbolts\controller
 				{
 					return $matches[0];
 				}
+				//Fallback to DB
+				
 			}
 			return false;
 		}
