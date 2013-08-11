@@ -33,7 +33,7 @@ namespace application\nutsnbolts\model
 					else
 					{
 						$contentParts[$i]['content_type_id']=$record['id'];
-						$this->model->ContentPart->insertAssoc($contentParts[$i]);
+						$return=$this->model->ContentPart->insertAssoc($contentParts[$i]);
 					}
 				}
 				//Now delete parts.
