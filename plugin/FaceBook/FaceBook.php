@@ -4,6 +4,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
 	use nutshell\behaviour\Native;
+	use nutshell\plugin\mvc\Controller;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
 	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
@@ -34,21 +35,42 @@ namespace application\nutsnbolts\plugin\FaceBook
 					)
 				);
 		}
-		
+		// read the user email
+		public function isConnectedUser()
+		{
+			$isUser=FALSE;
+			$user=$this->model->Subscriber->read();
+			if($user)
+			{
+				$isUser=TRUE;
+				//
+			}
+			else
+			{
+
+			}
+		}
+
 		public function storeUserData()
 		{
-			if ($this->getUserProfile())
+			if ($user=$this->getUserProfile())
 			{
-			 	# code...
+			 	// print($user);
+			 	if(!$this->isConnectedUser())
+			 	{
+			 		$params=array();
+			 		$whereVals=array();
+			 		foreach($user as $key)
+			 		{
+
+			 		}
+
+			 		$this->model->Subscriber->create($params,$whereVals);
+			 	}
 			}
 		}
 
 		//params include 'scope', 'redirect_uri' and 'display'
-		//read the fb dev api docs for more info
-		/*
-		*works up to the login dialog part, but does not
-		*for other apps it should take a scope array and a sring param for the redirect_url
-		*/
 		public function fbLogin()
 		{
 			$params=
@@ -93,15 +115,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 			    //                );
 			    //return ($fb->api($streamParams));
 			    // store the values in the db
-			   if(isset(is_array($me)))
-			   {
-				   	foreach ($me as $key => $value)
-				   	{
-				   		
-				   	}
-
-			   }
-			    //return $me;
+			   	return $me;
 				}
 				catch(impl\FacebookApiException $e)
 				{
@@ -114,15 +128,6 @@ namespace application\nutsnbolts\plugin\FaceBook
 				   return $this->fbLogin();
 			}
 		}
-		public function fbPostToUserFeed()
-		{
-			$data2 = array();
-		    $data2['access_token'] = $usersPermission; // from database
-
-		    $data2['message'] = 'test message';
-
-		    $facebook->api('/'.$facebook_user_id.'/feed/', 'post', $data2);
-		}
 
 		public function fbPostNew()
 		{
@@ -132,24 +137,28 @@ namespace application\nutsnbolts\plugin\FaceBook
 			{
 				$attachment =  array(
                               'access_token' => $access_token,
-                              'message' => "Hi test",
-                              'name' => "test post to wall",
-                              'description' => "testing 1...2....3....",
-                              'link' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post",
-                              'picture' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post",
-                              'actions' => array('name'=>'Try it now', 'link' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post")
+                              'message' => $this->request->get('message'),
+                              'name' => $this->request->get('name'),
+                              'description' =>$this->request->get('description'),
+                              'link' => $this->request->get('link'),
+                              'picture' => $this->request->get('picture'),
+                              'actions' => array(
+                              	'name'=>$this->request->get('action_name'),
+                              	'link' => $this->request->get('action_link'))
                           );
-
+					$me=$fb->getUser();
                   try{
                       $fb->api("me/feed","POST",$attachment);
+                  	// $facebook->api("/".$pageId."/feed", "POST", 
+                  		// array("link"=>$link, "access_token"=>$page["access_token"]));
                    }catch(impl\FacebookApiException $e){
                       exit($e);
                   }
 			}
-			else
-			{
-				print_r($fb->getUser());
-			}
+			// else
+			// {
+			// 	print_r($fb->getUser());
+			// }
 		}
 		public function fbLogout()
 		{
