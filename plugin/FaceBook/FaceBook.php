@@ -16,7 +16,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 		private $isLoggedIn=FALSE;
 		private $user;
 		private $access_token;
-		private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
+		//private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
 
 		public static function registerBehaviours()
 		{
@@ -28,8 +28,8 @@ namespace application\nutsnbolts\plugin\FaceBook
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '493266904098519',
-  					'secret' => 'c03561d1e39a3088a1140b199bb24ab9',
+					'appId'  => '1376270492601764',
+  					'secret' => 'f9a2227c271826b65d04103a78048207',
   					'cookie'=>TRUE
 					)
 				);
@@ -37,7 +37,10 @@ namespace application\nutsnbolts\plugin\FaceBook
 		
 		public function storeUserData()
 		{
-
+			if ($this->getUserProfile())
+			{
+			 	# code...
+			}
 		}
 
 		//params include 'scope', 'redirect_uri' and 'display'
@@ -50,8 +53,8 @@ namespace application\nutsnbolts\plugin\FaceBook
 		{
 			$params=
 					array(
-						'scope'=>'email,publish_actions',
-						'redirect_uri'=>'http://bizsmart.dev.lan/'
+						'scope'=>'email,publish_actions,publish_stream',
+						'redirect_uri'=>'http://bizsmart.dev.lan/home/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
@@ -84,12 +87,20 @@ namespace application\nutsnbolts\plugin\FaceBook
 				{
 				// Proceed knowing you have a logged in user who's authenticated.
 			    $me=$fb->api('/me?fields=picture,first_name,last_name,email,gender');
-			    $streamParams = array(
-			                          'method' => 'fql.multiquery',
-			                          'queries' => $streamQuery
-			                   );
-			    return ($fb->api($streamParams));
-			    //return $me;
+			    // $streamParams = array(
+			    //                       'method' => 'fql.multiquery',
+			    //                       'queries' => $streamQuery
+			    //                );
+			    //return ($fb->api($streamParams));
+			    // store the values in the db
+			   if(isset(is_array($me)))
+			   {
+				   	foreach ($me as $key => $value)
+				   	{
+				   		
+				   	}
+
+			   }
 			    //return $me;
 				}
 				catch(impl\FacebookApiException $e)
@@ -100,15 +111,40 @@ namespace application\nutsnbolts\plugin\FaceBook
 			}
 			else
 			{
-				return $this->fbLogin();
+				   return $this->fbLogin();
 			}
 		}
+		public function fbPostToUserFeed()
+		{
+			$data2 = array();
+		    $data2['access_token'] = $usersPermission; // from database
+
+		    $data2['message'] = 'test message';
+
+		    $facebook->api('/'.$facebook_user_id.'/feed/', 'post', $data2);
+		}
+
 		public function fbPostNew()
 		{
 			$fb=$this->facebook;
+			$access_token = $fb->getAccessToken();
 			if($fb->getUser())
 			{
+				$attachment =  array(
+                              'access_token' => $access_token,
+                              'message' => "Hi test",
+                              'name' => "test post to wall",
+                              'description' => "testing 1...2....3....",
+                              'link' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post",
+                              'picture' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post",
+                              'actions' => array('name'=>'Try it now', 'link' => "http://stackoverflow.com/questions/13023170/facebook-php-sdk-for-wall-post")
+                          );
 
+                  try{
+                      $fb->api("me/feed","POST",$attachment);
+                   }catch(impl\FacebookApiException $e){
+                      exit($e);
+                  }
 			}
 			else
 			{
