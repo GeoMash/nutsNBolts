@@ -78,7 +78,7 @@ namespace application\nutsnbolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				if ($this->model->Node->handleRecord($this->request->getAll()))
+				if ($this->model->Node->handleRecord($this->request->getAll())!==false)
 				{
 					$this->plugin->Notification->setSuccess('Content successfully edited.');
 				}

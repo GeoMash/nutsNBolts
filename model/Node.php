@@ -13,7 +13,7 @@ namespace application\nutsnbolts\model
 			{
 				$nodeParts		=$this->extractContentParts($record);
 				$nodeURLs		=$this->extractURLs($record);
-				$this->update($record,array('id'=>$record['id']));
+				$return			=$this->update($record,array('id'=>$record['id']));
 				//Update parts.
 				for ($i=0,$j=count($nodeParts); $i<$j; $i++)
 				{
@@ -34,6 +34,7 @@ namespace application\nutsnbolts\model
 				{
 					$this->model->NodeMap->insertAssoc($nodeURLs[$i]);
 				}
+				return $return;
 			}
 			//For Inserts
 			else
