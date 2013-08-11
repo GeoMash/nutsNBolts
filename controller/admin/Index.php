@@ -48,9 +48,10 @@ namespace application\nutsnbolts\controller\admin
 					$this->routedController=new ConfigureContent($this->MVC);
 					break;
 				}
-				case 'upload':
+				case 'fileManager':
+				case 'filemanager':
 				{
-					$this->routedController=new Upload($this->MVC);
+					$this->routedController=new FileManager($this->MVC);
 					break;
 				}
 				case '':
@@ -121,6 +122,29 @@ namespace application\nutsnbolts\controller\admin
 						$this->application->nutsnbolts->getWidgetList(),
 						$this->request->get('index')
 					);
+					break;
+				}
+				case 'admin/fileManager/collections':
+				{
+					$template=$this->plugin->Template();
+					$template->setTemplate($this->view->buildViewPath('admin/fileManager/collections'));
+					$template->setKeyVal('collections',$this->model->Collection->read());
+					$html=$template->compile();
+					break;
+				}
+				case 'admin/fileManager/files':
+				{
+					$template=$this->plugin->Template();
+					$template->setTemplate($this->view->buildViewPath('admin/fileManager/files'));
+					
+					$collection=$this->model->Collection->read($this->request->get('id'))[0];
+					$template->setKeyVal('collectionName',$collection['name']);
+					
+					$fileList=$this->plugin->FileSystem->getFileListFromCollection($this->request->get('id'));
+					
+					$template->setKeyVal('files',$fileList);
+					
+					$html=$template->compile();
 					break;
 				}
 			}
