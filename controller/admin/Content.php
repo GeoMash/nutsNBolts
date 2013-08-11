@@ -153,17 +153,13 @@ HTML;
 			for ($i=0,$j=count($contentType); $i<$j; $i++)
 			{
 				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_0';
-				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
-				$widget->setProperty('name',$formElId);
-				$widget->setProperty('value','');
-				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
-				// $input=str_replace
-				// (
-				// 	array('{name}','{value}'),
-				// 	array($formElId,''),
-				// 	$contentType[$i]['template']
-				// );
-				$parts[]=<<<HTML
+				if (!is_null($contentType[$i]['widget']))
+				{
+					$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+					$widget->setProperty('name',$formElId);
+					$widget->setProperty('value','');
+					$input	=$widget->getWidgetHTML($contentType[$i]['config']);
+					$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType[$i]['label']}</label>
 	<div class="controls">
@@ -171,6 +167,7 @@ HTML;
 	</div>
 </div>
 HTML;
+				}
 			}
 			$this->view->setVar('contentType',$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',$contentType[0]['icon']);
