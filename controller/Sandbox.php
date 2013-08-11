@@ -14,10 +14,10 @@ namespace application\nutsnbolts\controller
 			//print($this->plugin->FaceBook->fbLogin());
 			// if(isset($_GET['access_token']))
 			// {
-			// 	$this->plugin->FaceBookPlugin->storeUserData();
+			// 	$this->plugin->FaceBook->storeUserData();
 			// }
-			// print_r($this->plugin->FaceBookPlugin->fbPostNew());
-			//$this->plugin->FaceBookPlugin->fbLogout();
+			// print_r($this->plugin->FaceBook->fbPostNew());
+			// print_r($this->plugin->FaceBook->fbLogout());
 
 			// print $this->plugin->Notification->getSucessesHTML();
 			// $this->plugin->Notification->clearAll();

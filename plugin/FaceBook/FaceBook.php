@@ -28,8 +28,8 @@ namespace application\nutsnbolts\plugin\FaceBook
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '493266904098519',
-  					'secret' => 'c03561d1e39a3088a1140b199bb24ab9',
+					'appId'  => '407520512686092',
+  					'secret' => 'bbd9c76580decdf3e7ef0e71a29d05bf',
   					'cookie'=>TRUE
 					)
 				);
@@ -51,7 +51,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 			$params=
 					array(
 						'scope'=>'email,publish_actions',
-						'redirect_uri'=>'http://bizsmart.dev.lan/'
+						'redirect_uri'=>'http://bizsmart.dev.lan/home/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
@@ -100,7 +100,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 			}
 			else
 			{
-				return $this->fbLogin();
+				   return $this->facebook->getAccessToken();
 			}
 		}
 		public function fbPostNew()
