@@ -12,6 +12,7 @@ namespace application\nutsnbolts\model
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
 				$nodeParts		=$this->extractContentParts($record);
+				$nodeURLs		=$this->extractURLs($record);
 				$this->update($record,array('id'=>$record['id']));
 				//Update parts.
 				for ($i=0,$j=count($nodeParts); $i<$j; $i++)
@@ -27,18 +28,30 @@ namespace application\nutsnbolts\model
 						$this->model->NodePart->insertAssoc($nodeParts[$i]);
 					}
 				}
+				//Update URLs
+				$this->model->NodeMap->delete(array('node_id'=>$record['id']));
+				for ($i=0,$j=count($nodeURLs); $i<$j; $i++)
+				{
+					$this->model->NodeMap->insertAssoc($nodeURLs[$i]);
+				}
 			}
 			//For Inserts
 			else
 			{
 				unset($record['id']);
-				$nodeParts=$this->extractContentParts($record);
+				$nodeParts	=$this->extractContentParts($record);
+				$nodeURLs	=$this->extractURLs($record);
 				if ($id=$this->insertAssoc($record))
 				{
 					for ($i=0,$j=count($nodeParts); $i<$j; $i++)
 					{
 						$nodeParts[$i]['node_id']=$id;
 						$this->model->NodePart->insertAssoc($nodeParts[$i]);
+					}
+					for ($i=0,$j=count($nodeURLs); $i<$j; $i++)
+					{
+						$nodeURLs[$i]['node_id']=$id;
+						$this->model->NodeMap->insertAssoc($nodeURLs[$i]);
 					}
 					return $id;
 				}
@@ -66,6 +79,21 @@ namespace application\nutsnbolts\model
 				}
 			}
 			return $nodeParts;
+		}
+		
+		private function extractURLs(&$record)
+		{
+			$urls=array();
+			for ($i=0,$j=count($record['url']); $i<$j; $i++)
+			{
+				$urls[]=array
+				(
+					'node_id'	=>$record['id'],
+					'url'		=>$record['url'][$i]
+				);
+			}
+			unset($record['url']);
+			return $urls;
 		}
 	}
 }

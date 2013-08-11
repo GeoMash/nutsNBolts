@@ -89,6 +89,7 @@ namespace application\nutsnbolts\controller\admin
 			}
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
+			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
 			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
 			$parts		=array();
 			
@@ -131,9 +132,10 @@ HTML;
 			}
 			
 			$this->view->setVars($node[0]);
-			$this->view->setVar('contentType',$contentType[0]['name']);
-			$this->view->setVar('contentTypeIcon',$contentType[0]['icon']);
-			$this->view->setVar('parts',implode('',$parts));
+			$this->view->setVar('contentType',		$contentType[0]['name']);
+			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
+			$this->view->setVar('nodeURLs',			$nodeURLs);
+			$this->view->setVar('parts',			implode('',$parts));
 			
 			
 			$this->setContentView('admin/content/addEdit');
