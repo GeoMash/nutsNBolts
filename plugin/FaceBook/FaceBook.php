@@ -28,8 +28,8 @@ namespace application\nutsnbolts\plugin\FaceBook
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '407520512686092',
-  					'secret' => 'a7368dfd49ac3a66d1dd6881c7b032e3',
+					'appId'  => '493266904098519',
+  					'secret' => 'c03561d1e39a3088a1140b199bb24ab9',
   					'cookie'=>TRUE
 					)
 				);
@@ -66,14 +66,18 @@ namespace application\nutsnbolts\plugin\FaceBook
 		}
 		public function setAccessToken()
 		{
-
+			return $this->facebook->setAccessToken(
+				$this->facebook->getAccessToken()
+				);
 		}
 
 		//we have email and profile picture returned for processing
 		public function getUserProfile()
 		{
 			$fb=$this->facebook;
-			$access_token = $fb->getAccessToken();
+			$access_token =$this->facebook->setAccessToken(
+				$this->facebook->getAccessToken()
+				);
 			if ($fb->getUser()!=0) 
 			{
 				try
