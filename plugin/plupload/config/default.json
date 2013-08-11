@@ -1,0 +1,12 @@
+{
+	"config":
+	{
+		"temporary_dir":			"c:\\tmp\\plupload\\temporary\\",
+		"completed_dir":			"c:\\tmp\\plupload\\completed\\",
+		"thumbnail_dir":			"c:\\tmp\\plupload\\thumbnail\\",
+		"thumbnail_width":			150,
+		"thumbnail_height":			150,
+		"thumbnail_constraint":		"crop-best-orientation",
+		"ffmpeg_dir":				""
+	}
+}
