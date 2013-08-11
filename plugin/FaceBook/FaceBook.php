@@ -1,21 +1,22 @@
 <?php
-namespace application\nutsnbolts\plugin\FaceBookPlugin
+namespace application\nutsnbolts\plugin\FaceBook
 {
-	use nutshell\behaviour\Native;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
+	use nutshell\behaviour\Native;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\plugin\FaceBookPlugin\FaceBookException;
-	use application\nutsnbolts\plugin\FaceBookPlugin\impl\BaseFacebook;
-	use application\nutsnbolts\plugin\FaceBookPlugin\impl\Facebook;
+	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
+	use application\nutsnbolts\plugin\FaceBook\impl\BaseFacebook;
+	use application\nutsnbolts\plugin\FaceBook\impl\facebook as FaceBookBase;
 
-	class FaceBookPlugin extends Plugin implements Singleton, Native
+	class FaceBook extends Plugin implements Singleton, Native
 	{
 		private $facebook;
 		private $isLoggedIn=FALSE;
 		private $user;
-		private $access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
+		private $access_token;
+		private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
 
 		public static function registerBehaviours()
 		{
@@ -25,19 +26,16 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		public function init()
 		{
 			require_once(__DIR__._DS_.'impl\base_facebook.php');
-			$this->facebook=new Facebook(
+			$this->facebook=new FaceBookBase(
 				array(
 					'appId'  => '407520512686092',
   					'secret' => 'a7368dfd49ac3a66d1dd6881c7b032e3',
+  					'cookie'=>TRUE
 					)
 				);
 		}
-		public function setAppPerms()
-		{
-
-		}
-
-		public function getAppPerms()
+		
+		public function storeUserData()
 		{
 
 		}
@@ -52,13 +50,13 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 		{
 			$params=
 					array(
-						'scope'=>'email,publish_stream,publish_actions',
+						'scope'=>'email,publish_actions',
 						'redirect_uri'=>'http://bizsmart.dev.lan/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
 			{
-				 die('<script> top.location.href="'.$this->facebook->getLoginUrl($params).'";</script>');
+				return header('Location:'.$fb->getLoginUrl($params));
 			}
 			// else
 			// {
@@ -66,7 +64,7 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 			// }
 			
 		}
-		public function checkUserPerms()
+		public function setAccessToken()
 		{
 
 		}
@@ -82,25 +80,17 @@ namespace application\nutsnbolts\plugin\FaceBookPlugin
 				{
 				// Proceed knowing you have a logged in user who's authenticated.
 			    $me=$fb->api('/me?fields=picture,first_name,last_name,email,gender');
-			    $userInfo=array();
-				// print('Hi');
-				 $streamQuery = <<<STREAMQUERY
-				{
-				"basicinfo": "SELECT uid,name,pic_square,email,sex,
-				 first_name,last_name FROM user WHERE uid=me()",
-				}
-STREAMQUERY;
 			    $streamParams = array(
 			                          'method' => 'fql.multiquery',
 			                          'queries' => $streamQuery
 			                   );
-			   // return array_merge($fb->api($streamParams),$me);
-			    return $me;
+			    return ($fb->api($streamParams));
+			    //return $me;
 			    //return $me;
 				}
 				catch(impl\FacebookApiException $e)
 				{
-					exit($e);
+					exit($e->getResult());
 				}
 			    
 			}
@@ -109,25 +99,23 @@ STREAMQUERY;
 				return $this->fbLogin();
 			}
 		}
+		public function fbPostNew()
+		{
+			$fb=$this->facebook;
+			if($fb->getUser())
+			{
 
-		// public function isUserRegistered($email)
-		// {
-		// 	$isUser=False;
-		// 	if(!$this->model->User->read(array('email'=>$email)))
-		// 	{
-		// 		$this->model->User->create(array('email'=>$email));
-		// 	}
-		// 	else
-		// 	{
-
-		// 	}
-
-		// }
+			}
+			else
+			{
+				print_r($fb->getUser());
+			}
+		}
 		public function fbLogout()
 		{
 			session_unset();
 			// $params = array( 'next' => 'http://bizsmart.dev.lan/' );
-			// $this->facebook->getLogoutUrl($params); // $params is optional. 
+			// return  header('Location:'.$this->facebook->getLogoutUrl($params)); // $params is optional. 
 		}
 
 
