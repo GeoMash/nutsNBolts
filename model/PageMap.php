@@ -17,9 +17,9 @@ namespace application\nutsnbolts\model
 			SELECT page.*
 			FROM page
 			LEFT JOIN page_map ON page_map.page_id=page.id
-			WHERE page_map.url=?;
+			WHERE page_map.url IN(?,?);
 SQL;
-			if ($this->db->select($query,array($path)))
+			if ($this->db->select($query,array($path,$path.'/')))
 			{
 				return $this->db->result('assoc')[0];
 			}
