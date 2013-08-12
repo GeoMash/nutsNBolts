@@ -42,7 +42,11 @@ namespace application\nutsnbolts\plugin\jsLoader
 				{
 					for ($i=0,$j=count($this->executables); $i<$j; $i++)
 					{
-						$exec[]='new '.$this->executables[$i].'();';
+						if (substr($this->executables[$i],-1)!=')')
+						{
+							$this->executables[$i].='()';
+						}
+						$exec[]='new '.$this->executables[$i].';';
 					}
 				}
 				$exec=implode("\n",$exec);
