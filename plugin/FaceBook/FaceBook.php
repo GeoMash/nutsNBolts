@@ -132,8 +132,9 @@ namespace application\nutsnbolts\plugin\FaceBook
 		public function fbPostNew()
 		{
 			$fb=$this->facebook;
+			$pageId=$fb->getUser();
 			$access_token = $fb->getAccessToken();
-			if($fb->getUser())
+			if($pageId)
 			{
 				$attachment =  array(
                               'access_token' => $access_token,
@@ -146,9 +147,15 @@ namespace application\nutsnbolts\plugin\FaceBook
                               	'name'=>$this->request->get('action_name'),
                               	'link' => $this->request->get('action_link'))
                           );
-					$me=$fb->getUser();
+					//$me=$fb->getUser();
                   try{
-                      $fb->api("me/feed","POST",$attachment);
+                      	$fb->api(
+					  'me/nutsnbolts:published',
+					  'POST',
+					  array(
+					    'article' => "http://samples.ogp.me/434264856596891"
+					  )
+					);
                   	// $facebook->api("/".$pageId."/feed", "POST", 
                   		// array("link"=>$link, "access_token"=>$page["access_token"]));
                    }catch(impl\FacebookApiException $e){
