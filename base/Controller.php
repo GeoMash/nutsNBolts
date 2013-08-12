@@ -13,7 +13,7 @@ namespace application\nutsNBolts\base
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
 			
-			$result=$this->model->site->read(array('domain'=>$_SERVER['HTTP_HOST']));
+			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (isset($result[0]))
 			{
 				$this->site=$result[0];
