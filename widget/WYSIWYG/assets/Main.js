@@ -8,9 +8,9 @@ $JSKK.Class.create
 (
 	{},
 	{
-		init: function()
+		init: function(id)
 		{
-			$('#wysiwygEditor').wysihtml5();
+			$('[data-id="'+id+'"]').wysihtml5();
 		}
 	}
 );

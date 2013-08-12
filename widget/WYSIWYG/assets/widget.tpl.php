@@ -1,3 +1,3 @@
-<textarea id="wysiwygEditor" name="<?php $tpl->name; ?>">
+<textarea data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>">
 <?php $tpl->value; ?>
 </textarea>
