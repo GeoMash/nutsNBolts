@@ -23,6 +23,12 @@
 										<input type="text" name="title" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->title; ?>">
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Tags</label>
+									<div class="controls">
+										<textarea class="tags" placeholder="add a tag"><?php $tpl->tags; ?></textarea>
+									</div>
+								</div>
 								<?php $tpl->parts; ?>
 							</div>
 							<div class="container-fluid padded">

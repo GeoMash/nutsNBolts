@@ -163,9 +163,11 @@ HTML;
 			$html	=array();
 			for ($i=0,$j=count($roles); $i<$j; $i++)
 			{
-				
-				
-				$checked=($this->userHasRole($userRoles,$roles[$i]['id']))?'checked':'';
+				$checked='';
+				if (isset($userRoles))
+				{
+					$checked=($this->userHasRole($userRoles,$roles[$i]['id']))?'checked':'';
+				}
 				$html[]=<<<HTML
 <tr>
 	<td class=""><input type="checkbox" name="role[{$roles[$i]['id']}]" value="1" {$checked}></td>
