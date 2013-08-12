@@ -105,23 +105,13 @@ namespace application\nutsnbolts\controller\admin
 				}
 				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_';
 				$formElId.=($thisNodePart)?$thisNodePart['id']:'0';
-				
-				$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
-				$widget->setProperty('name',$formElId);
-				$widget->setProperty('value',$thisNodePart['value']);
-				$input	=$widget->getWidgetHTML($contentType[$i]['config']);
-				// var_dump($input);
-				// exit();
-				
-				// $input=str_replace
-				// (
-				// 	array('{name}','{value}'),
-				// 	array($formElId,$thisNodePart?$thisNodePart['value']:''),
-				// 	$contentType[$i]['template']
-				// );
-				
-				
-				$parts[]=<<<HTML
+				if (!is_null($contentType[$i]['widget']))
+				{
+					$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+					$widget->setProperty('name',$formElId);
+					$widget->setProperty('value',$thisNodePart['value']);
+					$input	=$widget->getWidgetHTML($contentType[$i]['config']);
+					$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType[$i]['label']}</label>
 	<div class="controls">
@@ -129,6 +119,7 @@ namespace application\nutsnbolts\controller\admin
 	</div>
 </div>
 HTML;
+				}
 			}
 			
 			$this->view->setVars($node[0]);
