@@ -27,7 +27,6 @@ namespace application\nutsnbolts\model\base
 			'salt' => 'varchar(100) NOT NULL ' ,
 			'name_first' => 'varchar(100) NOT NULL ' ,
 			'name_last' => 'varchar(100) NOT NULL ' ,
-			'gender' => 'tinyint(1) NOT NULL ' ,
 			'date_created' => 'datetime NOT NULL ' ,
 			'date_lastlogin' => 'datetime NOT NULL ' ,
 			'date_lastactive' => 'datetime NOT NULL ' ,
