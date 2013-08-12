@@ -150,7 +150,7 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$html=$this->buildWidgetHTML
 					(
-						$this->application->nutsnbolts->getWidgetList(),
+						$this->application->nutsNBolts->getWidgetList(),
 						$this->request->get('index')
 					);
 					break;

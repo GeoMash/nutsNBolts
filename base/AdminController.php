@@ -25,7 +25,7 @@ namespace application\nutsNBolts\base
 			
 			$this->MVC		=$MVC;
 			$this->JSLoader	=$this->plugin->JsLoader();
-			$this->config	=$this->application->nutsnbolts->config;
+			$this->config	=$this->application->nutsNBolts->config;
 			
 			if ($this->isAuthenticated())
 			{
