@@ -4,7 +4,6 @@ namespace application\nutsnbolts\plugin\FaceBook
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
 	use nutshell\behaviour\Native;
-	use nutshell\plugin\mvc\Controller;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
 	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
@@ -36,36 +35,44 @@ namespace application\nutsnbolts\plugin\FaceBook
 				);
 		}
 		// read the user email
-		public function isConnectedUser()
+		public function isConnectedUser($email)
 		{
 			$isUser=FALSE;
-			$user=$this->model->Subscriber->read();
-			if($user)
+			$user =$this->plugin->Mvc->model->Subscriber->read(array('email'=>$email));
+			if($user!=0)
 			{
 				$isUser=TRUE;
 				//
 			}
-			else
-			{
-
-			}
+			return $isUser;
 		}
 
 		public function storeUserData()
 		{
-			if ($user=$this->getUserProfile())
+			if ($this->getUserProfile())
 			{
+				$user=$this->getUserProfile();
 			 	// print($user);
-			 	if(!$this->isConnectedUser())
+			 	if(!$this->isConnectedUser($user['email']))
 			 	{
 			 		$params=array();
-			 		$whereVals=array();
-			 		foreach($user as $key)
-			 		{
+			 		// foreach($user as $key)
+			 		// {
+			 			$params['fb_uid']=$user['id'];
+			 			$params['first_name']=$user['first_name'];
+			 			$params['last_name']=$user['last_name'];
+			 			$params['email']=$user['email'];
+			 			$params['gender']=$user['gender'];
+			 			foreach ($params as $key =>$value)
+			 			{
+			 				if(empty($value))
+							{
+							   unset($params[$key]);
+							}
+			 			}
 
-			 		}
-
-			 		$this->model->Subscriber->create($params,$whereVals);
+			 		// }
+			 		$this->plugin->Mvc->model->Subscriber->insert($params);
 			 	}
 			}
 		}
@@ -83,11 +90,6 @@ namespace application\nutsnbolts\plugin\FaceBook
 			{
 				return header('Location:'.$fb->getLoginUrl($params));
 			}
-			// else
-			// {
-			// 	return header('Location:'.$fb->getLoginUrl());
-			// }
-			
 		}
 		public function setAccessToken()
 		{
@@ -108,14 +110,7 @@ namespace application\nutsnbolts\plugin\FaceBook
 				try
 				{
 				// Proceed knowing you have a logged in user who's authenticated.
-			    $me=$fb->api('/me?fields=picture,first_name,last_name,email,gender');
-			    // $streamParams = array(
-			    //                       'method' => 'fql.multiquery',
-			    //                       'queries' => $streamQuery
-			    //                );
-			    //return ($fb->api($streamParams));
-			    // store the values in the db
-			   	return $me;
+			 		return $fb->api('/me?fields=picture,first_name,last_name,email,gender');
 				}
 				catch(impl\FacebookApiException $e)
 				{
@@ -152,9 +147,7 @@ namespace application\nutsnbolts\plugin\FaceBook
                       	$fb->api(
 					  'me/nutsnbolts:published',
 					  'POST',
-					  array(
-					    'article' => "http://samples.ogp.me/434264856596891"
-					  )
+					 $attachment
 					);
                   	// $facebook->api("/".$pageId."/feed", "POST", 
                   		// array("link"=>$link, "access_token"=>$page["access_token"]));
@@ -178,3 +171,4 @@ namespace application\nutsnbolts\plugin\FaceBook
 	}
 
 }
+?>
