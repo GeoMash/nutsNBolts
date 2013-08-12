@@ -22,26 +22,31 @@ namespace application\nutsnbolts\base
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
+			
 			$this->MVC		=$MVC;
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->nutsnbolts->config;
 			
-			$this->view->setTemplate('admin');
+			if ($this->isAuthenticated())
+			{
+				$this->view->setTemplate('admin');
+				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
+				$this->view->setVar('nav_active_main',$mainNav);
+				$this->view->setVar('nav_active_sub',$this->request->node(2));
+				
+				
+				
+				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
+				
+				$this->user=$this->model->User->read($this->plugin->session->userId)[0];
+				$this->view->setVar('user',$this->user);
+				
+				$this->show404();
+			}
 			
 			$this->view->setVar('NS_ENV',		NS_ENV);
 			$this->view->setVar('websiteTitle',	$this->websiteTitle);
 			$this->view->setVar('brandTitle',	$this->brandTitle);
-			
-			$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
-			$this->view->setVar('nav_active_main',$mainNav);
-			$this->view->setVar('nav_active_sub',$this->request->node(2));
-			
-			$this->show404();
-			
-			$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
-			
-			//TODO: Change this once users are actually implemented.
-			$this->user=array('id'=>1);
 			
 			$this->view->getContext()
 				->registerCallback
@@ -241,6 +246,11 @@ HTML;
 					.$this->plugin->Notification->getSucessesHTML();
 			$this->plugin->Notification->clearAll();
 			return $ret;
+		}
+		
+		public function isAuthenticated()
+		{
+			return ($this->plugin->session->authenticated);
 		}
 	}
 }

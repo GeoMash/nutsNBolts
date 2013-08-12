@@ -9,6 +9,9 @@ namespace application\nutsnbolts\controller\admin
 	
 	class Index extends AdminController
 	{
+		const USER_STATUS_DISABLED	=0;
+		const USER_STATUS_ENABLED	=1;
+		
 		private $routedController	=null;
 		
 		public function index()
@@ -18,8 +21,19 @@ namespace application\nutsnbolts\controller\admin
 		
 		private function route()
 		{
+			$control=$this->request->node(1);
+			if (!$this->isAuthenticated() && $control!='login')
+			{
+				//TODO: Return address.
+				$this->redirect('/admin/login/');
+			}
+			elseif ($this->isAuthenticated() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED)
+			{
+				$control='logout';
+			}
+			
 			$this->MVC=$this->plugin->Mvc;
-			switch ($this->request->node(1))
+			switch ($control)
 			{
 				case 'script':
 				{
@@ -64,6 +78,18 @@ namespace application\nutsnbolts\controller\admin
 				{
 					$this->routedController=new Dashboard($this->MVC);
 					break;
+				}
+				case 'login':
+				{
+					$this->handleLogin();
+					$this->view->render();
+					exit();
+				}
+				case 'logout':
+				{
+					$this->logout();
+					$this->view->render();
+					exit();
 				}
 				default:
 				{
@@ -156,6 +182,39 @@ namespace application\nutsnbolts\controller\admin
 			$this->plugin	->Responder('html')
 							->setData($html)
 							->send();
+		}
+		
+		public function handleLogin()
+		{
+			if (!$this->request->get('username'))
+			{
+				$this->view->setTemplate('login');
+			}
+			else
+			{
+				$result=$this->model->User->authenticate
+				(
+					$this->request->get('username'),
+					$this->request->get('password')
+				);
+				if ($result)
+				{
+					$this->plugin->session->authenticated=true;
+					$this->plugin->session->userId=$result['id'];
+					$this->redirect('/admin/dashboard');
+				}
+				else
+				{
+					$this->view->setTemplate('login');
+				}
+			}
+		}
+		
+		public function logout()
+		{
+			unset($this->plugin->session->authenticated);
+			unset($this->plugin->session->userId);
+			$this->redirect('/admin/login/');
 		}
 	}
 }
