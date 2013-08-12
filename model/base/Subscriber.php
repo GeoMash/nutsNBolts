@@ -27,9 +27,6 @@ namespace application\nutsnbolts\model\base
 			'firstName' => 'varchar(100) NOT NULL ' ,
 			'lastName' => 'varchar(100) NOT NULL ' ,
 			'gender' => 'tinyint(1) NOT NULL ' ,
-			'access_token' => 'datetime NOT NULL ',
-			'date_last_access_token' => 'datetime NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
 		);
 	}
 }
