@@ -1,0 +1,29 @@
+{
+	"extends":	"dev",
+	"config":
+	{
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"f.NfN13jDv",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"nutsnbolts"
+					}
+				}
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"D:/tmp/",
+				"completed_dir":	"D:/www/praxisbt/nutsnbolts/private/application/data/uploads/"
+			}
+		}
+	}
+}
