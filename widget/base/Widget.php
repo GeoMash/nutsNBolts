@@ -14,6 +14,7 @@ namespace application\nutsnbolts\widget\base
 	{
 		public $mainTemplateFile	='widget.tpl.php';
 		public $configTemplateFile	='config.tpl.php';
+		public $widgetJSFile		='Main.js';
 		public $configJSFile		='Config.js';
 		
 		private $properties=array();
@@ -106,6 +107,16 @@ namespace application\nutsnbolts\widget\base
 		public function getConfigJS()
 		{
 			$filePath=ObjectHelper::getClassPath($this).'assets'._DS_.$this->configJSFile;
+			if (is_file($filePath))
+			{
+				return file_get_contents($filePath);
+			}
+			return false;
+		}
+		
+		public function getWidgetJS()
+		{
+			$filePath=ObjectHelper::getClassPath($this).'assets'._DS_.$this->widgetJSFile;
 			if (is_file($filePath))
 			{
 				return file_get_contents($filePath);

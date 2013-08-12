@@ -47,6 +47,7 @@ namespace application\nutsnbolts\controller\admin
 				$this->addBreadcrumb('Content','icon-edit','content');
 				$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$typeID);
 				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
+
 				$this->view->render();
 			}
 			else
@@ -158,8 +159,16 @@ HTML;
 	</div>
 </div>
 HTML;
+					$exec=str_replace
+					(
+						array('application\\','\\'),
+						array('','.'),
+						$contentType[$i]['widget']
+					).'.Main';
+					$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 				}
 			}
+			$parts[]=$this->JSLoader->getLoaderHTML();
 			$this->view->setVar('contentType',$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',$contentType[0]['icon']);
 			$this->view->setVar('parts',implode('',$parts));

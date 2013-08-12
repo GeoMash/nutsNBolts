@@ -97,10 +97,8 @@ namespace application\nutsnbolts\controller\admin
 				$partHTML	='';
 				$this->view->setVars($record);
 				$parts=$this->model->ContentPart->read(array('content_type_id'=>$id));
-				
 				if (count($parts))
 				{
-				// var_dump($parts);exit();
 					$contentWidgets=$this->application->nutsnbolts->getWidgetList();
 					for ($i=0,$j=count($parts); $i<$j; $i++)
 					{
@@ -171,6 +169,7 @@ HTML;
 		
 		public function getConfigForWidget()
 		{
+			die('errro');
 			$widget			=$this->getWidgetInstance($this->request->get('widget'));
 			$widgetOptions	=$widget->getConfigHTML($this->request->get('index'));
 			
@@ -193,6 +192,31 @@ HTML;
 							->setData($widgetOptions)
 							->send();
 		}
+
+		public function getJsForWidget()
+		{
+			$widget			=$this->getWidgetInstance($this->request->get('widget'));
+			$widgetOptions	=$widget->getJsHTML($this->request->get('index'));
+			
+			if (!empty($widgetOptions))
+			{
+				// $exec=str_replace
+				// (
+				// 	array('application\\','\\'),
+				// 	array('','.'),
+				// 	$this->request->get('widget')
+				// ).'.Widget';
+				// $this->JSLoader->loadScript('/admin/script/widget/config/'.$this->request->get('widget'),$exec);
+				$widgetOptions.=$this->JSLoader->getLoaderHTML();
+			}
+			else
+			{
+				$widgetOptions='None';
+			}
+			$this->plugin	->Responder('html')
+							->setData($widgetOptions)
+							->send();
+		}		
 	}
 }
 ?>

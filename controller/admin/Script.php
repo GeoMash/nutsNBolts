@@ -8,7 +8,7 @@ namespace application\nutsnbolts\controller\admin
 	{
 		public function index()
 		{
-			die('script');
+			//die('script');
 		}
 		
 		public function widget($type,$namespace)
@@ -22,6 +22,10 @@ namespace application\nutsnbolts\controller\admin
 			if ($type=='config')
 			{
 				$js=$widget->getConfigJS();
+			}
+			else if ($type='main')
+			{
+				$js=$widget->getWidgetJS();
 			}
 			if (!$js)
 			{
