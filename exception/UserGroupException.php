@@ -1,7 +1,7 @@
 <?php
 namespace application\nutsnbolts\exception
 {
-	use application\exception\NutsNBoltsException;
+	use application\nutsnbolts\exception\NutsNBoltsException;
 	
 	class UserGroupException extends NutsNBoltsException
 	{
