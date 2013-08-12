@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\Site as SiteBase;
+	use application\nutsNBolts\model\base\Site as SiteBase;
 	
 	class Site extends SiteBase	
 	{

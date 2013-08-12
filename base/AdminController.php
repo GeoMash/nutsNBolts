@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\base
+namespace application\nutsNBolts\base
 {
-	use application\nutsnbolts\base\Controller as BaseController;
+	use application\nutsNBolts\base\Controller as BaseController;
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\helper\ObjectHelper;
 	

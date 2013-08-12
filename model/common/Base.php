@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\model\common
+namespace application\nutsNBolts\model\common
 {
 	use nutshell\plugin\mvc\model\CRUD;
 

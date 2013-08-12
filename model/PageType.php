@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\PageType as PageTypeBase;
+	use application\nutsNBolts\model\base\PageType as PageTypeBase;
 	
 	class PageType extends PageTypeBase	
 	{

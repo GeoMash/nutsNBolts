@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\controller
+namespace application\nutsNBolts\controller
 {
-	use application\nutsnbolts\base\Controller;
+	use application\nutsNBolts\base\Controller;
 	use nutshell\helper\ObjectHelper;
 	
 	class Index extends Controller

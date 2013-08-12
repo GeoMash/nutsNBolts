@@ -1,11 +1,11 @@
 <?php
-namespace application\nutsnbolts\controller\admin
+namespace application\nutsNBolts\controller\admin
 {
-	use application\nutsnbolts\base\AdminController;
+	use application\nutsNBolts\base\AdminController;
 	use nutshell\helper\ArrayHelper;
-	// use application\nutsnbolts\controller\admin\ConfigureContent;
-	// use application\nutsnbolts\controller\admin\Content;
-	// use application\nutsnbolts\controller\admin\Dashboard;
+	// use application\nutsNBolts\controller\admin\ConfigureContent;
+	// use application\nutsNBolts\controller\admin\Content;
+	// use application\nutsNBolts\controller\admin\Dashboard;
 	
 	class Index extends AdminController
 	{

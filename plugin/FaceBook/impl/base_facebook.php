@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\FaceBook\impl;
+namespace application\nutsNBolts\plugin\FaceBook\impl;
 use \Exception;
 /**
  * Copyright 2011 Facebook, Inc.

@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\image
+namespace application\nutsNBolts\widget\image
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Image extends WidgetBase
 	{

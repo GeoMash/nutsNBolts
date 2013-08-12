@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\plupload
+namespace application\nutsNBolts\plugin\plupload
 {
 	use nutshell\Nutshell;
 	

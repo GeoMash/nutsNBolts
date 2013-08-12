@@ -1,10 +1,10 @@
 <?php
-namespace application\nutsnbolts\plugin\fileSystem
+namespace application\nutsNBolts\plugin\fileSystem
 {
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\helper\MimeHelper;
+	use application\nutsNBolts\helper\MimeHelper;
 	use \DirectoryIterator;
 
 	class FileSystem extends Plugin implements Singleton

@@ -1,11 +1,11 @@
 <?php
-namespace application\nutsnbolts\plugin\responder
+namespace application\nutsNBolts\plugin\responder
 {
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\helper\MimeHelper;
-	use application\nutsnbolts\plugin\responder\ResponderException;
+	use application\nutsNBolts\helper\MimeHelper;
+	use application\nutsNBolts\plugin\responder\ResponderException;
 
 	class Responder extends Plugin implements Singleton
 	{

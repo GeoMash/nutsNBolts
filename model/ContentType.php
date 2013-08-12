@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\ContentType as ContentTypeBase;
+	use application\nutsNBolts\model\base\ContentType as ContentTypeBase;
 	
 	class ContentType extends ContentTypeBase	
 	{

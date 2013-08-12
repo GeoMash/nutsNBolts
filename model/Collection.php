@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\Collection as CollectionBase;
+	use application\nutsNBolts\model\base\Collection as CollectionBase;
 	
 	class Collection extends CollectionBase	
 	{

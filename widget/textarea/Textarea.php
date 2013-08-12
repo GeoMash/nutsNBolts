@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\textarea
+namespace application\nutsNBolts\widget\textarea
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Textarea extends WidgetBase
 	{

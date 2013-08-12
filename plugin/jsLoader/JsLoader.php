@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\jsLoader
+namespace application\nutsNBolts\plugin\jsLoader
 {
 	use nutshell\behaviour\Factory;
 	use nutshell\core\plugin\Plugin;

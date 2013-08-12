@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\controller\admin
+namespace application\nutsNBolts\controller\admin
 {
-	use application\nutsnbolts\base\AdminController;
+	use application\nutsNBolts\base\AdminController;
 	use nutshell\helper\ObjectHelper;
 	
 	class Upload extends AdminController

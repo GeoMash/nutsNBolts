@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\textbox
+namespace application\nutsNBolts\widget\textbox
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Textbox extends WidgetBase
 	{

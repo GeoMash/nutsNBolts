@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\Role as RoleBase;
+	use application\nutsNBolts\model\base\Role as RoleBase;
 	
 	class Role extends RoleBase	
 	{

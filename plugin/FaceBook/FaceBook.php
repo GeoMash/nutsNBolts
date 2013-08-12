@@ -1,14 +1,14 @@
 <?php
-namespace application\nutsnbolts\plugin\FaceBook
+namespace application\nutsNBolts\plugin\FaceBook
 {
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
 	use nutshell\behaviour\Native;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsnbolts\plugin\FaceBook\FaceBookException;
-	use application\nutsnbolts\plugin\FaceBook\impl\BaseFacebook;
-	use application\nutsnbolts\plugin\FaceBook\impl\facebook as FaceBookBase;
+	use application\nutsNBolts\plugin\FaceBook\FaceBookException;
+	use application\nutsNBolts\plugin\FaceBook\impl\BaseFacebook;
+	use application\nutsNBolts\plugin\FaceBook\impl\facebook as FaceBookBase;
 
 	class FaceBook extends Plugin implements Singleton, Native
 	{

@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\select
+namespace application\nutsNBolts\widget\select
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Select extends WidgetBase
 	{

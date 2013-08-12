@@ -1,8 +1,8 @@
 <?php
-namespace application\nutsnbolts\controller\admin
+namespace application\nutsNBolts\controller\admin
 {
-	use application\nutsnbolts\base\AdminController;
-	use application\nutsnbolts\plugin\plupload\ThumbnailMaker;
+	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
 	use nutshell\helper\ObjectHelper;
 	
 	class Settings extends AdminController

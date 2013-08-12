@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\notification
+namespace application\nutsNBolts\plugin\notification
 {
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;

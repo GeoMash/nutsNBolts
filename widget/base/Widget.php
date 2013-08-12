@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\widget\base
+namespace application\nutsNBolts\widget\base
 {
 	use nutshell\behaviour\Loadable;
 

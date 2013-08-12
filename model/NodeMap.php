@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\model
+namespace application\nutsNBolts\model
 {
-	use application\nutsnbolts\model\base\NodeMap as NodeMapBase;
+	use application\nutsNBolts\model\base\NodeMap as NodeMapBase;
 	
 	class NodeMap extends NodeMapBase	
 	{

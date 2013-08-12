@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\WYSIWYG
+namespace application\nutsNBolts\widget\WYSIWYG
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Wysiwyg extends WidgetBase
 	{

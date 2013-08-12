@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\plupload\thirdparty;
+namespace application\nutsNBolts\plugin\plupload\thirdparty;
 /**
  * upload.php
  *

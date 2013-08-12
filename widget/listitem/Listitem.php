@@ -1,7 +1,7 @@
 <?php
-namespace application\nutsnbolts\widget\listitem
+namespace application\nutsNBolts\widget\listitem
 {
-	use application\nutsnbolts\widget\base\Widget as WidgetBase;
+	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
 	class Listitem extends WidgetBase
 	{

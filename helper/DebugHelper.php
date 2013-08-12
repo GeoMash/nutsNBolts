@@ -3,7 +3,7 @@
  * @package nutshell
  * @author dean
  */
-namespace application\nutsnbolts\helper
+namespace application\nutsNBolts\helper
 {
 	/**
 	 * The Debug Helper class

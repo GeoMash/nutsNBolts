@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts\plugin\faceBookPlugin
+namespace application\nutsNBolts\plugin\faceBookPlugin
 {
 	use nutshell\core\exception\NutshellException;
 

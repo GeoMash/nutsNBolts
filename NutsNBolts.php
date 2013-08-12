@@ -53,7 +53,7 @@ namespace application\nutsnbolts
 			$this->loadApplicationHelpers();
 
 			//Load Exception Handlers that belong to the application.
-			$this->loadApplicationExceptionHandlers();
+			// $this->loadApplicationExceptionHandlers();
 		}
 		
 		public function exec()
@@ -68,7 +68,7 @@ namespace application\nutsnbolts
 				}
 				if (NS_INTERFACE!= Nutshell::INTERFACE_PHPUNIT)
 				{
-					$this->plugin->Mvc('nutsnbolts');
+					$this->plugin->Mvc('nutsNBolts');
 				}
 			}
 			catch(NutshellException $exception)//TODO: Change this - its not always a 404 (It can sometimes be a 500).
