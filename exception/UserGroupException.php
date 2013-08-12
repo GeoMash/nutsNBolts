@@ -1,9 +1,9 @@
 <?php
 namespace application\exception
 {
-	use application\exception\GeomashException;
+	use application\exception\NutsNBoltsException;
 	
-	class UserGroupException extends GeomashException
+	class UserGroupException extends NutsNBoltsException
 	{
 		protected $message = 'Unknown user account group exception';
 		

@@ -6,7 +6,7 @@ namespace application\exception
 	/**
 	 * @author Guillaume Bodi <gbodi@praxisbt.com>
 	 */
-	class GeomashException extends NutshellException
+	class NutsNBoltsException extends NutshellException
 	{
 		const OPERATION_REQUIRES_ID = 10;
 		const OPERATION_REQUIRES_DATA = 11;

@@ -1,9 +1,9 @@
 <?php
 namespace application\exception
 {
-	use application\exception\GeomashException;
+	use application\exception\NutsNBoltsException;
 	
-	class UserException extends GeomashException
+	class UserException extends NutsNBoltsException
 	{
 		const NOT_EXIST = 'The specified user does not exist.';
 		const EMAIL_EXISTS = 'The specified email address already exists in the database.';
