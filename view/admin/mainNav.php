@@ -73,7 +73,7 @@
 			</li>
 		</ul>
 	</li>
-	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>" style="display:none;">
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#settings-subs">
 			<i class="icon-wrench icon-2x"></i>
@@ -83,7 +83,7 @@
 			</span>
 		</a>
 		<ul id="settings-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='settings')print 'in'; ?>">
-			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>" style="display:none;">
 				<a href="/admin/settings/general">
 					<i class="icon-circle-blank"></i> General
 				</a>
@@ -94,11 +94,11 @@
 				</a>
 			</li>
 			<li class="<?php if ($tpl->get('nav_active_sub')=='files')print 'active'; ?>">
-				<a href="/admin/settings/files">
+				<a href="#fileManagerWindow" role="button" data-toggle="bigmodal">
 					<i class="icon-folder-open"></i> File Manager
 				</a>
 			</li>
-			<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>" style="display:none;">
 				<a href="/admin/settings/plugins">
 					<i class="icon-bolt"></i> Plugins
 				</a>

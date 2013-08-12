@@ -20,7 +20,8 @@
 		"application":
 		{
 			"mode": 		"production",
-			"dataDir":		"./data/"
+			"dataDir":		"./data/",
+			"salt":			"Squirrels love nuts!"
 		},
 		"plugin":
 		{

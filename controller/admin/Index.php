@@ -54,6 +54,11 @@ namespace application\nutsnbolts\controller\admin
 					$this->routedController=new FileManager($this->MVC);
 					break;
 				}
+				case 'settings':
+				{
+					$this->routedController=new Settings($this->MVC);
+					break;
+				}
 				case '':
 				case 'dashboard':
 				{
