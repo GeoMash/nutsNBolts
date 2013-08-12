@@ -5,6 +5,29 @@
 		"application":
 		{
 			"mode": "development"
+		},
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"root",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"nutsnbolts"
+					}
+				}
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"D:/tmp/",
+				"completed_dir":	"D:/www/praxisbt/nutsnbolts/private/application/data/uploads/"
+			}
 		}
 	}
 }
