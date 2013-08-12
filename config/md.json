@@ -12,7 +12,7 @@
 					{
 						"handler":		"MySQL",
 						"username":		"root",
-						"password":		"Mehrdad#1838",
+						"password":		"",
 						"host":			"localhost",
 						"port":			"3306",
 						"database":		"nutsnbolts"
