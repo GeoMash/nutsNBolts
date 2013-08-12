@@ -221,7 +221,7 @@ namespace application\nutsNBolts\controller
 		private function getNodesByContentTypeRef($ref)
 		{
 			$return=array();
-			$result=$this->model->contentType->read(array('ref'=>$ref));
+			$result=$this->model->ContentType->read(array('ref'=>$ref));
 			if (!isset($result[0]))
 			{
 				return $return;
