@@ -5,10 +5,11 @@
 		<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,800">
 		<link href="/css/application.css" media="screen" rel="stylesheet" type="text/css" />
+		<link href="/css/bootstrap-wysihtml5.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="/js/vendor/jquery/fancybox/source/jquery.fancybox.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="/js/vendor/jquery/fancybox/source/helpers/jquery.fancybox-buttons.css" media="screen" rel="stylesheet" type="text/css" />
 		<link href="/css/main.css" media="screen" rel="stylesheet" type="text/css" />
-
+		
 		<meta charset="utf-8">
 
 		<!-- Always force latest IE rendering engine or request Chrome Frame -->
