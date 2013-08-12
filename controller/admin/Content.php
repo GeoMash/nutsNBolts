@@ -164,7 +164,7 @@ HTML;
 						array('application\\','\\'),
 						array('','.'),
 						$contentType[$i]['widget']
-					).'.Main';
+					).'.Main('.$contentType[$i]['content_part_id'].')';
 					$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 				}
 			}
