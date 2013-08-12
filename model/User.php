@@ -41,9 +41,9 @@ namespace application\nutsnbolts\model
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
 				
+				$roles=$this->extractRoles($record);
 				if ($id=$this->insertAssoc($record))
 				{
-					$roles=$this->extractRoles($record);
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
 						$roles[$i]['user_id']=$id;
