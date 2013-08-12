@@ -22,7 +22,7 @@ namespace application\nutsNBolts\controller
 		
 		public function index()
 		{
-			$binding		=$this->application->nutsNBolts->getSiteBinding($this->getSiteRef());
+			$binding		=$this->application->NutsNBolts->getSiteBinding($this->getSiteRef());
 			$applicationName=strtolower(ObjectHelper::getBaseClassName(get_class($binding['application'])));
 			$path			=$this->getPath();
 			$page			=$this->model->PageMap->getPageFromPath($path);

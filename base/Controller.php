@@ -22,7 +22,7 @@ namespace application\nutsNBolts\base
 			{
 				die('No site registered for this domain!');
 			}
-			if (!$this->application->nutsNBolts->getSiteBinding($this->getSiteRef()))
+			if (!$this->application->NutsNBolts->getSiteBinding($this->getSiteRef()))
 			{
 				die('No site bound for this domain!');
 			}

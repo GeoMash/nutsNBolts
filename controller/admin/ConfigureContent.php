@@ -99,7 +99,7 @@ namespace application\nutsNBolts\controller\admin
 				$parts=$this->model->ContentPart->read(array('content_type_id'=>$id));
 				if (count($parts))
 				{
-					$contentWidgets=$this->application->nutsNBolts->getWidgetList();
+					$contentWidgets=$this->application->NutsNBolts->getWidgetList();
 					for ($i=0,$j=count($parts); $i<$j; $i++)
 					{
 						 $partHTML.=$this->buildWidgetHTML($contentWidgets,$i,$parts[$i]);
@@ -157,7 +157,7 @@ HTML;
 		public function getAddContentTypeWidgetOptions()
 		{
 			$options=array();
-			$contentWidgets=$this->application->nutsNBolts->getWidgetList();
+			$contentWidgets=$this->application->NutsNBolts->getWidgetList();
 			for ($i=0,$j=count($contentWidgets); $i<$j; $i++)
 			{
 				$options[]='<option value="'.$contentWidgets[$i]['namespace'].'">'.$contentWidgets[$i]['name'].'</option>';

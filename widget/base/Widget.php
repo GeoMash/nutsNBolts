@@ -22,7 +22,7 @@ namespace application\nutsNBolts\widget\base
 		public function __construct()
 		{
 			$this->nutshell		=Nutshell::getInstance();
-			$this->application	=$this->nutshell->application->nutsnbolts;
+			$this->application	=$this->nutshell->application->NutsNBolts;
 			// $this->config		=$this->nutshell->applicationConfig->nutsNBolts->widget;
 			
 			if (method_exists($this,'init'))
