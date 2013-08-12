@@ -61,9 +61,9 @@ namespace application\nutsnbolts\widget\base
 			return $this->properties;
 		}
 		
-		public function getWidgetHTML($config=array())
+		public function getWidgetHTML($id,$config=array())
 		{
-			$template	=$this->plugin->Template(ObjectHelper::getClassPath($this).'assets'._DS_.$this->mainTemplateFile);
+			$template=$this->plugin->Template(ObjectHelper::getClassPath($this).'assets'._DS_.$this->mainTemplateFile);
 			
 			if (is_string($config))
 			{
@@ -77,6 +77,7 @@ namespace application\nutsnbolts\widget\base
 			{
 				$config=$this->getProperties();
 			}
+			$template->setKeyVal('dataId',$id);
 			$template->setKeyValArray($config);
 			$template->compile();
 			return $template->getCompiled();

@@ -1,4 +1,4 @@
-<select name="<?php $tpl->name; ?>">
+<select data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>">
 	<?php
 	$options=$tpl->get('options');
 	for ($i=0,$j=count($options); $i<$j; $i++)
