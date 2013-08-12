@@ -169,7 +169,6 @@ HTML;
 		
 		public function getConfigForWidget()
 		{
-			die('errro');
 			$widget			=$this->getWidgetInstance($this->request->get('widget'));
 			$widgetOptions	=$widget->getConfigHTML($this->request->get('index'));
 			
