@@ -51,6 +51,8 @@ namespace application\nutsnbolts
 			
 			//Load helpers that belong to the application.
 			$this->loadApplicationHelpers();
+			
+			$this->loadPHPPatches();
 
 			//Load Exception Handlers that belong to the application.
 			// $this->loadApplicationExceptionHandlers();
@@ -171,6 +173,11 @@ namespace application\nutsnbolts
 			//TODO: Registered widgets from other applications.
 			
 			return $list;
+		}
+		
+		public function loadPHPPatches()
+		{
+			$this->loadAllFilesFromFolder(__DIR__ . _DS_ . 'patch' . _DS_);
 		}
 	}
 }
