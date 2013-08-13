@@ -115,6 +115,11 @@ namespace application\nutsNBolts\widget\base
 			return false;
 		}
 		
+		public function hasWidgetJS()
+		{
+			return is_file(ObjectHelper::getClassPath($this).'assets'._DS_.$this->widgetJSFile);
+		}
+		
 		public function getWidgetJS()
 		{
 			$filePath=ObjectHelper::getClassPath($this).'assets'._DS_.$this->widgetJSFile;
