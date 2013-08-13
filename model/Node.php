@@ -39,7 +39,7 @@ namespace application\nutsNBolts\model
 				$this->model->NodeTag->delete(array('node_id'=>$record['id']));
 				for ($i=0,$j=count($nodeTags); $i<$j; $i++)
 				{
-					$this->model->NodeMap->insertAssoc($nodeTags[$i]);
+					$this->model->NodeTag->insertAssoc($nodeTags[$i]);
 				}
 				return $return;
 			}
