@@ -118,14 +118,15 @@ namespace application\nutsNBolts\controller
 						{
 							//TODO: get the id from the ref.
 							$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
+
 							if (!count($filteredContent))
 							{
 								return '';
 							}
 							//Multiple of the same content type.
-							if (isset($config['typeConfig']['multiple']) && $config['typeConfig']['multiple'])
+							if ( $config['typeConfig']['limit'] > 0)
 							{
-								$content=$filteredContent;
+								$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
 							}
 							//Singular item.
 							else
@@ -226,7 +227,7 @@ namespace application\nutsNBolts\controller
 			{
 				return $return;
 			}
-			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
+			for ($i=1,$j=count($this->nodes); $i<$j; $i++)
 			{
 				if ($this->nodes[$i]['content_type_id']==$result[0]['id'])
 				{
@@ -234,8 +235,33 @@ namespace application\nutsNBolts\controller
 				}
 			}
 			return $return;
-		}
-		
+		}		
+
+		private function getNodesByContentTypeRefLimit($ref, $limit)
+		{
+			$return=array();
+			$thisLimit=1;
+			$result=$this->model->ContentType->read(array('ref'=>$ref));
+
+			if (!isset($result[0]))
+			{
+				return $return;
+			}
+			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
+			{
+				if ($this->nodes[$i]['content_type_id']==$result[0]['id'])
+				{
+					if ($thisLimit <= $limit)
+					{
+						$return[]=&$this->nodes[$i];		
+						$thisLimit++;
+					}
+				}
+			}
+			return $return;
+		}		
+
+
 		public function getNode($filter)
 		{
 			//ID
