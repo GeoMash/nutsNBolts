@@ -122,8 +122,19 @@ namespace application\nutsNBolts\controller\admin
 	</div>
 </div>
 HTML;
+					if ($widget->hasWidgetJS())
+					{
+						$exec=str_replace
+						(
+							array('application\\','\\'),
+							array('','.'),
+							$contentType[$i]['widget']
+						).'.Main('.$contentType[$i]['content_part_id'].')';
+						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+					}
 				}
 			}
+			$parts[]=$this->JSLoader->getLoaderHTML();
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
