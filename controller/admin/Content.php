@@ -91,6 +91,8 @@ namespace application\nutsNBolts\controller\admin
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
 			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
+			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
+			
 			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
 			$parts		=array();
 			
@@ -122,11 +124,11 @@ namespace application\nutsNBolts\controller\admin
 HTML;
 				}
 			}
-			
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
 			$this->view->setVar('nodeURLs',			$nodeURLs);
+			$this->view->setVar('nodeTags',			implode(',',$nodeTags));
 			$this->view->setVar('parts',			implode('',$parts));
 			
 			

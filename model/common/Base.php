@@ -20,5 +20,18 @@ namespace application\nutsNBolts\model\common
 			}
 			return false;
 		}
+		
+		public function removeJunk($record)
+		{
+			$columns=array_keys($this->columns);
+			foreach ($record as $field=>$value)
+			{
+				if (!in_array($field,$columns))
+				{
+					unset($record[$field]);
+				}
+			}
+			return $record;
+		}
 	}
 }
