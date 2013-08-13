@@ -2,7 +2,7 @@ $JSKK.Class.create
 (
 	{
 		$namespace:	'nutsnbolts.widget.image',
-		$name:		'Config'
+		$name:		'Main'
 	}
 )
 (
@@ -10,7 +10,11 @@ $JSKK.Class.create
 	{
 		init: function()
 		{
-			console.debug('HELLO IMAGE CONFIG');
+			console.debug('HELLO IMAGE MAIN');
+		},
+		browseImage: function()
+		{
+			
 		}
 	}
 );
