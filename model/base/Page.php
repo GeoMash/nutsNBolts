@@ -6,11 +6,11 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 11/08/2013 
+ * @since 13/08/2013 
  */
-namespace application\nutsNBolts\model\base
+namespace application\nutsnbolts\model\base
 {
-	use application\nutsNBolts\model\common\Base;
+	use application\nutsnbolts\model\common\Base;
 	
 	class Page extends Base	
 	{
@@ -26,7 +26,8 @@ namespace application\nutsNBolts\model\base
 			'page_type_id' => 'int(11) NOT NULL ' ,
 			'title' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL ' ,
+			'url' => 'varchar(100) NOT NULL ' 
 		);
 	}
 }
