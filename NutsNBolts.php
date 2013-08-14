@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsnbolts
+namespace application\nutsNBolts
 {
 	use nutshell\Nutshell;
 	use nutshell\core\loader\Loader;
