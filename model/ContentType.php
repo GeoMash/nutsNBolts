@@ -14,6 +14,8 @@ namespace application\nutsNBolts\model
 
 				$existingParts	=$this->model->ContentPart->read(array('content_type_id'=>$record['id']));
 				$contentParts	=$this->extractContentParts($record);
+				$contentRoles	=$this->extractRoles($record);
+				$contentUsers	=$this->extractUsers($record);
 				$this->update($record,array('id'=>$record['id']));
 				//Update parts.
 				for ($i=0,$j=count($contentParts); $i<$j; $i++)
@@ -53,6 +55,20 @@ namespace application\nutsNBolts\model
 						$this->model->ContentPart->delete($existingParts[$i]);
 					}
 				}
+				//Delete Roles.
+				$this->model->ContentTypeRole->delete(array('content_type_id'=>$record['id']));
+				//Insert Roles.
+				for ($i=0,$j=count($contentRoles); $i<$j; $i++)
+				{
+					$this->model->ContentTypeRole->insert($contentRoles[$i]);
+				}
+				//Delete Users.
+				$this->model->ContentTypeUser->delete(array('content_type_id'=>$record['id']));
+				//Insert Users.
+				for ($i=0,$j=count($contentUsers); $i<$j; $i++)
+				{
+					$this->model->ContentTypeUser->insert($contentUsers[$i]);
+				}
 				return $return;
 			}
 			//For Inserts
@@ -60,12 +76,24 @@ namespace application\nutsNBolts\model
 			{
 				unset($record['id']);
 				$contentParts=$this->extractContentParts($record);
+				$contentRoles=$this->extractRoles($record);
+				$contentUsers=$this->extractUsers($record);
 				if ($id=$this->insertAssoc($record))
 				{
 					for ($i=0,$j=count($contentParts); $i<$j; $i++)
 					{
 						$contentParts[$i]['content_type_id']=$id;
 						$this->model->ContentPart->insertAssoc($contentParts[$i]);
+					}
+					for ($i=0,$j=count($contentRoles); $i<$j; $i++)
+					{
+						$contentRoles[$i]['content_type_id']=$id;
+						$this->model->ContentTypeRole->insertAssoc($contentRoles[$i]);
+					}
+					for ($i=0,$j=count($contentUsers); $i<$j; $i++)
+					{
+						$contentUsers[$i]['content_type_id']=$id;
+						$this->model->ContentTypeUser->insertAssoc($contentUsers[$i]);
 					}
 					return $id;
 				}
@@ -111,6 +139,46 @@ namespace application\nutsNBolts\model
 			unset($record['widget']);
 			unset($record['label']);
 			return $contentParts;
+		}
+		
+		private function extractRoles(&$record)
+		{
+			if (isset($record['role']))
+			{
+				$roles=array();
+				$id=(!empty($record['id']))?$record['id']:0;
+				foreach ($record['role'] as $roleID=>$enabled)
+				{
+					$roles[]=array
+					(
+						'content_type_id'	=>$id,
+						'role_id'			=>$roleID
+					);
+				}
+				unset($record['role']);
+				return $roles;
+			}
+			return array();
+		}
+		
+		private function extractUsers(&$record)
+		{
+			if (isset($record['user']))
+			{
+				$roles=array();
+				$id=(!empty($record['id']))?$record['id']:0;
+				foreach ($record['user'] as $userID=>$enabled)
+				{
+					$roles[]=array
+					(
+						'content_type_id'	=>$id,
+						'user_id'			=>$userID
+					);
+				}
+				unset($record['user']);
+				return $roles;
+			}
+			return array();
 		}
 		
 		public function readWithParts($id)
