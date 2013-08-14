@@ -22,7 +22,11 @@ namespace application\nutsNBolts\controller\site
 					$this->routedController=new Form($this->MVC);
 					break;
 				}
-				
+				case 'facebookLoginStoreEmail':
+				{
+					$this->routedController=new Facebook($this->MVC);
+					break;
+				}
 				default:
 				{
 					exit();
