@@ -147,83 +147,67 @@ namespace application\nutsNBolts\controller
 								//Pull from cache.
 								else
 								{
-									
-								}
+
+									//TODO: get the id from the ref.
+									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
+									if (!count($filteredContent))
+									{
+										return '';
+									}
 									//Multiple of the same content type.
 									if ( isset($config['typeConfig']['limit']) && $config['typeConfig']['limit'] > 0)
 									{
 										$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
-							}
-							
-							
-							
-							// //TODO: get the id from the ref.
-							// $filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
-
-							// if (!count($filteredContent))
-							// {
-							// 	return '';
-							// }
-							// //Multiple of the same content type.
-							// if ( $config['typeConfig']['limit'] > 0)
-							// {
-							// 	$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
-							// }
-							// //Singular item.
-							// else
-							// {
+									}
+									//Singular item.
+									else
+									{
 										$content=$filteredContent;
-							// 	$content=array();
-							// 	//If an ID is set, return that if it exists.
-							// 	if (isset($config['typeConfig']['id']))
-							// 	{
+										// $content=array();
+										//If an ID is set, return that if it exists.
+										// if (isset($config['typeConfig']['id']))
+										// {
 
-							// 		for ($i=0,$j=count($filteredContent); $i<$j; $i++)
-							// 		{
-							// 			if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
-							// 			{
-							// 				$content[]=$filteredContent[$i];
-							// 				break;
-							// 			}
-							// 		}
-							// 	}
-							// 	//Else return the first.
-							// 	else
-							// 	{
-							// 		$content[]=$filteredContent[0];
-							// 	}
-							// 	if (!count($content))
-							// 	{
-							// 		return 'INVALID ZONE - CONTENT ITEM COULD NOT BE FOUND';
-							// 	}
-							// }
-						}
-						else
-						{
-							return 'INVALID ZONE - NO TEMPLATE TYPE CONFIG FOR TYPE "'.$config['typeConfig'].'"';
+											// for ($i=0,$j=count($filteredContent); $i<$j; $i++)
+											// {
+											// 	if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
+											// 	{
+											// 		$content[]=$filteredContent[$i];
+											// 		break;
+											// 	}
+											// }
+										// }
+										//Else return the first.
+										// else
+										// {
+										// 	$content[]=$filteredContent[0];
+										// }
+										if (!count($content))
+										{
+											return 'INVALID ZONE - CONTENT ITEM COULD NOT BE FOUND';
 										}
-						}
-						list($scope,$template)=explode('.',$config['template']);
-						if ($scope=='local')
-						{
-							$template='page/'.$this->pageType['ref'].'/block/'.$template;
-						}
-						else if ($scope=='global')
-						{
-							$template='block/'.$template;
-						}
-						else
-						{
-							return 'INVALID TEMPLATE SCOPE';
-						}
-						for ($i=0,$j=count($content); $i<$j; $i++)
-						{
-							$this->view->getContext()->loadView
-							(
-								$template,
-								$content[$i]
-							);
-						}
+									}
+									list($scope,$template)=explode('.',$config['template']);
+									if ($scope=='local')
+									{
+										$template='page/'.$this->pageType['ref'].'/block/'.$template;
+									}
+									else if ($scope=='global')
+									{
+										$template='block/'.$template;
+									}
+									else
+									{
+										return 'INVALID TEMPLATE SCOPE';
+									}									
+									for ($i=0,$j=count($content); $i<$j; $i++)
+									{
+										$this->view->getContext()->loadView
+										(
+											$template,
+											$content[$i]
+										);
+									}									
 								}
 							}
 						}
