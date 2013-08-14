@@ -172,13 +172,16 @@ HTML;
 	</div>
 </div>
 HTML;
-					$exec=str_replace
-					(
-						array('application\\','\\'),
-						array('','.'),
-						$contentType[$i]['widget']
-					).'.Main('.$contentType[$i]['content_part_id'].')';
-					$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+					if ($widget->hasWidgetJS())
+					{
+						$exec=str_replace
+						(
+							array('application\\','\\'),
+							array('','.'),
+							$contentType[$i]['widget']
+						).'.Main('.$contentType[$i]['content_part_id'].')';
+						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+					}
 				}
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
