@@ -46,11 +46,11 @@ namespace application\nutsnbolts\controller
 			// Get the Model Generator, configure it
 			$generator = $this->plugin->ModelGenerator;
 			$generator->setBaseClass('Base');
-			$generator->setAppliacationNamespace('application\\nutsnbolts\\');
-			$generator->setBaseClassNamespace('application\\nutsnbolts\\model\\common\\');
+			$generator->setAppliacationNamespace('application\\nutsNBolts\\');
+			$generator->setBaseClassNamespace('application\\nutsNBolts\\model\\common\\');
 			
 			// Define the location to put the generated models
-			$modelsFolder = APP_HOME . _DS_ . 'nutsnbolts'._DS_.'model';
+			$modelsFolder = APP_HOME . _DS_ . 'nutsNBolts'._DS_.'model';
 			$subfolder = _DS_ . 'base';
 			
 			foreach($models as $tableName => $modelName)
