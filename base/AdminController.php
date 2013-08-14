@@ -23,7 +23,6 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 			
-			$this->MVC		=$MVC;
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
@@ -38,7 +37,7 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
-				$this->user=$this->model->User->read($this->plugin->session->userId)[0];
+				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
 				$this->view->setVar('user',$this->user);
 				
 				$this->show404();
@@ -244,7 +243,7 @@ HTML;
 		
 		public function isAuthenticated()
 		{
-			return ($this->plugin->session->authenticated);
+			return (bool)($this->plugin->Session->authenticated);
 		}
 	}
 }
