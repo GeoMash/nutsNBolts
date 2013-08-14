@@ -44,7 +44,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 		public function getAccessTokenDetails()
 		{
 			$token_url = "https://graph.facebook.com/oauth/access_token?"
-		      . "client_id=" . $this->appId . "&redirect_uri=" . urlencode('http://bizsmart.dev.lan/home/')
+		      . "client_id=" . $this->appId . "&redirect_uri=" . urlencode('http://alliance.dev.praxisbt.com/')
 		      . "&client_secret=" . $this->secret . "&code=" . $code;
 		 
 		    $response = file_get_contents($token_url);
@@ -101,7 +101,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 			$params=
 					array(
 						'scope'=>'email,publish_stream',
-						'redirect_uri'=>'http://bizsmart.dev.lan/home/'
+						'redirect_uri'=>'http://alliance.dev.praxisbt.com/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
