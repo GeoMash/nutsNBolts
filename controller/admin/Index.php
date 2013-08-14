@@ -199,8 +199,8 @@ namespace application\nutsNBolts\controller\admin
 				);
 				if ($result)
 				{
-					$this->plugin->session->authenticated=true;
-					$this->plugin->session->userId=$result['id'];
+					$this->plugin->Session->authenticated=true;
+					$this->plugin->Session->userId=$result['id'];
 					$this->redirect('/admin/dashboard');
 				}
 				else
@@ -212,8 +212,8 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function logout()
 		{
-			unset($this->plugin->session->authenticated);
-			unset($this->plugin->session->userId);
+			unset($this->plugin->Session->authenticated);
+			unset($this->plugin->Session->userId);
 			$this->redirect('/admin/login/');
 		}
 	}

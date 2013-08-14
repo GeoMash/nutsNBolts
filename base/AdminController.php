@@ -37,7 +37,7 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
-				$this->user=$this->model->User->read($this->plugin->session->userId)[0];
+				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
 				$this->view->setVar('user',$this->user);
 				
 				$this->show404();
