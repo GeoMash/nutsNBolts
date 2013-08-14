@@ -66,6 +66,11 @@
 					<i class="icon-th"></i> Content Types
 				</a>
 			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='forms')print 'active'; ?>">
+				<a href="/admin/configurecontent/forms">
+					<i class="icon-list-alt"></i> Forms
+				</a>
+			</li>
 			<li class="<?php if ($tpl->get('nav_active_sub')=='widgets')print 'active'; ?>" style="display:none;">
 				<a href="/admin/configurecontent/widgets">
 					<i class="icon-beaker"></i> Widgets
