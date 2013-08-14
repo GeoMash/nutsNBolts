@@ -2,6 +2,8 @@
 namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\model\base\Node as NodeBase;
+	use nutshell\helper\ArrayHelper;
+	use \DateTime;
 	
 	class Node extends NodeBase	
 	{
@@ -131,6 +133,82 @@ namespace application\nutsNBolts\model
 			unset($record['tags']);
 			return $return;
 		}
+		
+		
+		
+		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
+		{
+			$where=array();
+			foreach ($whereKeyVals as $field=>$value)
+			{
+				$where[]=<<<SQL
+				(
+					content_part.ref="{$field}"
+					AND
+					node_part.value="{$value}"
+				)
+SQL;
+			}
+			$where=implode(' AND ',$where);
+			
+			$query=<<<SQL
+			SELECT node.*,content_part.label,node_part.value
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			WHERE node.id IN
+			(
+				SELECT node.id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				WHERE {$where}
+			)
+			AND node.status=1
+			ORDER BY node.id ASC;
+SQL;
+			if ($result=$this->plugin->db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['label']]=$records[$i]['value'];
+					
+				}
+				//Reset index.
+				sort($nodes);
+				
+				// $column=array_column();
+				
+				
+				
+				// array_multisort($nodes);
+				
+				// var_dump($nodes);
+				
+				// exit();
+				
+				return $nodes;
+			}
+		}
+		
 	}
 }
 ?>

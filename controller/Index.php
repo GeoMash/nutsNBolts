@@ -112,48 +112,85 @@ namespace application\nutsNBolts\controller
 						
 						break;
 					}
+					/**
+					 * 
+					 * Type Config:
+					 * 
+					 * query	- Ignores all other parameters and runs the SQL query.
+					 * cache	- True by default. If false, ignores the cached $this->nodes array.
+					 * filter	- 
+					 * fields	- 
+					 * orderBy	- 
+					 * order	- 
+					 * limit	- 
+					 */
 					case 'node':
 					{
 						if (isset($config['typeConfig']))
 						{
-							//TODO: get the id from the ref.
-							$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
-
-							if (!count($filteredContent))
+							//If query is set, ignore all other parameters.
+							if (!empty($config['typeConfig']['query']))
 							{
-								return '';
+								if ($result=$this->plugin->db->nutsnbolts->select($config['typeConfig']['query']))
+								{
+									$content=$this->plugin->db->nutsnbolts->result('assoc');
+								}
 							}
-							//Multiple of the same content type.
-							if ( $config['typeConfig']['limit'] > 0)
-							{
-								$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
-							}
-							//Singular item.
+							//Else construct our own query.
 							else
 							{
-								$content=array();
-								//If an ID is set, return that if it exists.
-								if (isset($config['typeConfig']['id']))
+								//Ignore cache.
+								if (isset($config['typeConfig']['cache']) && $config['typeConfig']['cache']===false)
 								{
-									for ($i=0,$j=count($filteredContent); $i<$j; $i++)
-									{
-										if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
-										{
-											$content[]=$filteredContent[$i];
-											break;
-										}
-									}
+									$content=$this->model->Node->getWithParts($config['typeConfig']['filter']);
 								}
-								//Else return the first.
+								//Pull from cache.
 								else
 								{
-									$content[]=$filteredContent[0];
-								}
-								if (!count($content))
-								{
-									return 'INVALID ZONE - CONTENT ITEM COULD NOT BE FOUND';
+									
 								}
 							}
+							
+							
+							
+							// //TODO: get the id from the ref.
+							// $filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
+
+							// if (!count($filteredContent))
+							// {
+							// 	return '';
+							// }
+							// //Multiple of the same content type.
+							// if ( $config['typeConfig']['limit'] > 0)
+							// {
+							// 	$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
+							// }
+							// //Singular item.
+							// else
+							// {
+							// 	$content=array();
+							// 	//If an ID is set, return that if it exists.
+							// 	if (isset($config['typeConfig']['id']))
+							// 	{
+							// 		for ($i=0,$j=count($filteredContent); $i<$j; $i++)
+							// 		{
+							// 			if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
+							// 			{
+							// 				$content[]=$filteredContent[$i];
+							// 				break;
+							// 			}
+							// 		}
+							// 	}
+							// 	//Else return the first.
+							// 	else
+							// 	{
+							// 		$content[]=$filteredContent[0];
+							// 	}
+							// 	if (!count($content))
+							// 	{
+							// 		return 'INVALID ZONE - CONTENT ITEM COULD NOT BE FOUND';
+							// 	}
+							// }
 						}
 						else
 						{
