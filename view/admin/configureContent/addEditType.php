@@ -45,12 +45,58 @@
 							<div class="container-fluid padded">
 								<div class="box">
 									<div class="box-header">
-										<span class="title"><i class="icon-beaker"></i> Content Widgets</span>
+										<span class="title"><i class="icon-beaker"></i> Widgets</span>
 									</div>
 									<div class="content-box">
 										<div class="padded">
 											<?php $tpl->parts; ?>
 											<button type="button" class="btn btn-green" data-action="addWidgetSelectionRow"><i class="icon-plus"></i> Add Widget</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-beaker"></i> Role-Based Permissions</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+														<th><div>Restrict To</div></th>
+														<th><div>Name</div></th>
+														<th><div>Description</div></th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php $tpl->getUserRoles(); ?>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-beaker"></i> User-Based Restrictions</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+														<th><div>Restrict To</div></th>
+														<th><div>Email Address</div></th>
+														<th><div>Name</div></th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php $tpl->getUserList(); ?>
+												</tbody>
+											</table>
 										</div>
 									</div>
 								</div>

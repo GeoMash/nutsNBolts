@@ -21,11 +21,43 @@ namespace application\nutsNBolts\controller\admin
 			{
 				case 'add':
 				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getUserRoles',
+						function()
+						{
+							print $this->generateRolesList(null);
+						}
+					)->registerCallback
+					(
+						'getUserList',
+						function()
+						{
+							print $this->generateUserList(null);
+						}
+					);
 					$this->addType();
 					break;
 				}
 				case 'edit':
 				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getUserRoles',
+						function() use ($id)
+						{
+							print $this->generateRolesList($id);
+						}
+					)->registerCallback
+					(
+						'getUserList',
+						function() use ($id)
+						{
+							print $this->generateUserList($id);
+						}
+					);
 					$this->editType($id);
 					break;
 				}
@@ -217,11 +249,85 @@ HTML;
 							->send();
 		}
 		
+		public function generateRolesList($contentTypeId=null)
+		{
+			$return='';
+			if (is_numeric($contentTypeId))
+			{
+				$contentTypeRoles=$this->model->ContentTypeRole->read(array('content_type_id'=>$contentTypeId));
+			}
+			$roles	=$this->model->Role->read();
+			$html	=array();
+			for ($i=0,$j=count($roles); $i<$j; $i++)
+			{
+				$checked='';
+				if (isset($contentTypeRoles))
+				{
+					$checked=($this->contentTypeHasRole($contentTypeRoles,$roles[$i]['id']))?'checked':'';
+				}
+				$html[]=<<<HTML
+<tr>
+	<td class=""><input type="checkbox" name="role[{$roles[$i]['id']}]" value="1" {$checked}></td>
+	<td class="">{$roles[$i]['name']}</td>
+	<td class="">{$roles[$i]['description']}</td>
+</tr>
+HTML;
+			}
+			$return=implode('',$html);
+			return $return;
+		}
 		
+		private function contentTypeHasRole($contentTypeRoles,$roleID)
+		{
+			for ($i=0,$j=count($contentTypeRoles); $i<$j; $i++)
+			{
+				if ($contentTypeRoles[$i]['role_id']==$roleID)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 		
+		public function generateUserList($contentTypeId=null)
+		{
+			$return='';
+			if (is_numeric($contentTypeId))
+			{
+				$contentTypeUsers=$this->model->ContentTypeUser->read(array('content_type_id'=>$contentTypeId));
+			}
+			$users	=$this->model->User->read();
+			$html	=array();
+			for ($i=0,$j=count($users); $i<$j; $i++)
+			{
+				$checked='';
+				if (isset($contentTypeUsers))
+				{
+					$checked=($this->contentTypeHasUser($contentTypeUsers,$users[$i]['id']))?'checked':'';
+				}
+				$html[]=<<<HTML
+<tr>
+	<td class=""><input type="checkbox" name="user[{$users[$i]['id']}]" value="1" {$checked}></td>
+	<td class="">{$users[$i]['email']}</td>
+	<td class="">{$users[$i]['name_first']} {$users[$i]['name_last']}</td>
+</tr>
+HTML;
+			}
+			$return=implode('',$html);
+			return $return;
+		}
 		
-		
-		
+		private function contentTypeHasUser($contentTypeUsers,$roleID)
+		{
+			for ($i=0,$j=count($contentTypeUsers); $i<$j; $i++)
+			{
+				if ($contentTypeUsers[$i]['user_id']==$roleID)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 		
 		
 		

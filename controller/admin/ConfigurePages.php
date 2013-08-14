@@ -17,8 +17,34 @@ namespace application\nutsNBolts\controller\admin
 			$this->addBreadcrumb('Types','icon-th-large','types');
 			switch ($action)
 			{
-				case 'add':		$this->addType();		break;
-				case 'edit':	$this->editType($id);	break;
+				case 'add':
+				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getUserRoles',
+						function()
+						{
+							print $this->generateRolesList(null);
+						}
+					);
+					$this->addType();
+					break;
+				}
+				case 'edit':
+				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getUserRoles',
+						function()
+						{
+							print $this->generateRolesList($id);
+						}
+					);
+					$this->editType($id);
+					break;
+				}
 				case 'remove':	$this->removeType($id);	break;
 				default:
 				{
@@ -43,8 +69,16 @@ namespace application\nutsNBolts\controller\admin
 			$this->addBreadcrumb('Pages','icon-copy','pages');
 			switch ($action)
 			{
-				case 'add':		$this->addPage();		break;
-				case 'edit':	$this->editPage($id);	break;
+				case 'add':
+				{
+					$this->addPage();
+					break;
+				}
+				case 'edit':
+				{
+					$this->editPage($id);
+					break;
+				}
 				case 'remove':	$this->removePage($id);	break;
 				default:
 				{
@@ -247,6 +281,49 @@ HTML;
 			}
 			return implode('',$return);
 		}
+		
+		public function generateRolesList($contentTypeId=null)
+		{
+			$return='';
+			if (is_numeric($userId))
+			{
+				$contentTypeRoles=$this->model->ContentTypePermission->read(array('content_type_id'=>$userId));
+			}
+			$roles	=$this->model->Role->read();
+			$html	=array();
+			for ($i=0,$j=count($roles); $i<$j; $i++)
+			{
+				$checked='';
+				if (isset($userRoles))
+				{
+					$checked=($this->contentTypeHasRole($contentTypeRoles,$roles[$i]['id']))?'checked':'';
+				}
+				$html[]=<<<HTML
+<tr>
+	<td class=""><input type="checkbox" name="role[{$roles[$i]['id']}]" value="1" {$checked}></td>
+	<td class="">{$roles[$i]['name']}</td>
+	<td class="">{$roles[$i]['description']}</td>
+</tr>
+HTML;
+			}
+			$return=implode('',$html);
+			return $return;
+		}
+		
+		private function contentTypeHasRole($userRoles,$roleID)
+		{
+			for ($i=0,$j=count($userRoles); $i<$j; $i++)
+			{
+				if ($userRoles[$i]['role_id']==$roleID)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		
+		
 	}
 }
 ?>
