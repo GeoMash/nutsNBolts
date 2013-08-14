@@ -14,6 +14,8 @@ namespace application\nutsNBolts\plugin\FaceBook
 	{
 		private $facebook;
 		private $isLoggedIn=FALSE;
+		private $appId='1376270492601764';
+		private $secret='eb916a0b516c15e3b0e930cc258e77be';
 		private $user;
 		private $access_token;
 		//private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
@@ -29,12 +31,28 @@ namespace application\nutsNBolts\plugin\FaceBook
 			$this->facebook=new FaceBookBase(
 				array(
 					'appId'  => '1376270492601764',
-  					'secret' => 'f9a2227c271826b65d04103a78048207',
+  					'secret' => 'eb916a0b516c15e3b0e930cc258e77be',
   					'cookie'=>TRUE
 					)
 				);
+			// $cache_expire = 60*60*24*365;
+			// header("Pragma: public");
+			// header("Cache-Control: max-age=".$cache_expire);
+			// header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
 		}
 		// read the user email
+		public function getAccessTokenDetails()
+		{
+			$token_url = "https://graph.facebook.com/oauth/access_token?"
+		      . "client_id=" . $this->appId . "&redirect_uri=" . urlencode('http://alliance.dev.praxisbt.com/')
+		      . "&client_secret=" . $this->secret . "&code=" . $code;
+		 
+		    $response = file_get_contents($token_url);
+		    $params = null;
+		    parse_str($response, $params); //parse name value pair
+		 
+		    return $params;
+		}
 		public function isConnectedUser($email)
 		{
 			$isUser=FALSE;
@@ -82,8 +100,8 @@ namespace application\nutsNBolts\plugin\FaceBook
 		{
 			$params=
 					array(
-						'scope'=>'email,publish_actions,publish_stream',
-						'redirect_uri'=>'http://bizsmart.dev.lan/home/'
+						'scope'=>'email,publish_stream',
+						'redirect_uri'=>'http://alliance.dev.praxisbt.com/'
 						);
 			$fb=$this->facebook;
 			if(isset($params))
@@ -101,7 +119,9 @@ namespace application\nutsNBolts\plugin\FaceBook
 		//we have email and profile picture returned for processing
 		public function getUserProfile()
 		{
-			$fb=$this->facebook;
+			if($this->init())
+			{
+				$fb=$this->facebook;
 			$access_token =$this->facebook->setAccessToken(
 				$this->facebook->getAccessToken()
 				);
@@ -112,7 +132,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 				// Proceed knowing you have a logged in user who's authenticated.
 			 		return $fb->api('/me?fields=picture,first_name,last_name,email,gender');
 				}
-				catch(impl\FacebookApiException $e)
+				catch(FacebookException $e)
 				{
 					exit($e->getResult());
 				}
@@ -120,8 +140,12 @@ namespace application\nutsNBolts\plugin\FaceBook
 			}
 			else
 			{
-				   return $this->fbLogin();
+				return $this->fbLogin();
+
+				// $fb->getLoginUrl();
 			}
+			}
+			
 		}
 
 		public function fbPostNew()
@@ -151,9 +175,11 @@ namespace application\nutsNBolts\plugin\FaceBook
 					);
                   	// $facebook->api("/".$pageId."/feed", "POST", 
                   		// array("link"=>$link, "access_token"=>$page["access_token"]));
-                   }catch(impl\FacebookApiException $e){
-                      exit($e);
-                  }
+                   }
+                   catch(FacebookException $e)
+					{
+						exit($e->getResult());
+					}
 			}
 			// else
 			// {

@@ -99,6 +99,7 @@
 						{
 							"/admin/":		"admin/Index",
 							"/sandbox/":	"Sandbox",
+							"/_/":			"site/ActionHandler",
 							".":			"Index"
 						}
 					}
