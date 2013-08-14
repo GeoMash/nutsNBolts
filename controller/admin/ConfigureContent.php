@@ -289,7 +289,7 @@ HTML;
 				
 				if ($id=$this->model->Form->handleRecord($record))
 				{
-					$this->plugin->Notification->setSuccess('Form successfully added. Would you like to <a href="/admin/configurecontent/form/add/">Add another one?</a>');
+					$this->plugin->Notification->setSuccess('Form successfully added. Would you like to <a href="/admin/configurecontent/forms/add/">Add another one?</a>');
 					$this->redirect('/admin/configureContent/forms/edit/'.$id);
 				}
 				else
@@ -353,7 +353,7 @@ HTML;
 	<div class="news-content">
 		<div class="news-title"><a href="/admin/configurecontent/forms/edit/{$forms[$i]['id']}">{$forms[$i]['name']}</a></div>
 		<div class="news-text">{$forms[$i]['description']}</div>
-		<div class="news-text"><a href="/admin/configureconfig/forms/download/{$forms[$i]['id']}"><i class="icon-download"></i>&nbsp;<b>Download New Records</b></a></div>
+		<div class="news-text"><a href="/admin/configurecontent/forms/download/{$forms[$i]['id']}"><i class="icon-download"></i>&nbsp;<b>Download New Records</b></a></div>
 	</div>
 </div>
 HTML;
@@ -364,7 +364,51 @@ HTML;
 		
 		private function downloadFormRecords($id)
 		{
-			
+			$form		=$this->model->Form->read($id);
+			if (isset($form[0]))
+			{
+				$records	=$this->model->FormSubmission->exportNewRecords($id);
+				if (count($records))
+				{
+					$headers	=$this->getHeaders($records);
+					$fileName	=$form[0]['ref'].'_'.time().'_.csv';
+					$CSV=$this->plugin->Format('CSV');
+					$CSV->set_base_dir(APP_HOME.'nutsNBolts'._DS_.'data'._DS_);
+					$CSV->setHeaders($headers);
+					$CSV->new_file($fileName);
+					$CSV->process($records);
+					$CSV->close_file();
+					$this->plugin	->Responder('csv')
+									->forceDownload($fileName)
+									->setData($CSV->read())
+									->send();
+				}
+				else
+				{
+					$this->plugin->Notification->setInfo('Sorry, no new records found for export.');
+				}
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Cannot export from invalid form.');
+			}
+			$this->redirect('/admin/configurecontent/forms/');
+		}
+		
+		private function getHeaders(&$records)
+		{
+			$headers=array();
+			for ($i=0,$j=count($records); $i<$j; $i++)
+			{
+				foreach ($records[$i] as $header=>$value)
+				{
+					if (!in_array($header,$headers))
+					{
+						$headers[]=$header;
+					}
+				}
+			}
+			return $headers;
 		}
 	}
 }
