@@ -10,9 +10,9 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			 // $this->plugin->FaceBook->storeUserData();
-			// var_dump( $this->plugin->FaceBook->getUserProfile());
-			print($this->plugin->FaceBook->fbLogin());
+			$this->plugin->FaceBook->storeUserData();
+			var_dump( $this->plugin->FaceBook->getUserProfile());
+			// print($this->plugin->FaceBook->fbLogin());
 			// if(isset($_GET['access_token']))
 			// {
 			// 	$this->plugin->FaceBook->storeUserData();
