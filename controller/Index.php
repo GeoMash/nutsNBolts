@@ -170,7 +170,7 @@ namespace application\nutsNBolts\controller
 									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
 									if (!count($filteredContent))
 									{
-										die('nothing?');
+										
 										return '';
 									}
 									//Multiple of the same content type.
