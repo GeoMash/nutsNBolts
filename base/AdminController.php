@@ -243,7 +243,7 @@ HTML;
 		
 		public function isAuthenticated()
 		{
-			return ($this->plugin->session->authenticated);
+			return (bool)($this->plugin->Session->authenticated);
 		}
 	}
 }
