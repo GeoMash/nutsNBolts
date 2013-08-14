@@ -149,6 +149,10 @@ namespace application\nutsNBolts\controller
 								{
 									
 								}
+									//Multiple of the same content type.
+									if ( isset($config['typeConfig']['limit']) && $config['typeConfig']['limit'] > 0)
+									{
+										$content=$this->getNodesByContentTypeRefLimit($config['typeConfig']['ref'], $config['typeConfig']['limit']);
 							}
 							
 							
@@ -168,10 +172,12 @@ namespace application\nutsNBolts\controller
 							// //Singular item.
 							// else
 							// {
+										$content=$filteredContent;
 							// 	$content=array();
 							// 	//If an ID is set, return that if it exists.
 							// 	if (isset($config['typeConfig']['id']))
 							// 	{
+
 							// 		for ($i=0,$j=count($filteredContent); $i<$j; $i++)
 							// 		{
 							// 			if ($filteredContent[$i]['ref']==$config['typeConfig']['ref'])
@@ -195,6 +201,7 @@ namespace application\nutsNBolts\controller
 						else
 						{
 							return 'INVALID ZONE - NO TEMPLATE TYPE CONFIG FOR TYPE "'.$config['typeConfig'].'"';
+										}
 						}
 						list($scope,$template)=explode('.',$config['template']);
 						if ($scope=='local')
@@ -217,6 +224,22 @@ namespace application\nutsNBolts\controller
 								$content[$i]
 							);
 						}
+								}
+							}
+						}
+						else
+						{
+							return 'INVALID ZONE - NO TEMPLATE TYPE CONFIG FOR TYPE "'.$config['typeConfig'].'"';
+						}
+
+						// for ($i=0,$j=count($content); $i<$j; $i++)
+						// {
+						// 	$this->view->getContext()->loadView
+						// 	(
+						// 		$template,
+						// 		$content[$i]
+						// 	);
+						// }
 						break;
 					}
 					case 'nav':
