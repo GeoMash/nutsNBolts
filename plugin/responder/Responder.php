@@ -16,7 +16,8 @@ namespace application\nutsNBolts\plugin\responder
 		private $type		=null;
 		private $mimeType	=null;
 		private $headers	=array();
-		private $data	=null;
+		private $data		=null;
+		private $download	=false;
 		
 		public function init($type=self::DEFAULT_TYPE)
 		{
@@ -72,6 +73,10 @@ namespace application\nutsNBolts\plugin\responder
 			{
 				header($key.':'.$val.';');
 			}
+			if ($this->download)
+			{
+				header('Content-Disposition: attachment; filename="'.$this->download.'"');
+			}
 			$method=self::HANDLER_PREFIX.$this->type;
 			if (method_exists($this,$method))
 			{
@@ -81,12 +86,22 @@ namespace application\nutsNBolts\plugin\responder
 			{
 				$this->{self::HANDLER_PREFIX.self::DEFAULT_HANDLER}();
 			}
+			if ($this->download)
+			{
+				exit();
+			}
 			return $this;
 		}
 		
 		public function addHeader($key,$val)
 		{
 			$this->headers[$key]=$val;
+			return $this;
+		}
+		
+		public function forceDownload($fileName)
+		{
+			$this->download=$fileName;
 			return $this;
 		}
 	}
