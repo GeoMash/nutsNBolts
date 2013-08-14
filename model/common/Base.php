@@ -11,7 +11,7 @@ namespace application\nutsNBolts\model\common
 			//For Updates
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
-				$this->update($record,array('id'=>$record['id']));
+				return $this->update($record,array('id'=>$record['id']));
 			}
 			//For Inserts
 			else
