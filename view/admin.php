@@ -48,8 +48,42 @@
 					<div class="area-top clearfix">
 						<div class="pull-left header">
 							<h3 class="title">
-								<i class="icon-dashboard"></i>
-								CHANGEME
+								<?php
+								switch ($tpl->get('nav_active_main'))
+								{
+									case '':
+									case 'dashboard':
+									{
+										print '<i class="icon-dashboard"></i>';
+										print 'Dashboard';
+										break;
+									}
+									case 'content':
+									{
+										print '<i class="icon-edit"></i>';
+										print 'Content';
+										break;
+									}
+									case 'configurepages':
+									{
+										print '<i class="icon-qrcode"></i>';
+										print 'Configure Pages';
+										break;
+									}
+									case 'configurecontent':
+									{
+										print '<i class="icon-cogs"></i>';
+										print 'Configure Content';
+										break;
+									}
+									case 'settings':
+									{
+										print '<i class="icon-wrench"></i>';
+										print 'Settings';
+										break;
+									}
+								}
+								?>
 							</h3>
 						</div>
 					</div>
