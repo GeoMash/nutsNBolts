@@ -19,7 +19,7 @@ namespace application\nutsNBolts\controller
 		public $viewPath	=null;
 		public $nodes		=null;
 		private $site		=null;
-		
+		public $cache		=true;
 		public function index()
 		{
 			$binding		=$this->application->NutsNBolts->getSiteBinding($this->getSiteRef());
@@ -84,8 +84,25 @@ namespace application\nutsNBolts\controller
 		
 		public function defineZone($config)
 		{
+			if(isset($config['typeConfig']['cache']))
+			{
+				$cache=false;
+			}
+			else
+			{
+				$cache=true;
+			}
+			if(!isset($config['typeConfig']['filter']))
+			{
+				$filter=false;
+			}
+			else
+			{
+				$filter=$config['typeConfig']['filter'];
+			}
 			if ($this->isValidZone($config))
 			{
+				//$config['typeConfig']['filter'] = true;
 				switch ($config['type'])
 				{
 					case 'template':
@@ -126,6 +143,8 @@ namespace application\nutsNBolts\controller
 					 */
 					case 'node':
 					{
+
+
 						if (isset($config['typeConfig']))
 						{
 							//If query is set, ignore all other parameters.
@@ -140,14 +159,14 @@ namespace application\nutsNBolts\controller
 							else
 							{
 								//Ignore cache.
-								if (isset($config['typeConfig']['cache']) && $config['typeConfig']['cache']===false)
+								if (!isset($cache) || $cache===false)
 								{
-									$content=$this->model->Node->getWithParts($config['typeConfig']['filter']);
+									$content=$this->model->Node->getWithParts($filter);
+
 								}
 								//Pull from cache.
 								else
 								{
-
 									//TODO: get the id from the ref.
 									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
 									if (!count($filteredContent))
@@ -187,28 +206,29 @@ namespace application\nutsNBolts\controller
 											return 'INVALID ZONE - CONTENT ITEM COULD NOT BE FOUND';
 										}
 									}
-									list($scope,$template)=explode('.',$config['template']);
-									if ($scope=='local')
-									{
-										$template='page/'.$this->pageType['ref'].'/block/'.$template;
-									}
-									else if ($scope=='global')
-									{
-										$template='block/'.$template;
-									}
-									else
-									{
-										return 'INVALID TEMPLATE SCOPE';
-									}									
-									for ($i=0,$j=count($content); $i<$j; $i++)
-									{
-										$this->view->getContext()->loadView
-										(
-											$template,
-											$content[$i]
-										);
-									}									
+									
 								}
+								list($scope,$template)=explode('.',$config['template']);
+								if ($scope=='local')
+								{
+									$template='page/'.$this->pageType['ref'].'/block/'.$template;
+								}
+								else if ($scope=='global')
+								{
+									$template='block/'.$template;
+								}
+								else
+								{
+									return 'INVALID TEMPLATE SCOPE';
+								}									
+								for ($i=0,$j=count($content); $i<$j; $i++)
+								{
+									$this->view->getContext()->loadView
+									(
+										$template,
+										$content[$i]
+									);
+								}								
 							}
 						}
 						else

@@ -150,9 +150,8 @@ namespace application\nutsNBolts\model
 SQL;
 			}
 			$where=implode(' AND ',$where);
-			
 			$query=<<<SQL
-			SELECT node.*,content_part.label,node_part.value
+			SELECT node.*,content_part.label,content_part.ref	,node_part.value
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
@@ -167,8 +166,10 @@ SQL;
 			AND node.status=1
 			ORDER BY node.id ASC;
 SQL;
+
 			if ($result=$this->plugin->db->nutsnbolts->select($query))
 			{
+
 				$records=$this->plugin->db->nutsnbolts->result('assoc');
 				
 				$nodes=array();
@@ -189,7 +190,7 @@ SQL;
 						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
 						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
 					}
-					$nodes[$records[$i]['id']][$records[$i]['label']]=$records[$i]['value'];
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 					
 				}
 				//Reset index.
@@ -200,12 +201,11 @@ SQL;
 				
 				
 				// array_multisort($nodes);
-				
-				// var_dump($nodes);
-				
-				// exit();
-				
+				// print_r($nodes);				
 				return $nodes;
+			}
+			else
+			{
 			}
 		}
 		
