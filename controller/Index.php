@@ -126,6 +126,7 @@ namespace application\nutsNBolts\controller
 					 */
 					case 'node':
 					{
+						$content=array();
 						if (isset($config['typeConfig']))
 						{
 							//If query is set, ignore all other parameters.
