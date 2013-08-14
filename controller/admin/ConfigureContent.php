@@ -253,6 +253,11 @@ HTML;
 					$this->removeForm($id);
 					break;
 				}
+				case 'download':
+				{
+					$this->downloadFormRecords($id);
+					break;
+				}
 				default:
 				{
 					$this->setContentView('admin/configureContent/forms');
@@ -320,12 +325,18 @@ HTML;
 			}
 		}
 		
-		private function removeForm()
+		private function removeForm($id)
 		{
-			
+			if ($this->model->Form->delete(array('id'=>$id)))
+			{
+				$this->plugin->Notification->setSuccess('Form successfully removed.');
+				$this->redirect('/admin/configurecontent/forms/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
 		}
-		
-		
 		
 		private function generateFormsList()
 		{
@@ -342,6 +353,7 @@ HTML;
 	<div class="news-content">
 		<div class="news-title"><a href="/admin/configurecontent/forms/edit/{$forms[$i]['id']}">{$forms[$i]['name']}</a></div>
 		<div class="news-text">{$forms[$i]['description']}</div>
+		<div class="news-text"><a href="/admin/configureconfig/forms/download/{$forms[$i]['id']}"><i class="icon-download"></i>&nbsp;<b>Download New Records</b></a></div>
 	</div>
 </div>
 HTML;
@@ -349,6 +361,11 @@ HTML;
 			return implode('',$html);
 		}
 		
+		
+		private function downloadFormRecords($id)
+		{
+			
+		}
 	}
 }
 ?>
