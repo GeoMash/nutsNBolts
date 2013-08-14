@@ -113,7 +113,7 @@ namespace application\nutsNBolts\controller\admin
 					$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
 					$widget->setProperty('name',$formElId);
 					$widget->setProperty('value',$thisNodePart['value']);
-					$input	=$widget->getWidgetHTML($contentType[$i]['config']);
+					$input	=$widget->getWidgetHTML($contentType[$i]['content_part_id'],$contentType[$i]['config']);
 					$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType[$i]['label']}</label>
