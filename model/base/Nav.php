@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 13/08/2013 
+ * @since 14/08/2013 
  */
 namespace application\nutsnbolts\model\base
 {
