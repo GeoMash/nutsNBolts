@@ -30,9 +30,13 @@ namespace application\nutsNBolts\plugin\FaceBook
 				array(
 					'appId'  => '1376270492601764',
   					'secret' => 'f9a2227c271826b65d04103a78048207',
-  					'cookie'=>TRUE
+  					// 'cookie'=>TRUE
 					)
 				);
+			// $cache_expire = 60*60*24*365;
+			// header("Pragma: public");
+			// header("Cache-Control: max-age=".$cache_expire);
+			// header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
 		}
 		// read the user email
 		public function isConnectedUser($email)
@@ -120,7 +124,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 			}
 			else
 			{
-				   return $this->fbLogin();
+				   // return $this->fbLogin();
 			}
 		}
 
