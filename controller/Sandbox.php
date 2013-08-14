@@ -12,6 +12,7 @@ namespace application\nutsNBolts\controller
 		{
 			$this->plugin->FaceBook->storeUserData();
 			var_dump( $this->plugin->FaceBook->getUserProfile());
+			var_dump( $this->plugin->FaceBook->getAccessTokenDetails());
 			// print($this->plugin->FaceBook->fbLogin());
 			// if(isset($_GET['access_token']))
 			// {

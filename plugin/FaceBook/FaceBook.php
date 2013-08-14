@@ -14,6 +14,8 @@ namespace application\nutsNBolts\plugin\FaceBook
 	{
 		private $facebook;
 		private $isLoggedIn=FALSE;
+		private $appId='1376270492601764';
+		private $secret='eb916a0b516c15e3b0e930cc258e77be';
 		private $user;
 		private $access_token;
 		//private $app_access_token='647631425250102|nMJJvLhliKfu7Z2Ezn93aqDj7tk';
@@ -39,6 +41,18 @@ namespace application\nutsNBolts\plugin\FaceBook
 			// header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
 		}
 		// read the user email
+		public function getAccessTokenDetails()
+		{
+			$token_url = "https://graph.facebook.com/oauth/access_token?"
+		      . "client_id=" . $this->appId . "&redirect_uri=" . urlencode('http://bizsmart.dev.lan/home/')
+		      . "&client_secret=" . $this->secret . "&code=" . $code;
+		 
+		    $response = file_get_contents($token_url);
+		    $params = null;
+		    parse_str($response, $params); //parse name value pair
+		 
+		    return $params;
+		}
 		public function isConnectedUser($email)
 		{
 			$isUser=FALSE;
