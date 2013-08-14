@@ -161,12 +161,6 @@ HTML;
 			return implode('',$html);
 		}
 		
-		public function redirect($path)
-		{
-			header('location:'.$path);
-			exit();
-		}
-		
 		public function __call($action,$args)
 		{
 			$this->view->render();

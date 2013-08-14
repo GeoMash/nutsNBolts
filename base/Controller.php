@@ -42,6 +42,12 @@ namespace application\nutsNBolts\base
 		{
 			return $this->site['ref'];
 		}
+		
+		public function redirect($path)
+		{
+			header('location:'.$path);
+			exit();
+		}
 	}
 }
 ?>
