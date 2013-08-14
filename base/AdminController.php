@@ -23,7 +23,6 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 			
-			$this->MVC		=$MVC;
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
