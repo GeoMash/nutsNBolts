@@ -12,9 +12,9 @@ namespace application\nutsNBolts\model\base
 {
 	use application\nutsNBolts\model\common\Base;
 	
-	class Subscriber extends Base	
+	class Facebook extends Base	
 	{
-		public $name		= 'subscriber';
+		public $name		= 'facebook';
 		public $primary		= array('id');
 		public $primary_ai	= true;
 		public $autoCreate	= false;
