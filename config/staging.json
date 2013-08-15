@@ -1,0 +1,41 @@
+{
+	"extends":	"production",
+	"config":
+	{
+		"application":
+		{
+			"mode": "development"
+		},
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"e9db6bbca2",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"nutsnbolts"
+					}
+				}
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/alliance/public/_collections/",
+				"thumbnails":
+				[
+					{
+						"width":		120,
+						"height":		120,
+						"constraint":	"crop"
+					}
+				]
+			}
+		}
+	}
+}
