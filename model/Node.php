@@ -167,10 +167,10 @@ SQL;
 			ORDER BY node.id ASC;
 SQL;
 
-			if ($result=$this->plugin->db->nutsnbolts->select($query))
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
 
-				$records=$this->plugin->db->nutsnbolts->result('assoc');
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
 				
 				$nodes=array();
 				for ($i=0,$j=count($records); $i<$j; $i++)
