@@ -19,7 +19,14 @@ SQL;
 				$return	=array();
 				for ($i=0,$j=count($records); $i<$j; $i++)
 				{
-					$return[]=json_decode($records[$i]['data'],true);
+					$return[$i]=json_decode($records[$i]['data'],true);
+					foreach ($return[$i] as $field=>$value)
+					{
+						if (is_array($value))
+						{
+							$return[$i][$field]=implode(',',$value);
+						}
+					}
 				}
 				$ids	=implode(',',array_column($records,'id'));
 				/*

@@ -1,7 +1,11 @@
 {
-	"extends":	"dev",
+	"extends":	"production",
 	"config":
 	{
+		"application":
+		{
+			"mode": "development"
+		},
 		"plugin":
 		{
 			"Db":
@@ -12,7 +16,7 @@
 					{
 						"handler":		"MySQL",
 						"username":		"root",
-						"password":		"root",
+						"password":		"e9db6bbca2",
 						"host":			"localhost",
 						"port":			"3306",
 						"database":		"nutsnbolts"
@@ -21,8 +25,8 @@
 			},
 			"Plupload":
 			{
-				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/praxisbt/alliance/biz-smart-website/public/_collections/",
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/alliance/public/_collections/",
 				"thumbnails":
 				[
 					{

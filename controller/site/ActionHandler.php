@@ -22,6 +22,11 @@ namespace application\nutsNBolts\controller\site
 					$this->routedController=new Form($this->MVC);
 					break;
 				}
+				case 'comment':
+				{
+					$this->routedController=new Comment($this->MVC);
+					break;
+				}
 				case 'facebookLoginStoreEmail':
 				{
 					$this->routedController=new Facebook($this->MVC);

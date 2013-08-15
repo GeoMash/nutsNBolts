@@ -9,11 +9,11 @@ namespace application\nutsNBolts\plugin\fileSystem
 
 	class FileSystem extends Plugin implements Singleton
 	{
-		private $MVC=null;
+		// private $MVC=null;
 		
 		public function init()
 		{
-			$this->MVC=$this->plugin->MVC;
+			// $this->MVC=$this->plugin->MVC;
 		}
 		
 		public function getFileListFromCollection($collectionID)

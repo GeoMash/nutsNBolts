@@ -165,7 +165,7 @@ namespace application\nutsNBolts
 				{
 					$list[]=array
 					(
-						'namespace'	=>'application\\nutsnbolts\\widget\\'.$iteration->getFilename(),
+						'namespace'	=>'application\\nutsNBolts\\widget\\'.$iteration->getFilename(),
 						'name'		=>ucwords($iteration->getFilename())
 					);
 				}

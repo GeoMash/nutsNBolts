@@ -212,12 +212,12 @@ HTML;
 			if ($widgetConfig)
 			{
 				$className=ucwords(ObjectHelper::getBaseClassName($getConfigFor));
-				$exec=str_replace
+				$exec=strtolower(str_replace
 				(
 					array('application\\','\\'),
 					array('','.'),
 					$getConfigFor
-				).'.Config';
+				)).'.Config';
 				
 				$this->JSLoader->loadScript('/admin/script/widget/config/'.$getConfigFor,$exec);
 			}
