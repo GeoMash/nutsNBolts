@@ -206,12 +206,12 @@ HTML;
 			
 			if (!empty($widgetOptions))
 			{
-				$exec=str_replace
+				$exec=strtolower(str_replace
 				(
 					array('application\\','\\'),
 					array('','.'),
 					$this->request->get('widget')
-				).'.Config';
+				)).'.Config';
 				$this->JSLoader->loadScript('/admin/script/widget/config/'.$this->request->get('widget'),$exec);
 				$widgetOptions.=$this->JSLoader->getLoaderHTML();
 			}

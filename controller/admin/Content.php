@@ -124,12 +124,12 @@ namespace application\nutsNBolts\controller\admin
 HTML;
 					if ($widget->hasWidgetJS())
 					{
-						$exec=str_replace
+						$exec=strtolower(str_replace
 						(
 							array('application\\','\\'),
 							array('','.'),
 							$contentType[$i]['widget']
-						).'.Main('.$contentType[$i]['content_part_id'].')';
+						)).'.Main('.$contentType[$i]['content_part_id'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
 				}
@@ -174,12 +174,12 @@ HTML;
 HTML;
 					if ($widget->hasWidgetJS())
 					{
-						$exec=str_replace
+						$exec=strtolower(str_replace
 						(
 							array('application\\','\\'),
 							array('','.'),
 							$contentType[$i]['widget']
-						).'.Main('.$contentType[$i]['content_part_id'].')';
+						)).'.Main('.$contentType[$i]['content_part_id'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
 				}
