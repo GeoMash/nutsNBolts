@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsNBolts\widget\WYSIWYG
+namespace application\nutsNBolts\widget\wysiwyg
 {
 	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
