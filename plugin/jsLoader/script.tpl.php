@@ -15,27 +15,35 @@ requirejs.config
 requirejs
 (
 	[
-		'jskk',
-		'jskk-optional',
-		'nutsnbolts/Application',
-		<?php $tpl->scripts; ?>
+		'jskk'
 	],
 	function()
 	{
-		$JSKK.when
+		requirejs
 		(
+			[
+				'jskk-optional',
+				'nutsnbolts/Application',
+				<?php $tpl->scripts; ?>
+			],
 			function()
 			{
-				return Object.isDefined(window.$application);
-			}
-		).isTrue
-		(
-			function()
-			{
-				<?php $tpl->exec; ?>
+				$JSKK.when
+				(
+					function()
+					{
+						return Object.isDefined(window.$application);
+					}
+				).isTrue
+				(
+					function()
+					{
+						<?php $tpl->exec; ?>
+					}
+				);
+				
 			}
 		);
-		
 	}
 );
 </script>
