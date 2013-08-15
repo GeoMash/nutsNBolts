@@ -2,7 +2,7 @@
 requirejs.config
 (
 	{
-		waitSeconds:	3,
+		waitSeconds:	20,
 		baseUrl:		'/js',
 		paths:
 		{
