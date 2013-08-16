@@ -18,6 +18,7 @@ namespace application\nutsNBolts\base
 		private $user				=null;
 		public $JSLoader			=null;
 		public $config				=null;
+		public $returnToAction		=false;
 		
 		public function __construct(Mvc $MVC)
 		{
@@ -41,6 +42,18 @@ namespace application\nutsNBolts\base
 				$this->view->setVar('user',$this->user);
 				
 				$this->show404();
+				
+				if ($this->request->get('returnToAction'))
+				{
+					$this->returnToAction=$this->request->get('returnToAction');
+					$this->plugin->Session->returnToAction=$this->returnToAction;
+					$this->redirect($this->plugin->Url->getCurrentURL());
+				}
+				elseif (!empty($this->plugin->Session->returnToAction))
+				{
+					$this->returnToAction=$this->plugin->Session->returnToAction;
+				}
+				$this->view->setVar('returnToAction',$this->returnToAction);
 			}
 			
 			$this->view->setVar('NS_ENV',		NS_ENV);
