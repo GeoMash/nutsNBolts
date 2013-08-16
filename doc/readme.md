@@ -1,12 +1,7 @@
 TODO
 ====
-
-Sync Main Nav
-Clickable Breadcrumbs
 Improve Content View
 
-User Feedback (applicatin messages)
-Tags
 Templates
 Plugins
 Comments
@@ -31,6 +26,7 @@ Configure Pages
 	- Navigation
 Configure Content
 	- Content Types
+	- Forms
 	- Widgets
 Content
 	<dynamic>
