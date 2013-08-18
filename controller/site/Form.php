@@ -27,7 +27,9 @@ namespace application\nutsNBolts\controller\site
 					)
 				);
 			}
-			$this->redirect($_SERVER['HTTP_REFERER'].'success');
+			$redirectTo=$_SERVER['HTTP_REFERER'];
+			$redirectTo=rtrim($redirectTo,'/').'/';
+			$this->redirect($redirectTo.'success');
 		}
 	}
 }
