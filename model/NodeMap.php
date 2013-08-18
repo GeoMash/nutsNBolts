@@ -65,7 +65,7 @@ SQL;
 				FROM node_part
 				LEFT JOIN content_part ON content_part.id=node_part.content_part_id
 				WHERE node_part.node_id=?
-				ORDER BY node_id ASC;
+				ORDER BY node_id DESC;
 SQL;
 				if ($this->db->select($query,array($records[$i]['id'])))
 				{
