@@ -3,6 +3,7 @@ namespace application\nutsNBolts\controller
 {
 	use application\nutsNBolts\base\Controller;
 	use nutshell\helper\ObjectHelper;
+	use \DateTime;
 	
 	class Index extends Controller
 	{
@@ -71,6 +72,13 @@ namespace application\nutsNBolts\controller
 					function($filter)
 					{
 						return $this->getNode($filter);
+					}
+				)->registerCallback
+				(
+					'getComments',
+					function($nodeId,$limit)
+					{
+						return $this->getComments($nodeId,$limit);
 					}
 				);
 			}
@@ -373,6 +381,16 @@ namespace application\nutsNBolts\controller
 				
 			}
 			return false;
+		}
+		
+		public function getComments($nodeId,$limit)
+		{
+			$comments=$this->model->NodeComment->read(array('node_id'=>$nodeId),array(),'LIMIT '.$limit);
+			for ($i=0,$j=count($comments); $i<$j; $i++)
+			{
+				$comments[$i]['date_created']=new DateTime($comments[$i]['date_created']);
+			}
+			return $comments;
 		}
 	}
 }
