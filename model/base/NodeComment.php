@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 16/08/2013 
+ * @since 18/08/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -25,7 +25,8 @@ namespace application\nutsNBolts\model\base
 			'node_id' => 'int(10) NOT NULL ' ,
 			'user_id' => 'int(10)' ,
 			'name' => 'varchar(200) NOT NULL ' ,
-			'body' => 'text NOT NULL ' 
+			'body' => 'text NOT NULL ' ,
+			'date_created' => 'timestamp NOT NULL ' 
 		);
 	}
 }
