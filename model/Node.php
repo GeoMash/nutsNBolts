@@ -83,14 +83,17 @@ namespace application\nutsNBolts\model
 			{
 				if (strstr($key,'node_part_id_'))
 				{
-					list($contentPartId,$nodeId)=explode('_',str_replace('node_part_id_','',$key));
-					if (empty($nodeID))
+					// die($key);
+					list($contentPartId,$nodePartId)=explode('_',str_replace('node_part_id_','',$key));
+					$contentPartId=(int)$contentPartId;
+					$nodePartId=(int)$nodePartId;
+					if (empty($nodePartId))
 					{
-						$nodeId=0;
+						$nodePartId=0;
 					}
 					$nodeParts[]=array
 					(
-					 	'id'				=>$nodeId,
+					 	'id'				=>$nodePartId,
 						'node_id'			=>$id,
 						'content_part_id'	=>$contentPartId,
 						'value'				=>$val
