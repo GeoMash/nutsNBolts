@@ -158,7 +158,7 @@ namespace application\nutsNBolts\controller
 							else
 							{
 								//Ignore cache.
-								if (!isset($cache) || $cache===false)
+								if (!isset($cache) || $cache==false)
 								{
 									$content=$this->model->Node->getWithParts($filter);
 
@@ -170,6 +170,7 @@ namespace application\nutsNBolts\controller
 									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
 									if (!count($filteredContent))
 									{
+										
 										return '';
 									}
 									//Multiple of the same content type.

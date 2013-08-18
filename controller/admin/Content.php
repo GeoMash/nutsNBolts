@@ -47,7 +47,7 @@ namespace application\nutsNBolts\controller\admin
 				$this->addBreadcrumb('Content','icon-edit','content');
 				$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$typeID);
 				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
-
+				$this->view->setVar('contentTypeId',$typeID);
 				$this->view->render();
 			}
 			else
@@ -77,6 +77,7 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function edit($id)
 		{
+			unset($this->plugin->Session->returnToAction);
 			if ($this->request->get('id'))
 			{
 				if ($this->model->Node->handleRecord($this->request->getAll())!==false)
@@ -141,7 +142,7 @@ HTML;
 			$this->view->setVar('nodeURLs',			$nodeURLs);
 			$this->view->setVar('nodeTags',			implode(',',$nodeTags));
 			$this->view->setVar('parts',			implode('',$parts));
-			
+			$this->view->setVar('contentTypeId',	$node[0]['content_type_id']);
 			
 			$this->setContentView('admin/content/addEdit');
 			$this->addBreadcrumb('Content','icon-edit','content');

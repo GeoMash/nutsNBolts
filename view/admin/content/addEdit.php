@@ -66,6 +66,20 @@
 									</div>
 								</div>
 							</div>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-bolt"></i> Other Actions</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<ul>
+												<li><a href="/admin/configurecontent/types/edit/<?php $tpl->contentTypeId; ?>?returnToAction=/admin/content/edit/<?php $tpl->id; ?>">Edit associated <b>Content Type</b></a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="form-actions">
 								<div class="pull-right">
 									<button type="submit" class="btn btn-blue">Save Changes</button>

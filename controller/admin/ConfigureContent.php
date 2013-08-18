@@ -113,13 +113,16 @@ namespace application\nutsNBolts\controller\admin
 			{
 				if ($this->model->ContentType->handleRecord($this->request->getAll())!==false)
 				{
-
 					$this->plugin->Notification->setSuccess('Content type successfully edited.');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
+			}
+			if ($this->returnToAction)
+			{
+				$this->plugin->Notification->setInfo('Do you want to return to <a href="'.$this->returnToAction.'">editing the content item</a>?');
 			}
 			$this->addBreadcrumb('Edit Content Type','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configureContent/addEditType');

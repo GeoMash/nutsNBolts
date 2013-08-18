@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 15/08/2013 
+ * @since 16/08/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -16,14 +16,14 @@ namespace application\nutsNBolts\model\base
 	{
 		public $name		= 'node_comment';
 		public $primary		= array('id');
-		public $primary_ai	= false;
+		public $primary_ai	= true;
 		public $autoCreate	= false;
 		
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
 			'node_id' => 'int(10) NOT NULL ' ,
-			'user_id' => 'int(10) NOT NULL ' ,
+			'user_id' => 'int(10)' ,
 			'name' => 'varchar(200) NOT NULL ' ,
 			'body' => 'text NOT NULL ' 
 		);

@@ -64,7 +64,8 @@ SQL;
 				SELECT node_part.value,content_part.ref
 				FROM node_part
 				LEFT JOIN content_part ON content_part.id=node_part.content_part_id
-				WHERE node_part.node_id=?;
+				WHERE node_part.node_id=?
+				ORDER BY node_id ASC;
 SQL;
 				if ($this->db->select($query,array($records[$i]['id'])))
 				{

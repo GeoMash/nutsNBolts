@@ -25,6 +25,7 @@ namespace application\nutsNBolts\controller\admin
 			if (!$this->isAuthenticated() && $control!='login')
 			{
 				//TODO: Return address.
+				$this->plugin->Session->returnURL='/'.implode('/',$this->request->getNodes());
 				$this->redirect('/admin/login/');
 			}
 			elseif ($this->isAuthenticated() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED)
@@ -201,7 +202,14 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->plugin->Session->authenticated=true;
 					$this->plugin->Session->userId=$result['id'];
-					$this->redirect('/admin/dashboard');
+					if (!empty($this->plugin->Session->returnURL))
+					{
+						$this->redirect($this->plugin->Session->returnURL);
+					}
+					else
+					{
+						$this->redirect('/admin/dashboard');
+					}
 				}
 				else
 				{
