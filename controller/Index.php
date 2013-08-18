@@ -108,6 +108,7 @@ namespace application\nutsNBolts\controller
 					case 'template':
 					{
 						list($scope,$template)=explode('.',$config['template']);
+						print "\n<!-- [NB::START TEMPLATE::{$config['template']}] -->\n";
 						if ($scope=='local')
 						{
 							$this->view->getContext()->loadView
@@ -126,7 +127,7 @@ namespace application\nutsNBolts\controller
 						{
 							return 'INVALID TEMPLATE SCOPE';
 						}
-						
+						print "\n<!-- [NB::END TEMPLATE::{$config['template']}] -->\n";
 						break;
 					}
 					/**
@@ -220,7 +221,8 @@ namespace application\nutsNBolts\controller
 								else
 								{
 									return 'INVALID TEMPLATE SCOPE';
-								}									
+								}
+								print "\n<!-- [NB::START TEMPLATE::{$config['template']}] -->\n";
 								for ($i=0,$j=count($content); $i<$j; $i++)
 								{
 									$this->view->getContext()->loadView
@@ -228,7 +230,8 @@ namespace application\nutsNBolts\controller
 										$template,
 										$content[$i]
 									);
-								}								
+								}
+								print "\n<!-- [NB::END TEMPLATE::{$config['template']}] -->\n";
 							}
 						}
 						else
