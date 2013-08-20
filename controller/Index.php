@@ -80,6 +80,20 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getComments($nodeId,$limit);
 					}
+				)->registerCallback
+				(
+					'getTags',
+					function($nodeId)
+					{
+						return $this->getTags($nodeId);
+					}
+				)->registerCallback
+				(
+					'getNodesByTag',
+					function($tags,$limit)
+					{
+						return $this->getNodesByTag($tags,$limit);
+					}
 				);
 			}
 			else
@@ -161,6 +175,38 @@ namespace application\nutsNBolts\controller
 								if ($result=$this->plugin->db->nutsnbolts->select($config['typeConfig']['query']))
 								{
 									$content=$this->plugin->db->nutsnbolts->result('assoc');
+
+									//$content=implode(',', $content);
+									foreach ($content AS $tags)
+									{
+										$pageContent[]=$tags['tag'];
+									}
+
+									$content=$pageContent;
+									//$content = implode(',', $pageContent);
+
+									list($scope,$template)=explode('.',$config['template']);
+									if ($scope=='local')
+									{
+										$template='page/'.$this->pageType['ref'].'/block/'.$template;
+									}
+									else if ($scope=='global')
+									{
+										$template='block/'.$template;
+									}
+									else
+									{
+										return 'INVALID TEMPLATE SCOPE';
+									}
+									print "\n<!-- [NB::START TEMPLATE::{$config['template']}] -->\n";
+
+									$this->view->getContext()->loadView
+									(
+										$template,
+										$content
+									);
+
+									print "\n<!-- [NB::END TEMPLATE::{$config['template']}] -->\n";									
 								}
 							}
 							//Else construct our own query.
@@ -391,6 +437,18 @@ namespace application\nutsNBolts\controller
 				$comments[$i]['date_created']=new DateTime($comments[$i]['date_created']);
 			}
 			return $comments;
+		}
+
+		public function getTags($nodeId)
+		{
+			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId));
+			return $tags;
+		}
+
+		public function getNodesByTag($tags,$limit)
+		{
+			$tags=$this->model->NodeTag->read(array('tag'=>$tags),array(),'LIMIT '.$limit);
+			return $tags;
 		}
 	}
 }
