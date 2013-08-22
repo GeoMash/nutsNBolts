@@ -1,9 +1,9 @@
 <?php
-namespace application\nutsNBolts\plugin\faceBookPlugin
+namespace application\nutsNBolts\plugin\facebook
 {
 	use nutshell\core\exception\NutshellException;
 
-	class FaceBookException extends NutshellException
+	class FacebookException extends NutshellException
 	{
 
 	}
