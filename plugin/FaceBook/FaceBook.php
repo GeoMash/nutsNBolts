@@ -83,7 +83,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 						'scope'=>'email,publish_stream',
 						'redirect_uri'=>"http://bizsmart.dev.lan/$location",
 						);
-					$this->accessToken();
+					// $this->accessToken();
 			$fb=$this->facebook;
 			if(isset($params))
 			{
