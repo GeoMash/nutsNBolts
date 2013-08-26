@@ -96,6 +96,11 @@ Example (dev.json):
 	}
 }
 
+Admin Panel Setup
+==============
+To install the admin panel, unzip the admin.frontend.zip file into the "public" directory.
+
+
 Completion
 ==========
 You should now be good to start building your website. You can access the admin panel by browsing to:
