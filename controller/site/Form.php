@@ -27,9 +27,25 @@ namespace application\nutsNBolts\controller\site
 					)
 				);
 			}
-			$redirectTo=$_SERVER['HTTP_REFERER'];
-			$redirectTo=rtrim($redirectTo,'/').'/';
-			$this->redirect($redirectTo.'success');
+			$files=$this->request->getFiles();
+			
+			var_dump($files);
+			
+			exit();
+			// $this->plugin->Plupload->setCallback(array($this,'uploadComplete'));
+			// $this->plugin->Plupload->upload();
+			// $redirectTo=$_SERVER['HTTP_REFERER'];
+			// $redirectTo=rtrim($redirectTo,'/').'/';
+			// $this->redirect($redirectTo.'success');
+		}
+		
+		public function uploadComplete($basename)
+		{
+			$completedDir	=$this->config->plugin->Plupload->completed_dir;
+			$moveTo			=$completedDir.$this->collectionID._DS_;
+			
+			rename($completedDir.$basename,$moveTo.$basename);
+			$this->makeThumbnail($moveTo,$basename);
 		}
 	}
 }
