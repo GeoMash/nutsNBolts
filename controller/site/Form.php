@@ -18,7 +18,7 @@ namespace application\nutsNBolts\controller\site
 			$request=$this->request->getAll();
 			if (isset($form[0]) && count($request))
 			{
-				$this->model->FormSubmission->insertAssoc
+				$id=$this->model->FormSubmission->insertAssoc
 				(
 					array
 					(
@@ -26,26 +26,21 @@ namespace application\nutsNBolts\controller\site
 						'data'		=>	json_encode($request)
 					)
 				);
+				$redirectTo	=$_SERVER['HTTP_REFERER'];
+				$redirectTo	=rtrim($redirectTo,'/').'/';
+				$error		=$this->request->getFileError('upload');
+				if (!$error)
+				{
+					$moveTo=APP_HOME.'nutsNBolts'._DS_.$this->config->application->dataDir.'formUploads'._DS_.$id._DS_;
+					if ($this->request->moveFile('upload',$moveTo))
+					{
+						$this->redirect($redirectTo.'success');
+						exit();
+					}
+				}
 			}
-			$files=$this->request->getFiles();
-			
-			var_dump($files);
-			
+			$this->redirect($redirectTo.'error');
 			exit();
-			// $this->plugin->Plupload->setCallback(array($this,'uploadComplete'));
-			// $this->plugin->Plupload->upload();
-			// $redirectTo=$_SERVER['HTTP_REFERER'];
-			// $redirectTo=rtrim($redirectTo,'/').'/';
-			// $this->redirect($redirectTo.'success');
-		}
-		
-		public function uploadComplete($basename)
-		{
-			$completedDir	=$this->config->plugin->Plupload->completed_dir;
-			$moveTo			=$completedDir.$this->collectionID._DS_;
-			
-			rename($completedDir.$basename,$moveTo.$basename);
-			$this->makeThumbnail($moveTo,$basename);
 		}
 	}
 }
