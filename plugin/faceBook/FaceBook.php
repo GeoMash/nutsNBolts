@@ -1,14 +1,14 @@
 <?php
-namespace application\nutsNBolts\plugin\FaceBook
+namespace application\nutsNBolts\plugin\faceBook
 {
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
 	// use nutshell\behaviour\Native;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsNBolts\plugin\facebook\FacebookException;
-	use application\nutsNBolts\plugin\facebook\impl\BaseFacebook;
-	use application\nutsNBolts\plugin\facebook\impl\facebook as FacebookBase;
+	use application\nutsNBolts\plugin\faceBook\FacebookException;
+	use application\nutsNBolts\plugin\faceBook\impl\BaseFacebook;
+	use application\nutsNBolts\plugin\faceBook\impl\facebook as FacebookBase;
 
 	class FaceBook extends Plugin implements Singleton
 	{
@@ -121,6 +121,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 		public function checkLogged()
 		{
 			$fb=$this->facebook;
+
 			if ($fb->getUser()!=0) 
 			{
 				// call the storeUserData method to save the user data
@@ -178,9 +179,21 @@ namespace application\nutsNBolts\plugin\FaceBook
 		}
 
 
-		public function fbLogout()
+		public function fbLogout($url="/")
 		{
-			session_unset();
+			$urlArray=explode('/', $url);
+			if($urlArray[0]=='facebookLogout')
+			{
+				array_shift($urlArray);
+				$urlArray=implode('/', $urlArray);
+			}
+
+			print_r($urlArray);
+			// die();
+			$_SESSION = array();    //clear session array
+			session_destroy();
+			header('Location: /'.$urlArray);
+			die();
 		}
 
 
