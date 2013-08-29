@@ -121,6 +121,7 @@ namespace application\nutsNBolts\plugin\faceBook
 		public function checkLogged()
 		{
 			$fb=$this->facebook;
+
 			if ($fb->getUser()!=0) 
 			{
 				// call the storeUserData method to save the user data
@@ -178,9 +179,21 @@ namespace application\nutsNBolts\plugin\faceBook
 		}
 
 
-		public function fbLogout()
+		public function fbLogout($url="/")
 		{
-			session_unset();
+			$urlArray=explode('/', $url);
+			if($urlArray[0]=='facebookLogout')
+			{
+				array_shift($urlArray);
+				$urlArray=implode('/', $urlArray);
+			}
+
+			print_r($urlArray);
+			// die();
+			$_SESSION = array();    //clear session array
+			session_destroy();
+			header('Location: /'.$urlArray);
+			die();
 		}
 
 
