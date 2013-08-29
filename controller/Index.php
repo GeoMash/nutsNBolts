@@ -441,7 +441,7 @@ namespace application\nutsNBolts\controller
 
 		public function getTags($nodeId)
 		{
-			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId,'status'=>1));
+			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId));
 			return $tags;
 		}
 
