@@ -343,7 +343,7 @@ namespace application\nutsNBolts\controller
 		private function getNodesByContentTypeRef($ref)
 		{
 			$return=array();
-			$result=$this->model->ContentType->read(array('ref'=>$ref));
+			$result=$this->model->ContentType->read(array('ref'=>$ref,'status'=>1));
 			if (!isset($result[0]))
 			{
 				return $return;
@@ -362,7 +362,7 @@ namespace application\nutsNBolts\controller
 		{
 			$return=array();
 			$thisLimit=1;
-			$result=$this->model->ContentType->read(array('ref'=>$ref));
+			$result=$this->model->ContentType->read(array('ref'=>$ref,'status'=>1));
 
 			if (!isset($result[0]))
 			{
@@ -441,13 +441,13 @@ namespace application\nutsNBolts\controller
 
 		public function getTags($nodeId)
 		{
-			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId));
+			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId,'status'=>1));
 			return $tags;
 		}
 
 		public function getNodesByTag($tags,$limit)
 		{
-			$tags=$this->model->NodeTag->read(array('tag'=>$tags),array(),'LIMIT '.$limit);
+			$tags=$this->model->NodeTag->read(array('tag'=>$tags,'status'=>1),array(),'LIMIT '.$limit);
 			return $tags;
 		}
 	}
