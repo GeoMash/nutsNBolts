@@ -78,10 +78,11 @@ namespace application\nutsNBolts\plugin\faceBook
 		public function fbLogin($location)
 		{
 			// location is passed dynamically from the view, since we want to load the same article after successful login.
+			$url = "http://".$_SERVER['HTTP_HOST']."/".$location;
 			$params=
 					array(
 						'scope'=>'email,publish_stream',
-						'redirect_uri'=>"http://alliance.dev.praxisbt.com/$location",
+						'redirect_uri'=>$url
 						);
 					// $this->accessToken();
 			$fb=$this->facebook;
