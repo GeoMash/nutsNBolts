@@ -447,7 +447,7 @@ namespace application\nutsNBolts\controller
 
 		public function getNodesByTag($tags,$limit)
 		{
-			$tags=$this->model->NodeTag->read(array('tag'=>$tags,'status'=>1),array(),'LIMIT '.$limit);
+			$tags=$this->model->NodeTag->read(array('tag'=>$tags),array(),'LIMIT '.$limit);
 			return $tags;
 		}
 	}
