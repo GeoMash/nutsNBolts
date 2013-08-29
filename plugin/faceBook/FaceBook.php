@@ -81,7 +81,7 @@ namespace application\nutsNBolts\plugin\faceBook
 			$params=
 					array(
 						'scope'=>'email,publish_stream',
-						'redirect_uri'=>"http://bizsmart.dev.lan/$location",
+						'redirect_uri'=>"http://alliance.dev.praxisbt.com/$location",
 						);
 					// $this->accessToken();
 			$fb=$this->facebook;
