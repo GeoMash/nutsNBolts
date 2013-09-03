@@ -15,18 +15,18 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"mddev",
-						"password":		"k3yB0@rDm@5h",
-						"host":			"192.168.1.13",
+						"username":		"root",
+						"password":		"root",
+						"host":			"localhost",
 						"port":			"3306",
-						"database":		"nutsnbolts"
+						"database":		"myblog"
 					}
 				}
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/praxisbt/nutsnbolts/private/application/data/uploads/"
+				"completed_dir":	"D:/www/myblog/public/_collections/"
 			}
 		}
 	}

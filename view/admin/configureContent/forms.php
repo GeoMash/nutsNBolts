@@ -14,6 +14,9 @@
 			<div class="box-content scrollable" style="height: 410px; overflow-y: auto">
 				<?php $tpl->getFormsList(); ?>
 			</div>
+			<div class="box-content padded">
+				<a href="/admin/configurecontent/forms/uploads/">View form uploads</a>
+			</div>
 		</div>
 	</div>
 </div>
