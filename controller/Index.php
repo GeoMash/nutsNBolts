@@ -441,13 +441,13 @@ namespace application\nutsNBolts\controller
 
 		public function getTags($nodeId)
 		{
-			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId,'status'=>1));
+			$tags=$this->model->NodeTag->read(array('node_id'=>$nodeId));
 			return $tags;
 		}
 
 		public function getNodesByTag($tags,$limit)
 		{
-			$tags=$this->model->NodeTag->read(array('tag'=>$tags,'status'=>1),array(),'LIMIT '.$limit);
+			$tags=$this->model->NodeTag->read(array('tag'=>$tags),array(),'LIMIT '.$limit);
 			return $tags;
 		}
 	}
