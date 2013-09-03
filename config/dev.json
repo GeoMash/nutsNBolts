@@ -27,6 +27,11 @@
 			{
 				"temporary_dir":	"D:/tmp/",
 				"completed_dir":	"D:/www/myblog/public/_collections/"
+			},
+			"FaceBook":
+			{
+				"app_id":		"576839855687694",
+				"app_secret":	"efeb1366341aceaace574ca42291bae3"
 			}
 		}
 	}
