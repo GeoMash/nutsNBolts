@@ -29,8 +29,8 @@ namespace application\nutsNBolts\plugin\faceBook
 			require_once(__DIR__._DS_.'impl/base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '576839855687694',
-  					'secret' => 'efeb1366341aceaace574ca42291bae3',
+					'appId'  => $this->config->app_id,
+  					'secret' => $this->config->app_secret,
   					'cookie'=>TRUE
 					)
 				);
