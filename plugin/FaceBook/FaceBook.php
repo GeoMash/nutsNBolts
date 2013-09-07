@@ -1,14 +1,14 @@
 <?php
-namespace application\nutsNBolts\plugin\FaceBook
+namespace application\nutsNBolts\plugin\faceBook
 {
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Singleton;
 	// use nutshell\behaviour\Native;
 	use \Exception;
 	use nutshell\core\exception\NutshellException;
-	use application\nutsNBolts\plugin\facebook\FacebookException;
-	use application\nutsNBolts\plugin\facebook\impl\BaseFacebook;
-	use application\nutsNBolts\plugin\facebook\impl\facebook as FacebookBase;
+	use application\nutsNBolts\plugin\faceBook\FacebookException;
+	use application\nutsNBolts\plugin\faceBook\impl\BaseFacebook;
+	use application\nutsNBolts\plugin\faceBook\impl\facebook as FacebookBase;
 
 	class FaceBook extends Plugin implements Singleton
 	{
@@ -29,8 +29,8 @@ namespace application\nutsNBolts\plugin\FaceBook
 			require_once(__DIR__._DS_.'impl/base_facebook.php');
 			$this->facebook=new FaceBookBase(
 				array(
-					'appId'  => '576839855687694',
-  					'secret' => 'efeb1366341aceaace574ca42291bae3',
+					'appId'  => $this->config->app_id,
+  					'secret' => $this->config->app_secret,
   					'cookie'=>TRUE
 					)
 				);
@@ -78,10 +78,11 @@ namespace application\nutsNBolts\plugin\FaceBook
 		public function fbLogin($location)
 		{
 			// location is passed dynamically from the view, since we want to load the same article after successful login.
+			$url = "http://".$_SERVER['HTTP_HOST']."/".$location;
 			$params=
 					array(
 						'scope'=>'email,publish_stream',
-						'redirect_uri'=>"http://bizsmart.dev.lan/$location",
+						'redirect_uri'=>$url
 						);
 					// $this->accessToken();
 			$fb=$this->facebook;
@@ -121,6 +122,7 @@ namespace application\nutsNBolts\plugin\FaceBook
 		public function checkLogged()
 		{
 			$fb=$this->facebook;
+
 			if ($fb->getUser()!=0) 
 			{
 				// call the storeUserData method to save the user data
@@ -178,9 +180,21 @@ namespace application\nutsNBolts\plugin\FaceBook
 		}
 
 
-		public function fbLogout()
+		public function fbLogout($url="/")
 		{
-			session_unset();
+			$urlArray=explode('/', $url);
+			if($urlArray[0]=='facebookLogout')
+			{
+				array_shift($urlArray);
+				$urlArray=implode('/', $urlArray);
+			}
+
+			print_r($urlArray);
+			// die();
+			$_SESSION = array();    //clear session array
+			session_destroy();
+			header('Location: /'.$urlArray);
+			die();
 		}
 
 
