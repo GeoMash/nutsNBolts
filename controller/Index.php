@@ -94,6 +94,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getNodesByTag($tags,$limit);
 					}
+				)->registerCallback
+				(
+					'getFacebookConfig',
+					function()
+					{
+						return $this->getFacebookConfig();
+					}
 				);
 			}
 			else
@@ -449,6 +456,11 @@ namespace application\nutsNBolts\controller
 		{
 			$tags=$this->model->NodeTag->read(array('tag'=>$tags),array(),'LIMIT '.$limit);
 			return $tags;
+		}
+
+		public function getFacebookConfig()
+		{
+			return $this->config->plugin->FaceBook->app_id;
 		}
 	}
 }
