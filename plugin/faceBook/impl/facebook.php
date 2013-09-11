@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsNBolts\plugin\facebook\impl;
+namespace application\nutsNBolts\plugin\faceBook\impl;
 /**
  * Copyright 2011 Facebook, Inc.
  *

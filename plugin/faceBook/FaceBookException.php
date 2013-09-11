@@ -1,5 +1,5 @@
 <?php
-namespace application\nutsNBolts\plugin\facebook
+namespace application\nutsNBolts\plugin\faceBook
 {
 	use nutshell\core\exception\NutshellException;
 
