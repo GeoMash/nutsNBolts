@@ -14,12 +14,12 @@
 				{
 					"nutsnbolts":
 					{
-						"handler":		"MySQL",
-						"username":		"root",
-						"password":		"e9db6bbca2",
-						"host":			"localhost",
-						"port":			"3306",
-						"database":		"nutsnbolts"
+                        "handler":              "MySQL",
+                        "username":             "abstaging",
+                        "password":             "@ll1@nC35t@g1ng",
+                        "host":                 "192.168.0.152",
+                        "port":                 "3306",
+                        "database":             "abstaging"
 					}
 				}
 			},
