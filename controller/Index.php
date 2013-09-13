@@ -343,7 +343,7 @@ namespace application\nutsNBolts\controller
 		private function getNodesByContentTypeRef($ref)
 		{
 			$return=array();
-			$result=$this->model->ContentType->read(array('ref'=>$ref));
+			$result=$this->model->ContentType->read(array('ref'=>$ref,'status'=>1));
 			if (!isset($result[0]))
 			{
 				return $return;
@@ -362,7 +362,7 @@ namespace application\nutsNBolts\controller
 		{
 			$return=array();
 			$thisLimit=1;
-			$result=$this->model->ContentType->read(array('ref'=>$ref));
+			$result=$this->model->ContentType->read(array('ref'=>$ref,'status'=>1));
 
 			if (!isset($result[0]))
 			{
