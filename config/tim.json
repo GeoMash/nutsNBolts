@@ -12,10 +12,10 @@
 					{
 						"handler":		"MySQL",
 						"username":		"root",
-						"password":		"root",
+						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"nutsnbolts"
+						"database":		"alliance_nutsnbolts"
 					}
 				}
 			},
