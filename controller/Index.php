@@ -355,7 +355,7 @@ namespace application\nutsNBolts\controller
 			{
 				return $return;
 			}
-			for ($i=1,$j=count($this->nodes); $i<$j; $i++)
+			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
 			{
 				if ($this->nodes[$i]['content_type_id']==$result[0]['id'])
 				{
