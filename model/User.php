@@ -7,8 +7,6 @@ namespace application\nutsNBolts\model
 	
 	class User extends UserBase	
 	{
-		const SUPER=-100;
-		
 		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
 		{
 			$result=parent::read($whereKeyVals, $readColumns, $additionalPartSQL);
