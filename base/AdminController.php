@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\base
 {
+	use application\nutsNBolts\NutsNBolts;
 	use application\nutsNBolts\base\Controller as BaseController;
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\helper\ObjectHelper;
@@ -34,13 +35,10 @@ namespace application\nutsNBolts\base
 				$this->view->setVar('nav_active_main',$mainNav);
 				$this->view->setVar('nav_active_sub',$this->request->node(2));
 				
-				
-				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
 				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
 				$this->view->setVar('user',$this->user);
-				
 				$this->show404();
 				
 				if ($this->request->get('returnToAction'))
@@ -81,6 +79,13 @@ namespace application\nutsNBolts\base
 					function()
 					{
 						print $this->getNotifications();
+					}
+				)->registerCallback
+				(
+					'challangeRole',
+					function($allowedRoles)
+					{
+						return $this->challangeRole($allowedRoles);
 					}
 				);
 			if (method_exists($this,'init'))
@@ -165,14 +170,17 @@ HTML;
 			$contentTypes=$this->model->ContentType->read();
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
-				$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
-				$html[]	=<<<HTML
+				if ($this->challangeRole($contentTypes[$i]['roles']))
+				{
+					$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
+					$html[]	=<<<HTML
 <li class="{$active}">
 	<a href="/admin/content/view/{$contentTypes[$i]['id']}">
 		<i class="{$contentTypes[$i]['icon']}"></i> {$contentTypes[$i]['name']}
 	</a>
 </li>
 HTML;
+				}
 			}
 			return implode('',$html);
 		}
@@ -261,6 +269,58 @@ HTML;
 		public function isAuthenticated()
 		{
 			return (bool)($this->plugin->Session->authenticated);
+		}
+		
+		public function challangeRole($allowedRoles)
+		{
+			if ($this->isSuper())return true;
+			
+			if (!is_array($allowedRoles))
+			{
+				$allowedRoles=array($allowedRoles);
+			}
+			$user=$this->getUser();
+			for ($i=0,$j=count($allowedRoles); $i<$j; $i++)
+			{
+				for ($k=0,$l=count($user['roles']); $k<$l; $k++)
+				{
+					if (is_array($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]['id']==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_numeric($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_string($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['ref'])
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+		
+		public function isSuper()
+		{
+			$user=$this->getUser();
+			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
+			{
+				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }
