@@ -248,12 +248,33 @@ namespace application\nutsNBolts\controller
 										$low=$page*$limit;
 										// get the high range of the array
 										$high=$low+$limit-1;
+										// get the total number of results
+										$total=count($allContent);
 
 										for ($i=$low;$i<=$high; $i++)
 										{
 											if(isset($allContent[$i]))
 											{
-												$filteredContent[]=$allContent[$i];	
+												if($total<=$high)
+												{
+													// should not show the paginator links
+													$filteredContent[]=$allContent[$i];	
+													end($filteredContent);
+													$key=key($filteredContent);
+													$filteredContent[$key]=array_merge($filteredContent[$key],array(
+														'showPaginate'		=> 'no'
+													));													
+												}
+												else
+												{
+													// there are more results and it is safe to show the paginator links
+													$filteredContent[]=$allContent[$i];
+													end($filteredContent);
+													$key=key($filteredContent);
+													$filteredContent[$key]=array_merge($filteredContent[$key],array(
+														'showPaginate'		=> 'yes'
+													));
+												}
 											}
 										}
 									}
