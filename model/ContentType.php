@@ -217,7 +217,7 @@ SQL;
 		
 		public function getRoles($contentTypeId)
 		{
-			if ($userId!=NutsNBolts::USER_SUPER)
+			if ($contentTypeId!=NutsNBolts::USER_SUPER)
 			{
 				$query=<<<SQL
 SELECT role.*
