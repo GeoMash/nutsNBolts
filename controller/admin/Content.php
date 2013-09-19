@@ -5,7 +5,14 @@ namespace application\nutsNBolts\controller\admin
 	
 	class Content extends AdminController
 	{
-		private $typeID=null;
+		private $typeID		=null;
+		private $contentType=null;
+		
+		public function init()
+		{
+			$this->typeID		=$this->request->lastNode();
+			$this->contentType	=$this->model->ContentType->read($this->typeID)[0];
+		}
 		
 		public function index()
 		{
@@ -33,7 +40,11 @@ namespace application\nutsNBolts\controller\admin
 						print $this->generateContentRows();
 					}
 				);
-			
+					
+			if (!$this->challangeRole($contentType[0]['roles']))
+			{
+				$this->plugin->Notification->setError('You don\'t have permission to view this!');
+			}
 			$this->view->render();
 		}
 		
@@ -193,20 +204,29 @@ HTML;
 		
 		public function generateContentRows()
 		{
-			$records=$this->model->Node->read(array('content_type_id'=>$this->typeID));
-			$html	=array();
-			for ($i=0,$j=count($records); $i<$j; $i++)
+			if ($this->canAccessContentType())
 			{
-				$html[]=<<<HTML
+				$records=$this->model->Node->read(array('content_type_id'=>$this->typeID));
+				$html	=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					$html[]=<<<HTML
 <tr>
-	<td class=""><a href="/admin/content/edit/{$records[$i]['id']}">{$records[$i]['title']}</a></td>
-	<td class="">{$records[$i]['date_created']}</td>
-	<td class="">{$records[$i]['last_user_id']}</td>
-	<td class="">{$records[$i]['status']}</td>
+	<td><a href="/admin/content/edit/{$records[$i]['id']}">{$records[$i]['title']}</a></td>
+	<td>{$records[$i]['date_created']}</td>
+	<td>{$records[$i]['last_user_id']}</td>
+	<td>{$records[$i]['status']}</td>
 </tr>
 HTML;
+				}
+				return implode('',$html);
 			}
-			return implode('',$html);
+			return '';
+		}
+		
+		private function canAccessContentType()
+		{
+			return $this->challangeRole($this->contentType['roles']);
 		}
 	}
 }
