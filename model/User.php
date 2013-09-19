@@ -1,10 +1,14 @@
 <?php
 namespace application\nutsNBolts\model
 {
+	use application\nutsNBolts\NutsNBolts;
 	use application\nutsNBolts\model\base\User as UserBase;
+	use nutshell\exception\NutshellException;
 	
 	class User extends UserBase	
 	{
+		const SUPER=-100;
+		
 		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
 		{
 			$result=parent::read($whereKeyVals, $readColumns, $additionalPartSQL);
@@ -118,16 +122,32 @@ namespace application\nutsNBolts\model
 		
 		public function getRoles($userId)
 		{
-			$query=<<<SQL
+			if ($userId!=NutsNBolts::USER_SUPER)
+			{
+				$query=<<<SQL
 SELECT role.*
 FROM user_role
-LEFT JOIN role ON role.id=user_role.user_id
+LEFT JOIN role ON role.id=user_role.role_id
 WHERE user_id=?
 SQL;
-			if ($this->db->select($query,array($userId)))
+				if ($this->db->select($query,array($userId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+			}
+			else
 			{
-				$records=$this->db->result('assoc');
-				return isset($records)?$records:null;
+				$query='SELECT * FROM role WHERE id=-100;';
+				if ($this->db->select($query,array($userId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+				else
+				{
+					throw new NutshellException('Ooops! Root role has not been configured.');
+				}
 			}
 			return null;
 		}

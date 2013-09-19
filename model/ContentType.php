@@ -1,10 +1,23 @@
 <?php
 namespace application\nutsNBolts\model
 {
+	use application\nutsNBolts\NutsNBolts;
 	use application\nutsNBolts\model\base\ContentType as ContentTypeBase;
 	
 	class ContentType extends ContentTypeBase	
 	{
+		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
+		{
+			$result=parent::read($whereKeyVals, $readColumns, $additionalPartSQL);
+			
+			for ($i=0,$j=count($result); $i<$j; $i++)
+			{
+				$result[$i]['roles']=$this->getRoles($result[$i]['id']);
+			}
+			// var_dump($result);exit();
+			return $result;
+		}
+		
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -200,6 +213,38 @@ SQL;
 				return isset($records)?$records:false;
 			}
 			return false;
+		}
+		
+		public function getRoles($contentTypeId)
+		{
+			if ($userId!=NutsNBolts::USER_SUPER)
+			{
+				$query=<<<SQL
+SELECT role.*
+FROM content_type_role
+LEFT JOIN role ON role.id=content_type_role.role_id
+WHERE content_type_id=?
+SQL;
+				if ($this->db->select($query,array($contentTypeId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+			}
+			else
+			{
+				$query='SELECT * FROM role WHERE id=-100;';
+				if ($this->db->select($query,array($contentTypeId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+				else
+				{
+					throw new NutshellException('Ooops! Root role has not been configured.');
+				}
+			}
+			return null;
 		}
 	}
 }
