@@ -83,6 +83,10 @@ namespace application\nutsNBolts\base
 						print $this->getNotifications();
 					}
 				);
+			if (method_exists($this,'init'))
+			{
+				$this->init();
+			}
 		}
 		
 		public function show404()
