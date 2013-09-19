@@ -179,6 +179,7 @@ namespace application\nutsNBolts\controller
 							//If query is set, ignore all other parameters.
 							if (!empty($config['typeConfig']['query']))
 							{
+
 								if ($result=$this->plugin->db->nutsnbolts->select($config['typeConfig']['query']))
 								{
 									$content=$this->plugin->db->nutsnbolts->result('assoc');
@@ -228,11 +229,40 @@ namespace application\nutsNBolts\controller
 								//Pull from cache.
 								else
 								{
+
 									//TODO: get the id from the ref.
-									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
-									if (!count($filteredContent))
+
+									// check to see if pagination has been set for this page
+									if(isset($config['typeConfig']['paginate']))
 									{
-										
+
+										// grab all the nodes in the zone
+										$allContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);	
+										// create an empty array to dump the paginated data in
+										$filteredContent=array();
+										// read the limit (the number of items per page)
+										$limit=$config['typeConfig']['paginate']['limit'];
+										// get the page number, we deduct 1 from the number to keep it in sync with the array index starting from 0
+										$page=$config['typeConfig']['paginate']['page']-1;
+										// get the low range of the array
+										$low=$page*$limit;
+										// get the high range of the array
+										$high=$low+$limit-1;
+
+										for ($i=$low;$i<=$high; $i++)
+										{
+											if(isset($allContent[$i]))
+											{
+												$filteredContent[]=$allContent[$i];	
+											}
+										}
+									}
+									else
+									{
+										$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);	
+									}
+									if (!count($filteredContent))
+									{	
 										return '';
 									}
 									//Multiple of the same content type.
