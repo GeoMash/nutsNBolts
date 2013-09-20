@@ -247,6 +247,23 @@ SQL;
 				return $nodes;
 			}
 		}
+
+		public function getBlogger($id)
+		{
+			$query=<<<SQL
+			SELECT *
+			FROM user
+			WHERE 
+			id={$id}
+SQL;
+			$record=null;
+			if($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$record=$this->plugin->Db->nutsnbolts->result('assoc');	
+			}
+			return $record;
+			
+		}
 		
 	}
 }
