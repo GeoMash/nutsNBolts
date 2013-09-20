@@ -309,6 +309,8 @@ SQL;
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
+				//Reset index.
+				sort($nodes);
 				return $nodes;
 			}
 		}
