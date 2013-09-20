@@ -17,7 +17,7 @@ namespace application\nutsNBolts\plugin\blog
 
 		public function getNextBlogArticle($id)
 		{
-			
+
 		}	
 
 		public function getPreviousBlogArticle($id)
@@ -27,7 +27,9 @@ namespace application\nutsNBolts\plugin\blog
 
 		public function getBlogger($id)
 		{
-
+			$blog=$this->getBlogArticle($id);
+			$bloggerId=$blog[0]['user_id'];
+			return $record=$this->plugin->Mvc->model->Node->getBlogger($id);
 		}
 	}
 }
