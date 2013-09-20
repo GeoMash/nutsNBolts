@@ -154,10 +154,11 @@ SQL;
 			}
 			$where=implode(' AND ',$where);
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref	,node_part.value
+			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE node.id IN
 			(
 				SELECT node.id
@@ -167,6 +168,7 @@ SQL;
 				WHERE {$where}
 			)
 			AND node.status=1
+
 			ORDER BY node.id ASC;
 SQL;
 
