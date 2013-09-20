@@ -10,14 +10,8 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			$this->plugin->Blog->getBlogArticle(158);
+			$this->plugin->Blog->getNextBlogArticle(159,2);
 		}
-		
-		public function testFBPlugin()
-		{
-
-		}
-		
 	}
 }
 ?>
