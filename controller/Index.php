@@ -111,16 +111,16 @@ namespace application\nutsNBolts\controller
 				)->registerCallback
 				(
 					'getNextBlogArticle',
-					function($blogId,$userId)
+					function($blogId)
 					{
-						return $this->plugin->Blog->getNextBlogArticle($blogId,$userId);
+						return $this->plugin->Blog->getNextBlogArticle($blogId);
 					}
 				)->registerCallback
 				(
 					'getPreviousBlogArticle',
-					function($blogId,$userId)
+					function($blogId)
 					{
-						return $this->plugin->Blog->getPreviousBlogArticle($blogId,$userId);
+						return $this->plugin->Blog->getPreviousBlogArticle($blogId);
 					}
 				)->registerCallback
 				(
