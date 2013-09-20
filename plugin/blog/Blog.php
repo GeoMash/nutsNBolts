@@ -19,15 +19,15 @@ namespace application\nutsNBolts\plugin\blog
 		{
 			$thisBlog=$this->getBlogArticle($blogId);
 			$userId=$thisBlog[0]['user_id'];
-			$thisBlogDate=$thisBlog[0]['date_created']->getTimestamp();
+			$thisBlogDate=$thisBlog[0]['date_created'];
 			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $blogId, 'DESC');
 		}	
 
-		public function getPreviousBlogArticle($id)
+		public function getPreviousBlogArticle($blogId)
 		{
-			$thisBlog=$this->getBlogArticle($blogId,$userId);
+			$thisBlog=$this->getBlogArticle($blogId);
 			$userId=$thisBlog[0]['user_id'];			
-			$thisBlogDate=$thisBlog[0]['date_created']->getTimestamp();
+			$thisBlogDate=$thisBlog[0]['date_created'];
 			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $blogId, 'ASC');	
 		}
 
