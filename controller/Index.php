@@ -101,6 +101,34 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getFacebookConfig();
 					}
+				)->registerCallback
+				(
+					'getBlogArticle',
+					function($id)
+					{
+						return $this->plugin->Blog->getBlogArticle($id);
+					}
+				)->registerCallback
+				(
+					'getNextBlogArticle',
+					function($blogId,$userId)
+					{
+						return $this->plugin->Blog->getNextBlogArticle($blogId,$userId);
+					}
+				)->registerCallback
+				(
+					'getPreviousBlogArticle',
+					function($blogId,$userId)
+					{
+						return $this->plugin->Blog->getPreviousBlogArticle($blogId,$userId);
+					}
+				)->registerCallback
+				(
+					'getBlogger',
+					function($id)
+					{
+						return $this->plugin->Blog->getNextBlogArticle($id);
+					}
 				);
 			}
 			else
