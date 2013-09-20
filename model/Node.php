@@ -236,9 +236,9 @@ SQL;
 								'status'
 							)
 						);
-						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
-						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
-						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+						// $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						// $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						// $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
@@ -267,25 +267,49 @@ SQL;
 
 		/*
 		 thisBlogDate should be in the timestamp format
-		 direction can be next or previous
+		 direction can be ASC or DESC
 		 */
 		public function getNextBlogArticle($userId, $thisBlogDate, $blogId, $direction)
 		{
-
+			if($direction == 'ASC')
+			{
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$userId}
+			WHERE content_type_user.user_id=?
 			AND node.status=1
-			AND UNIX_TIMESTAMP(node.date_created) < {$thisBlogDate}
-			AND node.id <> {$blogId}
-			ORDER BY UNIX_TIMESTAMP(node.date_created) {$direction}
+			AND node.id <> ?
+			AND node.date_created > ?
+			GROUP BY (node.id)
+			ORDER BY node.date_created ASC
 			LIMIT 1
 SQL;
-			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			}
+			else
+			{
+			$query=<<<SQL
+			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id=?
+			AND node.status=1
+			AND node.id <> ?
+			AND node.date_created < ?
+			GROUP BY (node.id)
+			ORDER BY node.date_created DESC
+			LIMIT 1
+SQL;
+			}
+
+// echo $query;
+// echo '<br/>';
+// die();
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,array($userId,$blogId, $thisBlogDate)))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
 				
@@ -310,7 +334,8 @@ SQL;
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
 				//Reset index.
-				sort($nodes);
+
+				sort($nodes);			
 				return $nodes;
 			}
 		}
