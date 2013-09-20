@@ -4,25 +4,13 @@ namespace application\nutsNBolts\controller
 	use nutshell\Nutshell;
 	use nutshell\core\exception\NutshellException;
 	use nutshell\plugin\mvc\Controller;
-	use application\plugin\FaceBook\FaceBook;
+	use application\plugin\blog\Blog;
 	
 	class Sandbox extends Controller
 	{
 		public function index()
 		{
-			$this->plugin->FaceBook->storeUserData();
-			var_dump( $this->plugin->FaceBook->getUserProfile());
-			var_dump( $this->plugin->FaceBook->getAccessTokenDetails());
-			// print($this->plugin->FaceBook->fbLogin());
-			// if(isset($_GET['access_token']))
-			// {
-			// 	$this->plugin->FaceBook->storeUserData();
-			// }
-			// $this->plugin->FaceBook->fbPostNew();
-			// print_r($this->plugin->FaceBook->fbLogout());
-
-			// print $this->plugin->Notification->getSucessesHTML();
-			// $this->plugin->Notification->clearAll();
+			$this->plugin->Blog->getBlogArticle(158);
 		}
 		
 		public function testFBPlugin()
