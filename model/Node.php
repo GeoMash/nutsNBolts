@@ -456,6 +456,46 @@ SQL;
 			}
 
 		}
+
+		public function getAllDates($bloggerId)
+		{
+			$query=<<<SQL
+			SELECT node.date_created,node.id,node.site_id,node.status
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=1
+			ORDER BY node.date_created DESC
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+					}
+				}
+				//Reset index.
+				sort($nodes);
+				// print_r($nodes);
+				return $nodes;
+			}
+		}
 	}
 }
 ?>
