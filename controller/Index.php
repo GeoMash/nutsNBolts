@@ -143,6 +143,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->plugin->Blog->getRecent($id,$limit);
 					}
+				)->registerCallback
+				(
+					'getBlogsByBlogger',
+					function($bloggerId, $category)
+					{
+						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category);
+					}
 				);
 			}
 			else
@@ -276,12 +283,31 @@ namespace application\nutsNBolts\controller
 
 									// check to see if pagination has been set for this page
 									if(isset($config['typeConfig']['paginate']))
-									{
-
+									{ 
+										// cehck to see if any extra options are set
+										if(isset($config['typeConfig']['paginate']['options']))
+										{
+											// $category=null;
+											$bloggerId=null;
+											if (isset($config['typeConfig']['paginate']['options']['bloggerId']))
+											{
+												$bloggerId=$config['typeConfig']['paginate']['options']['bloggerId'];
+											}
+											if (isset($config['typeConfig']['paginate']['options']['category']))
+											{
+												$category=$config['typeConfig']['paginate']['options']['category'];
+											}											
+										}
 										// grab all the nodes in the zone
-										$allContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);	
-										// get the latest first
-										$allContent=array_reverse($allContent);
+										if($allContent=$this->plugin->Blog->getBlogsByBlogger($bloggerId, $category))
+										{
+											// get the latest first
+											$allContent=array_reverse($allContent);
+										}
+										else
+										{
+											$allContent=array();
+										}
 										// create an empty array to dump the paginated data in
 										$filteredContent=array();
 										// read the limit (the number of items per page)
@@ -294,7 +320,6 @@ namespace application\nutsNBolts\controller
 										$high=$low+$limit-1;
 										// get the total number of results
 										$total=count($allContent);
-
 										for ($i=$low;$i<=$high; $i++)
 										{
 											if(isset($allContent[$i]))
