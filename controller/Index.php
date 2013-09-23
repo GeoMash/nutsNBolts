@@ -129,6 +129,20 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->plugin->Blog->getNextBlogArticle($id);
 					}
+				)->registerCallback
+				(
+					'getBloggerCategories',
+					function($id)
+					{
+						return $this->plugin->Blog->getBloggerCategories($id);
+					}
+				)->registerCallback
+				(
+					'getRecent',
+					function($id,$limit)
+					{
+						return $this->plugin->Blog->getRecent($id,$limit);
+					}
 				);
 			}
 			else
