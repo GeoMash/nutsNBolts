@@ -10,7 +10,32 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			$this->plugin->Blog->getRecent(2,1);
+			echo '<pre>';
+		
+
+			$dates=$this->plugin->Blog->getAllDates(2);
+
+			$allDates=array();
+			$countedDates=array();
+			foreach($dates AS $key=>$date)
+			{
+				$allDates[]=$newDate=$date['date_created']->format("F Y");
+			}
+
+			foreach($allDates AS $key=>$secondDate)
+			{
+				if (isset($countedDates[$secondDate]))
+				{
+					$countedDates[$secondDate]+=1;
+				}
+				else
+				{
+					$countedDates[$secondDate]=1;
+				}
+			}
+
+			print_r($countedDates);
+			return $countedDates;
 		}
 	}
 }
