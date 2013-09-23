@@ -150,6 +150,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category);
 					}
+				)->registerCallback
+				(
+					'getAllDates',
+					function($id)
+					{
+						return $this->getAllDates($id);
+					}
 				);
 			}
 			else
@@ -581,6 +588,31 @@ namespace application\nutsNBolts\controller
 		public function getFacebookConfig()
 		{
 			return $this->config->plugin->FaceBook->app_id;
+		}
+
+		public function getAllDates($id)
+		{
+			$dates=$this->plugin->Blog->getAllDates(2);
+			$dates=array_reverse($dates);
+			$allDates=array();
+			$countedDates=array();
+			foreach($dates AS $key=>$date)
+			{
+				$allDates[]=$newDate=$date['date_created']->format("F Y");
+			}
+
+			foreach($allDates AS $key=>$secondDate)
+			{
+				if (isset($countedDates[$secondDate]))
+				{
+					$countedDates[$secondDate]+=1;
+				}
+				else
+				{
+					$countedDates[$secondDate]=1;
+				}
+			}
+			return $countedDates;
 		}
 	}
 }
