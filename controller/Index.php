@@ -266,6 +266,8 @@ namespace application\nutsNBolts\controller
 
 										// grab all the nodes in the zone
 										$allContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);	
+										// get the latest first
+										$allContent=array_reverse($allContent);
 										// create an empty array to dump the paginated data in
 										$filteredContent=array();
 										// read the limit (the number of items per page)
