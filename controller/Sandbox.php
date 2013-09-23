@@ -10,7 +10,7 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			$this->plugin->Blog->getNextBlogArticle(159,2);
+			$this->plugin->Blog->getBlogsByBlogger(2);
 		}
 	}
 }

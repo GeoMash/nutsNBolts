@@ -10,32 +10,68 @@ namespace application\nutsNBolts\plugin\blog
 
 		}
 
+		/*
+			parameters:
+			$id = blog id
+			returns the blog by passing in the blog id
+		*/
 		public function getBlogArticle($id)
 		{
 			return $record=$this->plugin->Mvc->model->Node->getBlog($id);
 		}
 
-		public function getNextBlogArticle($blogId)
+		/*
+			parameters:
+			$id = blog id
+			returns the next CREATED blog by the SAME blogger
+		*/
+		public function getNextBlogArticle($id)
 		{
-			$thisBlog=$this->getBlogArticle($blogId);
+			// get the current blog
+			$thisBlog=$this->getBlogArticle($id);
+			// extract the blogger id
 			$userId=$thisBlog[0]['user_id'];
+			// get the date created of the blog (to get the previous blog)
 			$thisBlogDate=$thisBlog[0]['date_created'];
-			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $blogId, 'DESC');
+			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $id, 'DESC');
 		}	
 
-		public function getPreviousBlogArticle($blogId)
+		/*
+			parameters:
+			$id = blog id
+			returns the previous CREATED blog by the SAME blogger
+		*/
+		public function getPreviousBlogArticle($id)
 		{
-			$thisBlog=$this->getBlogArticle($blogId);
+			// get the current blog
+			$thisBlog=$this->getBlogArticle($id);
+			// extract the blogger id
 			$userId=$thisBlog[0]['user_id'];			
+			// get the date created of the blog (to get the next blog)
 			$thisBlogDate=$thisBlog[0]['date_created'];
-			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $blogId, 'ASC');	
+			return $record=$this->plugin->Mvc->model->Node->getNextBlogArticle($userId, $thisBlogDate, $id, 'ASC');	
 		}
 
+		/*
+			parameters:
+			$id = blog id
+			returns the blogger details by passing in the blog id
+		*/
 		public function getBlogger($id)
 		{
 			$blog=$this->getBlogArticle($id);
 			$bloggerId=$blog[0]['user_id'];
 			return $this->plugin->Mvc->model->Node->getBlogger($id);
+		}
+
+		/*
+			parameters:
+			$id = blogger id
+			returns all of the blogs associated to the specific blogger
+		*/
+		public function getBlogsByBlogger($id)
+		{
+			return $this->plugin->Mvc->model->Node->getBlogsByBlogger($id);
 		}
 	}
 }
