@@ -94,5 +94,15 @@ namespace application\nutsNBolts\plugin\blog
 		{
 			return $this->plugin->Mvc->model->Node->getRecent($id, $limit);
 		}		
+
+		/*
+			parameters:
+			$id = blogger id		
+			returns an array full of dates of blog entries
+		*/
+		public function getAllDates($id)
+		{
+			return $this->plugin->Mvc->model->Node->getAllDates($id);
+		}
 	}
 }
