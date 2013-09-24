@@ -146,9 +146,9 @@ namespace application\nutsNBolts\controller
 				)->registerCallback
 				(
 					'getBlogsByBlogger',
-					function($bloggerId, $category)
+					function($bloggerId, $category, $min, $max)
 					{
-						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category);
+						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max);
 					}
 				)->registerCallback
 				(
@@ -291,6 +291,9 @@ namespace application\nutsNBolts\controller
 									// check to see if pagination has been set for this page
 									if(isset($config['typeConfig']['paginate']))
 									{ 
+										$category		=null;
+										$min			=null;
+										$max			=null;
 										// cehck to see if any extra options are set
 										if(isset($config['typeConfig']['paginate']['options']))
 										{
@@ -303,10 +306,15 @@ namespace application\nutsNBolts\controller
 											if (isset($config['typeConfig']['paginate']['options']['category']))
 											{
 												$category=$config['typeConfig']['paginate']['options']['category'];
-											}											
+											}
+											if (isset($config['typeConfig']['paginate']['options']['dateRange']))
+											{
+												$min=$config['typeConfig']['paginate']['options']['dateRange']['min'];
+												$max=$config['typeConfig']['paginate']['options']['dateRange']['max'];
+											}
 										}
 										// grab all the nodes in the zone
-										if($allContent=$this->plugin->Blog->getBlogsByBlogger($bloggerId, $category))
+										if($allContent=$this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max))
 										{
 											// get the latest first
 											$allContent=array_reverse($allContent);
