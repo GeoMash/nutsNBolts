@@ -69,9 +69,9 @@ namespace application\nutsNBolts\plugin\blog
 			$id = blogger id
 			returns all of the blogs associated to the specific blogger
 		*/
-		public function getBlogsByBlogger($bloggerId, $category)
+		public function getBlogsByBlogger($bloggerId, $category, $min, $max)
 		{
-			return $this->plugin->Mvc->model->Node->getBlogsByBlogger($bloggerId, $category);
+			return $this->plugin->Mvc->model->Node->getBlogsByBlogger($bloggerId, $category, $min, $max);
 		}
 
 		/*
