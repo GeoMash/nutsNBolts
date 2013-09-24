@@ -59,14 +59,17 @@ namespace application\nutsNBolts\plugin\blog
 		*/
 		public function getBlogger($id)
 		{
-			$blog=$this->getBlogArticle($id);
-			$bloggerId=$blog[0]['user_id'];
+			// $blog=$this->getBlogArticle($id);
+			// $bloggerId=$blog[0]['user_id'];
 			return $this->plugin->Mvc->model->Node->getBlogger($id);
 		}
 
 		/*
 			parameters:
 			$id = blogger id
+			$category = the blog category, can pass in any value
+			$min = if set, the minimum date range
+			$max = if set, the maximum date range
 			returns all of the blogs associated to the specific blogger
 		*/
 		public function getBlogsByBlogger($bloggerId, $category, $min, $max)

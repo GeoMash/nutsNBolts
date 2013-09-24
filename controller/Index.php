@@ -127,7 +127,7 @@ namespace application\nutsNBolts\controller
 					'getBlogger',
 					function($id)
 					{
-						return $this->plugin->Blog->getNextBlogArticle($id);
+						return $this->plugin->Blog->getBlogger($id);
 					}
 				)->registerCallback
 				(

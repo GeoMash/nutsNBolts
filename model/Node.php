@@ -339,6 +339,7 @@ SQL;
 
 		public function getBlogsByBlogger($bloggerId, $category, $min, $max)
 		{
+			$where=null;
 			if(strlen($category) > 3)
 			{
 				$where=<<<SQL
