@@ -452,6 +452,7 @@ SQL;
 				}
 				//Reset index.
 				sort($nodes);
+				$nodes=array_reverse($nodes);
 				return $nodes;
 			}
 
@@ -492,7 +493,6 @@ SQL;
 				}
 				//Reset index.
 				sort($nodes);
-				// print_r($nodes);
 				return $nodes;
 			}
 		}
