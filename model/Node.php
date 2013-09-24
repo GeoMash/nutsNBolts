@@ -337,7 +337,7 @@ SQL;
 			}
 		}
 
-		public function getBlogsByBlogger($bloggerId, $category)
+		public function getBlogsByBlogger($bloggerId, $category, $min, $max)
 		{
 			if(strlen($category) > 3)
 			{
@@ -345,9 +345,11 @@ SQL;
 				AND node_part.value="{$category}"
 SQL;
 			}
-			else
+			if(strlen($min) > 3)
 			{
-				$where="";
+				$where=<<<SQL
+				AND node.date_created BETWEEN "{$min}" AND "{$max}"
+SQL;
 			}
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
