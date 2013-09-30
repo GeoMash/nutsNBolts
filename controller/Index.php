@@ -101,6 +101,62 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getFacebookConfig();
 					}
+				)->registerCallback
+				(
+					'getBlogArticle',
+					function($id)
+					{
+						return $this->plugin->Blog->getBlogArticle($id);
+					}
+				)->registerCallback
+				(
+					'getNextBlogArticle',
+					function($blogId)
+					{
+						return $this->plugin->Blog->getNextBlogArticle($blogId);
+					}
+				)->registerCallback
+				(
+					'getPreviousBlogArticle',
+					function($blogId)
+					{
+						return $this->plugin->Blog->getPreviousBlogArticle($blogId);
+					}
+				)->registerCallback
+				(
+					'getBlogger',
+					function($id)
+					{
+						return $this->plugin->Blog->getBlogger($id);
+					}
+				)->registerCallback
+				(
+					'getBloggerCategories',
+					function($id)
+					{
+						return $this->plugin->Blog->getBloggerCategories($id);
+					}
+				)->registerCallback
+				(
+					'getRecent',
+					function($id,$limit)
+					{
+						return $this->plugin->Blog->getRecent($id,$limit);
+					}
+				)->registerCallback
+				(
+					'getBlogsByBlogger',
+					function($bloggerId, $category, $min, $max)
+					{
+						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max);
+					}
+				)->registerCallback
+				(
+					'getAllDates',
+					function($id)
+					{
+						return $this->getAllDates($id);
+					}
 				);
 			}
 			else
@@ -179,6 +235,7 @@ namespace application\nutsNBolts\controller
 							//If query is set, ignore all other parameters.
 							if (!empty($config['typeConfig']['query']))
 							{
+
 								if ($result=$this->plugin->db->nutsnbolts->select($config['typeConfig']['query']))
 								{
 									$content=$this->plugin->db->nutsnbolts->result('assoc');
@@ -228,11 +285,89 @@ namespace application\nutsNBolts\controller
 								//Pull from cache.
 								else
 								{
+
 									//TODO: get the id from the ref.
-									$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);
-									if (!count($filteredContent))
+
+									// check to see if pagination has been set for this page
+									if(isset($config['typeConfig']['paginate']))
+									{ 
+										$category		=null;
+										$min			=null;
+										$max			=null;
+										// cehck to see if any extra options are set
+										if(isset($config['typeConfig']['paginate']['options']))
+										{
+											// $category=null;
+											$bloggerId=null;
+											if (isset($config['typeConfig']['paginate']['options']['bloggerId']))
+											{
+												$bloggerId=$config['typeConfig']['paginate']['options']['bloggerId'];
+											}
+											if (isset($config['typeConfig']['paginate']['options']['category']))
+											{
+												$category=$config['typeConfig']['paginate']['options']['category'];
+											}
+											if (isset($config['typeConfig']['paginate']['options']['dateRange']))
+											{
+												$min=$config['typeConfig']['paginate']['options']['dateRange']['min'];
+												$max=$config['typeConfig']['paginate']['options']['dateRange']['max'];
+											}
+										}
+										// grab all the nodes in the zone
+										if($allContent=$this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max))
+										{
+											// get the latest first
+											$allContent=array_reverse($allContent);
+										}
+										else
+										{
+											$allContent=array();
+										}
+										// create an empty array to dump the paginated data in
+										$filteredContent=array();
+										// read the limit (the number of items per page)
+										$limit=$config['typeConfig']['paginate']['limit'];
+										// get the page number, we deduct 1 from the number to keep it in sync with the array index starting from 0
+										$page=$config['typeConfig']['paginate']['page']-1;
+										// get the low range of the array
+										$low=$page*$limit;
+										// get the high range of the array
+										$high=$low+$limit-1;
+										// get the total number of results
+										$total=count($allContent);
+										for ($i=$low;$i<=$high; $i++)
+										{
+											if(isset($allContent[$i]))
+											{
+												if($total<=$high)
+												{
+													// should not show the paginator links
+													$filteredContent[]=$allContent[$i];	
+													end($filteredContent);
+													$key=key($filteredContent);
+													$filteredContent[$key]=array_merge($filteredContent[$key],array(
+														'showPaginate'		=> 'no'
+													));													
+												}
+												else
+												{
+													// there are more results and it is safe to show the paginator links
+													$filteredContent[]=$allContent[$i];
+													end($filteredContent);
+													$key=key($filteredContent);
+													$filteredContent[$key]=array_merge($filteredContent[$key],array(
+														'showPaginate'		=> 'yes'
+													));
+												}
+											}
+										}
+									}
+									else
 									{
-										
+										$filteredContent=$this->getNodesByContentTypeRef($config['typeConfig']['ref']);	
+									}
+									if (!count($filteredContent))
+									{	
 										return '';
 									}
 									//Multiple of the same content type.
@@ -355,7 +490,7 @@ namespace application\nutsNBolts\controller
 			{
 				return $return;
 			}
-			for ($i=1,$j=count($this->nodes); $i<$j; $i++)
+			for ($i=0,$j=count($this->nodes); $i<$j; $i++)
 			{
 				if ($this->nodes[$i]['content_type_id']==$result[0]['id'])
 				{
@@ -461,6 +596,31 @@ namespace application\nutsNBolts\controller
 		public function getFacebookConfig()
 		{
 			return $this->config->plugin->FaceBook->app_id;
+		}
+
+		public function getAllDates($id)
+		{
+			$dates=$this->plugin->Blog->getAllDates(2);
+			$dates=array_reverse($dates);
+			$allDates=array();
+			$countedDates=array();
+			foreach($dates AS $key=>$date)
+			{
+				$allDates[]=$newDate=$date['date_created']->format("F Y");
+			}
+
+			foreach($allDates AS $key=>$secondDate)
+			{
+				if (isset($countedDates[$secondDate]))
+				{
+					$countedDates[$secondDate]+=1;
+				}
+				else
+				{
+					$countedDates[$secondDate]=1;
+				}
+			}
+			return $countedDates;
 		}
 	}
 }
