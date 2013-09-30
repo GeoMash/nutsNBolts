@@ -38,6 +38,7 @@ namespace application\nutsNBolts\controller
 				$this->execHook('onInitPage',$this->page);
 				
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
+				$this->view->setVar('page',$this->page);
 				$this->view->setVar('NS_ENV',NS_ENV);
 				$this->view->setVar('SITEPATH','/sites/'.$this->getSite()['ref'].'/');
 				$this->view->setVar('URI',$this->request->getNodes());
