@@ -12,12 +12,13 @@ namespace application\nutsNBolts\widget\base
 	
 	abstract class Widget extends Component implements Loadable
 	{
+		private $application		=null;
+		private $properties			=array();
+
 		public $mainTemplateFile	='widget.tpl.php';
 		public $configTemplateFile	='config.tpl.php';
 		public $widgetJSFile		='Main.js';
 		public $configJSFile		='Config.js';
-		
-		private $properties=array();
 		
 		public function __construct()
 		{
