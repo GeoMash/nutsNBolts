@@ -36,7 +36,7 @@ namespace application\nutsNBolts\controller
 
 				$this->loadHooks($this->page['ref']);
 				$this->execHook('onInitPage',$this->page);
-				
+
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
 				$this->view->setVar('page',$this->page);
 				$this->view->setVar('NS_ENV',NS_ENV);
@@ -637,11 +637,12 @@ namespace application\nutsNBolts\controller
 
 		private $hookContainers=array();
 
-		public function loadHooks($ref=null)
+		public function loadHooks($ref)
 		{
 			$ref=ucfirst($ref);
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
+				$this->loadGlobalHooks($applicationRef);
 				$className=$this->application->getNamespace($applicationRef).'\hook\\'.$ref;
 				$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
 				if (is_file($path))
@@ -649,12 +650,38 @@ namespace application\nutsNBolts\controller
 					require_once($path);
 					if (class_exists($className))
 					{
-						$this->hookContainers[$ref]=new $className($this,$this->view);
+						if (!is_array($this->hookContainers[$applicationRef]))
+						{
+							$this->hookContainers[$applicationRef]=array();
+						}
+						$this->hookContainers[$applicationRef][$ref]=new $className($this,$this->view);
 					}
 					else
 					{
 						//TODO: Throw exception re bad hook class name
 					}
+				}
+			}
+		}
+
+		private function loadGlobalHooks($applicationRef)
+		{
+			$className=$this->application->getNamespace($applicationRef).'\hook\_Global';
+			$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.'_Global.php';
+			if (is_file($path))
+			{
+				require_once($path);
+				if (class_exists($className))
+				{
+					if (!is_array($this->hookContainers[$applicationRef]))
+					{
+						$this->hookContainers[$applicationRef]=array();
+					}
+					$this->hookContainers[$applicationRef]['_Global']=new $className($this,$this->view);
+				}
+				else
+				{
+					//TODO: Throw exception re bad hook class name
 				}
 			}
 		}
@@ -668,11 +695,18 @@ namespace application\nutsNBolts\controller
 			{
 				$xargs[]=&$args[$ci];
 			}
-			foreach ($this->hookContainers as $container)
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
-				if (method_exists($container,$hook))
+				if (!isset($this->hookContainers[$applicationRef]))
 				{
-					call_user_func_array(array($container,$hook),$xargs);
+					continue;
+				}
+				foreach ($this->hookContainers[$applicationRef] as $container)
+				{
+					if (method_exists($container,$hook))
+					{
+						call_user_func_array(array($container,$hook),$xargs);
+					}
 				}
 			}
 			for ($ci=1,$cj=func_num_args(); $ci<$cj; $ci++)
