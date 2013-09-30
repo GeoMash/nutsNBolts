@@ -4698,7 +4698,7 @@ wysihtml5.dom.observe = function(element, eventNames, handler) {
  * @param {Object} [rules] List of rules for rewriting the HTML, if there's no rule for an element it will
  *    be converted to a "span". Each rule is a key/value pair where key is the tag to convert, and value the
  *    desired substitution.
- * @param {Object} context Document object in which to parse the html, needed to sandbox the parsing
+ * @param {Object} context Document object in which to parse the html, needed to home the parsing
  *
  * @return {Element|String} Depends on the elementOrHtml parameter. When html then the sanitized html as string elsewise the element.
  *
@@ -5298,19 +5298,19 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
  *  - Secure in MSIE 6+, but only when the user hasn't made changes to his security level "restricted"
  *  - Partially secure in other browsers (Firefox, Opera, Safari, Chrome, ...)
  *
- * Please note that this class can't benefit from the HTML5 sandbox attribute for the following reasons:
+ * Please note that this class can't benefit from the HTML5 home attribute for the following reasons:
  *    - sandboxing doesn't work correctly with inlined content (src="javascript:'<html>...</html>'")
  *    - sandboxing of physical documents causes that the dom isn't accessible anymore from the outside (iframe.contentWindow, ...)
  *    - setting the "allow-same-origin" flag would fix that, but then still javascript and dom events refuse to fire
  *    - therefore the "allow-scripts" flag is needed, which then would deactivate any security, as the js executed inside the iframe
- *      can do anything as if the sandbox attribute wasn't set
+ *      can do anything as if the home attribute wasn't set
  *
- * @param {Function} [readyCallback] Method that gets invoked when the sandbox is ready
+ * @param {Function} [readyCallback] Method that gets invoked when the home is ready
  * @param {Object} [config] Optional parameters
  *
  * @example
- *    new wysihtml5.dom.Sandbox(function(sandbox) {
- *      sandbox.getWindow().document.body.innerHTML = '<img src=foo.gif onerror="alert(document.cookie)">';
+ *    new wysihtml5.dom.Sandbox(function(home) {
+ *      home.getWindow().document.body.innerHTML = '<img src=foo.gif onerror="alert(document.cookie)">';
  *    });
  */
 (function(wysihtml5) {
@@ -5381,15 +5381,15 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
     },
 
     /**
-     * Creates the sandbox iframe
+     * Creates the home iframe
      *
      * Some important notes:
-     *  - We can't use HTML5 sandbox for now:
+     *  - We can't use HTML5 home for now:
      *    setting it causes that the iframe's dom can't be accessed from the outside
      *    Therefore we need to set the "allow-same-origin" flag which enables accessing the iframe's dom
      *    But then there's another problem, DOM events (focus, blur, change, keypress, ...) aren't fired.
      *    In order to make this happen we need to set the "allow-scripts" flag.
-     *    A combination of allow-scripts and allow-same-origin is almost the same as setting no sandbox attribute at all.
+     *    A combination of allow-scripts and allow-same-origin is almost the same as setting no home attribute at all.
      *  - Chrome & Safari, doesn't seem to support sandboxing correctly when the iframe's html is inlined (no physical document)
      *  - IE needs to have the security="restricted" attribute set before the iframe is 
      *    inserted into the dom tree
@@ -5402,7 +5402,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
     _createIframe: function() {
       var that   = this,
           iframe = doc.createElement("iframe");
-      iframe.className = "wysihtml5-sandbox";
+      iframe.className = "wysihtml5-home";
       wysihtml5.dom.setAttributes({
         "security":           "restricted",
         "allowtransparency":  "true",
@@ -9388,7 +9388,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
     parserRules:          { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
     // Parser method to use when the user inserts content via copy & paste
     parser:               wysihtml5.dom.parse,
-    // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
+    // Class name which should be set on the contentEditable element in the created home iframe, can be styled via the 'stylesheets' option
     composerClassName:    "wysihtml5-editor",
     // Class name to add to the body when the wysihtml5 editor is supported
     bodyClassName:        "wysihtml5-supported",

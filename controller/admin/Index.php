@@ -98,7 +98,7 @@ namespace application\nutsNBolts\controller\admin
 					exit();
 				}
 			}
-			//Chek for action.
+			//Check for action.
 			$action	=$this->request->node(2);
 			$args	=array();
 			$node	=3;

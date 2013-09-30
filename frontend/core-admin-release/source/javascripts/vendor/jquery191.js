@@ -29,7 +29,7 @@ var
 	// For `typeof node.method` instead of `node.method !== undefined`
 	core_strundefined = typeof undefined,
 
-	// Use the correct document accordingly with window argument (sandbox)
+	// Use the correct document accordingly with window argument (home)
 	document = window.document,
 	location = window.location,
 
