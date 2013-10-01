@@ -673,7 +673,7 @@ namespace application\nutsNBolts\controller
 				require_once($path);
 				if (class_exists($className))
 				{
-					if (!is_array($this->hookContainers[$applicationRef]))
+					if ( isset($this->hookContainers[$applicationRef]) && !is_array($this->hookContainers[$applicationRef]))
 					{
 						$this->hookContainers[$applicationRef]=array();
 					}
