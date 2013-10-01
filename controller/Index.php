@@ -665,7 +665,7 @@ namespace application\nutsNBolts\controller
 						{
 							$this->hookContainers[$applicationRef]=array();
 						}
-						$this->hookContainers[$applicationRef][$ref]=new $className($this,$this->view);
+						$this->hookContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
 					}
 					else
 					{
@@ -688,7 +688,7 @@ namespace application\nutsNBolts\controller
 					{
 						$this->hookContainers[$applicationRef]=array();
 					}
-					$this->hookContainers[$applicationRef]['_Global']=new $className($this,$this->view);
+					$this->hookContainers[$applicationRef]['_Global']=new $className($this->model,$this->view);
 				}
 				else
 				{
@@ -712,7 +712,7 @@ namespace application\nutsNBolts\controller
 					{
 						$this->hookContainers[$applicationRef]=array();
 					}
-					$this->hookContainers[$applicationRef]['_Forms']=new $className($this,$this->view);
+					$this->hookContainers[$applicationRef]['_Forms']=new $className($this->model,$this->view);
 				}
 				else
 				{
