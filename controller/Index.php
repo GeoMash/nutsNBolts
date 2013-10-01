@@ -27,6 +27,11 @@ namespace application\nutsNBolts\controller
 			$applicationName=strtolower(ObjectHelper::getBaseClassName(get_class($binding['application'])));
 			$path			=$this->getPath();
 			$page			=$this->model->PageMap->getPageFromPath($path);
+
+			$pageRef=isset($page['ref'])?$page['ref']:null;
+
+			$this->loadHooks($pageRef);
+
 			if ($page)
 			{
 				$this->page		=$page;
@@ -34,7 +39,6 @@ namespace application\nutsNBolts\controller
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
 				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 
-				$this->loadHooks($this->page['ref']);
 				$this->execHook('onInitPage',$this->page);
 
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
@@ -168,6 +172,11 @@ namespace application\nutsNBolts\controller
 			else
 			{
 				$this->view->setTemplate('site/404');
+			}
+			$requestVars=$this->request->getAll();
+			if (count($requestVars))
+			{
+				$this->execHook('onFormSubmit',$requestVars,$this->page,$this->view);
 			}
 			$this->view->render();
 			exit();
@@ -637,12 +646,14 @@ namespace application\nutsNBolts\controller
 
 		private $hookContainers=array();
 
-		public function loadHooks($ref)
+		public function loadHooks($ref=null)
 		{
 			$ref=ucfirst($ref);
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
 				$this->loadGlobalHooks($applicationRef);
+				$this->loadFormHooks($applicationRef);
+				if (!$ref)continue;
 				$className=$this->application->getNamespace($applicationRef).'\hook\\'.$ref;
 				$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
 				if (is_file($path))
@@ -678,6 +689,30 @@ namespace application\nutsNBolts\controller
 						$this->hookContainers[$applicationRef]=array();
 					}
 					$this->hookContainers[$applicationRef]['_Global']=new $className($this,$this->view);
+				}
+				else
+				{
+					//TODO: Throw exception re bad hook class name
+				}
+			}
+		}
+
+
+
+		private function loadFormHooks($applicationRef)
+		{
+			$className=$this->application->getNamespace($applicationRef).'\hook\_Forms';
+			$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.'_Forms.php';
+			if (is_file($path))
+			{
+				require_once($path);
+				if (class_exists($className))
+				{
+					if ( isset($this->hookContainers[$applicationRef]) && !is_array($this->hookContainers[$applicationRef]))
+					{
+						$this->hookContainers[$applicationRef]=array();
+					}
+					$this->hookContainers[$applicationRef]['_Forms']=new $className($this,$this->view);
 				}
 				else
 				{
