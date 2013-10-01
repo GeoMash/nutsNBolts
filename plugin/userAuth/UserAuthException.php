@@ -1,5 +1,5 @@
 <?php
-namespace application\wtp\plugin\userAuth
+namespace application\nutsNBolts\plugin\userAuth
 {
 	use nutshell\core\exception\NutshellException;
 

@@ -1,12 +1,12 @@
 <?php
-namespace application\wtp\plugin\userAuth
+namespace application\nutsNBolts\plugin\userAuth
 {
 	use nutshell\Nutshell;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Native;
 	use nutshell\behaviour\Singleton;
-	use application\wtp\model\User;
-	use application\wtp\plugin\userAuth\UserAuthException;
+	use application\nutsNBolts\model\User;
+	use application\nutsNBolts\plugin\userAuth\UserAuthException;
 
 	
 	/**
@@ -31,6 +31,11 @@ namespace application\wtp\plugin\userAuth
 		public function init()
 		{
 			
+		}
+		
+		public function test()
+		{
+			return "salam";
 		}
 
 		private function handleRecord($record)

@@ -40,7 +40,7 @@ namespace application\nutsNBolts\base
 			{
 				case 'plugin':
 				{
-					$this->nutshell->setConfigPointer(ObjectHelper::getBaseClassName(get_called_class()));
+					$this->nutshell->setConfigPointer('NutsNBolts');
 					return $this->nutshell->plugin;
 				}
 				default:
