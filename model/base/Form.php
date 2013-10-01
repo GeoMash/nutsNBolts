@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 18/08/2013 
+ * @since 01/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -26,8 +26,8 @@ namespace application\nutsNBolts\model\base
 			'ref' => 'varchar(100) NOT NULL ' ,
 			'name' => 'varchar(100) NOT NULL ' ,
 			'description' => 'varchar(255) NOT NULL ' ,
-			'message_success' => 'text NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL ' ,
+			'message_success' => 'text' 
 		);
 	}
 }

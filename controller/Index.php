@@ -7,6 +7,7 @@ namespace application\nutsNBolts\controller
 
 	class Index extends Controller
 	{
+		
 		private $validZones=array
 		(
 			'template',

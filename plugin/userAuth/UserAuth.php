@@ -33,11 +33,6 @@ namespace application\nutsNBolts\plugin\userAuth
 			
 		}
 		
-		public function test()
-		{
-			return "salam";
-		}
-
 		private function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
