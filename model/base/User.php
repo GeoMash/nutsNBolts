@@ -6,7 +6,11 @@
  * Model Generator Plugin.
  * 
  * @package application-model
+<<<<<<< Updated upstream
  * @since 01/10/2013 
+=======
+ * @since 02/10/2013 
+>>>>>>> Stashed changes
  */
 namespace application\nutsNBolts\model\base
 {
@@ -30,7 +34,11 @@ namespace application\nutsNBolts\model\base
 			'date_created' => 'datetime NOT NULL ' ,
 			'date_lastlogin' => 'datetime NOT NULL ' ,
 			'date_lastactive' => 'datetime NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL ' ,
+			'phone' => 'varchar(50)' ,
+			'dob' => 'date' ,
+			'income_range' => 'varchar(20)' ,
+			'gender' => 'varchar(10)' 
 		);
 	}
 }
