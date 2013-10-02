@@ -216,16 +216,9 @@ HTML;
 			return false;
 		}
 
-		public function authenticate($email=null,$phone=null,$password=null)
+		public function authenticate($fieldName,$fieldValue,$password)
 		{
-			if($email)
-			{
-				$user		=$this->plugin->Mvc->model->User->read(array('email'=>$email));	
-			}
-			elseif($phone)
-			{
-				$user		=$this->plugin->Mvc->model->User->read(array('phone'=>$phone));
-			}
+			$user		=$this->plugin->Mvc->model->User->read(array("$fieldName"=>$fieldValue));
 			
 			if (isset($user[0]))
 			{
