@@ -104,6 +104,17 @@ namespace application\nutsNBolts\model
 			}
 			return false;
 		}
+		
+		public function updateLogin($email)
+		{
+			$query=<<<SQL
+			UPDATE user
+			SET date_lastlogin= NOW()
+			WHERE email="{$email}"
+SQL;
+
+echo $query;
+		}
 	}
 }
 ?>
