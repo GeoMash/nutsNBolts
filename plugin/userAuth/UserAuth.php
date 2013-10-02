@@ -216,21 +216,29 @@ HTML;
 			return false;
 		}
 
-		public function authenticate($email,$password)
+		public function authenticate($email=null,$phone=null,$password=null)
 		{
-			$user		=$this->plugin->Mvc->model->User->read(array('email'=>$email));
+			if($email)
+			{
+				$user		=$this->plugin->Mvc->model->User->read(array('email'=>$email));	
+			}
+			elseif($phone)
+			{
+				$user		=$this->plugin->Mvc->model->User->read(array('phone'=>$phone));
+			}
+			
 			if (isset($user[0]))
 			{
 				$userSalt	=$user[0]['salt'];
 				$systemSalt	=Nutshell::getInstance()->config->application->salt;
-				
-				$result	=$this->plugin->Mvc->model->User->read
+				$email		=$user[0]['email'];
+				$result		=$this->plugin->Mvc->model->User->read
 				(
 					array
 					(
-						'email'		=>$email,
-						'pin'	=>md5($systemSalt.$userSalt.$password),
-						'status'	=>1
+						'email'			=>$email,
+						'password'		=>md5($systemSalt.$userSalt.$password),
+						'status'		=>1
 					)
 				);
 				if (isset($result[0]))
@@ -240,10 +248,5 @@ HTML;
 			}
 			return false;
 		}
-
-		// public function seeSalt()
-		// {
-		// 	var_dump($this->config->salt);
-		// }
 	}
 }
