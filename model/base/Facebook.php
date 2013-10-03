@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 18/08/2013 
+ * @since 02/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -15,18 +15,13 @@ namespace application\nutsNBolts\model\base
 	class Facebook extends Base	
 	{
 		public $name		= 'facebook';
-		public $primary		= array('id');
-		public $primary_ai	= true;
+		public $primary		= array();
+		public $primary_ai	= false;
 		public $autoCreate	= false;
 		
 		public $columns = array
 		(
-			'id' => 'int(10) NOT NULL ' ,
-			'fb_uid' => 'int(30) NOT NULL ' ,
-			'email' => 'varchar(150)' ,
-			'firstName' => 'varchar(200)' ,
-			'lastName' => 'varchar(200)' ,
-			'gender' => 'varchar(15)' 
+
 		);
 	}
 }

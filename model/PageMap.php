@@ -14,9 +14,10 @@ namespace application\nutsNBolts\model
 			}
 			//Is there a URL matching this exact path?
 			$query=<<<SQL
-			SELECT page.*
+			SELECT page.*,page_type.name,page_type.ref
 			FROM page
 			LEFT JOIN page_map ON page_map.page_id=page.id
+			LEFT JOIN page_type ON page_type_id=page.page_type_id
 			WHERE page_map.url IN(?,?);
 SQL;
 			if ($this->db->select($query,array($path,$path.'/')))
@@ -40,9 +41,10 @@ SQL;
 			}
 			$regexp='('.implode(')|(',$checks).')';
 			$query=<<<SQL
-			SELECT page.*
+			SELECT page.*,page_type.name,page_type.ref
 			FROM page
 			LEFT JOIN page_map ON page_map.page_id=page.id
+			LEFT JOIN page_type ON page_type_id=page.page_type_id
 			WHERE page_map.url REGEXP('^{$regexp}\$')
 			ORDER BY LENGTH(page_map.url) DESC
 			LIMIT 1;

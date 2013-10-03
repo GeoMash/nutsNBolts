@@ -30,7 +30,7 @@ namespace application\nutsNBolts\controller\site
 				$redirectTo=$_SERVER['HTTP_REFERER'];  
 				$redirectTo=rtrim($redirectTo,'/').'/';
 				$files=$this->request->getFiles();
-				if ($files['upload']['error']==4)
+				if (!count(files) || $files['upload']['error']==4)
 				{
 					$this->redirect($redirectTo.'success');
 					exit();
@@ -40,7 +40,7 @@ namespace application\nutsNBolts\controller\site
 					$error=$this->request->getFileError('upload');
 					if (!$error)
 					{
-						$moveTo=APP_HOME.'nutsNBolts'._DS_.$this->config->application->d
+						$moveTo=APP_HOME.'nutsNBolts'._DS_.$this->config->application->dataDir.'formUploads'._DS_.$id._DS_;
 						if ($this->request->moveFile('upload',$moveTo))
 						{
 							$this->redirect($redirectTo.'success');

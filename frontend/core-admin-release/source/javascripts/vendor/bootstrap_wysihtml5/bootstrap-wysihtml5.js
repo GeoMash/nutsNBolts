@@ -128,7 +128,7 @@
 
         window.editor = this.editor;
 
-        $('iframe.wysihtml5-sandbox').each(function(i, el){
+        $('iframe.wysihtml5-home').each(function(i, el){
             $(el.contentWindow).off('focus.wysihtml5').on({
                 'focus.wysihtml5' : function(){
                     $('li.dropdown').removeClass('open');

@@ -6,6 +6,9 @@
 			<span>Dashboard</span>
 		</a>
 	</li>
+	<?php
+	if ($tpl->challangeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR','BLOGGER'))):
+	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='content')print 'active'; ?>">
 		<span class="glow"></span>
 		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#content-subs">
@@ -19,6 +22,10 @@
 			<?php $tpl->navContentTypes(); ?>
 		</ul>
 	</li>
+	<?php
+	endif;
+	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurepages')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#pages-config-subs">
@@ -51,6 +58,10 @@
 			</li>
 		</ul>
 	</li>
+	<?php
+	endif;
+	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurecontent')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#content-config-subs">
@@ -78,6 +89,10 @@
 			</li>
 		</ul>
 	</li>
+	<?php
+	endif;
+	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">
 		<span class="glow"></span>
 		<a data-toggle="collapse" href="#settings-subs">
@@ -110,4 +125,5 @@
 			</li>
 		</ul>
 	</li>
+	<?php endif; ?>
 </ul>
