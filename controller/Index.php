@@ -616,26 +616,31 @@ namespace application\nutsNBolts\controller
 
 		public function getAllDates($id)
 		{
-			$dates=$this->plugin->Blog->getAllDates(2);
-			$dates=array_reverse($dates);
-			$allDates=array();
-			$countedDates=array();
-			foreach($dates AS $key=>$date)
+			$countedDates=null;
+			$dates=$this->plugin->Blog->getAllDates($id);
+			if($dates)
 			{
-				$allDates[]=$newDate=$date['date_created']->format("F Y");
+				$dates=array_reverse($dates);
+				$allDates=array();
+				$countedDates=array();
+				foreach($dates AS $key=>$date)
+				{
+					$allDates[]=$newDate=$date['date_created']->format("F Y");
+				}
+
+				foreach($allDates AS $key=>$secondDate)
+				{
+					if (isset($countedDates[$secondDate]))
+					{
+						$countedDates[$secondDate]+=1;
+					}
+					else
+					{
+						$countedDates[$secondDate]=1;
+					}
+				}				
 			}
 
-			foreach($allDates AS $key=>$secondDate)
-			{
-				if (isset($countedDates[$secondDate]))
-				{
-					$countedDates[$secondDate]+=1;
-				}
-				else
-				{
-					$countedDates[$secondDate]=1;
-				}
-			}
 			return $countedDates;
 		}
 
