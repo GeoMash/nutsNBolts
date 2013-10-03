@@ -168,7 +168,7 @@ HTML;
 		{
 			$html=array();
 			$contentTypes=$this->model->ContentType->read();
-			print_r($contentTypes);exit();
+//			print_r($contentTypes);exit();
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
 				if ($this->userCanAccessContentType($contentTypes[$i]))
@@ -326,6 +326,7 @@ HTML;
 
 		public function userCanAccessContentType($contentType)
 		{
+			return true;
 			if ($this->challangeRole($contentType['roles']))
 			{
 //				if (!count($contentType['users']))
