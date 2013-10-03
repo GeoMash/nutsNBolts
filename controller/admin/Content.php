@@ -102,9 +102,9 @@ namespace application\nutsNBolts\controller\admin
 			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
 			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
 
-			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
 
-			if (!$this->userCanAccessContentType($contentType[0]))
+			$contentTypeForPermCheck=$this->model->ContentType->read($node[0]['content_type_id']);
+			if (!$this->userCanAccessContentType($contentTypeForPermCheck[0]))
 			{
 				$this->plugin->Notification->setError('You don\'t have permission to edit this content item!');
 				$this->redirect('/admin/dashboard/');
@@ -122,6 +122,7 @@ namespace application\nutsNBolts\controller\admin
 				}
 			}
 
+			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
 			$parts		=array();
 			
 			for ($i=0,$j=count($contentType); $i<$j; $i++)
