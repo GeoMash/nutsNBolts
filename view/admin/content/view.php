@@ -7,7 +7,9 @@
 					<ul class="box-toolbar">
 						<li>
 							<a href="/admin/content/add/<?php $tpl->contentTypeId; ?>">
+								<?php if ($tpl->get('canAddContent')): ?>
 								<span class="triangle-button green"><i class="icon-plus"></i></span>
+								<?php endif; ?>
 							</a>
 						</li>
 					</ul>

@@ -168,7 +168,6 @@ HTML;
 		{
 			$html=array();
 			$contentTypes=$this->model->ContentType->read();
-//			print_r($contentTypes);exit();
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
 				if ($this->userCanAccessContentType($contentTypes[$i]))
@@ -326,17 +325,23 @@ HTML;
 
 		public function userCanAccessContentType($contentType)
 		{
-			return true;
 			if ($this->challangeRole($contentType['roles']))
 			{
-//				if (!count($contentType['users']))
-//				{
-//					return true;
-//				}
-//				else if ()
-//				{
-//
-//				}
+				if (!count($contentType['users']))
+				{
+					return true;
+				}
+				else
+				{
+					$user=$this->getUser();
+					for ($i=0,$j=count($contentType['users']); $i<$j; $i++)
+					{
+						if ($contentType['users'][$i]['id']==$user['id'])
+						{
+							return true;
+						}
+					}
+				}
 			}
 			return false;
 		}

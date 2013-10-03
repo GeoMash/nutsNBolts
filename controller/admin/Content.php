@@ -23,6 +23,7 @@ namespace application\nutsNBolts\controller\admin
 		public function view($typeID)
 		{
 			$this->typeID=$typeID;
+
 			$contentType=$this->model->ContentType->read($this->typeID);
 			
 			$this->addBreadcrumb('Content','icon-edit','content');
@@ -30,7 +31,7 @@ namespace application\nutsNBolts\controller\admin
 			$this->setContentView('admin/content/view');
 			$this->view->setVar('contentTypeId',$this->typeID);
 			$this->view->setVar('tableHeaderText',$contentType[0]['name']);
-			
+			$this->view->setVar('canAddContent',false);
 			$this->view->getContext()
 				->registerCallback
 				(
@@ -40,9 +41,9 @@ namespace application\nutsNBolts\controller\admin
 						print $this->generateContentRows();
 					}
 				);
-					
-			if (!$this->challangeRole($contentType[0]['roles']))
+			if (!$this->userCanAccessContentType($contentType[0]))
 			{
+				$this->view->setVar('canAddContent',false);
 				$this->plugin->Notification->setError('You don\'t have permission to view this!');
 			}
 			$this->view->render();
@@ -50,9 +51,14 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function add($typeID)
 		{
+			$contentType=$this->model->ContentType->read($this->request->node(3));
+			if (!$this->userCanAccessContentType($contentType[0]))
+			{
+				$this->plugin->Notification->setError('You don\'t have permission to add content to this!');
+				$this->redirect('/admin/content/view/'.$typeID);
+			}
 			if (!$this->request->get('title'))
 			{
-				$contentType=$this->model->ContentType->read($this->request->node(3));
 				$this->generateContentParts($typeID);
 				$this->setContentView('admin/content/addEdit');
 				$this->addBreadcrumb('Content','icon-edit','content');
@@ -88,6 +94,18 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function edit($id)
 		{
+			$node		=$this->model->Node->read(array('id'=>$id));
+			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
+			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
+			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
+
+			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
+
+			if (!$this->userCanAccessContentType($contentType[0]))
+			{
+				$this->plugin->Notification->setError('You don\'t have permission to edit this content item!');
+				$this->redirect('/admin/dashboard/');
+			}
 			unset($this->plugin->Session->returnToAction);
 			if ($this->request->get('id'))
 			{
@@ -100,12 +118,7 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			$node		=$this->model->Node->read(array('id'=>$id));
-			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
-			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
-			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
-			
-			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
+
 			$parts		=array();
 			
 			for ($i=0,$j=count($contentType); $i<$j; $i++)
