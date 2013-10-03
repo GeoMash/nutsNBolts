@@ -25,6 +25,10 @@
 		},
 		"plugin":
 		{
+			"UserAuth":
+			{
+				"salt":	"Squirrels love nuts!"
+			},
 			"Session":
 			{
 				"storage": 		"db",
