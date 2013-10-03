@@ -10,7 +10,21 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function init()
 		{
-			$this->typeID		=$this->request->lastNode();
+			switch ($this->request->node(2))
+			{
+				case 'view':
+				case 'add':
+				{
+					$this->typeID	=$this->request->lastNode();
+					break;
+				}
+				case 'edit':
+				{
+					$node			=$this->model->Node->read(array('id'=>$this->request->lastNode()));
+					$this->typeID	=$node[0]['content_type_id'];
+					break;
+				}
+			}
 			$this->contentType	=$this->model->ContentType->read($this->typeID)[0];
 		}
 		
