@@ -168,9 +168,10 @@ HTML;
 		{
 			$html=array();
 			$contentTypes=$this->model->ContentType->read();
+			print_r($contentTypes);exit();
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
-				if ($this->challangeRole($contentTypes[$i]['roles']))
+				if ($this->userCanAccessContentType($contentTypes[$i]))
 				{
 					$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
 					$html[]	=<<<HTML
@@ -318,6 +319,22 @@ HTML;
 				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
 				{
 					return true;
+				}
+			}
+			return false;
+		}
+
+		public function userCanAccessContentType($contentType)
+		{
+			if ($this->challangeRole($contentType['roles']))
+			{
+				if (!count($contentType['users']))
+				{
+					return true;
+				}
+				else if ()
+				{
+
 				}
 			}
 			return false;
