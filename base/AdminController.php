@@ -325,6 +325,7 @@ HTML;
 
 		public function userCanAccessContentType($contentType)
 		{
+			if ($this->isSuper())return true;
 			if ($this->challangeRole($contentType['roles']))
 			{
 				if (!count($contentType['users']))
