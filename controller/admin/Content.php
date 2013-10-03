@@ -31,7 +31,6 @@ namespace application\nutsNBolts\controller\admin
 			$this->setContentView('admin/content/view');
 			$this->view->setVar('contentTypeId',$this->typeID);
 			$this->view->setVar('tableHeaderText',$contentType[0]['name']);
-			$this->view->setVar('canAddContent',false);
 			$this->view->getContext()
 				->registerCallback
 				(
@@ -45,6 +44,10 @@ namespace application\nutsNBolts\controller\admin
 			{
 				$this->view->setVar('canAddContent',false);
 				$this->plugin->Notification->setError('You don\'t have permission to view this!');
+			}
+			else
+			{
+				$this->view->setVar('canAddContent',true);
 			}
 			$this->view->render();
 		}
