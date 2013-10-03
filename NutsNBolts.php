@@ -22,6 +22,8 @@ namespace application\nutsNBolts
 		const VERSION_STAGE				='dev';
 		const VERSION_STAGE_NUM			=0;
 		
+		const USER_SUPER				=-100;
+		
 		private $siteBindings=array();
 		
 		public $widget=null;
