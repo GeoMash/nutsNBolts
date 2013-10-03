@@ -150,7 +150,7 @@ namespace application\nutsNBolts\plugin\userAuth
 				{
 					throw new UserAuthException(
 						UserAuthException::PASSWORDS_DO_NOT_MATCH,
-						$this->plugin->Logger()->warn($e->__toString())
+						$this->plugin->Logger()->warn(UserAuthException::PASSWORDS_DO_NOT_MATCH)
 						);
 				}
 
@@ -164,7 +164,7 @@ namespace application\nutsNBolts\plugin\userAuth
 				{
 					throw new UserAuthException(
 						UserAuthException::REQUEST_FAILED, 
-						$this->plugin->Logger()->warn($e->__toString())
+						$this->plugin->Logger()->warn(UserAuthException::REQUEST_FAILED)
 						);
 				}
 			}
