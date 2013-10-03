@@ -328,14 +328,14 @@ HTML;
 		{
 			if ($this->challangeRole($contentType['roles']))
 			{
-				if (!count($contentType['users']))
-				{
-					return true;
-				}
-				else if ()
-				{
-
-				}
+//				if (!count($contentType['users']))
+//				{
+//					return true;
+//				}
+//				else if ()
+//				{
+//
+//				}
 			}
 			return false;
 		}
