@@ -26,7 +26,7 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/alliance/public/_collections/",
+				"completed_dir":	"/datastore/www/alliance/current/public/_collections/",
 				"thumbnails":
 				[
 					{

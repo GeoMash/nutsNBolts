@@ -73,7 +73,7 @@
 			},
 			"Email":
 			{
-				"sendConfig": 
+				"sendConfig":
 				{
 					"smtp": 
 					{
@@ -113,8 +113,8 @@
 			},
 			"Plupload":
 			{
-				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/praxisbt/alliance/biz-smart-website/public/_collections/",
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/alliance/current/public/_collections/",
 				"thumbnails":
 				[
 					{
