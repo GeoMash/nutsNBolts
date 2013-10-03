@@ -13,6 +13,7 @@ namespace application\nutsNBolts\model
 			for ($i=0,$j=count($result); $i<$j; $i++)
 			{
 				$result[$i]['roles']=$this->getRoles($result[$i]['id']);
+				$result[$i]['users']=$this->getUsers($result[$i]['id']);
 			}
 			// var_dump($result);exit();
 			return $result;
@@ -242,6 +243,38 @@ SQL;
 				else
 				{
 					throw new NutshellException('Ooops! Root role has not been configured.');
+				}
+			}
+			return null;
+		}
+
+		public function getUsers($contentTypeId)
+		{
+			if ($contentTypeId!=NutsNBolts::USER_SUPER)
+			{
+				$query=<<<SQL
+SELECT user.*
+FROM content_type_user
+LEFT JOIN user ON user.id=content_type_user.user_id
+WHERE content_type_id=?
+SQL;
+				if ($this->db->select($query,array($contentTypeId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+			}
+			else
+			{
+				$query='SELECT * FROM user WHERE id=-100;';
+				if ($this->db->select($query,array($contentTypeId)))
+				{
+					$records=$this->db->result('assoc');
+					return isset($records)?$records:null;
+				}
+				else
+				{
+					throw new NutshellException('Ooops! Root user has not been configured.');
 				}
 			}
 			return null;
