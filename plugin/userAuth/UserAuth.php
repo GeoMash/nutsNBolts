@@ -148,10 +148,11 @@ namespace application\nutsNBolts\plugin\userAuth
 			{
 				if ($array['password']!=$array['password_confirm'])
 				{
-					throw new UserAuthException(
+					throw new UserAuthException
+					(
 						UserAuthException::PASSWORDS_DO_NOT_MATCH,
 						$this->plugin->Logger()->warn(UserAuthException::PASSWORDS_DO_NOT_MATCH)
-						);
+					);
 				}
 
 				unset($array['password_confirm']);
@@ -162,10 +163,11 @@ namespace application\nutsNBolts\plugin\userAuth
 				}
 				else
 				{
-					throw new UserAuthException(
-						UserAuthException::REQUEST_FAILED, 
+					throw new UserAuthException
+					(
+						UserAuthException::REQUEST_FAILED,
 						$this->plugin->Logger()->warn(UserAuthException::REQUEST_FAILED)
-						);
+					);
 				}
 			}
 		}
