@@ -24,7 +24,7 @@ namespace application\nutsNBolts\base
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
-			
+
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
@@ -145,7 +145,7 @@ HTML;
 				}
 				else
 				{
-					$href.=$this->breadcrumbs[$i]['urlNode'].'/';
+					$href=$this->breadcrumbs[$i]['urlNode'].'/';
 				}
 				$html[]=str_replace
 				(
