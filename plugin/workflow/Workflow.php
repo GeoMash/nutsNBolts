@@ -6,9 +6,14 @@ namespace application\nutsNBolts\plugin\workflow
 
 	class Workflow extends Plugin implements Singleton
 	{
+		private $db=null;
+
 		public function init()
 		{
-
+			if ($connection=Nutshell::getInstance()->config->plugin->Mvc->connection)
+			{
+				$this->db=$this->plugin->Db->{$connection};
+			}
 		}
 
 		public function getWorkflowOptions($workflowId=0)
