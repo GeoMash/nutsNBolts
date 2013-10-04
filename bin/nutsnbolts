@@ -21,7 +21,7 @@ namespace
 	function bootstrap()
 	{
 		Nutshell::setApplictionPath(__DIR__.'/../../');
-		Nutshell::registerDefaultConfig('Wtp');
+		Nutshell::registerDefaultConfig('nutsNBolts');
 		
 		Nutshell::getInstance()->application->NutsNBolts->exec();
 	}
@@ -30,5 +30,5 @@ namespace
 	 * auto-initiate. Nutshell will detect our custom bootstrap
 	 * and execute it.
 	 */
-	require __DIR__ . '/../../../nutshell/Nutshell.php';
+	require __DIR__ . '/../../../lib/nutshell/Nutshell.php';
 }
