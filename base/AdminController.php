@@ -314,15 +314,7 @@ HTML;
 		
 		public function isSuper()
 		{
-			$user=$this->getUser();
-			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
-			{
-				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
-				{
-					return true;
-				}
-			}
-			return false;
+			return $this->plugin->UserAuth->isSuper();
 		}
 
 		public function userCanAccessContentType($contentType)
