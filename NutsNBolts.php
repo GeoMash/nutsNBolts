@@ -15,11 +15,11 @@ namespace application\nutsNBolts
 	 */
 	class NutsNBolts extends Application
 	{
-		const VERSION					='1.0.0';
+		const VERSION					='1.1.0-dev';
 		const VERSION_MAJOR				=1;
 		const VERSION_MINOR				=0;
 		const VERSION_MICRO				=0;
-		const VERSION_STAGE				='';
+		const VERSION_STAGE				='dev';
 		const VERSION_STAGE_NUM			=0;
 		
 		const USER_SUPER				=-100;
