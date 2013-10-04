@@ -41,6 +41,14 @@
 										<input type="text" name="ref" value="<?php $tpl->ref; ?>">
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Workflow</label>
+									<div class="controls">
+										<select name="workflow_id">
+											<?php $tpl->getWorkflowOptions($tpl->get('workflow_id')); ?>
+										</select>
+									</div>
+								</div>
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">
