@@ -7,6 +7,15 @@ namespace application\nutsNBolts\model
 	
 	class Node extends NodeBase	
 	{
+		const STATUS_SAVED		=0;
+		const STATUS_SUBMITTED	=1;
+		const STATUS_PUBLISHED	=2;
+		const STATUS_DELETED	=3;
+
+
+
+
+
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
