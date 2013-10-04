@@ -28,5 +28,23 @@ namespace application\nutsNBolts\plugin\workflow
 			}
 			return implode('',$html);
 		}
+
+		public function getTransitionsForStep($stepId,$user)
+		{
+			$return	=array();
+			$roleIds=array_column($user['roles'],'id');
+			$query	=<<<SQL
+SELECT workflow_step_transition.*
+FROM workflow_step_transition
+LEFT JOIN workflow_transition_role ON workflow_transition_role.transition_id=workflow_step_transition.id
+WHERE from_step_id=?
+AND workflow_transition_role.role_id IN(?)
+SQL;
+			if ($this->db->select($query))
+			{
+				$return=$this->db->result('assoc',array($stepId,$roleIds));
+			}
+			return $return;
+		}
 	}
 }
