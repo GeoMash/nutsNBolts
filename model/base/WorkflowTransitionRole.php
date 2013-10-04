@@ -12,9 +12,9 @@ namespace application\nutsNBolts\model\base
 {
 	use application\nutsNBolts\model\common\Base;
 	
-	class WorklfowTransitionRole extends Base	
+	class WorkflowTransitionRole extends Base
 	{
-		public $name		= 'worklfow_transition_role';
+		public $name		= 'workflow_transition_role';
 		public $primary		= array('id');
 		public $primary_ai	= true;
 		public $autoCreate	= false;
