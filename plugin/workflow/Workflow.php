@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\plugin\workflow
 {
+	use nutshell\Nutshell;
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
 
