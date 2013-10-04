@@ -25,10 +25,12 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 
+			$this->plugin->UserAuth();
+
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
-			if ($this->isAuthenticated())
+			if ($this->plugin->UserAuth->isAuthenticated())
 			{
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
@@ -37,7 +39,7 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
-				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
+				$this->user=$this->plugin->UserAuth->getUser();
 				$this->view->setVar('user',$this->user);
 				$this->show404();
 				
