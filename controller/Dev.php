@@ -29,11 +29,13 @@ namespace application\nutsnbolts\controller
 			$this->guard();
 			// $db=Nutshell::getInstance()->config->plugin->Db->connections->{Nutshell::getInstance()->config->plugin->Mvc->connection}->database;
 			// die(Nutshell::getInstance()->config->plugin->Mvc->connection);
-			$db=$this->plugin->Db->{Nutshell::getInstance()->config->plugin->Mvc->connection};
+			$connection=Nutshell::getInstance()->config->plugin->Mvc->connection;
+			$db=$this->plugin->Db->{$connection};
 			// var_dump(get_class($db));
 			// Get list of Table Names
 			$query = "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = ?";
-			$db->select($query,array(Nutshell::getInstance()->config->plugin->Mvc->connection));
+//			print Nutshell::getInstance()->config->plugin->Db->connections->prettyPrint();exit();
+			$db->select($query,array(Nutshell::getInstance()->config->plugin->Db->connections->{$connection}->database));
 			$tables = $db->result('assoc');
 			$models = array();
 			foreach($tables as $tableData)
@@ -42,24 +44,24 @@ namespace application\nutsnbolts\controller
 				$modelName = StringHelper::formatModelName($tableName);
 				$models[$tableName] = $modelName;
 			}
-			
+
 			// Get the Model Generator, configure it
 			$generator = $this->plugin->ModelGenerator;
 			$generator->setBaseClass('Base');
 			$generator->setAppliacationNamespace('application\\nutsNBolts\\');
 			$generator->setBaseClassNamespace('application\\nutsNBolts\\model\\common\\');
-			
+
 			// Define the location to put the generated models
 			$modelsFolder = APP_HOME . _DS_ . 'nutsNBolts'._DS_.'model';
 			$subfolder = _DS_ . 'base';
-			
+
 			foreach($models as $tableName => $modelName)
 			{
 				$fileContents = $generator->getModelStrFromTable($tableName, $subfolder, $modelName);
 				file_put_contents($modelsFolder.$subfolder._DS_.$modelName.'.php', $fileContents);
 				echo "$tableName -- $modelName\n";
 			}
-			
+
 			exit;
 		}
 

@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 01/10/2013 
+ * @since 04/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
