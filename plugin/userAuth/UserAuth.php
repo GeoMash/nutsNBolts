@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\plugin\userAuth
 {
+	use application\nutsNBolts\NutsNBolts;
 	use nutshell\Nutshell;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Native;
