@@ -178,6 +178,14 @@ HTML;
 				}
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
+
+//			$this->plugin->Workflow->getTransitionsForStep(1);
+
+			//TODO: get current workflow step.
+
+//			$this->plugin->Workflow->getTransitionsForStep(1);
+
+
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
@@ -185,6 +193,7 @@ HTML;
 			$this->view->setVar('nodeTags',			implode(',',$nodeTags));
 			$this->view->setVar('parts',			implode('',$parts));
 			$this->view->setVar('contentTypeId',	$node[0]['content_type_id']);
+			$this->view->setVar('hasWorkflow',		(bool)$contentType[0]['workflow_id']);
 			
 			$this->setContentView('admin/content/addEdit');
 			$this->addBreadcrumb('Content','icon-edit','content');
