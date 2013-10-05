@@ -35,6 +35,9 @@ namespace application\nutsNBolts\controller
 
 			if ($page)
 			{
+				// echo '<pre>';
+				// print_r($path);
+				// die();
 				$this->page		=$page;
 				$this->pageType	=$this->model->PageType->read(array('id'=>$this->page['page_type_id']))[0];
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
@@ -158,6 +161,13 @@ namespace application\nutsNBolts\controller
 					function($bloggerId, $category, $min, $max)
 					{
 						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max);
+					}
+				)->registerCallback
+				(
+					'countAllBlogs',
+					function($id)
+					{
+						return $this->plugin->Blog->countAllBlogs($id);
 					}
 				)->registerCallback
 				(
