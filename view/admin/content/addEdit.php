@@ -2,8 +2,9 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="box">
-					<form class="form-horizontal fill-up validatable" method="post">
+					<form id="addEditContentForm" class="form-horizontal fill-up validatable" method="post">
 						<input type="hidden" name="id" value="<?php $tpl->id; ?>">
+						<input type="hidden" name="transition_id" value="">
 						<div class="box-header">
 							<span class="title"><i class="<?php $tpl->contentTypeIcon; ?>"></i> <?php $tpl->contentType; ?></span>
 							<?php if (!$tpl->get('hasWorkflow')): ?>
@@ -84,8 +85,14 @@
 							</div>
 							<div class="form-actions">
 								<div class="pull-right">
-									<button type="submit" class="btn btn-blue">Save Changes</button>
-									<button type="button" class="btn btn-red">Cancel</button>
+									<?php if (!$tpl->get('hasWorkflow')): ?>
+									<button class="btn btn-blue">Save Changes</button>
+									<?php
+									else:
+										$tpl->getWorkflowTransitions();
+									endif;
+									?>
+<button type="button" class="btn btn-red">Cancel</button>
 								</div>
 							</div>
 						</div>
