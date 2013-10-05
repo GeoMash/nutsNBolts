@@ -111,13 +111,7 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function edit($id)
 		{
-			$node		=$this->model->Node->read(array('id'=>$id));
-			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
-			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
-			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
-
-
-			$contentTypeForPermCheck=$this->model->ContentType->read($node[0]['content_type_id']);
+			$contentTypeForPermCheck=$this->model->ContentType->read($this->typeID);
 			if (!$this->userCanAccessContentType($contentTypeForPermCheck[0]))
 			{
 				$this->plugin->Notification->setError('You don\'t have permission to edit this content item!');
@@ -143,7 +137,11 @@ namespace application\nutsNBolts\controller\admin
 				}
 			}
 
-			$contentType=$this->model->ContentType->readWithParts($node[0]['content_type_id']);
+			$contentType=$this->model->ContentType->readWithParts($this->typeID);
+			$node		=$this->model->Node->read(array('id'=>$id));
+			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
+			$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
+			$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
 			$parts		=array();
 			
 			for ($i=0,$j=count($contentType); $i<$j; $i++)
@@ -207,10 +205,10 @@ HTML;
 						for ($i=0,$j=count($transitions); $i<$j; $i++)
 						{
 							$html[]='<button data-action="doWorkflowTransition"'
-											.' data-transition="'.$transitions[$i]['id'].'"'
-											.' type="button"'
-											.' class="btn btn-blue"'
-											.' title="'.$transitions[$i]['description'].'">'.$transitions[$i]['name'].'</button>&nbsp;';
+									.' data-transition="'.$transitions[$i]['id'].'"'
+								.' type="button"'
+								.' class="btn btn-blue"'
+								.' title="'.$transitions[$i]['description'].'">'.$transitions[$i]['name'].'</button>&nbsp;';
 						}
 						print implode('',$html);
 					}
