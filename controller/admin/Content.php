@@ -185,7 +185,6 @@ HTML;
 
 //			$this->plugin->Workflow->getTransitionsForStep(1);
 
-
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
