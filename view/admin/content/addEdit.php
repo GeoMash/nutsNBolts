@@ -13,7 +13,7 @@
 									<span>Published: </span>
 								</li>
 								<li>
-									<input type="checkbox" class="iButton-icons" <?php print (bool)$tpl->get('status')?'checked':''; ?> name="status" value="1" />
+									<input type="checkbox" class="iButton-icons" <?php print (bool)$tpl->get('status')?'checked':''; ?> name="status" value="2" />
 								</li>
 							</ul>
 							<?php endif; ?>
