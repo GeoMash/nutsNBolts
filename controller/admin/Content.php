@@ -126,13 +126,20 @@ namespace application\nutsNBolts\controller\admin
 			unset($this->plugin->Session->returnToAction);
 			if ($this->request->get('id'))
 			{
-				if ($this->model->Node->handleRecord($this->request->getAll())!==false)
+				if (!$this->contentType['workflow_id'])
 				{
-					$this->plugin->Notification->setSuccess('Content successfully edited.');
+					if ($this->model->Node->handleRecord($this->request->getAll())!==false)
+					{
+						$this->plugin->Notification->setSuccess('Content successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 				}
 			}
 
@@ -179,11 +186,7 @@ HTML;
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
 
-//			$this->plugin->Workflow->getTransitionsForStep(1);
 
-			//TODO: get current workflow step.
-
-//			$this->plugin->Workflow->getTransitionsForStep(1);
 
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
@@ -193,7 +196,25 @@ HTML;
 			$this->view->setVar('parts',			implode('',$parts));
 			$this->view->setVar('contentTypeId',	$node[0]['content_type_id']);
 			$this->view->setVar('hasWorkflow',		(bool)$contentType[0]['workflow_id']);
-			
+			$this->view->getContext()
+				->registerCallback
+				(
+					'getWorkflowTransitions',
+					function() use ($node)
+					{
+						$transitions=$this->plugin->Workflow->getTransitionsForStep($node[0]['workflow_step_id']);
+						$html		=array();
+						for ($i=0,$j=count($transitions); $i<$j; $i++)
+						{
+							$html[]='<button data-action="doWorkflowTransition"'
+											.' data-transition="'.$transitions[$i]['id'].'"'
+											.' type="button"'
+											.' class="btn btn-blue"'
+											.' title="'.$transitions[$i]['description'].'">'.$transitions[$i]['name'].'</button>&nbsp;';
+						}
+						print implode('',$html);
+					}
+				);
 			$this->setContentView('admin/content/addEdit');
 			$this->addBreadcrumb('Content','icon-edit','content');
 			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
