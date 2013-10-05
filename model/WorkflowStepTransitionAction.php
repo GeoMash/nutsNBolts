@@ -1,9 +1,9 @@
 <?php
 namespace application\nutsNBolts\model
 {
-	use application\nutsNBolts\model\base\WorkflowStepAction as WorkflowStepActionBase;
+	use application\nutsNBolts\model\base\WorkflowStepTransitionAction as WorkflowStepTransitionActionBase;
 	
-	class WorkflowStepAction extends WorkflowStepActionBase
+	class WorkflowStepAction extends WorkflowStepTransitionActionBase
 	{
 
 	}
