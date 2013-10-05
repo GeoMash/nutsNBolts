@@ -24,11 +24,13 @@ namespace application\nutsNBolts\base
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
-			
+
+			$this->plugin->UserAuth();
+
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
-			if ($this->isAuthenticated())
+			if ($this->plugin->UserAuth->isAuthenticated())
 			{
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
@@ -37,7 +39,7 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
-				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
+				$this->user=$this->plugin->UserAuth->getUser();
 				$this->view->setVar('user',$this->user);
 				$this->show404();
 				
@@ -145,7 +147,7 @@ HTML;
 				}
 				else
 				{
-					$href.=$this->breadcrumbs[$i]['urlNode'].'/';
+					$href=$this->breadcrumbs[$i]['urlNode'].'/';
 				}
 				$html[]=str_replace
 				(
@@ -312,15 +314,7 @@ HTML;
 		
 		public function isSuper()
 		{
-			$user=$this->getUser();
-			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
-			{
-				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
-				{
-					return true;
-				}
-			}
-			return false;
+			return $this->plugin->UserAuth->isSuper();
 		}
 
 		public function userCanAccessContentType($contentType)

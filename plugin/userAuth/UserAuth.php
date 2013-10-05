@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\plugin\userAuth
 {
+	use application\nutsNBolts\NutsNBolts;
 	use nutshell\Nutshell;
 	use nutshell\core\plugin\Plugin;
 	use nutshell\behaviour\Native;
@@ -15,7 +16,7 @@ namespace application\nutsNBolts\plugin\userAuth
 	 */
 	class UserAuth extends Plugin implements Native,Singleton 
 	{
-
+		private $user=null;
 		// protected $vModelLoader = null;
 		
 		public static function loadDependencies()
@@ -30,7 +31,11 @@ namespace application\nutsNBolts\plugin\userAuth
 		
 		public function init()
 		{
-			
+			if ($connection=Nutshell::getInstance()->config->plugin->Mvc->connection)
+			{
+				$this->db=$this->plugin->Db->{$connection};
+			}
+			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 		}
 		
 		private function handleRecord($record)
@@ -239,6 +244,34 @@ HTML;
 				if (isset($result[0]))
 				{
 					return $result[0];
+				}
+			}
+			return false;
+		}
+
+		public function getUser()
+		{
+			return $this->user;
+		}
+
+		public function getUserId()
+		{
+			return $this->user['id'];
+		}
+
+		public function isAuthenticated()
+		{
+			return (bool)($this->plugin->Session->authenticated);
+		}
+
+		public function isSuper()
+		{
+			$user=$this->getUser();
+			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
+			{
+				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
+				{
+					return true;
 				}
 			}
 			return false;

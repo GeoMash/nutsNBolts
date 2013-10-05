@@ -36,6 +36,13 @@ namespace application\nutsNBolts\controller\admin
 						{
 							print $this->generateUserList(null);
 						}
+					)->registerCallback
+					(
+						'getWorkflowOptions',
+						function()
+						{
+							print $this->plugin->Workflow->getWorkflowOptions();
+						}
 					);
 					$this->addType();
 					break;
@@ -56,6 +63,13 @@ namespace application\nutsNBolts\controller\admin
 						function() use ($id)
 						{
 							print $this->generateUserList($id);
+						}
+					)->registerCallback
+					(
+						'getWorkflowOptions',
+						function($workflowId)
+						{
+							print $this->plugin->Workflow->getWorkflowOptions($workflowId);
 						}
 					);
 					$this->editType($id);

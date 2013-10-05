@@ -7,6 +7,15 @@ namespace application\nutsNBolts\model
 	
 	class Node extends NodeBase	
 	{
+		const STATUS_SAVED		=0;
+		const STATUS_SUBMITTED	=1;
+		const STATUS_PUBLISHED	=2;
+		const STATUS_DELETED	=3;
+
+
+
+
+
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -144,13 +153,13 @@ namespace application\nutsNBolts\model
 			$where=array();
 			foreach ($whereKeyVals as $field=>$value)
 			{
-				$where[]=<<<SQL
+				$where[]=<<<SQL_PART
 				(
 					content_part.ref="{$field}"
 					AND
 					node_part.value="{$value}"
 				)
-SQL;
+SQL_PART;
 			}
 			$where=implode(' AND ',$where);
 			$query=<<<SQL
@@ -342,15 +351,15 @@ SQL;
 			$where=null;
 			if(strlen($category) > 3)
 			{
-				$where=<<<SQL
+				$where=<<<SQL_PART
 				AND node_part.value="{$category}"
-SQL;
+SQL_PART;
 			}
 			if(strlen($min) > 3)
 			{
-				$where=<<<SQL
+				$where=<<<SQL_PART
 				AND node.date_created BETWEEN "{$min}" AND "{$max}"
-SQL;
+SQL_PART;
 			}
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
