@@ -69,7 +69,14 @@ namespace application\nutsNBolts\controller\admin
 						'getWorkflowOptions',
 						function($workflowId)
 						{
-							print $this->plugin->Workflow->getWorkflowOptions($workflowId);
+							$options=$this->plugin->Workflow->getWorkflowOptions($workflowId);
+							$html	=array();
+							for ($i=0,$j=count($options); $i<$j; $i++)
+							{
+								$selected	=($options[$i]['selected'])?'selected':'';
+								$html[]		='<option value="'.$options[$i]['value'].'" '.$selected.'>'.$options[$i]['label'].'</option>';
+							}
+							print implode('',$html);
 						}
 					);
 					$this->editType($id);
