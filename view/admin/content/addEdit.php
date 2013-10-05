@@ -7,12 +7,14 @@
 						<div class="box-header">
 							<span class="title"><i class="<?php $tpl->contentTypeIcon; ?>"></i> <?php $tpl->contentType; ?></span>
 							<ul class="box-toolbar">
+								<!--
 								<li>
 									<span>Published: </span>
 								</li>
 								<li>
 									<input type="checkbox" class="iButton-icons" <?php print (bool)$tpl->get('status')?'checked':''; ?> name="status" value="1" />
 								</li>
+								-->
 							</ul>
 						</div>
 						<div class="box-content">
