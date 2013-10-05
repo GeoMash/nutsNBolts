@@ -49,7 +49,6 @@ SQL;
 			ORDER BY LENGTH(page_map.url) DESC
 			LIMIT 1;
 SQL;
-			print $query;
 			if ($this->db->select($query))
 			{
 				return $this->db->result('assoc')[0];
