@@ -20,13 +20,25 @@ namespace application\nutsNBolts\plugin\workflow
 		public function getWorkflowOptions($workflowId=0)
 		{
 			$records=$this->plugin->Mvc->model->Workflow->read(array('status'=>1));
-			$html	=array('<option value="0">No Workflow</option>');
+			$options=array
+			(
+				array
+				(
+					'value'		=>0,
+					'label'		=>'No Workflow',
+					'selected'	=>($workflowId==0)
+				)
+			);
 			for ($i=0,$j=count($records); $i<$j; $i++)
 			{
-				$selected	=($records[$i]['id']==$workflowId)?'selected':'';
-				$html[]		='<option value="'.$records[$i]['id'].'" '.$selected.'>'.$records[$i]['name'].'</option>';
+				$options[]=array
+				(
+					'value'		=>$records[$i]['id'],
+					'label'		=>$records[$i]['name'],
+					'selected'	=>($records[$i]['id']==$workflowId)
+				);
 			}
-			return implode('',$html);
+			return $options;
 		}
 
 		public function getTransitionsForStep($stepId)
