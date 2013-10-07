@@ -29,22 +29,23 @@ namespace application\nutsNBolts\controller
 			$path			=$this->getPath();
 			$page			=$this->model->PageMap->getPageFromPath($path);
 
-			$pageRef=isset($page['ref'])?$page['ref']:null;
 
-			$this->loadHooks($pageRef);
+			if(isset($page['ref']))
+			{
+				$pageRef=str_replace('/', '_', $page['ref']);
+				$this->loadHooks($pageRef);
+				$this->loadCustomWidgets($pageRef);
+			}
+			
 
 			if ($page)
 			{
-				// echo '<pre>';
-				// print_r($path);
-				// die();
 				$this->page		=$page;
 				$this->pageType	=$this->model->PageType->read(array('id'=>$this->page['page_type_id']))[0];
 				$this->nodes	=$this->model->NodeMap->getNodesForPath($path);
 				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 
 				$this->execHook('onInitPage',$this->page);
-
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
 				$this->view->setVar('page',$this->page);
 				$this->view->setVar('NS_ENV',NS_ENV);
@@ -765,6 +766,51 @@ namespace application\nutsNBolts\controller
 				${$table[$ci]}=$xargs[$ci-1];
 			}
 		}
+		
+		/*
+			Loading custom application widgets
+		*/
+		
+		// create empty array	
+		
+		public function loadCustomWidgets($ref=null)
+		{	
+			$widgetContainers=array();
+			$ref=ucfirst($ref);
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
+			{
+				echo "<pre>";
+				print_r($applicationRef);
+				
+				if($applicationRef != "NutsNBolts")
+				{
+					if (!$ref)continue;
+					$className=$this->application->getNamespace($applicationRef).'\widget\\'.$ref;
+					$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
+
+					if (is_file($path))
+					{
+						echo $path;
+						require_once($path);
+						if (class_exists($className))
+						{
+							
+							if (!is_array($this->$widgetContainers[$applicationRef]))
+							{
+								$this->$widgetContainers[$applicationRef]=array();
+							}
+							$this->$widgetContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
+						}
+						else
+						{
+							//TODO: Throw exception re bad widget class name
+						}
+					}					
+				}
+
+			}
+			die("finished");
+		}			
 	}
 }
 ?>
