@@ -22,6 +22,7 @@ namespace application\nutsNBolts\controller
 		public $nodes		=null;
 		private $site		=null;
 		public $cache		=true;
+		
 		public function index()
 		{
 			$binding		=$this->application->NutsNBolts->getSiteBinding($this->getSiteRef());
@@ -772,34 +773,29 @@ namespace application\nutsNBolts\controller
 		*/
 		
 		// create empty array	
-		
+		private $widgetContainers=array();
 		public function loadCustomWidgets($ref=null)
 		{	
-			$widgetContainers=array();
+			
 			$ref=ucfirst($ref);
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
-				echo "<pre>";
-				print_r($applicationRef);
-				
 				if($applicationRef != "NutsNBolts")
 				{
 					if (!$ref)continue;
 					$className=$this->application->getNamespace($applicationRef).'\widget\\'.$ref;
-					$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
+					$path=APP_HOME.lcfirst($applicationRef)._DS_.'widget'._DS_.strtolower($ref)._DS_.$ref.'.php';
 
 					if (is_file($path))
 					{
-						echo $path;
 						require_once($path);
 						if (class_exists($className))
 						{
-							
-							if (!is_array($this->$widgetContainers[$applicationRef]))
+							if (!is_array($this->widgetContainers))
 							{
-								$this->$widgetContainers[$applicationRef]=array();
+								$this->widgetContainers[$applicationRef]=array();
 							}
-							$this->$widgetContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
+							$this->widgetContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
 						}
 						else
 						{
@@ -809,7 +805,6 @@ namespace application\nutsNBolts\controller
 				}
 
 			}
-			die("finished");
 		}			
 	}
 }

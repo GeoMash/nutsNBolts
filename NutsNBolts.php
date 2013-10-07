@@ -168,13 +168,16 @@ namespace application\nutsNBolts
 					{
 						$widget[$applicationRef][]=array
 						(
-							'namespace'		=>'application\\nutsNBolts\\widget\\'.$iteration->getFilename(),
+							'namespace'		=>'application\\nutsNBolts\\widget\\'.strtolower($iteration->getFilename()).'\\'.$iteration->getFilename(),
 							'name'			=>ucwords($iteration->getFilename()),
 							'application'	=>$applicationRef
 						);
 					}
 				}						
 			}
+			// echo "<pre>";
+			// print_r($widget);
+			// die();
 			return $widget;
 		}
 		

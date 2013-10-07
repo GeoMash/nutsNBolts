@@ -206,6 +206,7 @@ HTML;
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
 			$classPath.='\\'.ucwords($className);
+			$classPath;
 			return new $classPath;
 		}
 		
@@ -222,6 +223,8 @@ HTML;
 			}
 			foreach( $contentWidgets AS $key=>$widget)
 			{	
+				// print_r( $key);
+				// echo "<br/>";
 				$selectBoxOptions[]='<optgroup label="'.$key.'">';
 				for ($k=0,$l=count($widget); $k<$l; $k++)
 				{
@@ -241,6 +244,8 @@ HTML;
 			$template->setKeyVal('optionIndex','0');
 			
 			$template->setKeyVal('widgetTypes',implode('',$selectBoxOptions));
+			// echo $getConfigFor;
+			// die();
 			$widgetConfig=$this->getWidgetInstance($getConfigFor)->getConfigHTML($widgetIndex,$part['config']);
 			
 			if ($widgetConfig)
