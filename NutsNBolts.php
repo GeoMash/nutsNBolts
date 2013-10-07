@@ -156,25 +156,26 @@ namespace application\nutsNBolts
 		
 		public function getWidgetList()
 		{
-			//preg_match_all('/((?:^|[A-Z])[a-z]+)/',$str,$matches);
-			$folder	=__DIR__._DS_.'widget';
-			$list	=array();
-			foreach (new DirectoryIterator($folder) as $iteration)
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
-				//We don't load folders or files from within folders.
-				if ($iteration->isDir() && !$iteration->isDot()
-				&& $iteration->getFilename()!='base')
+				$folder	=__DIR__._DS_.'widget';
+				$folder=str_replace("nutsNBolts", $applicationRef, $folder);
+				foreach (new DirectoryIterator($folder) as $iteration)
 				{
-					$list[]=array
-					(
-						'namespace'	=>'application\\nutsNBolts\\widget\\'.$iteration->getFilename(),
-						'name'		=>ucwords($iteration->getFilename())
-					);
-				}
+					//We don't load folders or files from within folders.
+					if ($iteration->isDir() && !$iteration->isDot()
+					&& $iteration->getFilename()!='base')
+					{
+						$widget[$applicationRef][]=array
+						(
+							'namespace'		=>'application\\nutsNBolts\\widget\\'.$iteration->getFilename(),
+							'name'			=>ucwords($iteration->getFilename()),
+							'application'	=>$applicationRef
+						);
+					}
+				}						
 			}
-			//TODO: Registered widgets from other applications.
-			
-			return $list;
+			return $widget;
 		}
 		
 		public function loadPHPPatches()
