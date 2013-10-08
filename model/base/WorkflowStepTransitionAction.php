@@ -6,13 +6,13 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 04/10/2013 
+ * @since 08/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
 	use application\nutsNBolts\model\common\Base;
 	
-	class WorkflowStepTransitionAction extends Base
+	class WorkflowStepTransitionAction extends Base	
 	{
 		public $name		= 'workflow_step_transition_action';
 		public $primary		= array('id');
@@ -24,6 +24,7 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'step_transition_id' => 'int(10) NOT NULL ' ,
 			'action_id' => 'int(10) NOT NULL ' ,
+			'params' => 'text NOT NULL ' ,
 			'order' => 'int(5) NOT NULL ' 
 		);
 	}

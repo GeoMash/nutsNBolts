@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 04/10/2013 
+ * @since 08/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -24,7 +24,7 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'transition_id' => 'int(10) NOT NULL ' ,
 			'from_step_id' => 'int(10) NOT NULL ' ,
-			'to_step_id' => 'int(10) NOT NULL '
+			'to_step_id' => 'int(10) NOT NULL ' 
 		);
 	}
 }
