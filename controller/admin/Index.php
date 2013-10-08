@@ -160,7 +160,8 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$template=$this->plugin->Template();
 					$template->setTemplate($this->view->buildViewPath('admin/fileManager/collections'));
-					$template->setKeyVal('collections',$this->model->Collection->read());
+
+					$template->setKeyVal('collections',$this->plugin->Collection->getCollections());
 					$html=$template->compile();
 					break;
 				}
