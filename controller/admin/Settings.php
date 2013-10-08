@@ -3,6 +3,7 @@ namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
+	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ObjectHelper;
 	
 	class Settings extends AdminController
@@ -94,6 +95,24 @@ namespace application\nutsNBolts\controller\admin
 				if ($id=$this->model->User->handleRecord($record))
 				{
 					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
+
+					try
+					{
+						$this->plugin->Collection->create
+						(
+							array
+							(
+								'name'			=>'My Files',
+								'description'	=>'User Collection',
+								'status'		=>1
+							),
+							$id
+						);
+					}
+					catch(NutshellException $exception)
+					{
+						$this->plugin->Notification->setError($exception->getMessage());
+					}
 					$this->redirect('/admin/settings/users/edit/'.$id);
 				}
 				else

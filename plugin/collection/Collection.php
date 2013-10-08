@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\plugin\collection
 {
+	use nutshell\core\exception\NutshellException;
 	use nutshell\Nutshell;
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
@@ -65,6 +66,36 @@ namespace application\nutsNBolts\plugin\collection
 				}
 			}
 			return $return;
+		}
+
+		public function create($record,$userId)
+		{
+			$dir=PUBLIC_DIR.'_collections';
+			if (is_writable($dir))
+			{
+				$id=$this->model->Collection->insertAssoc($record);
+				$this->model->CollectionUser->insertAssoc
+				(
+					array
+					(
+						'collection_id'	=>$id,
+						'user_id'		=>$userId
+					)
+				);
+				$dir=$dir._DS_.$id;
+				if (is_dir($dir) || mkdir($dir,0777))
+				{
+					return $id;
+				}
+				else
+				{
+					throw new NutshellException('Unable to make directory "'.$dir.'", event after write check.');
+				}
+			}
+			else
+			{
+				throw new NutshellException('Directory "'.$dir.'" is not writable. Unable to create collection!');
+			}
 		}
 	}
 }
