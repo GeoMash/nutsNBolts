@@ -783,12 +783,11 @@ namespace application\nutsNBolts\controller
 				if($applicationRef != "NutsNBolts")
 				{
 					if (!$ref)continue;
-					$className=$this->application->getNamespace($applicationRef).'\widget\\'.$ref;
+					$className=$this->application->getNamespace($applicationRef).'\widget\\'.strtolower($ref).'\\'.$ref;
 					$path=APP_HOME.lcfirst($applicationRef)._DS_.'widget'._DS_.strtolower($ref)._DS_.$ref.'.php';
-
 					if (is_file($path))
 					{
-						require_once($path);
+						require_once($path);	
 						if (class_exists($className))
 						{
 							if (!is_array($this->widgetContainers))

@@ -116,5 +116,10 @@ namespace application\nutsNBolts\plugin\blog
 		{
 			return $this->plugin->Mvc->model->Node->getAllDates($id);
 		}
+		
+		public function getAllBlogs()
+		{
+			return $this->plugin->Mvc->model->Node->getAllBlogs();
+		}
 	}
 }
