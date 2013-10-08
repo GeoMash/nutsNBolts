@@ -1,5 +1,6 @@
 ALTER TABLE `alliance_nutsnbolts`.`content_type` ADD COLUMN `workflow_id` INT(10) NOT NULL AFTER `site_id`;
 ALTER TABLE `alliance_nutsnbolts`.`node` ADD COLUMN `workflow_step_id` INT(10) DEFAULT 0 NOT NULL AFTER `content_type_id`;
+ALTER TABLE `alliance_nutsnbolts`.`collection` CHANGE `descriptions` `description` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci NOT NULL;
 CREATE TABLE `workflow` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
