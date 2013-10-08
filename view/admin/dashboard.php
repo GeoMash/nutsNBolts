@@ -2,9 +2,6 @@
 	<div class="row-fluid">
 		<div class="action-nav-normal">
 			<div class="row-fluid">
-				<?php
-				if ($tpl->challangeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR'))):
-				?>
 				<div class="span2 action-nav-button">
 					<a data-toggle="bigmodal" role="button" href="#fileManagerWindow" title="File Manager">
 						<i class="icon-folder-open-alt"></i>
@@ -12,7 +9,6 @@
 					</a>
 				</div>
 				<?php
-				endif;
 				if ($tpl->challangeRole(array('SUPER','ADMIN'))):
 				?>
 				<div class="span2 action-nav-button">
