@@ -80,6 +80,15 @@ namespace application\nutsNBolts\plugin\blog
 		/*
 			parameters:
 			$id = blogger id
+			returns the total number of blogs by the blogger
+		*/
+		public function countAllBlogs($id)
+		{
+			return count($this->plugin->Mvc->model->Node->countAllBlogs($id));
+		}
+		/*
+			parameters:
+			$id = blogger id
 			returns all of the blog categories of the blogger
 		*/
 		public function getBloggerCategories($id)
@@ -106,6 +115,11 @@ namespace application\nutsNBolts\plugin\blog
 		public function getAllDates($id)
 		{
 			return $this->plugin->Mvc->model->Node->getAllDates($id);
+		}
+		
+		public function getAllBlogs()
+		{
+			return $this->plugin->Mvc->model->Node->getAllBlogs();
 		}
 	}
 }

@@ -22,6 +22,7 @@ namespace application\nutsNBolts\controller
 		public $nodes		=null;
 		private $site		=null;
 		public $cache		=true;
+		
 		public function index()
 		{
 			$binding		=$this->application->NutsNBolts->getSiteBinding($this->getSiteRef());
@@ -29,9 +30,14 @@ namespace application\nutsNBolts\controller
 			$path			=$this->getPath();
 			$page			=$this->model->PageMap->getPageFromPath($path);
 
-			$pageRef=isset($page['ref'])?$page['ref']:null;
 
-			$this->loadHooks($pageRef);
+			if(isset($page['ref']))
+			{
+				$pageRef=str_replace('/', '_', $page['ref']);
+				$this->loadHooks($pageRef);
+				$this->loadCustomWidgets($pageRef);
+			}
+			
 
 			if ($page)
 			{
@@ -41,7 +47,6 @@ namespace application\nutsNBolts\controller
 				$this->viewPath	='..'._DS_.'..'._DS_.$applicationName._DS_.'view'._DS_;
 
 				$this->execHook('onInitPage',$this->page);
-
 				$this->view->setTemplate($this->viewPath.'page'._DS_.$this->pageType['ref']._DS_.'index');
 				$this->view->setVar('page',$this->page);
 				$this->view->setVar('NS_ENV',NS_ENV);
@@ -158,6 +163,13 @@ namespace application\nutsNBolts\controller
 					function($bloggerId, $category, $min, $max)
 					{
 						return $this->plugin->Blog->getBlogsByBlogger($bloggerId, $category, $min, $max);
+					}
+				)->registerCallback
+				(
+					'countAllBlogs',
+					function($id)
+					{
+						return $this->plugin->Blog->countAllBlogs($id);
 					}
 				)->registerCallback
 				(
@@ -755,6 +767,44 @@ namespace application\nutsNBolts\controller
 				${$table[$ci]}=$xargs[$ci-1];
 			}
 		}
+		
+		/*
+			Loading custom application widgets
+		*/
+		
+		// create empty array	
+		private $widgetContainers=array();
+		public function loadCustomWidgets($ref=null)
+		{	
+			
+			$ref=ucfirst($ref);
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
+			{
+				if($applicationRef != "NutsNBolts")
+				{
+					if (!$ref)continue;
+					$className=$this->application->getNamespace($applicationRef).'\widget\\'.strtolower($ref).'\\'.$ref;
+					$path=APP_HOME.lcfirst($applicationRef)._DS_.'widget'._DS_.strtolower($ref)._DS_.$ref.'.php';
+					if (is_file($path))
+					{
+						require_once($path);	
+						if (class_exists($className))
+						{
+							if (!is_array($this->widgetContainers))
+							{
+								$this->widgetContainers[$applicationRef]=array();
+							}
+							$this->widgetContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
+						}
+						else
+						{
+							//TODO: Throw exception re bad widget class name
+						}
+					}					
+				}
+
+			}
+		}			
 	}
 }
 ?>

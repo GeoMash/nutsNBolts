@@ -206,34 +206,46 @@ HTML;
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
 			$classPath.='\\'.ucwords($className);
+			$classPath;
 			return new $classPath;
 		}
 		
 		public function buildWidgetHTML($contentWidgets,$widgetIndex='',$part=null)
 		{
+		
 			$selectBoxOptions	=array();
-			$getConfigFor		=$contentWidgets[0]['namespace'];
+			$getConfigFor		=$contentWidgets['NutsNBolts'][0]['namespace'];
 			$template			=$this->plugin->Template();
 			$template->setTemplate($this->view->buildViewPath('admin/configureContent/addWidgetSelection'));
 			if ($part)
 			{
 				$template->setKeyValArray($part);
 			}
-			for ($k=0,$l=count($contentWidgets); $k<$l; $k++)
-			{
-				$selected='';
-				if ($part['widget']==$contentWidgets[$k]['namespace'])
+			foreach( $contentWidgets AS $key=>$widget)
+			{	
+				// print_r( $key);
+				// echo "<br/>";
+				$selectBoxOptions[]='<optgroup label="'.$key.'">';
+				for ($k=0,$l=count($widget); $k<$l; $k++)
 				{
-					$selected='selected';
-					$getConfigFor=$part['widget'];
+					$selected='';
+					if ($part['widget']==$widget[$k]['namespace'])
+					{
+						$selected='selected';
+						$getConfigFor=$part['widget'];
+					}
+					$selectBoxOptions[]='<option '.$selected.' value="'.$contentWidgets[$key][$k]['namespace'].'">'.$contentWidgets[$key][$k]['name'].'</option>';
 				}
-				$selectBoxOptions[]='<option '.$selected.' value="'.$contentWidgets[$k]['namespace'].'">'.$contentWidgets[$k]['name'].'</option>';
+				$selectBoxOptions[]='</optgroup>';
 			}
+			
 			$template->setKeyVal('widgetIndex',$widgetIndex);
 			//TODO: Load existing options.
 			$template->setKeyVal('optionIndex','0');
 			
 			$template->setKeyVal('widgetTypes',implode('',$selectBoxOptions));
+			// echo $getConfigFor;
+			// die();
 			$widgetConfig=$this->getWidgetInstance($getConfigFor)->getConfigHTML($widgetIndex,$part['config']);
 			
 			if ($widgetConfig)
