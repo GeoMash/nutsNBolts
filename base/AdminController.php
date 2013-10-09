@@ -24,11 +24,13 @@ namespace application\nutsNBolts\base
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
-			
+
+			$this->plugin->UserAuth();
+
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
 			
-			if ($this->isAuthenticated())
+			if ($this->plugin->UserAuth->isAuthenticated())
 			{
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
@@ -37,7 +39,7 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 				
-				$this->user=$this->model->User->read($this->plugin->Session->userId)[0];
+				$this->user=$this->plugin->UserAuth->getUser();
 				$this->view->setVar('user',$this->user);
 				$this->show404();
 				
@@ -145,7 +147,7 @@ HTML;
 				}
 				else
 				{
-					$href.=$this->breadcrumbs[$i]['urlNode'].'/';
+					$href=$this->breadcrumbs[$i]['urlNode'].'/';
 				}
 				$html[]=str_replace
 				(
@@ -204,34 +206,46 @@ HTML;
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
 			$classPath.='\\'.ucwords($className);
+			$classPath;
 			return new $classPath;
 		}
 		
 		public function buildWidgetHTML($contentWidgets,$widgetIndex='',$part=null)
 		{
+		
 			$selectBoxOptions	=array();
-			$getConfigFor		=$contentWidgets[0]['namespace'];
+			$getConfigFor		=$contentWidgets['NutsNBolts'][0]['namespace'];
 			$template			=$this->plugin->Template();
 			$template->setTemplate($this->view->buildViewPath('admin/configureContent/addWidgetSelection'));
 			if ($part)
 			{
 				$template->setKeyValArray($part);
 			}
-			for ($k=0,$l=count($contentWidgets); $k<$l; $k++)
-			{
-				$selected='';
-				if ($part['widget']==$contentWidgets[$k]['namespace'])
+			foreach( $contentWidgets AS $key=>$widget)
+			{	
+				// print_r( $key);
+				// echo "<br/>";
+				$selectBoxOptions[]='<optgroup label="'.$key.'">';
+				for ($k=0,$l=count($widget); $k<$l; $k++)
 				{
-					$selected='selected';
-					$getConfigFor=$part['widget'];
+					$selected='';
+					if ($part['widget']==$widget[$k]['namespace'])
+					{
+						$selected='selected';
+						$getConfigFor=$part['widget'];
+					}
+					$selectBoxOptions[]='<option '.$selected.' value="'.$contentWidgets[$key][$k]['namespace'].'">'.$contentWidgets[$key][$k]['name'].'</option>';
 				}
-				$selectBoxOptions[]='<option '.$selected.' value="'.$contentWidgets[$k]['namespace'].'">'.$contentWidgets[$k]['name'].'</option>';
+				$selectBoxOptions[]='</optgroup>';
 			}
+			
 			$template->setKeyVal('widgetIndex',$widgetIndex);
 			//TODO: Load existing options.
 			$template->setKeyVal('optionIndex','0');
 			
 			$template->setKeyVal('widgetTypes',implode('',$selectBoxOptions));
+			// echo $getConfigFor;
+			// die();
 			$widgetConfig=$this->getWidgetInstance($getConfigFor)->getConfigHTML($widgetIndex,$part['config']);
 			
 			if ($widgetConfig)
@@ -312,15 +326,7 @@ HTML;
 		
 		public function isSuper()
 		{
-			$user=$this->getUser();
-			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
-			{
-				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
-				{
-					return true;
-				}
-			}
-			return false;
+			return $this->plugin->UserAuth->isSuper();
 		}
 
 		public function userCanAccessContentType($contentType)

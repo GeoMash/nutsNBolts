@@ -36,6 +36,13 @@ namespace application\nutsNBolts\controller\admin
 						{
 							print $this->generateUserList(null);
 						}
+					)->registerCallback
+					(
+						'getWorkflowOptions',
+						function()
+						{
+							print $this->plugin->Workflow->getWorkflowOptions();
+						}
 					);
 					$this->addType();
 					break;
@@ -56,6 +63,20 @@ namespace application\nutsNBolts\controller\admin
 						function() use ($id)
 						{
 							print $this->generateUserList($id);
+						}
+					)->registerCallback
+					(
+						'getWorkflowOptions',
+						function($workflowId)
+						{
+							$options=$this->plugin->Workflow->getWorkflowOptions($workflowId);
+							$html	=array();
+							for ($i=0,$j=count($options); $i<$j; $i++)
+							{
+								$selected	=($options[$i]['selected'])?'selected':'';
+								$html[]		='<option value="'.$options[$i]['value'].'" '.$selected.'>'.$options[$i]['label'].'</option>';
+							}
+							print implode('',$html);
 						}
 					);
 					$this->editType($id);

@@ -7,6 +7,15 @@ namespace application\nutsNBolts\model
 	
 	class Node extends NodeBase	
 	{
+		const STATUS_SAVED		=0;
+		const STATUS_SUBMITTED	=1;
+		const STATUS_PUBLISHED	=2;
+		const STATUS_DELETED	=3;
+
+
+
+
+
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -144,13 +153,13 @@ namespace application\nutsNBolts\model
 			$where=array();
 			foreach ($whereKeyVals as $field=>$value)
 			{
-				$where[]=<<<SQL
+				$where[]=<<<SQL_PART
 				(
 					content_part.ref="{$field}"
 					AND
 					node_part.value="{$value}"
 				)
-SQL;
+SQL_PART;
 			}
 			$where=implode(' AND ',$where);
 			$query=<<<SQL
@@ -342,15 +351,15 @@ SQL;
 			$where=null;
 			if(strlen($category) > 3)
 			{
-				$where=<<<SQL
+				$where=<<<SQL_PART
 				AND node_part.value="{$category}"
-SQL;
+SQL_PART;
 			}
 			if(strlen($min) > 3)
 			{
-				$where=<<<SQL
+				$where=<<<SQL_PART
 				AND node.date_created BETWEEN "{$min}" AND "{$max}"
-SQL;
+SQL_PART;
 			}
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
@@ -499,6 +508,126 @@ SQL;
 				return $nodes;
 			}
 		}
+			
+		public function countAllBlogs($bloggerId)
+		{
+			$query=<<<SQL
+			SELECT node.date_created,node.id,node.site_id,node.status
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=1
+			ORDER BY node.date_created DESC
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+					}
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}			
+		}
+		
+		public function getAllBlogs()
+		{
+			$query=<<<SQL
+			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_part.ref='is_a_blog'
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						// $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						// $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						// $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}	
+		}
+		
+		public function getSpecificContentType($ref)
+		{
+			$query=<<<SQL
+			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id,content_type.ref
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			LEFT JOIN content_type ON content_type.id=node.content_type_id
+			WHERE content_type.ref='{$ref}'
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						// $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						// $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						// $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}	
+		}		
 	}
 }
 ?>

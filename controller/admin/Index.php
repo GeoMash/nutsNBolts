@@ -3,6 +3,7 @@ namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
 	use nutshell\helper\ArrayHelper;
+	use nutshell\core\exception\NutshellException;
 	// use application\nutsNBolts\controller\admin\ConfigureContent;
 	// use application\nutsNBolts\controller\admin\Content;
 	// use application\nutsNBolts\controller\admin\Dashboard;
@@ -160,7 +161,8 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$template=$this->plugin->Template();
 					$template->setTemplate($this->view->buildViewPath('admin/fileManager/collections'));
-					$template->setKeyVal('collections',$this->model->Collection->read());
+
+					$template->setKeyVal('collections',$this->plugin->Collection->getCollections());
 					$html=$template->compile();
 					break;
 				}
@@ -172,9 +174,17 @@ namespace application\nutsNBolts\controller\admin
 					$collection=$this->model->Collection->read($this->request->get('id'))[0];
 					$template->setKeyVal('collectionName',$collection['name']);
 					
-					$fileList=$this->plugin->FileSystem->getFileListFromCollection($this->request->get('id'));
+					try
+					{
+						$fileList=$this->plugin->FileSystem->getFileListFromCollection($this->request->get('id'));
+						$template->setKeyVal('files',$fileList);
+					}
+					catch (NutshellException $exception)
+					{
+						$template->setKeyVal('files',array());
+					}
 					
-					$template->setKeyVal('files',$fileList);
+
 					
 					$html=$template->compile();
 					break;

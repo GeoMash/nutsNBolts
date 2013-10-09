@@ -199,6 +199,7 @@ namespace application\nutsNBolts\model
 		{
 			$query=<<<SQL
 			SELECT	content_type.name,
+					content_type.workflow_id,
 					content_type.icon,
 					content_part.id AS content_part_id,
 					content_part.label,

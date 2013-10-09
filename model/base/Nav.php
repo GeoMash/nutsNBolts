@@ -6,11 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
-<<<<<<< Updated upstream
- * @since 01/10/2013 
-=======
- * @since 02/10/2013 
->>>>>>> Stashed changes
+ * @since 08/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
