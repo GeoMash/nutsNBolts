@@ -175,9 +175,6 @@ namespace application\nutsNBolts
 					}
 				}						
 			}
-			// echo "<pre>";
-			// print_r($widget);
-			// die();
 			return $widget;
 		}
 		

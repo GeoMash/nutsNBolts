@@ -178,7 +178,14 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getAllDates($id);
 					}
-				);
+				)->registerCallback
+				(
+				 	'getHomeTiles',
+				 	function()
+				 	{
+				 		return $this->getHomeTiles();
+				 	}
+				 );
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
 			}
@@ -805,6 +812,12 @@ namespace application\nutsNBolts\controller
 
 			}
 		}			
+		
+		public function getHomeTiles()
+		{
+			$tiles=$this->model->Node->getHomeTiles();
+			return $tiles;
+		}		
 	}
 }
 ?>

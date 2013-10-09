@@ -33,6 +33,7 @@ namespace application\nutsNBolts\model
 					if ($nodeParts[$i]['id']!==0)
 					{
 						$this->model->NodePart->update($nodeParts[$i],array('id'=>$nodeParts[$i]['id']));
+						$return=true;
 					}
 					//For Insert
 					else
@@ -52,6 +53,7 @@ namespace application\nutsNBolts\model
 				{
 					$this->model->NodeTag->insertAssoc($nodeTags[$i]);
 				}
+
 				return $return;
 			}
 			//For Inserts
@@ -117,32 +119,49 @@ namespace application\nutsNBolts\model
 		{
 			$urls=array();
 			$id=(!empty($record['id']))?$record['id']:0;
-			for ($i=0,$j=count($record['url']); $i<$j; $i++)
+			if(isset($record['url']))
 			{
-				$urls[]=array
-				(
-					'node_id'	=>$id,
-					'url'		=>$record['url'][$i]
-				);
+				for ($i=0,$j=count($record['url']); $i<$j; $i++)
+				{
+					$urls[]=array
+					(
+						'node_id'	=>$id,
+						'url'		=>$record['url'][$i]
+					);
+				}
+				unset($record['url']);
 			}
-			unset($record['url']);
 			return $urls;
 		}
 		
 		private function extractTags(&$record)
 		{
-			$id		=(!empty($record['id']))?$record['id']:0;
-			$tags	=explode(',',$record['tags']);
-			$return	=array();
-			for ($i=0,$j=count($tags); $i<$j; $i++)
+			foreach ($record AS $key=>$rec)
 			{
-				$return[]=array
-				(
-					'node_id'	=>$id,
-					'tag'		=>$tags[$i]
-				);
+				if(preg_match('/$application\/json:/',$rec))	
+				{
+					$record[$key]=json_decode($rec);
+				}
 			}
-			unset($record['tags']);
+
+			$id		=(!empty($record['id']))?$record['id']:0;
+			$return	=array();
+			if(isset($record['tags']))
+			{
+				$tags	=explode(',',$record['tags']);	
+				
+				for ($i=0,$j=count($tags); $i<$j; $i++)
+				{
+					$return[]=array
+					(
+						'node_id'	=>$id,
+						'tag'		=>$tags[$i]
+					);
+				}
+				unset($record['tags']);				
+			}
+			
+
 			return $return;
 		}
 		
@@ -598,6 +617,47 @@ SQL;
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			LEFT JOIN content_type ON content_type.id=node.content_type_id
 			WHERE content_type.ref='{$ref}'
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						// $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						// $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						// $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}	
+		}		
+		
+		public function getHomeTiles()
+		{
+			$query=<<<SQL
+			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id,content_type.ref
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			LEFT JOIN content_type ON content_type.id=node.content_type_id
+			WHERE content_type.ref='HOMESCREEN_MANAGEMENT'
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{

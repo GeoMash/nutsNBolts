@@ -86,8 +86,16 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
-				$record=$this->request->getAll();
-				
+				$record=$this->request->getAll();				
+				foreach ($record AS $key=>$rec)
+				{
+					// checking to see if an array is passed, and converting it to a json object
+					if(is_array($rec))
+					{
+						$record[$key]='application/json: '.json_encode($rec);
+					}
+				}
+
 				$record['site_id']			=$this->getSiteId();
 				$record['content_type_id']	=$typeID;
 				$record['last_user_id']		=$this->getUserId();
@@ -96,7 +104,8 @@ namespace application\nutsNBolts\controller\admin
 					$record['original_user_id']=$this->getUserId();
 				}
 				//TODO last_user_id
-				$id=$this->model->Node->handleRecord($record);
+
+				$id=$this->model->Node->handleRecord($record);				
 				if (is_numeric($id))
 				{
 					$this->plugin->Notification->setSuccess('Content successfully added. Would you like to <a href="/admin/content/add/'.$typeID.'">Add another one?</a>');
@@ -124,11 +133,25 @@ namespace application\nutsNBolts\controller\admin
 				$this->redirect('/admin/dashboard/');
 			}
 			unset($this->plugin->Session->returnToAction);
+		
 			if ($this->request->get('id'))
 			{
+				foreach ($this->request->getAll() AS $key=>$rec)
+				{
+					// checking to see if an array is passed, and converting it to a json object
+					if(is_array($rec))
+					{
+						$record[$key]='application/json: '.json_encode($rec);
+					}
+					else
+					{
+						$record[$key]=$rec;
+					}
+				}	
+	
 				if (!$this->contentType['workflow_id'])
 				{
-					if ($this->model->Node->handleRecord($this->request->getAll())!==false)
+					if ($this->model->Node->handleRecord($record))
 					{
 						$this->plugin->Notification->setSuccess('Content successfully edited.');
 					}
@@ -185,9 +208,6 @@ HTML;
 				}
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
-
-
-
 			$this->view->setVars($node[0]);
 			$this->view->setVar('contentType',		$contentType[0]['name']);
 			$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
@@ -253,6 +273,10 @@ HTML;
 							$contentType[$i]['widget']
 						)).'.Main('.$contentType[$i]['content_part_id'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+					}
+					else
+					{
+
 					}
 				}
 			}
