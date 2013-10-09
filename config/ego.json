@@ -11,13 +11,26 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"mddev",
-						"password":		"k3yB0@rDm@5h",
-						"host":			"192.168.1.13",
+						"username":		"ego_dev",
+						"password":		"root",
+						"host":			"localhost",
 						"port":			"3306",
 						"database":		"wtp"
 					}
 				}
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"D:/tmp/",
+				"completed_dir":	"D:/www/praxisbt/alliance/biz-smart-website/public/_collections/",
+				"thumbnails":
+				[
+					{
+						"width":		120,
+						"height":		120,
+						"constraint":	"crop"
+					}
+				]
 			}
 		}
 	}
