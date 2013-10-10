@@ -65,3 +65,13 @@ CREATE TABLE `message` (
   `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+/* MD changes */
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `site_id`;
