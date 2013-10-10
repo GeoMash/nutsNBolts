@@ -9,18 +9,17 @@ namespace application\nutsNBolts\controller\admin
 		public function init()
 		{
 			$url=$this->request->getNodes();
-			echo count($url);
-			die();
 			$userId=$this->plugin->UserAuth->getUserId();
 			
-			switch ($action)
+			switch (count($url))
 			{
-				case 'viewList':
-					$this->viewList($userId);
+				case '2':
+					$this->viewAll($userId);
 				break;
 				
-				case 'view':
-					$this->view($userId);
+				case '3':
+					$messageId=$url[2];
+					$this->view($userId,$messageId);
 				break;
 			}
 			
@@ -31,8 +30,12 @@ namespace application\nutsNBolts\controller\admin
 		
 		private function viewAll($id)
 		{
+			$search=array
+			(
+			 	'to_user_id'	=>$id
+			 );
 			$this->setContentView('admin/messages');
-			$this->view->setVar('messages',$this->plugin->Mvc->model->User->read($userId));
+			$this->view->setVar('messages',$this->plugin->Mvc->model->Message->read($search));
 			$this->addBreadcrumb('Messages','icon-inbox','messages');
 			$this->view->render();			
 		}		
