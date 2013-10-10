@@ -27,7 +27,7 @@ $user=$tpl->get('user');
 
 				<li class="divider"></li>
 
-				<!-- <li><a href="#"><i class="icon-user"></i> <span>Profile</span></a></li> -->
+				<li><a href="/admin/profile"><i class="icon-user"></i> <span>Profile</span></a></li>
 				<li><a href="/admin/logout"><i class="icon-off"></i> <span>Logout</span></a></li>
 			</ul>
 		</li>
