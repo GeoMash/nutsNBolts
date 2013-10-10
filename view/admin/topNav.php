@@ -20,7 +20,7 @@ $user=$tpl->get('user');
 
 				<li class="with-image">
 					<div class="avatar">
-						<!-- <img src="/images/avatars/avatar1.jpg" /> -->
+						<img src="<?php echo $user['image']; ?>" />
 					</div>
 					<span><?php print $user['name_first'].' '.$user['name_last']; ?></span>
 				</li>

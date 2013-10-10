@@ -136,13 +136,13 @@ namespace application\nutsNBolts\model
 		
 		private function extractTags(&$record)
 		{
-			foreach ($record AS $key=>$rec)
-			{
-				if(preg_match('/$application\/json:/',$rec))	
-				{
-					$record[$key]=json_decode($rec);
-				}
-			}
+			// foreach ($record AS $key=>$rec)
+			// {
+			// 	if(preg_match('/$application\/json:/',$rec))	
+			// 	{
+			// 		$record[$key]=json_decode($rec);
+			// 	}
+			// }
 
 			$id		=(!empty($record['id']))?$record['id']:0;
 			$return	=array();
