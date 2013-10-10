@@ -22,10 +22,10 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
-			'from_step_id' => 'int(10) NOT NULL ' ,
-			'to_step_id' => 'int(10) NOT NULL ' ,
-			'name' => 'varchar(100) NOT NULL ' ,
-			'description' => 'varchar(255) NOT NULL ' 
+			'step_transition_id' => 'int(10) NOT NULL ' ,
+			'action_id' => 'int(10) NOT NULL ' ,
+			'params' => 'text NOT NULL ' ,
+			'order' => 'int(5) NOT NULL ' 
 		);
 	}
 }
