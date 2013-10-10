@@ -11,11 +11,11 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"ego_dev",
-						"password":		"root",
-						"host":			"localhost",
+						"username":		"mddev",
+						"password":		"k3yB0@rDm@5h",
+						"host":			"192.168.1.13",
 						"port":			"3306",
-						"database":		"nutsnbolts"
+						"database":		"wtp"
 					}
 				}
 			}
