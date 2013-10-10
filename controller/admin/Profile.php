@@ -6,7 +6,6 @@ namespace application\nutsNBolts\controller\admin
 	
 	class Profile extends AdminController
 	{
-		private $collectionID=null;
 		public function init()
 		{
 			if(strlen($this->request->node(2))>0)
