@@ -36,7 +36,7 @@ namespace application\nutsNBolts\controller\admin
 			$this->setContentView('admin/profile');
 			$this->view->setVar('userDetails',$this->plugin->Mvc->model->User->read($userId));
 			$this->addBreadcrumb('Profile','icon-edit','profile');
-			$this->view->render();			
+			// $this->view->render();			
 		}
 		
 		private function edit()

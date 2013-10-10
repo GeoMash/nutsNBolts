@@ -93,6 +93,11 @@ namespace application\nutsNBolts\controller\admin
 					$this->view->render();
 					exit();
 				}
+				case 'profile':
+				{	
+					$this->routedController=new Profile($this->MVC);
+					break;
+				}				
 				default:
 				{
 					$this->view->render();

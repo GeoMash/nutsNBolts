@@ -57,10 +57,10 @@
 									</div>
 								</div>
 								<?php
-								$hasValue	=(bool)$tpl->get('value');
+								$hasValue	=($userDetails['image']);
 								if ($hasValue)
 								{
-									$parts		=explode('/',$tpl->get('value'));
+									$parts		=explode('/',$userDetails['image']);
 									$name		=array_pop($parts);
 									$thumb		=implode('/',$parts).'/_thumbs/120x120/'.$name;
 								}
@@ -69,7 +69,7 @@
 									<label class="control-label">Profile Picture</label>
 									<div class="controls">
 										<div class="box span2 ">
-											<input type="hidden" name="image" value="<?php echo (isset($userDetails['image'])) ? $userDetails['image']: ''; ?>">
+											<input type="hidden" name="image" value="<?php echo $userDetails['image']; ?>">
 											<div class="box-header">
 												<span class="title"><a href="javascript:{}" data-action="image.browseImage" title="Image Not Selected"><i class="icon-picture"></i> Select Image</a></span>
 											</div>
