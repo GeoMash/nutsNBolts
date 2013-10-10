@@ -24,7 +24,6 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'site_id' => 'int(10) NOT NULL ' ,
 			'content_type_id' => 'int(10) NOT NULL ' ,
-			'workflow_id' => 'int(10) NOT NULL ' ,
 			'title' => 'varchar(100) NOT NULL ' ,
 			'date_created' => 'timestamp NOT NULL ' ,
 			'date_updated' => 'timestamp NOT NULL ' ,
