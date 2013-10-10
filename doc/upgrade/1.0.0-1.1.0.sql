@@ -67,11 +67,11 @@ CREATE TABLE `message` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 /* MD changes */
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `site_id`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `income_range`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `position`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `company`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `about`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER `phone`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `dob`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `income_range`;
+ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
