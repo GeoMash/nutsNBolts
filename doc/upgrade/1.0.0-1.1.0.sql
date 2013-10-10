@@ -55,4 +55,13 @@ CREATE TABLE `collection_user` (
   `collection_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `message` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `from_user_id` int(10) NOT NULL,
+  `to_user_id` int(10) NOT NULL,
+  `subject` varchar(200) NOT NULL,
+  `body` text NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
