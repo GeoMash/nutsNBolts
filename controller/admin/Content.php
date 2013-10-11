@@ -96,6 +96,8 @@ namespace application\nutsNBolts\controller\admin
 					}
 				}
 
+
+				
 				$record['site_id']			=$this->getSiteId();
 				$record['content_type_id']	=$typeID;
 				$record['last_user_id']		=$this->getUserId();
@@ -119,7 +121,7 @@ namespace application\nutsNBolts\controller\admin
 		}
 		
 		public function edit($id)
-		{
+		{			
 			$contentTypeForPermCheck=$this->model->ContentType->read($this->typeID);
 			if (!$this->userCanAccessContentType($contentTypeForPermCheck[0]))
 			{
@@ -127,14 +129,15 @@ namespace application\nutsNBolts\controller\admin
 				$this->redirect('/admin/dashboard/');
 			}
 			unset($this->plugin->Session->returnToAction);
-		
+	
 			if ($this->request->get('id'))
 			{
 				foreach ($this->request->getAll() AS $key=>$rec)
 				{
 					// checking to see if an array is passed, and converting it to a json object
-					if(is_array($rec))
+					if($key != 'url' && is_array($rec))
 					{
+
 						$record[$key]='application/json: '.json_encode($rec);
 					}
 					else
