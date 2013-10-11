@@ -195,8 +195,6 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				WHERE {$where}
 			)
-			AND node.status=1
-
 			ORDER BY node.id ASC;
 SQL;
 
@@ -244,7 +242,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE node.id={$id}
-			AND node.status=1
+			AND node.status=2
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
@@ -308,7 +306,7 @@ SQL;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 				WHERE content_type_user.user_id=?
-				AND node.status=1
+				AND node.status=2
 				AND node.id <> ?
 				AND node.date_created > ?
 				GROUP BY (node.id)
@@ -325,7 +323,7 @@ SQL;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 				WHERE content_type_user.user_id=?
-				AND node.status=1
+				AND node.status=2
 				AND node.id <> ?
 				AND node.date_created < ?
 				GROUP BY (node.id)
@@ -387,7 +385,7 @@ SQL_PART;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=1
+			AND node.status=2
 			{$where}
 			ORDER BY node.date_created DESC
 SQL;
@@ -431,7 +429,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$id}
-			AND node.status=1
+			AND node.status=2
 			AND content_part.ref="category"
 			ORDER BY node.date_created DESC
 SQL;
@@ -453,7 +451,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=1
+			AND node.status=2
 			ORDER BY node.date_created DESC
 SQL;
 
@@ -498,7 +496,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=1
+			AND node.status=2
 			ORDER BY node.date_created DESC
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
@@ -537,7 +535,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=1
+			AND node.status=2
 			ORDER BY node.date_created DESC
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
