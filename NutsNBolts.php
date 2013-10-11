@@ -168,7 +168,7 @@ namespace application\nutsNBolts
 					{
 						$widget[$applicationRef][]=array
 						(
-							'namespace'		=>'application\\'.strtolower($applicationRef).'\\widget\\'.$iteration->getFilename(),
+							'namespace'		=>'application\\'.lcfirst($applicationRef).'\\widget\\'.$iteration->getFilename(),
 							'name'			=>ucwords($iteration->getFilename()),
 							'application'	=>$applicationRef
 						);
