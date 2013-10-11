@@ -15,6 +15,7 @@
 				<div class="padded">
 					<form class="form-horizontal fill-up validatable" action="/admin/profile/edit" method="POST">
 						<input type="hidden" value="<?php echo $userDetails['id']; ?>" name="id"/>
+						<input type="hidden" value="<?php echo $userDetails['status']; ?>" name="status"/>
 						<div class="box-content">
 							<div class="padded">
 								<div class="control-group">
