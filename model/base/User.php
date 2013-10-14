@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 08/10/2013 
+ * @since 11/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -30,7 +30,11 @@ namespace application\nutsNBolts\model\base
 			'phone' => 'varchar(50) NOT NULL ' ,
 			'dob' => 'date NOT NULL ' ,
 			'gender' => 'tinyint(1) NOT NULL ' ,
+			'image' => 'varchar(200) NOT NULL ' ,
 			'income_range' => 'varchar(20) NOT NULL ' ,
+			'position' => 'varchar(200) NOT NULL ' ,
+			'company' => 'varchar(200) NOT NULL ' ,
+			'about' => 'varchar(1024) NOT NULL ' ,
 			'date_created' => 'datetime NOT NULL ' ,
 			'date_lastlogin' => 'datetime NOT NULL ' ,
 			'date_lastactive' => 'datetime NOT NULL ' ,

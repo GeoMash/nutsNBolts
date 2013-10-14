@@ -159,7 +159,7 @@ namespace application\nutsNBolts
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
 				$folder	=__DIR__._DS_.'widget';
-				$folder=str_replace("nutsNBolts", $applicationRef, $folder);
+				$folder=str_replace("nutsNBolts", lcfirst($applicationRef), $folder);
 				foreach (new DirectoryIterator($folder) as $iteration)
 				{
 					//We don't load folders or files from within folders.
@@ -168,16 +168,13 @@ namespace application\nutsNBolts
 					{
 						$widget[$applicationRef][]=array
 						(
-							'namespace'		=>'application\\'.strtolower($applicationRef).'\\widget\\'.$iteration->getFilename(),
+							'namespace'		=>'application\\'.lcfirst($applicationRef).'\\widget\\'.$iteration->getFilename(),
 							'name'			=>ucwords($iteration->getFilename()),
 							'application'	=>$applicationRef
 						);
 					}
 				}						
 			}
-			// echo "<pre>";
-			// print_r($widget);
-			// die();
 			return $widget;
 		}
 		

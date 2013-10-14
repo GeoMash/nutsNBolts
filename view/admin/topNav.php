@@ -20,14 +20,18 @@ $user=$tpl->get('user');
 
 				<li class="with-image">
 					<div class="avatar">
-						<!-- <img src="/images/avatars/avatar1.jpg" /> -->
+					<?php if(isset($user['image']) && strlen($user['image']>0)): ?>
+						<img src="<?php echo $user['image']; ?>" />
+					<?php else: ?>
+						<img src="/images/avatars/silhouette.png" />
+					<?php endif; ?>
 					</div>
 					<span><?php print $user['name_first'].' '.$user['name_last']; ?></span>
 				</li>
 
 				<li class="divider"></li>
-
-				<!-- <li><a href="#"><i class="icon-user"></i> <span>Profile</span></a></li> -->
+				<li><a href="/admin/messages"><i class="icon-inbox"></i> <span>Messages - <span style="font-weight:bold;color:red">0</span></span></a></li>
+				<li><a href="/admin/profile"><i class="icon-user"></i> <span>Profile</span></a></li>
 				<li><a href="/admin/logout"><i class="icon-off"></i> <span>Logout</span></a></li>
 			</ul>
 		</li>

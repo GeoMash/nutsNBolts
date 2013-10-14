@@ -4,10 +4,9 @@ namespace application\nutsNBolts\controller
 	use application\nutsNBolts\base\Controller;
 	use nutshell\helper\ObjectHelper;
 	use \DateTime;
-
+	
 	class Index extends Controller
 	{
-		
 		private $validZones=array
 		(
 			'template',
@@ -22,7 +21,6 @@ namespace application\nutsNBolts\controller
 		public $nodes		=null;
 		private $site		=null;
 		public $cache		=true;
-		
 		public function index()
 		{
 			$binding		=$this->application->NutsNBolts->getSiteBinding($this->getSiteRef());
@@ -178,7 +176,14 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getAllDates($id);
 					}
-				);
+				)->registerCallback
+				(
+				 	'getHomeTiles',
+				 	function()
+				 	{
+				 		return $this->getHomeTiles();
+				 	}
+				 );
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
 			}
@@ -263,7 +268,6 @@ namespace application\nutsNBolts\controller
 							//If query is set, ignore all other parameters.
 							if (!empty($config['typeConfig']['query']))
 							{
-
 								if ($result=$this->plugin->db->nutsnbolts->select($config['typeConfig']['query']))
 								{
 									$content=$this->plugin->db->nutsnbolts->result('assoc');
@@ -805,6 +809,12 @@ namespace application\nutsNBolts\controller
 
 			}
 		}			
+		
+		public function getHomeTiles()
+		{
+			$tiles=$this->model->Node->getHomeTiles();
+			return $tiles;
+		}		
 	}
 }
 ?>
