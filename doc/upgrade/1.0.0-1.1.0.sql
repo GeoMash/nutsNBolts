@@ -1,6 +1,6 @@
-ALTER TABLE `alliance_nutsnbolts`.`content_type` ADD COLUMN `workflow_id` INT(10) NOT NULL AFTER `site_id`;
-ALTER TABLE `alliance_nutsnbolts`.`node` ADD COLUMN `workflow_step_id` INT(10) DEFAULT 0 NOT NULL AFTER `content_type_id`;
-ALTER TABLE `alliance_nutsnbolts`.`collection` CHANGE `descriptions` `description` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `content_type` ADD COLUMN `workflow_id` INT(10) NOT NULL AFTER `site_id`;
+ALTER TABLE `node` ADD COLUMN `workflow_step_id` INT(10) DEFAULT 0 NOT NULL AFTER `content_type_id`;
+ALTER TABLE `collection` CHANGE `descriptions` `description` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci NOT NULL;
 CREATE TABLE `workflow` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
@@ -55,23 +55,4 @@ CREATE TABLE `collection_user` (
   `collection_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `message` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `from_user_id` int(10) NOT NULL,
-  `to_user_id` int(10) NOT NULL,
-  `subject` varchar(200) NOT NULL,
-  `body` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-
-/* MD changes */
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `income_range`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `position`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `company`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `about`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER `phone`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `dob`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `income_range`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
