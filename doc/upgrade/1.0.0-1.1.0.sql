@@ -55,4 +55,10 @@ CREATE TABLE `collection_user` (
   `collection_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `user`
+ADD COLUMN `image` VARCHAR(100) NOT NULL AFTER `name_last`,
+ADD COLUMN `position` VARCHAR(100) NOT NULL AFTER `image`,
+ADD COLUMN `company` VARCHAR(100) NOT NULL AFTER `position`,
+ADD COLUMN `about` TEXT NOT NULL AFTER `company`;
