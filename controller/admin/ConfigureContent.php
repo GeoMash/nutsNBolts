@@ -87,6 +87,11 @@ namespace application\nutsNBolts\controller\admin
 					$this->removeType($id);
 					break;
 				}
+				case 'duplicate':
+				{
+					$this->duplicateContentType($id);
+					break;
+				}				
 				default:
 				{
 					$this->setContentView('admin/configureContent/types');
@@ -113,9 +118,9 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
+
 				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();
-				
+				$record['site_id']=$this->getSiteId();				
 				if ($id=$this->model->ContentType->handleRecord($record))
 				{
 					$this->plugin->Notification->setSuccess('Content type successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
@@ -203,6 +208,9 @@ namespace application\nutsNBolts\controller\admin
 	<div class="news-content">
 		<div class="news-title"><a href="/admin/configurecontent/types/edit/{$contentTypes[$i]['id']}">{$contentTypes[$i]['name']}</a></div>
 		<div class="news-text">{$contentTypes[$i]['description']}</div>
+		<a href="/admin/configurecontent/types/duplicate/{$contentTypes[$i]['id']}">
+			<div class="duplicate">duplicate</div>
+		</a>
 	</div>
 </div>
 HTML;
@@ -539,6 +547,26 @@ HTML;
 				}
 			}
 			return $headers;
+		}
+
+		private function duplicateContentType($id)
+		{
+
+			$thisContentType=$this->model->ContentType->read(array('id'=>$id));
+			if(isset($thisContentType[0]['id']))
+			{
+				$thisContentType[0]['name'].= " (copy)";	
+				unset($thisContentType[0]['id']);
+				unset($thisContentType[0]['roles']);
+				unset($thisContentType[0]['users']);
+			}
+			
+			$duplicatedContentType=$thisContentType[0];
+			print_r($duplicatedContentType);
+			$this->model->ContentType->handleRecord($duplicatedContentType);
+			// die();
+			$this->redirect('/admin/configureContent/types/');
+			die();
 		}
 	}
 }
