@@ -566,23 +566,13 @@ HTML;
 				unset($thisContentPart[$i]['id']);
 				$thisContentPart[$i]['content_type_id']=$contentTypeId;
 			}
-// print_r($duplicatedContentType);
+ 
+ 			foreach($thisContentPart AS $part)
+ 			{
+ 				$this->model->ContentPart->insert($part);
+ 			}
 			if($roles['roles'] > 0)
 			{
-
-				$role=array
-				(
-					'content_type_id'		=>$contentTypeId,
-					'role_id'				=>$roles['roles'][0]['id']
-				);
-
-				
-
-				$user=array
-				(
-					'content_type_id'		=>$contentTypeId,
-					'user_id'				=>$roles['users'][0]['id']
-				);
 
 				foreach ($roles['roles'] AS $role)
 				{
