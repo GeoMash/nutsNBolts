@@ -544,26 +544,69 @@ HTML;
 		{
 			$roles=array();
 			$thisContentType=$this->model->ContentType->read(array('id'=>$id));
+
 			if(isset($thisContentType[0]['id']))
 			{
 				$thisContentType[0]['name'].= " (copy)";	
 				unset($thisContentType[0]['id']);
 
-				if(isset($thisContentType[0]['roles']))
-				{
-					$roles['roles']=$thisContentType[0]['roles'];
-					$roles['users']=$thisContentType[0]['users'];
+				$roles['roles']=$thisContentType[0]['roles'];
+				$roles['users']=$thisContentType[0]['users'];
 
-					unset($thisContentType[0]['roles']);
-					unset($thisContentType[0]['users']);					
-				}
+				unset($thisContentType[0]['roles']);
+				unset($thisContentType[0]['users']);					
 			}
 			
 			$duplicatedContentType=$thisContentType[0];
-			print_r($duplicatedContentType);
-			$this->model->ContentType->handleRecord($duplicatedContentType);
-			// die();
-			$this->redirect('/admin/configureContent/types/');
+			$contentTypeId=$this->model->ContentType->insert($duplicatedContentType);
+
+			$thisContentPart=$this->model->ContentPart->read(array('content_type_id'=>$id));
+			for($i=0;$i<count($thisContentPart); $i++)
+			{
+				unset($thisContentPart[$i]['id']);
+				$thisContentPart[$i]['content_type_id']=$contentTypeId;
+			}
+// print_r($duplicatedContentType);
+			if($roles['roles'] > 0)
+			{
+
+				$role=array
+				(
+					'content_type_id'		=>$contentTypeId,
+					'role_id'				=>$roles['roles'][0]['id']
+				);
+
+				
+
+				$user=array
+				(
+					'content_type_id'		=>$contentTypeId,
+					'user_id'				=>$roles['users'][0]['id']
+				);
+
+				foreach ($roles['roles'] AS $role)
+				{
+					$role=array
+					(
+						'content_type_id'		=>$contentTypeId,
+						'role_id'				=>$role['id']
+					);
+					$this->model->ContentTypeRole->insert($role);
+
+				}
+
+				foreach ($roles['users'] AS $user)
+				{
+					$user=array
+					(
+						'content_type_id'		=>$contentTypeId,
+						'user_id'				=>$user['id']
+					);
+					$this->model->ContentTypeUser->insert($user);
+					
+				}				
+			}
+			$this->redirect('/admin/configureContent/types/edit/'.$contentTypeId);
 			die();
 		}
 	}
