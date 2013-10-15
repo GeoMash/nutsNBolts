@@ -145,7 +145,13 @@ namespace application\nutsNBolts\controller\admin
 						$record[$key]=$rec;
 					}
 				}	
-	
+
+				// sets the status to published
+				if(!isset($record['status']))
+				{
+					$record['status'] = 2;
+				}
+
 				if (!$this->contentType['workflow_id'])
 				{
 					if ($this->model->Node->handleRecord($record))
@@ -161,6 +167,7 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 				}
+
 			}
 
 			$contentType=$this->model->ContentType->readWithParts($this->typeID);
