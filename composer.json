@@ -1,5 +1,6 @@
 {
 	"name":             "praxisbt/nutsnbolts",
+	"type":             "nutshell-application",
 	"description":      "Nuts n Bolts - A CMS from PraxisBT",
 	"authors":
     [
@@ -19,15 +20,5 @@
             "type": "git",
             "url":  "http://git.geomash.com/open-source/nutshell.git"
         }
-    ],
-	"extra":
-    {
-        "installer-paths":
-        {
-            "private/lib/{$name}":
-            [
-                "nutshell/nutshell"
-            ]
-        }
-    }
+    ]
 }
