@@ -361,15 +361,6 @@ HTML;
 			return false;
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		public function forms($action=null,$id=null)
 		{
 			$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
@@ -551,14 +542,21 @@ HTML;
 
 		private function duplicateContentType($id)
 		{
-
+			$roles=array();
 			$thisContentType=$this->model->ContentType->read(array('id'=>$id));
 			if(isset($thisContentType[0]['id']))
 			{
 				$thisContentType[0]['name'].= " (copy)";	
 				unset($thisContentType[0]['id']);
-				unset($thisContentType[0]['roles']);
-				unset($thisContentType[0]['users']);
+
+				if(isset($thisContentType[0]['roles']))
+				{
+					$roles['roles']=$thisContentType[0]['roles'];
+					$roles['users']=$thisContentType[0]['users'];
+
+					unset($thisContentType[0]['roles']);
+					unset($thisContentType[0]['users']);					
+				}
 			}
 			
 			$duplicatedContentType=$thisContentType[0];
