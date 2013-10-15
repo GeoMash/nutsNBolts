@@ -11,8 +11,7 @@
     ],
 	"require":
     {
-        "nutshell/nutshell": "dev-1.1.0.dev",
-        "raveren/kint": "dev-master"
+        "nutshell/nutshell": "dev-1.1.0.dev"
     },
 	"repositories":
     [
