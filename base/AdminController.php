@@ -43,7 +43,15 @@ namespace application\nutsNBolts\base
 				$this->user=$this->plugin->UserAuth->getUser();
 				$this->view->setVar('user',$this->user);
 
-				$this->unreadMessages=$this->plugin->Message->getUnreadMessageCount();
+				if($this->plugin->Message->getUnreadMessageCount()<1)
+				{
+					$this->unreadMessages="";
+				}
+				else
+				{
+					$this->unreadMessages=$this->plugin->Message->getUnreadMessageCount();	
+				}
+				
 
 				$this->show404();
 				
