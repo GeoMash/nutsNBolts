@@ -20,9 +20,18 @@ namespace application\nutsNBolts\plugin\message
 			}
 		}
 
-		public function newMessage($userId,$subject,$body)
+		public function sendMessage($toId,$subject,$body)
 		{
-
+			return $this->model->Message->insertAssoc
+			(
+				array
+				(
+					'from_user_id'	=>$this->plugin->UserAuth->getUserId(),
+					'to_user_id'	=>$toId,
+					'subject'		=>$subject,
+					'body'			=>$body
+				)
+			);
 		}
 
 
