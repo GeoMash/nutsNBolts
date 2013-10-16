@@ -225,7 +225,7 @@ HTML;
 
 		public function authenticate($fieldName,$fieldValue,$password)
 		{
-			$user		=$this->plugin->Mvc->model->User->read(array("$fieldName"=>$fieldValue));
+			$user		=$this->plugin->Mvc->model->User->read(array($fieldName=>$fieldValue));
 			
 			if (isset($user[0]))
 			{

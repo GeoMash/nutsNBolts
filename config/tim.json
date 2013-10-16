@@ -15,22 +15,14 @@
 						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"alliance_nutsnbolts"
+						"database":		"wtp"
 					}
 				}
 			},
 			"Plupload":
 			{
-				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/praxisbt/alliance/biz-smart-website/public/_collections/",
-				"thumbnails":
-				[
-					{
-						"width":		120,
-						"height":		120,
-						"constraint":	"crop"
-					}
-				]
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/api.geomash3.dev.lan/private/application/data/uploads/"
 			}
 		}
 	}

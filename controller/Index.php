@@ -183,7 +183,15 @@ namespace application\nutsNBolts\controller
 				 	{
 				 		return $this->getHomeTiles();
 				 	}
-				 );
+				 )->registerCallback
+				 (
+					'isAuthenticated',
+					function()
+					{
+						return $this->plugin->UserAuth->isAuthenticated();
+					}
+				);
+
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
 			}
