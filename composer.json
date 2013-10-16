@@ -1,0 +1,23 @@
+{
+	"name":             "praxisbt/nutsnbolts",
+	"type":             "nutshell-application",
+	"description":      "Nuts n Bolts - A CMS from PraxisBT",
+	"authors":
+    [
+        {
+            "name": "Praxis BT",
+            "email":"support@praxisbt.com"
+        }
+    ],
+	"require":
+    {
+        "nutshell/nutshell": "dev-1.1.0.dev"
+    },
+	"repositories":
+    [
+        {
+            "type": "git",
+            "url":  "http://git.geomash.com/open-source/nutshell.git"
+        }
+    ]
+}
