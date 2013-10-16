@@ -5,7 +5,7 @@ namespace application\nutsNBolts\model
 	use application\nutsNBolts\model\base\User as UserBase;
 	use nutshell\exception\NutshellException;
 	
-	class User extends UserBase	
+	class User extends UserBase
 	{
 		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
 		{
@@ -148,6 +148,37 @@ SQL;
 				}
 			}
 			return null;
+		}
+
+		public function getUsersByRole($role)
+		{
+			if (is_numeric($role))
+			{
+				$query=<<<SQL
+SELECT *
+FROM USER
+LEFT JOIN user_role ON user_role.user_id=user.id
+LEFT JOIN role ON role.id=user_role.role_id
+WHERE role.id=-100 OR role.id=?
+SQL;
+
+			}
+			else
+			{
+				$query=<<<SQL
+SELECT *
+FROM USER
+LEFT JOIN user_role ON user_role.user_id=user.id
+LEFT JOIN role ON role.id=user_role.role_id
+WHERE role.id=-100 OR role.ref=?
+SQL;
+			}
+			if ($this->db->select($query,array($role)))
+			{
+				$records=$this->db->result('assoc');
+				return isset($records)?$records:null;
+			}
+			return false;
 		}
 	}
 }

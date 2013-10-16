@@ -59,16 +59,17 @@ CREATE TABLE `collection_user` (
 
 
 /* MD changes */
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `income_range`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `position`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `company`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `about`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER `phone`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `dob`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `income_range`;
-ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
+ALTER TABLE `user` ADD COLUMN `position` VARCHAR(200) NOT NULL AFTER `income_range`;
+ALTER TABLE `user` ADD COLUMN `company` VARCHAR(200) NOT NULL AFTER `position`;
+ALTER TABLE `user` ADD COLUMN `about` VARCHAR(1024) NOT NULL AFTER `company`;
+ALTER TABLE `user` ADD COLUMN `phone` VARCHAR(50) NOT NULL AFTER `about`;
+ALTER TABLE `user` ADD COLUMN `dob` DATE() NOT NULL AFTER `phone`;
+ALTER TABLE `user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `dob`;
+ALTER TABLE `user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `income_range`;
+ALTER TABLE `user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
 
 /* page bunching */
+
 ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 
 ALTER TABLE `user`
@@ -76,4 +77,7 @@ ADD COLUMN `image` VARCHAR(100) NOT NULL AFTER `name_last`,
 ADD COLUMN `position` VARCHAR(100) NOT NULL AFTER `image`,
 ADD COLUMN `company` VARCHAR(100) NOT NULL AFTER `position`,
 ADD COLUMN `about` TEXT NOT NULL AFTER `company`;
+
+
+ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 
