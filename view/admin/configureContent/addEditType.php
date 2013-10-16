@@ -49,6 +49,21 @@
 										</select>
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Page</label>
+									<div class="controls">
+										<select name="page_name">
+											<option value="Home">Home</option>
+											<option value="About">About</option>
+											<option value="Knowledge Bank">Knowledge Bank</option>
+											<option value="Academic Calendar">Academic Calendar</option>
+											<option value="SME challenge">SME Challenge</option>
+											<option value="Contact">Contact</option>
+											<option value="Search">Search</option>
+											<option value="Blog">Blog</option>											
+										</select>
+									</div>
+								</div>								
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">
