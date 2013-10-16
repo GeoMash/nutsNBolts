@@ -18,7 +18,7 @@ namespace application\nutsNBolts\plugin\fileSystem
 		
 		public function getFileListFromCollection($collectionID)
 		{
-			$dir=PUBLIC_DIR.'_collections'._DS_.$collectionID;
+			$dir=$this->config->collectionsDir._DS_.$collectionID;
 			if (is_dir($dir))
 			{
 				$fileList=array();
