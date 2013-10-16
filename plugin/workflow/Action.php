@@ -32,7 +32,7 @@ namespace application\nutsNBolts\plugin\workflow
 			return false;
 		}
 
-		public function sendNotification($nodeId,$params)
+		public function sendNotificationToUser($nodeId,$params)
 		{
 			return $this->plugin->Message->sendMessage
 			(
@@ -40,6 +40,21 @@ namespace application\nutsNBolts\plugin\workflow
 				$params['subject'],
 				str_replace('{$nodeId}',$nodeId,$params['message'])
 			);
+		}
+
+		public function sendNotificationToRole($nodeId,$params)
+		{
+			$users=$this->model->User->getUsersByRole($params['role']);
+			for ($i=0,$j=count($users); $i<$j; $i++)
+			{
+				$this->plugin->Message->sendMessage
+				(
+					$users[$i]['id'],
+					$params['subject'],
+					str_replace('{$nodeId}',$nodeId,$params['message'])
+				);
+			}
+			return true;
 		}
 	}
 }
