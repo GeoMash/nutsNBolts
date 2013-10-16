@@ -20,7 +20,7 @@ $user=$tpl->get('user');
 
 				<li class="with-image">
 					<div class="avatar">
-					<?php if(isset($user['image']) && strlen($user['image']>0)): ?>
+					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
 						<img src="<?php echo $user['image']; ?>" />
 					<?php else: ?>
 						<img src="/images/avatars/silhouette.png" />
