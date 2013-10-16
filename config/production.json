@@ -118,15 +118,19 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/alliance/current/public/_collections/",
+				"completed_dir":	"/datastore/www/alliance/shared/_collections/",
 				"thumbnails":
-				[
-					{
-						"width":		120,
-						"height":		120,
-						"constraint":	"crop"
-					}
-				]
+				                    [
+					                    {
+						                    "width":		120,
+						                    "height":		120,
+						                    "constraint":	"crop"
+					                    }
+				                    ]
+			},
+			"FileSystem":
+			{
+				"collectionsDir": "/datastore/www/alliance/shared/_collections/"
 			},
 			"FaceBook":
 			{
