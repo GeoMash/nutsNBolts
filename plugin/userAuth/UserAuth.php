@@ -223,9 +223,9 @@ HTML;
 			return false;
 		}
 
-		public function authenticate($fieldName,$fieldValue,$password)
+		public function authenticate(Array $array,$password)
 		{
-			$user		=$this->plugin->Mvc->model->User->read(array("$fieldName"=>$fieldValue));
+			$user		=$this->plugin->Mvc->model->User->read($array);
 			if (isset($user[0]))
 			{
 				$userSalt	=$user[0]['salt'];
@@ -240,6 +240,7 @@ HTML;
 						'status'		=>1
 					)
 				);
+				
 				if (isset($result[0]))
 				{
 					return $result[0];
