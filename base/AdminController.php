@@ -169,12 +169,26 @@ HTML;
 		public function generateContentTypesforNav()
 		{
 			$html=array();
-			$contentTypes=$this->model->ContentType->read();
+			
+
+			$contentTypes=$this->model->ContentType->read(array(),array(),' ORDER BY page_name');
+	
+			$previousPage="";
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
 				if ($this->userCanAccessContentType($contentTypes[$i]))
 				{
 					$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
+					if($contentTypes[$i]['page_name']!=$previousPage)
+					{
+						$html[]	=<<<HTML
+			<i class="icon-edit icon-2x"></i>
+			<span>
+				{$contentTypes[$i]['page_name']}
+				<i class="icon-caret-down"></i>
+			</span>						
+HTML;
+					}					
 					$html[]	=<<<HTML
 <li class="{$active}">
 	<a href="/admin/content/view/{$contentTypes[$i]['id']}">
@@ -182,6 +196,7 @@ HTML;
 	</a>
 </li>
 HTML;
+					$previousPage=$contentTypes[$i]['page_name'];
 				}
 			}
 			return implode('',$html);
