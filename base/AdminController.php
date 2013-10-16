@@ -20,6 +20,7 @@ namespace application\nutsNBolts\base
 		public $JSLoader			=null;
 		public $config				=null;
 		public $returnToAction		=false;
+		public $unreadMessages		=0;
 		
 		public function __construct(Mvc $MVC)
 		{
@@ -38,9 +39,12 @@ namespace application\nutsNBolts\base
 				$this->view->setVar('nav_active_sub',$this->request->node(2));
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
-				
+
 				$this->user=$this->plugin->UserAuth->getUser();
 				$this->view->setVar('user',$this->user);
+
+				$this->unreadMessages=$this->plugin->Message->getUnreadMessageCount();
+
 				$this->show404();
 				
 				if ($this->request->get('returnToAction'))
@@ -88,6 +92,13 @@ namespace application\nutsNBolts\base
 					function($allowedRoles)
 					{
 						return $this->challangeRole($allowedRoles);
+					}
+				)->registerCallback
+				(
+					'getUnreadMessages',
+					function()
+					{
+						print $this->unreadMessages;
 					}
 				);
 			if (method_exists($this,'init'))
