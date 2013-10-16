@@ -18,6 +18,32 @@ namespace application\nutsNBolts\plugin\workflow
 			}
 		}
 
+		public function saveRecord($nodeId,$params)
+		{
+			$record=array();
+			foreach ($this->request->getAll() AS $key=>$rec)
+			{
+				// checking to see if an array is passed, and converting it to a json object
+				if($key != 'url' && is_array($rec))
+				{
+					$record[$key]='application/json: '.json_encode($rec);
+				}
+				else
+				{
+					$record[$key]=$rec;
+				}
+			}
+
+			if ($this->model->Node->handleRecord($record))
+			{
+				$this->plugin->Notification->setSuccess('Content successfully edited.');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
+		}
+
 		public function setNodeStatus($nodeId,$params)
 		{
 			if (isset($params['status']) && is_numeric($params['status']))
