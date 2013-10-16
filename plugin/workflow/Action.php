@@ -31,5 +31,15 @@ namespace application\nutsNBolts\plugin\workflow
 			}
 			return false;
 		}
+
+		public function sendNotification($nodeId,$params)
+		{
+			return $this->plugin->Message->sendMessage
+			(
+				$params['toId'],
+				$params['subject'],
+				str_replace('{$nodeId}',$nodeId,$params['message'])
+			);
+		}
 	}
 }
