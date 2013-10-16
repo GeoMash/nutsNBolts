@@ -132,24 +132,18 @@ namespace application\nutsNBolts\controller\admin
 	
 			if ($this->request->get('id'))
 			{
+				$record=array();
 				foreach ($this->request->getAll() AS $key=>$rec)
 				{
 					// checking to see if an array is passed, and converting it to a json object
 					if($key != 'url' && is_array($rec))
 					{
-
 						$record[$key]='application/json: '.json_encode($rec);
 					}
 					else
 					{
 						$record[$key]=$rec;
 					}
-				}	
-
-				// sets the status to published
-				if(!isset($record['status']))
-				{
-					$record['status'] = 2;
 				}
 
 				if (!$this->contentType['workflow_id'])
