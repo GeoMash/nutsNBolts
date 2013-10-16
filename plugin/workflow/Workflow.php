@@ -138,14 +138,15 @@ SQL;
 
 		private function parseActionParams($params)
 		{
-			$returnParams	=array();
-			$parts			=preg_split('(\n|\r\n)',$params);
-			for ($i=0,$j=count($parts); $i<$j; $i++)
-			{
-				list($key,$value)			=explode('=',$parts[$i]);
-				$returnParams[trim($key)]	=trim($value);
-			}
-			return $returnParams;
+			return json_decode($params,true);
+//			$returnParams	=array();
+//			$parts			=preg_split('(\n|\r\n)',$params);
+//			for ($i=0,$j=count($parts); $i<$j; $i++)
+//			{
+//				list($key,$value)			=explode('=',$parts[$i]);
+//				$returnParams[trim($key)]	=trim($value);
+//			}
+//			return $returnParams;
 		}
 	}
 }
