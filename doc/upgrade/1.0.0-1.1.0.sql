@@ -75,3 +75,6 @@ ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `dob` DATE() NOT NULL AFTER 
 ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `income_range` VARCHAR(20) NOT NULL AFTER `dob`;
 ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `gender` TINYINT(1) NOT NULL AFTER `income_range`;
 ALTER TABLE `alliance_nutsnbolts`.`user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
+
+/* page bunching */
+ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
