@@ -85,8 +85,8 @@ HTML;
 				{
 					$html[]=<<<HTML
 <tr>
-	<td><i><a href="/admin/messages/view/{$records[$i]['id']}">{$records[$i]['subject']}</a></i></td>
-	<td><i>{$records[$i]['body']}</i></td>
+	<td><a href="/admin/messages/view/{$records[$i]['id']}">{$records[$i]['subject']}</a></td>
+	<td>{$records[$i]['body']}</td>
 </tr>
 HTML;
 			}
