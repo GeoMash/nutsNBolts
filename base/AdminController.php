@@ -185,7 +185,7 @@ HTML;
 			<i class="icon-edit icon-2x"></i>
 			<span>
 				{$contentTypes[$i]['page_name']}
-				<i class="icon-caret-down"></i>
+				
 			</span>						
 HTML;
 					}					
