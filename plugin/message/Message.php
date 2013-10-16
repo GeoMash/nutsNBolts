@@ -34,6 +34,23 @@ namespace application\nutsNBolts\plugin\message
 			);
 		}
 
-
+		public function getUnreadMessageCount()
+		{
+			$return=0;
+			$query=<<<SQL
+SELECT COUNT(id) AS total
+FROM message
+WHERE status=0
+SQL;
+			if ($this->db->select($query))
+			{
+				$result=$this->db->result('assoc');
+				if (isset($result[0]))
+				{
+					return $result[0]['total'];
+				}
+			}
+			return $return;
+		}
 	}
 }
