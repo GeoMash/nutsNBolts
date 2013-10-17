@@ -28,7 +28,7 @@ namespace application\nutsNBolts\model\base
 			'name_first' => 'varchar(100) NOT NULL ' ,
 			'name_last' => 'varchar(100) NOT NULL ' ,
 			'phone' => 'varchar(50) NOT NULL ' ,
-			'dob' => 'date NOT NULL ' ,
+			'dob' => 'varchar(200)' ,
 			'gender' => 'tinyint(1) NOT NULL ' ,
 			'image' => 'varchar(200)' ,
 			'income_range' => 'varchar(20) NOT NULL ' ,
