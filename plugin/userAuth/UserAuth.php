@@ -39,7 +39,7 @@ namespace application\nutsNBolts\plugin\userAuth
 		}
 		
 
-		
+
 		private function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -264,7 +264,12 @@ HTML;
 
 		public function isAuthenticated()
 		{
-			return (bool)($this->plugin->Session->authenticated);
+			return (bool)(Nutshell::getInstance()->plugin->Session);
+		}
+
+		public function logout()
+		{
+			Nutshell::getInstance()->plugin->Session->destroy();
 		}
 
 		public function isSuper()
