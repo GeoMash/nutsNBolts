@@ -53,8 +53,13 @@ namespace application\nutsNBolts\model
 				$record['date_created']		=date('Y-m-d H:i:s');
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
-				
+				// if(!isset($record['role']))
+				// {
+				// 	$record['role']=1;
+				// }
+
 				$roles=$this->extractRoles($record);
+				var_dump($roles); exit();
 				if ($id=$this->insertAssoc($record))
 				{
 					for ($i=0,$j=count($roles); $i<$j; $i++)

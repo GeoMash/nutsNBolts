@@ -38,6 +38,8 @@ namespace application\nutsNBolts\plugin\userAuth
 			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 		}
 		
+
+		
 		private function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -81,6 +83,8 @@ namespace application\nutsNBolts\plugin\userAuth
 					{
 						$roles[$i]['user_id']=$id;
 						$this->plugin->Mvc->model->UserRole->insertAssoc($roles[$i]);
+						// var_dump($roles[$i]);
+						// exit();
 					}
 					return $id;
 				}
