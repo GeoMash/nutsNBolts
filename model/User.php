@@ -36,15 +36,21 @@ namespace application\nutsNBolts\model
 					unset($record['password']);
 				}
 				// var_dump($record);exit();
-				$roles	=$this->extractRoles($record);
-				$return	=$this->update($record,array('id'=>$record['id']));
-				$this->model->UserRole->delete(array('user_id'=>$record['id']));
+
 				
-				for ($i=0,$j=count($roles); $i<$j; $i++)
+				if(isset($record['role']))
 				{
-					$this->model->UserRole->insert($roles[$i]);
+					$roles	=$this->extractRoles($record);
+					
+					$this->model->UserRole->delete(array('user_id'=>$record['id']));					
+					for ($i=0,$j=count($roles); $i<$j; $i++)
+					{
+						$this->model->UserRole->insert($roles[$i]);
+					}					
 				}
+				$return	=$this->update($record,array('id'=>$record['id']));
 				return $return;
+				
 			}
 			//For Inserts
 			else

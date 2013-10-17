@@ -41,7 +41,7 @@ namespace application\nutsNBolts\controller\admin
 			$contentType=$this->model->ContentType->read($this->typeID);
 			
 			$this->addBreadcrumb('Content','icon-edit','content');
-			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$contentType[0]['id']);
+			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],$contentType[0]['id']);
 			$this->setContentView('admin/content/view');
 			$this->view->setVar('contentTypeId',$this->typeID);
 			$this->view->setVar('tableHeaderText',$contentType[0]['name']);
@@ -240,7 +240,7 @@ HTML;
 			$this->setContentView('admin/content/addEdit');
 			$this->addBreadcrumb('Content','icon-edit','content');
 			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
-			$this->addBreadcrumb('Edit Content','icon-pencil','edit/'.$id);
+			$this->addBreadcrumb('Edit Content','icon-pencil',$id);
 			$this->view->render();
 		}
 		
