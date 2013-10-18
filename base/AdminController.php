@@ -143,7 +143,7 @@ namespace application\nutsNBolts\base
 			$html			=array('<div id="breadcrumbs">');
 			$itemTemplate	=<<<HTML
 <div class="breadcrumb-button {first}">
-	<a href="{href}">
+	<a href="#">
 		<span class="breadcrumb-label">
 			<i class="{icon}"></i> {label}
 		</span>
