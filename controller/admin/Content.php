@@ -83,6 +83,15 @@ namespace application\nutsNBolts\controller\admin
 				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
 				$this->view->setVar('contentTypeId',$typeID);
 				$this->view->setVar('hasWorkflow',(bool)$contentType[0]['workflow_id']);
+				$this->view->getContext()
+				->registerCallback
+				(
+					'getWorkflowTransitions',
+					function()
+					{
+						$this->getWorkflowTransitions(null);
+					}
+				);
 				$this->view->render();
 			}
 			else
@@ -96,8 +105,6 @@ namespace application\nutsNBolts\controller\admin
 						$record[$key]='application/json: '.json_encode($rec);
 					}
 				}
-
-
 				
 				$record['site_id']			=$this->getSiteId();
 				$record['content_type_id']	=$typeID;
@@ -225,17 +232,7 @@ HTML;
 					'getWorkflowTransitions',
 					function() use ($node)
 					{
-						$transitions=$this->plugin->Workflow->getTransitionsForStep($node[0]['workflow_step_id']);
-						$html		=array();
-						for ($i=0,$j=count($transitions); $i<$j; $i++)
-						{
-							$html[]='<button data-action="doWorkflowTransition"'
-									.' data-transition="'.$transitions[$i]['id'].'"'
-								.' type="button"'
-								.' class="btn btn-blue"'
-								.' title="'.$transitions[$i]['description'].'">'.$transitions[$i]['name'].'</button>&nbsp;';
-						}
-						print implode('',$html);
+						$this->getWorkflowTransitions($node);
 					}
 				);
 			$this->setContentView('admin/content/addEdit');
@@ -326,6 +323,21 @@ HTML;
 		private function canAccessContentType()
 		{
 			return $this->challangeRole($this->contentType['roles']);
+		}
+
+		public function getWorkflowTransitions($node)
+		{
+			$transitions=$this->plugin->Workflow->getTransitionsForStep($node[0]['workflow_step_id']);
+			$html		=array();
+			for ($i=0,$j=count($transitions); $i<$j; $i++)
+			{
+				$html[]='<button data-action="doWorkflowTransition"'
+					.' data-transition="'.$transitions[$i]['id'].'"'
+					.' type="button"'
+					.' class="btn btn-blue"'
+					.' title="'.$transitions[$i]['description'].'">'.$transitions[$i]['name'].'</button>&nbsp;';
+			}
+			print implode('',$html);
 		}
 	}
 }
