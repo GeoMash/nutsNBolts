@@ -296,12 +296,24 @@ HTML;
 				$html	=array();
 				for ($i=0,$j=count($records); $i<$j; $i++)
 				{
+					if($records[$i]['status']==0)
+					{
+						$theStatus="saved";
+					}
+					if($records[$i]['status']==1)
+					{
+						$theStatus="pending approval";
+					}
+					if($records[$i]['status']==2)
+					{
+						$theStatus="published";
+					}					
 					$html[]=<<<HTML
 <tr>
 	<td><a href="/admin/content/edit/{$records[$i]['id']}">{$records[$i]['title']}</a></td>
 	<td>{$records[$i]['date_created']}</td>
 	<td>{$records[$i]['last_user_id']}</td>
-	<td>{$records[$i]['status']}</td>
+	<td>{$theStatus}</td>
 </tr>
 HTML;
 				}
