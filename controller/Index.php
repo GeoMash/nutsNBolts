@@ -190,7 +190,14 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->plugin->UserAuth->isAuthenticated();
 					}
-				);
+				)->registerCallback
+				(
+				 	'logout',
+				 	function()
+				 	{
+				 		return $this->plugin->UserAuth->logout();
+				 	}
+				 );
 
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
