@@ -327,7 +327,14 @@ HTML;
 
 		public function getWorkflowTransitions($node)
 		{
-			$transitions=$this->plugin->Workflow->getTransitionsForStep($node[0]['workflow_step_id']);
+			if (!is_null($node))
+			{
+				$transitions=$this->plugin->Workflow->getTransitionsForStep($node[0]['workflow_step_id']);
+			}
+			else
+			{
+				$transitions=$this->plugin->Workflow->getTransitionsForStep(0);
+			}
 			$html		=array();
 			for ($i=0,$j=count($transitions); $i<$j; $i++)
 			{
