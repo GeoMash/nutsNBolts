@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 11/10/2013 
+ * @since 21/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -27,18 +27,18 @@ namespace application\nutsNBolts\model\base
 			'salt' => 'varchar(100) NOT NULL ' ,
 			'name_first' => 'varchar(100) NOT NULL ' ,
 			'name_last' => 'varchar(100) NOT NULL ' ,
-			'phone' => 'varchar(50) NOT NULL ' ,
-			'dob' => 'date NOT NULL ' ,
-			'gender' => 'tinyint(1) NOT NULL ' ,
-			'image' => 'varchar(200) NOT NULL ' ,
-			'income_range' => 'varchar(20) NOT NULL ' ,
-			'position' => 'varchar(200) NOT NULL ' ,
-			'company' => 'varchar(200) NOT NULL ' ,
-			'about' => 'varchar(1024) NOT NULL ' ,
+			'image' => 'varchar(100)' ,
+			'position' => 'varchar(100)' ,
+			'company' => 'varchar(100)' ,
+			'about' => 'text' ,
 			'date_created' => 'datetime NOT NULL ' ,
 			'date_lastlogin' => 'datetime NOT NULL ' ,
 			'date_lastactive' => 'datetime NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL ' ,
+			'phone' => 'varchar(50)' ,
+			'dob' => 'varchar(200)' ,
+			'income_range' => 'varchar(20)' ,
+			'gender' => 'varchar(10)' 
 		);
 	}
 }
