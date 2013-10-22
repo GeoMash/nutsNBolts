@@ -22,7 +22,8 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'user_id' => 'int(10) NOT NULL ' ,
-			'role_id' => 'int(10) NOT NULL ' 
+			'role_id' => 'int(10) NOT NULL ' ,
+			'bar_id' => 'int(10)' 
 		);
 	}
 }
