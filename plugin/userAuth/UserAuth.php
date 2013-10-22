@@ -276,5 +276,18 @@ HTML;
 			}
 			return false;
 		}
+		
+		public function isAdmin()
+		{
+			$user=$this->getUser();
+			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
+			{
+				if ($user['roles'][$i]['ref']=='ADMIN')
+				{
+					return true;
+				}
+			}
+			return false;
+		}		
 	}
 }
