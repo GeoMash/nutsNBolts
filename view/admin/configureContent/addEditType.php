@@ -60,7 +60,8 @@
 											<option <?php echo ($tpl->get("page_name")=='SME challenge' ? "selected='selected'":""); ?> value="SME challenge">SME Challenge</option>
 											<option <?php echo ($tpl->get("page_name")=='Contact' ? "selected='selected'":""); ?> value="Contact">Contact</option>
 											<option <?php echo ($tpl->get("page_name")=='Search' ? "selected='selected'":""); ?> value="Search">Search</option>
-											<option <?php echo ($tpl->get("page_name")=='Blog' ? "selected='selected'":""); ?> value="Blog">Blog</option>											
+											<option <?php echo ($tpl->get("page_name")=='Blog' ? "selected='selected'":""); ?> value="Blog">Blog</option>
+											<option <?php echo ($tpl->get("page_name")=='Video' ? "selected='selected'":""); ?> value="Video">Video</option>
 										</select>
 									</div>
 								</div>								
