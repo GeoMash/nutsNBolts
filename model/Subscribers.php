@@ -10,27 +10,11 @@
  */
 namespace application\nutsNBolts\model\base
 {
-	use application\nutsNBolts\model\common\Base;
+	use application\nutsNBolts\model\base\Subscribers as SubscribersBase;
 	
-	class Subscribers extends Base	
+	class Subscribers extends SubscribersBase	
 	{
-		public $name		= 'subscribers';
-		public $primary		= array('id');
-		public $primary_ai	= true;
-		public $autoCreate	= false;
 		
-		public $columns = array
-		(
-			'id' => 'int(10) NOT NULL ' ,
-			'fb_uid' => 'int(30) NOT NULL ' ,
-			'email' => 'varchar(150)' ,
-			'firstName' => 'varchar(200)' ,
-			'lastName' => 'varchar(200)' ,
-			'gender' => 'varchar(15)' ,
-			'access_token' => 'text' ,
-			'date_last_access_token' => 'datetime' ,
-			'status' => 'int(1)' 
-		);
 	}
 }
 ?>

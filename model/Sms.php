@@ -8,23 +8,13 @@
  * @package application-model
  * @since 23/10/2013 
  */
-namespace application\nutsNBolts\model\base
+namespace application\nutsNBolts\model
 {
-	use application\nutsNBolts\model\common\Base;
+	use application\nutsNBolts\model\base\Sms as SmsBase;
 	
-	class Sms extends Base	
+	class Sms extends SmsBase	
 	{
-		public $name		= 'sms';
-		public $primary		= array('id');
-		public $primary_ai	= true;
-		public $autoCreate	= false;
 		
-		public $columns = array
-		(
-			'id' => 'int(11) unsigned NOT NULL ' ,
-			'user_id' => 'int(11)' ,
-			'date_sent' => 'timestamp' 
-		);
 	}
 }
 ?>

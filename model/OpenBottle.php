@@ -14,21 +14,7 @@ namespace application\nutsNBolts\model
 	
 	class OpenBottle extends OpenBottleBase	
 	{
-		public $name		= 'open_bottle';
-		public $primary		= array('id');
-		public $primary_ai	= true;
-		public $autoCreate	= false;
 		
-		public $columns = array
-		(
-			'id' => 'int(11) unsigned NOT NULL ' ,
-			'user_id' => 'int(11)' ,
-			'bottle_by_bar_id' => 'int(11)' ,
-			'bar_id' => 'int(11)' ,
-			'date_opened' => 'timestamp' ,
-			'bottle_price' => 'double(15,2)' ,
-			'volume_left' => 'int(10)' 
-		);
 	}
 }
 ?>
