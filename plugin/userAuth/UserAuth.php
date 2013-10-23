@@ -75,17 +75,15 @@ namespace application\nutsNBolts\plugin\userAuth
 				$record['date_created']		=date('Y-m-d H:i:s');
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
+				$role=$record['role'];
+				unset($record['role']);
 				
 				$roles=$this->extractRoles($record);
-				if ($id=$this->plugin->Mvc->model->User->insertAssoc($record))
+				if ($id=$this->insertAssoc($record))
 				{
-					for ($i=0,$j=count($roles); $i<$j; $i++)
-					{
-						$roles[$i]['user_id']=$id;
-						$this->plugin->Mvc->model->UserRole->insertAssoc($roles[$i]);
-						// var_dump($roles[$i]);
-						// exit();
-					}
+					$array=array('user_id'=>$id,'role_id'=>$role);
+					$this->model->UserRole->insertAssoc($array);
+					// var_dump($id); exit();
 					return $id;
 				}
 			}

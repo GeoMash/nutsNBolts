@@ -64,7 +64,7 @@ namespace application\nutsNBolts\model
 				// var_dump($roles); exit();
 				if ($id=$this->insertAssoc($record))
 				{
-					$array=array('user_id'=>$id,'role_id'=>$role);
+					$array=array('user_id'=>$id,'role_id'=>$role,'bar_id'=>$record['bar_id']);
 					$this->model->UserRole->insertAssoc($array);
 					// var_dump($id); exit();
 					return $id;
