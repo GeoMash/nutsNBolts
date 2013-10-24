@@ -6,7 +6,11 @@
  * Model Generator Plugin.
  * 
  * @package application-model
+<<<<<<< HEAD
  * @since 21/10/2013 
+=======
+ * @since 23/10/2013 
+>>>>>>> refs/heads/dev.ego.isika
  */
 namespace application\nutsNBolts\model\base
 {
@@ -22,7 +26,8 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'user_id' => 'int(10) NOT NULL ' ,
-			'role_id' => 'int(10) NOT NULL ' 
+			'role_id' => 'int(10) NOT NULL ' ,
+			'bar_id' => 'int(10)' 
 		);
 	}
 }

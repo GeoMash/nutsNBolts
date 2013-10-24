@@ -6,7 +6,11 @@
  * Model Generator Plugin.
  * 
  * @package application-model
+<<<<<<< HEAD
  * @since 21/10/2013 
+=======
+ * @since 23/10/2013 
+>>>>>>> refs/heads/dev.ego.isika
  */
 namespace application\nutsNBolts\model\base
 {
@@ -26,7 +30,12 @@ namespace application\nutsNBolts\model\base
 			'bottle_by_bar_id' => 'int(11)' ,
 			'bar_id' => 'int(11)' ,
 			'date_opened' => 'timestamp' ,
+<<<<<<< HEAD
 			'bottle_price' => 'double(15,2)' 
+=======
+			'bottle_price' => 'double(15,2)' ,
+			'volume_left' => 'int(10)' 
+>>>>>>> refs/heads/dev.ego.isika
 		);
 	}
 }
