@@ -98,11 +98,6 @@ var wysihtml5ParserRules = {
         "acronym": {
             "rename_tag": "span"
         },
-        "br": {
-            "add_class": {
-                "clear": "clear_br"
-            }
-        },
         "details": {
             "rename_tag": "div"
         },
