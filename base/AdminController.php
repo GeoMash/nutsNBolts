@@ -143,7 +143,7 @@ namespace application\nutsNBolts\base
 			$html			=array('<div id="breadcrumbs">');
 			$itemTemplate	=<<<HTML
 <div class="breadcrumb-button {first}">
-	<a href="{href}">
+	<a href="#">
 		<span class="breadcrumb-label">
 			<i class="{icon}"></i> {label}
 		</span>
@@ -198,8 +198,10 @@ HTML;
 				if ($this->userCanAccessContentType($contentTypes[$i]))
 				{
 					$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
-					if($contentTypes[$i]['page_name']!=$previousPage)
+					if(isset($contentTypes[$i]['page_name']))
 					{
+						if($contentTypes[$i]['page_name']!=$previousPage)
+						{
 						$html[]	=<<<HTML
 			<i class="icon-edit icon-2x"></i>
 			<span>
@@ -207,7 +209,9 @@ HTML;
 				
 			</span>						
 HTML;
-					}					
+						}	
+					}
+				
 					$html[]	=<<<HTML
 <li class="{$active}">
 	<a href="/admin/content/view/{$contentTypes[$i]['id']}">
@@ -355,9 +359,21 @@ HTML;
 		
 		public function isSuper()
 		{
-			return $this->plugin->UserAuth->isSuper();
+			if($this->plugin->UserAuth->isSuper() || $this->isAdmin())
+			{
+				return true;	
+			}
+			else
+			{
+				return false;
+			}
 		}
 
+		public function isAdmin()
+		{
+			return $this->plugin->UserAuth->isAdmin();
+		}
+		
 		public function userCanAccessContentType($contentType)
 		{
 			if ($this->isSuper())return true;

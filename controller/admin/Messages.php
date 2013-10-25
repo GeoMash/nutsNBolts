@@ -68,7 +68,7 @@ namespace application\nutsNBolts\controller\admin
 		private function generateMessageRows()
 		{
 
-			$records=$this->model->Message->read(array('to_user_id'=>$this->plugin->UserAuth->getUserId() ));
+			$records=$this->model->Message->read(array('to_user_id'=>$this->plugin->UserAuth->getUserId() ),array(),' ORDER BY id DESC');
 			$html	=array();
 			for ($i=0,$j=count($records); $i<$j; $i++)
 			{
