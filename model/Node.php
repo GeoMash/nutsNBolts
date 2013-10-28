@@ -94,7 +94,6 @@ namespace application\nutsNBolts\model
 			{
 				if (strstr($key,'node_part_id_'))
 				{
-					// die($key);
 					list($contentPartId,$nodePartId)=explode('_',str_replace('node_part_id_','',$key));
 					$contentPartId=(int)$contentPartId;
 					$nodePartId=(int)$nodePartId;
@@ -269,8 +268,6 @@ SQL;
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
 				//Reset index.
-				// print_r($nodes);
-				// die('halt');
 				sort($nodes);
 				return $nodes;
 			}
@@ -417,8 +414,6 @@ SQL;
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
 				//Reset index.
-				// print_r($nodes);
-				// die();
 				sort($nodes);
 				return $nodes;
 			}
