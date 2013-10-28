@@ -57,7 +57,13 @@
 					"rootLog": 
 					{
 						"class":			"DailyFileWriter",
-						"output":			"{APP_HOME}/logs/root-{DATE}.log",
+						"output":			"{APP_HOME}nutsNBolts/logs/root-{DATE}.log",
+						"mode":				666
+					},
+					"SMSLog":
+					{
+						"class":			"DailyFileWriter",
+						"output":			"{APP_HOME}nutsNBolts/logs/SMS-{DATE}.log",
 						"mode":				666
 					}
 				},
@@ -70,6 +76,16 @@
 							{
 								"writer":	"rootLog",
 								"level" :	"INFO" 
+							}
+						]
+					},
+					"SMSLog":
+					{
+						"writers":
+						[
+							{
+								"writer":	"SMSLog",
+								"level" :	"INFO"
 							}
 						]
 					}
@@ -120,13 +136,13 @@
 				"temporary_dir":	"/tmp/",
 				"completed_dir":	"/datastore/www/alliance/shared/_collections/",
 				"thumbnails":
-				                    [
-					                    {
-						                    "width":		120,
-						                    "height":		120,
-						                    "constraint":	"crop"
-					                    }
-				                    ]
+                [
+                    {
+	                    "width":		120,
+	                    "height":		120,
+	                    "constraint":	"crop"
+                    }
+                ]
 			},
 			"FileSystem":
 			{
@@ -136,6 +152,18 @@
 			{
 				"app_id":		"1376270492601764",
 				"app_secret":	"eb916a0b516c15e3b0e930cc258e77be"
+			},
+			"Sms":
+			{
+				"timezone": "Asia/Kuala_Lumpur",
+				"M3Tech":
+				{
+					"serviceURL":   "https://www.wcdma.com.my/imp/hlbb_praxis/submitsm.asp",
+					"UserKey":      "hlbbpraxis",
+					"Password":     "xdsf99b",
+					"ServiceId":    "000",
+					"MCN":          "push"
+				}
 			}
 		}
 	}

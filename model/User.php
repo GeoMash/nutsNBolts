@@ -163,25 +163,39 @@ SQL;
 
 		public function getUsersByRole($role)
 		{
-			if (is_numeric($role))
+			if (!is_array($role))
 			{
+				$role=array($role);
+			}
+			$roleQueryPart=array();
+			if (is_numeric($role[0]))
+			{
+				for ($i=0,$j=count($role); $i<$j; $i++)
+				{
+					$roleQueryPart[]=$role[$i];
+				}
+				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT *
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id=?
+WHERE role.id=-100 OR role.id IN({$roleQueryPart});
 SQL;
-
 			}
 			else
 			{
+				for ($i=0,$j=count($role); $i<$j; $i++)
+				{
+					$roleQueryPart[]='"'.$role[$i].'"';
+				}
+				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT *
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.ref=?
+WHERE role.id=-100 OR role.ref IN({$roleQueryPart});
 SQL;
 			}
 			if ($this->db->select($query,array($role)))
