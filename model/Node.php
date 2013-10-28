@@ -236,7 +236,7 @@ SQL;
 		public function getBlog($id)
 		{
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
@@ -269,6 +269,8 @@ SQL;
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
 				//Reset index.
+				print_r($nodes);
+				die('halt');
 				sort($nodes);
 				return $nodes;
 			}
