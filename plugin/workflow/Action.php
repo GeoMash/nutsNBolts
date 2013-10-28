@@ -33,15 +33,16 @@ namespace application\nutsNBolts\plugin\workflow
 					$record[$key]=$rec;
 				}
 			}
-
 			if ($this->model->Node->handleRecord($record))
 			{
 				$this->plugin->Notification->setSuccess('Content successfully edited.');
+				return true;
 			}
 			else
 			{
 				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 			}
+			return false;
 		}
 
 		public function setNodeStatus($nodeId,$params)
