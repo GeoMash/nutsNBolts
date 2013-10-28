@@ -176,11 +176,11 @@ SQL;
 				}
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
-SELECT *
+SELECT DISTINCT user.*
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id IN({$roleQueryPart});
+WHERE role.id=-100 OR role.id IN ({$roleQueryPart});
 SQL;
 			}
 			else
@@ -191,14 +191,14 @@ SQL;
 				}
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
-SELECT *
+SELECT DISTINCT user.*
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.ref IN({$roleQueryPart});
+WHERE role.id=-100 OR role.ref IN ({$roleQueryPart});
 SQL;
 			}
-			if ($this->db->select($query,array($role)))
+			if ($this->db->select($query))
 			{
 				$records=$this->db->result('assoc');
 				return isset($records)?$records:null;
