@@ -51,6 +51,8 @@ namespace application\nutsNBolts\controller
 				$this->view->setVar('SITEPATH','/sites/'.$this->getSite()['ref'].'/');
 				$this->view->setVar('URI',$this->request->getNodes());
 				$this->view->setVar('node',$this->nodes);
+				// adding a checked logged boolean to an array
+				$this->view->setVar('authenticated',(bool)$this->plugin->Session->authenticated);
 				
 				$scope		=$this->view;
 				$viewPath	=$this->viewPath;
