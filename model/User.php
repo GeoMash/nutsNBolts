@@ -74,6 +74,8 @@ namespace application\nutsNBolts\model
 				$record['date_lastactive']	='0000-00-00 00:00:00';
 				$role=$record['role'];
 				unset($record['role']);
+				$bars=$record['bars'];
+				unset($record['bars']);
 				// if(!isset($record['role']))
 				// {
 				// 	$record['role']=1;
