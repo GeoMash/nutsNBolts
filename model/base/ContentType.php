@@ -28,7 +28,8 @@ namespace application\nutsNBolts\model\base
 			'name' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
 			'icon' => 'varchar(50) NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL ' ,
+			'page_name' => 'varchar(20) NOT NULL ' , 
 		);
 	}
 }
