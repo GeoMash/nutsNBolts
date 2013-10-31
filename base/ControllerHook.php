@@ -13,8 +13,9 @@ namespace application\nutsNBolts\base
 	
 	class ControllerHook extends Component 
 	{
-		public $model		=null;
-		public $view		=null;
+		public $model			=null;
+		public $view			=null;
+		public $hookContainers =null;
 
 		public function __construct($model,$view)
 		{

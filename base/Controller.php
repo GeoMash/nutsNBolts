@@ -36,7 +36,7 @@ namespace application\nutsNBolts\base
 			// {
 				
 				// $pageRef=str_replace('/', '_', 'admin/configurecontent/types/add');
-				// $this->loadHooks('admin/settings/users/add');
+				$this->loadHooks('admin/settings/users/add');
 				// $this->loadCustomWidgets($pageRef);
 			// }
 						
@@ -62,6 +62,8 @@ namespace application\nutsNBolts\base
 			header('location:'.$path);
 			exit();
 		}
+		
+		private $hookContainers=array();
 		
 		public function loadHooks($ref=null)
 		{
