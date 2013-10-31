@@ -94,7 +94,6 @@ namespace application\nutsNBolts\model
 			{
 				if (strstr($key,'node_part_id_'))
 				{
-					// die($key);
 					list($contentPartId,$nodePartId)=explode('_',str_replace('node_part_id_','',$key));
 					$contentPartId=(int)$contentPartId;
 					$nodePartId=(int)$nodePartId;
@@ -249,7 +248,7 @@ SQL;
 		public function getBlog($id)
 		{
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
@@ -392,7 +391,7 @@ SQL_PART;
 SQL_PART;
 			}
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id

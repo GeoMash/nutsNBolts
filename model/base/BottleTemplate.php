@@ -6,7 +6,11 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 30/10/2013 
+<<<<<<< HEAD
+ * @since 21/10/2013 
+=======
+ * @since 23/10/2013 
+>>>>>>> refs/heads/dev.ego.isika
  */
 namespace application\nutsNBolts\model\base
 {
@@ -24,8 +28,7 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(11) unsigned NOT NULL ' ,
 			'name' => 'varchar(50)' ,
 			'volume' => 'varchar(10)' ,
-			'bottle_type' => 'varchar(50)' ,
-			'image' => 'varchar(100)' 
+			'bottle_type' => 'varchar(50)' 
 		);
 	}
 }
