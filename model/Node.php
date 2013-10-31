@@ -685,7 +685,38 @@ SQL;
 				sort($nodes);
 				return $nodes;
 			}	
-		}		
+		}
+		
+		public function getSpecificNodesAndParts($array)
+		{
+			$records=$this->model->Node->read($array);
+			$this->attachParts($records);
+			return $records;
+		}
+		
+		private function attachParts(&$records)
+		{
+			for ($i=0,$j=count($records); $i<$j; $i++)
+			{
+				$query=<<<SQL
+				SELECT node_part.value,content_part.ref
+				FROM node_part
+				LEFT JOIN content_part ON content_part.id=node_part.content_part_id
+				WHERE node_part.node_id=?
+				ORDER BY node_id DESC;
+SQL;
+				if ($this->db->select($query,array($records[$i]['id'])))
+				{
+					$nodePart=$this->db->result('assoc');
+
+					for ($k=0,$l=count($nodePart); $k<$l; $k++)
+					{
+						$records[$i][$nodePart[$k]['ref']]=$nodePart[$k]['value'];
+					}
+				}
+			}
+		}
+				
 	}
 }
 ?>
