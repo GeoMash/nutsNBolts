@@ -13,7 +13,6 @@ namespace application\nutsNBolts\base
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
 			$path			=$this->getPath();
-			$page			=$this->model->PageMap->getPageFromPath($path);			
 			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (isset($result[0]))
 			{
