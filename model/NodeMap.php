@@ -22,6 +22,8 @@ SQL;
 			if ($this->db->select($query,array($path)))
 			{
 				$records=$this->db->result('assoc');
+				print_r($records);
+				die();
 				$this->attachParts($records);
 				return $records;
 			}
@@ -50,6 +52,8 @@ SQL;
 			if ($this->db->select($query))
 			{
 				$records=$this->db->result('assoc');
+				print_r($records);
+				die();				
 				$this->attachParts($records);
 				return $records;
 			}
