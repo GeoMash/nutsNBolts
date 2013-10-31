@@ -22,7 +22,7 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/usr/local/var/www/bizsmart/public/_collections/",
+				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/",
 				"thumbnails":
 				[
 					{
