@@ -35,6 +35,11 @@ namespace application\nutsNBolts\base
 			}
 		}
 
+		public function getView()
+		{
+			return $this->view;
+		}
+
 		public function __get($key)
 		{
 			switch ($key)
