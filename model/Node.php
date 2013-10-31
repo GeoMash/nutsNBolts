@@ -165,7 +165,20 @@ namespace application\nutsNBolts\model
 			return $return;
 		}
 		
-		
+		public function getCount($contentTypeId)
+		{
+			$query=<<<SQL
+			SELECT count(id) as total
+			FROM node
+			WHERE content_type_id=?;
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,array($contentTypeId)))
+			{
+				$record=$this->plugin->Db->nutsnbolts->result('assoc');
+				return $record[0]['total'];
+			}
+			return 0;
+		}
 		
 		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
 		{
