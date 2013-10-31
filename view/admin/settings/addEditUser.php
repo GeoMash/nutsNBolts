@@ -71,6 +71,38 @@
 									</div>
 								</div>
 							</div>
+							
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-beaker"></i> Bars</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<table class="table table-hover">
+												<thead>
+													<tr>
+														<th><div>Grant</div></th>
+														<th><div>Name</div></th>
+														<th><div>Description</div></th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php $tpl->generateBarList(); ?>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>							
+							
+				<?php
+				$navButtons=$tpl->get('extraOptions');
+				foreach ($navButtons as $navButton)
+				{
+					print $navButton;
+				}
+				?>							
 							<div class="form-actions">
 								<div class="pull-right">
 									<button type="submit" class="btn btn-blue">Save Changes</button>
