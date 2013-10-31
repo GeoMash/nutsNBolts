@@ -8,6 +8,8 @@ namespace application\nutsNBolts\controller\admin
 		public function index()
 		{
 			$this->setContentView('admin/dashboard');
+			$renderRef='index';
+			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 	}
