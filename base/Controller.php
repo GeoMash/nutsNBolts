@@ -15,6 +15,7 @@ namespace application\nutsNBolts\base
 			$path			=$this->getPath();
 			$page			=$this->model->PageMap->getPageFromPath($path);			
 			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
+			
 			if (isset($result[0]))
 			{
 				$this->site=$result[0];
@@ -29,17 +30,17 @@ namespace application\nutsNBolts\base
 			}
 			
 			
-			$page			=$this->model->PageMap->getPageFromPath($path);
+			// $page			=$this->model->PageMap->getPageFromPath($path);
 			
 
-			// if(isset($page['ref']))
-			// {
+			// // if(isset($page['ref']))
+			// // {
 				
-				$pageRef=str_replace('/', '_', 'admin/settings/users/add');
-				$this->loadHooks($pageRef);
-				// $this->loadCustomWidgets($pageRef);
-			// }
-						
+			// 	$pageRef=str_replace('/', '_', 'admin/settings/users/add');
+			// 	$this->loadHooks($pageRef);
+			// 	// $this->loadCustomWidgets($pageRef);
+			// // }
+			// 	$this->execHook('onInitPage');
 		}
 		
 		public function getSite()
