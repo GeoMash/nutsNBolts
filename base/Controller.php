@@ -28,7 +28,7 @@ namespace application\nutsNBolts\base
 			}
 			
 			
-			$page			=$this->model->PageMap->getPageFromPath($path);
+//			$page			=$this->model->PageMap->getPageFromPath($path);
 			
 
 			// if(isset($page['ref']))
