@@ -15,7 +15,7 @@ namespace application\nutsNBolts\base
 	{
 		public $model			=null;
 		public $view			=null;
-		public $hookContainers =null;
+		public $hookContainers 	=null;
 
 		public function __construct($model,$view)
 		{

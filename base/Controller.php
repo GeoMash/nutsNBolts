@@ -35,8 +35,8 @@ namespace application\nutsNBolts\base
 			// if(isset($page['ref']))
 			// {
 				
-				// $pageRef=str_replace('/', '_', 'admin/configurecontent/types/add');
-				$this->loadHooks('admin/settings/users/add');
+				$pageRef=str_replace('/', '_', 'admin/settings/users/add');
+				$this->loadHooks($pageRef);
 				// $this->loadCustomWidgets($pageRef);
 			// }
 						
@@ -77,13 +77,19 @@ namespace application\nutsNBolts\base
 				$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
 				if (is_file($path))
 				{
+					
 					require_once($path);
 					if (class_exists($className))
 					{
-						if (!is_array($this->hookContainers[$applicationRef]))
+						if(count($this->hookContainers) > 0)
 						{
-							$this->hookContainers[$applicationRef]=array();
+							if (!is_array($this->hookContainers[$applicationRef]))
+							{
+								die('not array');
+								$this->hookContainers[$applicationRef]=array();
+							}							
 						}
+
 						$this->hookContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
 					}
 					else
