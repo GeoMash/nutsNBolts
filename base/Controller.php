@@ -12,7 +12,6 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
-			$path			=$this->getPath();
 			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (isset($result[0]))
 			{
@@ -26,19 +25,6 @@ namespace application\nutsNBolts\base
 			{
 				die('No site bound for this domain!');
 			}
-			
-			
-//			$page			=$this->model->PageMap->getPageFromPath($path);
-			
-
-			// if(isset($page['ref']))
-			// {
-				
-				$pageRef=str_replace('/', '_', 'admin/settings/users/add');
-				$this->loadHooks($pageRef);
-				// $this->loadCustomWidgets($pageRef);
-			// }
-						
 		}
 		
 		public function getSite()
@@ -64,7 +50,7 @@ namespace application\nutsNBolts\base
 		
 		private $hookContainers=array();
 		
-		public function loadHooks($ref=null)
+		public function loadHooks($ref=null,$subFolder=null)
 		{
 			$ref=ucfirst($ref);
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
@@ -72,11 +58,18 @@ namespace application\nutsNBolts\base
 				$this->loadGlobalHooks($applicationRef);
 				$this->loadFormHooks($applicationRef);
 				if (!$ref)continue;
-				$className=$this->application->getNamespace($applicationRef).'\hook\\'.$ref;
-				$path=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
+				if (!is_string($subFolder))
+				{
+					$className	=$this->application->getNamespace($applicationRef).'\hook\\'.$ref;
+					$path		=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$ref.'.php';
+				}
+				else
+				{
+					$className	=$this->application->getNamespace($applicationRef).'\hook\\'.$subFolder.'\\'.$ref;
+					$path		=APP_HOME.lcfirst($applicationRef)._DS_.'hook'._DS_.$subFolder._DS_.$ref.'.php';
+				}
 				if (is_file($path))
 				{
-					
 					require_once($path);
 					if (class_exists($className))
 					{
@@ -84,9 +77,8 @@ namespace application\nutsNBolts\base
 						{
 							if (!is_array($this->hookContainers[$applicationRef]))
 							{
-								die('not array');
 								$this->hookContainers[$applicationRef]=array();
-							}							
+							}
 						}
 
 						$this->hookContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
