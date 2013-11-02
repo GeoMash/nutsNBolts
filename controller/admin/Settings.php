@@ -13,6 +13,8 @@ namespace application\nutsNBolts\controller\admin
 		public function index()
 		{
 			$this->show404();
+			$renderRef='index';
+			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 		
@@ -34,6 +36,7 @@ namespace application\nutsNBolts\controller\admin
 						}
 					);
 					$this->addUser();
+					$renderRef='users/add';
 					break;
 				}
 				case 'edit':
@@ -48,11 +51,13 @@ namespace application\nutsNBolts\controller\admin
 						}
 					);
 					$this->editUser($id);
+					$renderRef='users/edit';
 					break;
 				}
 				case 'remove':
 				{
 					$this->removeUser($id);
+					$renderRef='users/remove';
 					break;
 				}
 				//View
@@ -68,6 +73,7 @@ namespace application\nutsNBolts\controller\admin
 							print $this->generateUserList();
 						}
 					);
+					$renderRef='users';
 				}
 			}
 			// $this->setContentView('admin/settings/users');
@@ -83,9 +89,7 @@ namespace application\nutsNBolts\controller\admin
 			);
 								
 			$this->view->setVar('extraOptions',array());
-			$renderRef='index';
 			$this->execHook('onBeforeRender',$renderRef);
-						
 			$this->view->render();
 		}
 		
@@ -108,9 +112,10 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Password cannot be blank.');
 				}
 				unset($record['password_confirm']);
-				if ($id=$this->model->User->handleRecord($record))
+				if ($user=$this->model->User->handleRecord($record))
 				{
-					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
+					$this->execHook('onAddUser',$user);
+					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
 
 					try
 					{
@@ -122,14 +127,14 @@ namespace application\nutsNBolts\controller\admin
 								'description'	=>'User Collection',
 								'status'		=>1
 							),
-							$id
+							$user['id']
 						);
 					}
 					catch(NutshellException $exception)
 					{
 						$this->plugin->Notification->setError($exception->getMessage());
 					}
-					$this->redirect('/admin/settings/users/edit/'.$id);
+					$this->redirect('/admin/settings/users/edit/'.$user['id']);
 				}
 				else
 				{
@@ -148,8 +153,9 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Passwords did not match. Please try again.');
 				}
 				unset($record['password_confirm']);
-				if ($this->model->User->handleRecord($record)!==false)
+				if ($user=$this->model->User->handleRecord($record))
 				{
+					$this->execHook('onEditUser',$user);
 					$this->plugin->Notification->setSuccess('User successfully edited.');
 				}
 				else
@@ -214,7 +220,7 @@ HTML;
 			$return=implode('',$html);
 			return $return;
 		}
-		
+
 		private function userHasRole($userRoles,$roleID)
 		{
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)
@@ -226,48 +232,6 @@ HTML;
 			}
 			return false;
 		}
-		
-		public function generateBarList($userId=null)
-		{
-			$return='';
-			if (is_numeric($userId))
-			{
-				$userBars=$this->model->UserBar->read(array('user_id'=>$userId));
-			}
-
-			$bars	=$this->model->Bar->read();
-			$html	=array();
-			for ($i=0,$j=count($bars); $i<$j; $i++)
-			{
-				$checked='';
-				if (isset($userBars))
-				{
-					$checked=($this->userHasBar($userBars,$bars[$i]['id']))?'checked':'';
-				}
-				$html[]=<<<HTML
-<tr>
-	<td class=""><input type="checkbox" name="bars[{$bars[$i]['id']}]" value="1" {$checked}></td>
-	<td class="">{$bars[$i]['name']}</td>
-	<td class="">{$bars[$i]['address']}</td>
-</tr>
-HTML;
-			}
-			$return=implode('',$html);
-			return $return;
-		}
-		
-		private function userHasBar($userBars,$barId)
-		{
-			for ($i=0,$j=count($userBars); $i<$j; $i++)
-			{
-				$userBars[$i]['bar_id'];
-				if ($userBars[$i]['bar_id']==$barId)
-				{
-					return true;
-				}
-			}
-			return false;
-		}		
 	}
 }
 ?>
