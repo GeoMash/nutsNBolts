@@ -23,7 +23,8 @@ namespace application\nutsNBolts\model\base
 		(
 			'id' => 'int(11) unsigned NOT NULL ' ,
 			'user_id' => 'int(11)' ,
-			'bar_id' => 'int(11)' 
+			'bar_id' => 'int(11)' ,
+			'role_id' => 'int(11)' 
 		);
 	}
 }

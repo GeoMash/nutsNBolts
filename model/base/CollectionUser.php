@@ -6,11 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
-<<<<<<< HEAD
- * @since 21/10/2013 
-=======
- * @since 23/10/2013 
->>>>>>> refs/heads/dev.ego.isika
+ * @since 30/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
