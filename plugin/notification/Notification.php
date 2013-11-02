@@ -77,9 +77,9 @@ HTML;
 			return $this->session->successes;
 		}
 		
-		public function getNotices()
+		public function getInfos()
 		{
-			return $this->session->notices;
+			return $this->session->infos;
 		}
 		
 		public function getWarnings()
@@ -177,5 +177,23 @@ HTML;
 				$this->template
 			);
 		}
+		
+		
+		public function getAll($clear=true)
+		{
+			$return=array
+			(
+				'success'	=>$this->getSuccesses(),
+				'info'		=>$this->getInfos(),
+				'warning'	=>$this->getWarnings(),
+				'error'		=>$this->getErrors()
+			);
+			if ($clear)
+			{
+				$this->clearAll();
+			}
+			return $return;
+		}
+
 	}
 }
