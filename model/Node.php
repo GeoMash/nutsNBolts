@@ -115,25 +115,6 @@ namespace application\nutsNBolts\model
 			return $nodeParts;
 		}
 		
-		private function extractURLs(&$record)
-		{
-			$urls=array();
-			$id=(!empty($record['id']))?$record['id']:0;
-			if(isset($record['url']))
-			{
-				for ($i=0,$j=count($record['url']); $i<$j; $i++)
-				{
-					$urls[]=array
-					(
-						'node_id'	=>$id,
-						'url'		=>$record['url'][$i]
-					);
-				}
-				unset($record['url']);
-			}
-			return $urls;
-		}
-		
 		private function extractTags(&$record)
 		{
 			// foreach ($record AS $key=>$rec)
