@@ -35,30 +35,20 @@ namespace application\nutsNBolts\model
 				{
 					unset($record['password']);
 				}
-				$return=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$result=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$this->model->UserRole->delete(array('user_id'=>$record['id']));
 				if (isset($record['role']))
 				{
 					$roles=$this->extractRoles($record);
-					$this->model->UserRole->delete(array('user_id'=>$record['id']));
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
 						$this->model->UserRole->insert($roles[$i]);
 					}
 				}
-				
-//				if (isset($record['bars']))
-//				{
-//					$bars	=$this->extractBars($record);
-//
-//					$this->model->UserBar->delete(array('user_id'=>$record['id']));
-//					for ($i=0,$j=count($bars); $i<$j; $i++)
-//					{
-//
-//						$this->model->UserBar->insert($bars[$i]);
-//					}
-//				}
-				return $return;
-				
+				if ($result!==false)
+				{
+					return $this->read($record['id'])[0];
+				}
 			}
 			//For Inserts
 			else
@@ -79,7 +69,7 @@ namespace application\nutsNBolts\model
 							$this->model->UserRole->insert($roles[$i]);
 						}
 					}
-					return $id;
+					return $this->read($id)[0];
 				}
 			}
 			return false;
@@ -104,26 +94,6 @@ namespace application\nutsNBolts\model
 			}
 			return array();
 		}
-		
-		public function extractBars(&$record)
-		{
-			if (isset($record['bars']))
-			{
-				$bars=array();
-				$id=(!empty($record['id']))?$record['id']:0;
-				foreach ($record['bars'] as $barId=>$enabled)
-				{
-					$bars[]=array
-					(
-						'user_id'	=>$id,
-						'bar_id'	=>$barId
-					);
-				}
-				unset($record['bars']);
-				return $bars;
-			}
-			return array();
-		}		
 		
 		private function generateSalt(&$record)
 		{
