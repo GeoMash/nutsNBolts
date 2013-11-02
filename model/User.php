@@ -35,33 +35,28 @@ namespace application\nutsNBolts\model
 				{
 					unset($record['password']);
 				}
-				// var_dump($record);exit();
-
-				
-				if(isset($record['role']))
+				$return=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				if (isset($record['role']))
 				{
-					$roles	=$this->extractRoles($record);
-					
-					$this->model->UserRole->delete(array('user_id'=>$record['id']));					
+					$roles=$this->extractRoles($record);
+					$this->model->UserRole->delete(array('user_id'=>$record['id']));
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
 						$this->model->UserRole->insert($roles[$i]);
-					}					
+					}
 				}
 				
-				if(isset($record['bars']))
-				{
-					$bars	=$this->extractBars($record);
-					
-					$this->model->UserBar->delete(array('user_id'=>$record['id']));					
-					for ($i=0,$j=count($bars); $i<$j; $i++)
-					{
-
-						$this->model->UserBar->insert($bars[$i]);
-					}					
-				}				
-				
-				$return	=$this->update($record,array('id'=>$record['id']));
+//				if (isset($record['bars']))
+//				{
+//					$bars	=$this->extractBars($record);
+//
+//					$this->model->UserBar->delete(array('user_id'=>$record['id']));
+//					for ($i=0,$j=count($bars); $i<$j; $i++)
+//					{
+//
+//						$this->model->UserBar->insert($bars[$i]);
+//					}
+//				}
 				return $return;
 				
 			}
@@ -72,22 +67,18 @@ namespace application\nutsNBolts\model
 				$record['date_created']		=date('Y-m-d H:i:s');
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
-				$role=$record['role'];
-				unset($record['role']);
-				$bars=$record['bars'];
-				unset($record['bars']);
-				// if(!isset($record['role']))
-				// {
-				// 	$record['role']=1;
-				// }
 
-				// $roles=$this->extractRoles($record);
-				// var_dump($roles); exit();
-				if ($id=$this->insertAssoc($record))
+				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{
-					$array=array('user_id'=>$id,'role_id'=>$role);
-					$this->model->UserRole->insertAssoc($array);
-					// var_dump($id); exit();
+					if (isset($record['role']))
+					{
+						$roles=$this->extractRoles($record);
+						for ($i=0,$j=count($roles); $i<$j; $i++)
+						{
+							$roles[$i]['user_id']=$id;
+							$this->model->UserRole->insert($roles[$i]);
+						}
+					}
 					return $id;
 				}
 			}
