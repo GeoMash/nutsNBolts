@@ -1,3 +1,4 @@
+ALTER TABLE `wtp`.`page` DROP COLUMN `url`;
 ALTER TABLE `content_type` ADD COLUMN `workflow_id` INT(10) NOT NULL AFTER `site_id`;
 ALTER TABLE `node` ADD COLUMN `workflow_step_id` INT(10) DEFAULT 0 NOT NULL AFTER `content_type_id`;
 ALTER TABLE `collection` CHANGE `descriptions` `description` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci NOT NULL;
