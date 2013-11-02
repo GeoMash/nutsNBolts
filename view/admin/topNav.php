@@ -38,6 +38,6 @@ $user=$tpl->get('user');
 		</li>
 	</ul>
 	<ul class="nav pull-right">
-		<li class="active"><a href="/" target="_blank" title="View Website"><i class="icon-globe"></i> View Website</a></li>
+		<li><a href="/" target="_blank" title="View Website"><i class="icon-globe"></i> View Website</a></li>
 	</ul>
 </div>
