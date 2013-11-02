@@ -165,6 +165,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			$this->addBreadcrumb('Edit Page Type','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditType');
+			$this->view->setVar('pageUrls',array());
 			if ($record=$this->model->PageType->read($id))
 			{
 				$this->view->setVars($record[0]);
@@ -188,8 +189,11 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
+			$pageURLs	=$this->model->PageMap->read(array(page_id=>$id));
+
 			$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditPage');
+			$this->view->setVar('pageUrls',$pageURLs);
 			if ($record=$this->model->Page->read($id))
 			{
 				$this->view->setVars($record[0]);
