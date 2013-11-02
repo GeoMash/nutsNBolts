@@ -39,6 +39,10 @@ namespace application\nutsNBolts\base
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
 				$this->view->setVar('nav_active_main',$mainNav);
 				$this->view->setVar('nav_active_sub',$this->request->node(2));
+
+				//Hook Containers
+				$this->view->setVar('aboveForm',array());
+				$this->view->setVar('belowForm',array());
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 
