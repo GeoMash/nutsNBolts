@@ -47,6 +47,36 @@
 										<input type="text" name="name_last" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->name_last; ?>">
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Company</label>
+									<div class="controls">
+										<input type="text" name="company" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->company; ?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Position</label>
+									<div class="controls">
+										<input type="text" name="position" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Position</label>
+									<div class="controls">
+										<input type="text" name="position" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Phone Number</label>
+									<div class="controls">
+										<input type="text" name="phone" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->phone; ?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Date of Birth</label>
+									<div class="controls">
+										<input type="text" name="dob" class="datepicker validate[required]" data-prompt-position="topLeft" value="<?php $tpl->dob; ?>">
+									</div>
+								</div>
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">
