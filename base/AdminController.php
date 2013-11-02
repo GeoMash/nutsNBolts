@@ -111,10 +111,6 @@ namespace application\nutsNBolts\base
 						print $this->unreadMessages;
 					}
 				);
-			if (method_exists($this,'init'))
-			{
-				$this->init();
-			}
 		}
 		
 		public function show404()
