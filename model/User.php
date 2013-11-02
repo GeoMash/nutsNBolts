@@ -48,6 +48,19 @@ namespace application\nutsNBolts\model
 						$this->model->UserRole->insert($roles[$i]);
 					}					
 				}
+				
+				if(isset($record['bars']))
+				{
+					$bars	=$this->extractBars($record);
+					
+					$this->model->UserBar->delete(array('user_id'=>$record['id']));					
+					for ($i=0,$j=count($bars); $i<$j; $i++)
+					{
+
+						$this->model->UserBar->insert($bars[$i]);
+					}					
+				}				
+				
 				$return	=$this->update($record,array('id'=>$record['id']));
 				return $return;
 				
@@ -61,6 +74,8 @@ namespace application\nutsNBolts\model
 				$record['date_lastactive']	='0000-00-00 00:00:00';
 				$role=$record['role'];
 				unset($record['role']);
+				$bars=$record['bars'];
+				unset($record['bars']);
 				// if(!isset($record['role']))
 				// {
 				// 	$record['role']=1;
@@ -98,6 +113,26 @@ namespace application\nutsNBolts\model
 			}
 			return array();
 		}
+		
+		public function extractBars(&$record)
+		{
+			if (isset($record['bars']))
+			{
+				$bars=array();
+				$id=(!empty($record['id']))?$record['id']:0;
+				foreach ($record['bars'] as $barId=>$enabled)
+				{
+					$bars[]=array
+					(
+						'user_id'	=>$id,
+						'bar_id'	=>$barId
+					);
+				}
+				unset($record['bars']);
+				return $bars;
+			}
+			return array();
+		}		
 		
 		private function generateSalt(&$record)
 		{

@@ -70,6 +70,22 @@ namespace application\nutsNBolts\controller\admin
 					);
 				}
 			}
+			// $this->setContentView('admin/settings/users');
+			
+			$this->view->getContext()
+			->registerCallback
+			(
+				'generateBarList',
+				function() use ($id)
+				{
+					print $this->generateBarList($id);
+				}
+			);
+								
+			$this->view->setVar('extraOptions',array());
+			$renderRef='index';
+			$this->execHook('onBeforeRender',$renderRef);
+						
 			$this->view->render();
 		}
 		
@@ -210,6 +226,48 @@ HTML;
 			}
 			return false;
 		}
+		
+		public function generateBarList($userId=null)
+		{
+			$return='';
+			if (is_numeric($userId))
+			{
+				$userBars=$this->model->UserBar->read(array('user_id'=>$userId));
+			}
+
+			$bars	=$this->model->Bar->read();
+			$html	=array();
+			for ($i=0,$j=count($bars); $i<$j; $i++)
+			{
+				$checked='';
+				if (isset($userBars))
+				{
+					$checked=($this->userHasBar($userBars,$bars[$i]['id']))?'checked':'';
+				}
+				$html[]=<<<HTML
+<tr>
+	<td class=""><input type="checkbox" name="bars[{$bars[$i]['id']}]" value="1" {$checked}></td>
+	<td class="">{$bars[$i]['name']}</td>
+	<td class="">{$bars[$i]['address']}</td>
+</tr>
+HTML;
+			}
+			$return=implode('',$html);
+			return $return;
+		}
+		
+		private function userHasBar($userBars,$barId)
+		{
+			for ($i=0,$j=count($userBars); $i<$j; $i++)
+			{
+				$userBars[$i]['bar_id'];
+				if ($userBars[$i]['bar_id']==$barId)
+				{
+					return true;
+				}
+			}
+			return false;
+		}		
 	}
 }
 ?>
