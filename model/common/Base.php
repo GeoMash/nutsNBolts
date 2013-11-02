@@ -18,7 +18,6 @@ namespace application\nutsNBolts\model\common
 			{
 				return $this->insertAssoc($record);
 			}
-			return false;
 		}
 		
 		public function removeJunk($record)
@@ -32,6 +31,25 @@ namespace application\nutsNBolts\model\common
 				}
 			}
 			return $record;
+		}
+
+		public function extractURLs(&$record,$idField)
+		{
+			$urls=array();
+			$id=(!empty($record['id']))?$record['id']:0;
+			if(isset($record['url']))
+			{
+				for ($i=0,$j=count($record['url']); $i<$j; $i++)
+				{
+					$urls[]=array
+					(
+						$idField	=>$id,
+						'url'		=>$record['url'][$i]
+					);
+				}
+				unset($record['url']);
+			}
+			return $urls;
 		}
 	}
 }

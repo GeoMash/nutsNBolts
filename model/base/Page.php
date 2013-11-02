@@ -30,8 +30,7 @@ namespace application\nutsNBolts\model\base
 			'page_type_id' => 'int(11) NOT NULL ' ,
 			'title' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' ,
-			'url' => 'varchar(100) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL '
 		);
 	}
 }
