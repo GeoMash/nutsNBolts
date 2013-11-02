@@ -83,6 +83,7 @@ namespace application\nutsNBolts\controller\admin
 				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
 				$this->view->setVar('contentTypeId',$typeID);
 				$this->view->setVar('hasWorkflow',(bool)$contentType[0]['workflow_id']);
+				$this->view->setVar('nodeURLs',array());
 				$this->view->getContext()
 				->registerCallback
 				(
