@@ -18,7 +18,6 @@ namespace application\nutsNBolts\model\common
 			{
 				return $this->insertAssoc($record);
 			}
-			return false;
 		}
 		
 		public function removeJunk($record)
