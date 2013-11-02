@@ -157,7 +157,7 @@ namespace application\nutsNBolts\controller\admin
 
 				if (!$this->contentType['workflow_id'])
 				{
-					if ($this->model->Node->handleRecord($record))
+					if ($this->model->Node->handleRecord($record)!==false)
 					{
 						$this->plugin->Notification->setSuccess('Content successfully edited.');
 					}

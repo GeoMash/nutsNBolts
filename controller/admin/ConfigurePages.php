@@ -154,7 +154,7 @@ namespace application\nutsNBolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				if ($this->model->PageType->handleRecord($this->request->getAll()))
+				if ($this->model->PageType->handleRecord($this->request->getAll())!==false)
 				{
 					$this->plugin->Notification->setSuccess('Page type successfully edited.');
 				}
@@ -180,7 +180,7 @@ namespace application\nutsNBolts\controller\admin
 		{
 			if ($this->request->get('id'))
 			{
-				if ($this->model->Page->handleRecord($this->request->getAll()))
+				if ($this->model->Page->handleRecord($this->request->getAll())!==false)
 				{
 					$this->plugin->Notification->setSuccess('Page successfully edited.');
 				}
