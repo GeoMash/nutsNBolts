@@ -25,6 +25,19 @@ namespace application\nutsNBolts\base
 			{
 				die('No site bound for this domain!');
 			}
+			$this->view->getContext()
+				->registerCallback
+				(
+					'getAllNotifications',
+					function()
+					{
+						return $this->plugin->Notification->getAll();
+					}
+				);		
+			if (method_exists($this,'init'))
+			{
+				$this->init();
+			}
 		}
 		
 		public function getSite()
