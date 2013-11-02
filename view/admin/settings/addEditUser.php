@@ -16,6 +16,13 @@
 							</ul>
 						</div>
 						<div class="box-content">
+							<?php
+							$extras=$tpl->get('aboveForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="padded">
 								<div class="control-group">
 									<label class="control-label">Email Address</label>
@@ -119,32 +126,8 @@
 									</div>
 								</div>
 							</div>
-							
-							<div class="container-fluid padded">
-								<div class="box">
-									<div class="box-header">
-										<span class="title"><i class="icon-beaker"></i> Bars</span>
-									</div>
-									<div class="content-box">
-										<div class="padded">
-											<table class="table table-hover">
-												<thead>
-													<tr>
-														<th><div>Grant</div></th>
-														<th><div>Name</div></th>
-														<th><div>Description</div></th>
-													</tr>
-												</thead>
-												<tbody>
-													<?php $tpl->generateBarList(); ?>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
 							<?php
-							$extras=$tpl->get('extraOptions');
+							$extras=$tpl->get('belowForm');
 							foreach ($extras as $extra)
 							{
 								print $extra;
