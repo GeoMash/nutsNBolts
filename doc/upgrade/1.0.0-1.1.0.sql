@@ -70,7 +70,7 @@ ALTER TABLE `user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
 
 /* page bunching */
 
-ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
+ALTER TABLE `content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 
 ALTER TABLE `user`
 ADD COLUMN `image` VARCHAR(100) NOT NULL AFTER `name_last`,
@@ -79,5 +79,5 @@ ADD COLUMN `company` VARCHAR(100) NOT NULL AFTER `position`,
 ADD COLUMN `about` TEXT NOT NULL AFTER `company`;
 
 
-ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
+ALTER TABLE `content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 
