@@ -19,6 +19,10 @@
 					}
 				}
 			},
+			"FileSystem":
+			{
+				"collectionsDir": "/datastore/www/wtp.dev.lan/public/_collections/"
+			},
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",

@@ -146,7 +146,7 @@
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/alliance/shared/_collections/"
+				"collectionsDir": "/datastore/www/wtp/shared/_collections/"
 			},
 			"FaceBook":
 			{
