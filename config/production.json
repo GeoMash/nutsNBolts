@@ -122,7 +122,9 @@
 							"/admin/":		"admin/Index",
 							"/sandbox/":	"Sandbox",
 							"/_/":			"site/ActionHandler",
+							"/user/":		"User",
 							".":			"Index"
+							
 						}
 					}
 				]
