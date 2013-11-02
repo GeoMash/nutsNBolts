@@ -23,7 +23,7 @@ namespace application\nutsNBolts\model
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
 				$nodeParts		=$this->extractContentParts($record);
-				$nodeURLs		=$this->extractURLs($record);
+				$nodeURLs		=$this->extractURLs($record,'node_id');
 				$nodeTags		=$this->extractTags($record);
 				$return			=$this->update($this->removeJunk($record),array('id'=>$record['id']));
 				//Update parts.
@@ -61,7 +61,7 @@ namespace application\nutsNBolts\model
 			{
 				unset($record['id']);
 				$nodeParts	=$this->extractContentParts($record);
-				$nodeURLs	=$this->extractURLs($record);
+				$nodeURLs	=$this->extractURLs($record,'node_id');
 				$nodeTags	=$this->extractTags($record);
 				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{

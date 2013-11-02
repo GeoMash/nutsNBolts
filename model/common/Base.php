@@ -33,7 +33,7 @@ namespace application\nutsNBolts\model\common
 			return $record;
 		}
 
-		public function extractURLs(&$record)
+		public function extractURLs(&$record,$idField)
 		{
 			$urls=array();
 			$id=(!empty($record['id']))?$record['id']:0;
@@ -43,7 +43,7 @@ namespace application\nutsNBolts\model\common
 				{
 					$urls[]=array
 					(
-						'node_id'	=>$id,
+						$idField	=>$id,
 						'url'		=>$record['url'][$i]
 					);
 				}
