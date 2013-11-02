@@ -48,33 +48,51 @@
 									</div>
 								</div>
 								<div class="control-group">
+									<label class="control-label">Gender</label>
+									<div class="controls">
+										<select class="chzn-select" name="gender">
+											<?php
+											$gender=(bool)$tpl->get('gender');
+											?>
+											<option <?php print (!$gender)?'selected':''; ?>>Male</option>
+											<option <?php print ($gender)?'selected':''; ?>>Female</option>
+										</select>
+									</div>
+								</div>
+								<div class="control-group">
 									<label class="control-label">Company</label>
 									<div class="controls">
-										<input type="text" name="company" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->company; ?>">
+										<input type="text" name="company" data-prompt-position="topLeft" value="<?php $tpl->company; ?>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Position</label>
 									<div class="controls">
-										<input type="text" name="position" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
+										<input type="text" name="position" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Position</label>
 									<div class="controls">
-										<input type="text" name="position" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
+										<input type="text" name="position" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Phone Number</label>
 									<div class="controls">
-										<input type="text" name="phone" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->phone; ?>">
+										<input type="text" name="phone" data-prompt-position="topLeft" value="<?php $tpl->phone; ?>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Date of Birth</label>
 									<div class="controls">
-										<input type="text" name="dob" class="datepicker validate[required]" data-prompt-position="topLeft" value="<?php $tpl->dob; ?>">
+										<input type="text" name="dob" class="datepicker" data-prompt-position="topLeft" value="<?php $tpl->dob; ?>">
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">Income Range</label>
+									<div class="controls">
+										<input type="text" name="income_range" data-prompt-position="topLeft" value="<?php $tpl->income_range; ?>">
 									</div>
 								</div>
 							</div>
@@ -124,15 +142,14 @@
 										</div>
 									</div>
 								</div>
-							</div>							
-							
-				<?php
-				$navButtons=$tpl->get('extraOptions');
-				foreach ($navButtons as $navButton)
-				{
-					print $navButton;
-				}
-				?>							
+							</div>
+							<?php
+							$extras=$tpl->get('extraOptions');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="form-actions">
 								<div class="pull-right">
 									<button type="submit" class="btn btn-blue">Save Changes</button>
