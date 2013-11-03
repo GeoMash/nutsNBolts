@@ -12,10 +12,6 @@ namespace application\nutsNBolts\model
 		const STATUS_PUBLISHED	=2;
 		const STATUS_ARCHIVED	=3;
 
-
-
-
-
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -116,14 +112,6 @@ namespace application\nutsNBolts\model
 		
 		private function extractTags(&$record)
 		{
-			// foreach ($record AS $key=>$rec)
-			// {
-			// 	if(preg_match('/$application\/json:/',$rec))	
-			// 	{
-			// 		$record[$key]=json_decode($rec);
-			// 	}
-			// }
-
 			$id		=(!empty($record['id']))?$record['id']:0;
 			$return	=array();
 			if(isset($record['tags']))
@@ -159,6 +147,30 @@ SQL;
 			}
 			return 0;
 		}
+
+		public function getWithoutParts($contentTypeId,$excludeDeleted=true)
+		{
+			if ($excludeDeleted)
+			{
+				$status='AND status != '.self::STATUS_ARCHIVED;
+			}
+			else
+			{
+				$status='';
+			}
+			$query=<<<SQL
+			SELECT *
+			FROM node
+			WHERE content_type_id=?
+			{$status}
+			ORDER BY node.date_updated ASC;
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query,array($contentTypeId)))
+			{
+				return $this->plugin->Db->nutsnbolts->result('assoc');
+			}
+			return null;
+		}
 		
 		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
 		{
@@ -193,7 +205,6 @@ SQL;
 
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
-
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
 				
 				$nodes=array();
@@ -215,15 +226,12 @@ SQL;
 						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
-					
 				}
 				//Reset index.
 				sort($nodes);			
 				return $nodes;
 			}
-			else
-			{
-			}
+			return null;
 		}
 
 		public function getBlog($id)
@@ -235,7 +243,7 @@ SQL;
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE node.id={$id}
-			AND node.status=2
+			AND node.status=2;
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
