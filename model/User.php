@@ -3,7 +3,7 @@ namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\NutsNBolts;
 	use application\nutsNBolts\model\base\User as UserBase;
-	use nutshell\exception\NutshellException;
+	use nutshell\core\exception\NutshellException;
 	
 	class User extends UserBase
 	{
