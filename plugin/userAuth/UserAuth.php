@@ -237,6 +237,7 @@ HTML;
 					return $result[0];
 				}
 			}
+			return false;
 		}
 
 		public function getUser()
