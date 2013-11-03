@@ -204,6 +204,10 @@ HTML;
 			$html	=array();
 			for ($i=0,$j=count($roles); $i<$j; $i++)
 			{
+				if ($roles[$i]['id']==-100)
+				{
+					continue;
+				}
 				$checked='';
 				if (isset($userRoles))
 				{
