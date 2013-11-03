@@ -30,7 +30,9 @@ namespace application\nutsNBolts\base
 
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
-			
+
+			$this->loadHooks(ObjectHelper::getBaseClassName($this),'admin');
+
 			if ($this->plugin->UserAuth->isAuthenticated())
 			{
 				$this->view->setTemplate('admin');
@@ -109,10 +111,6 @@ namespace application\nutsNBolts\base
 						print $this->unreadMessages;
 					}
 				);
-			if (method_exists($this,'init'))
-			{
-				$this->init();
-			}
 		}
 		
 		public function show404()

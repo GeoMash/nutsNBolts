@@ -165,7 +165,20 @@ namespace application\nutsNBolts\model
 			return $return;
 		}
 		
-		
+		public function getCount($contentTypeId)
+		{
+			$query=<<<SQL
+			SELECT count(id) as total
+			FROM node
+			WHERE content_type_id=?;
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,array($contentTypeId)))
+			{
+				$record=$this->plugin->Db->nutsnbolts->result('assoc');
+				return $record[0]['total'];
+			}
+			return 0;
+		}
 		
 		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
 		{
@@ -685,7 +698,38 @@ SQL;
 				sort($nodes);
 				return $nodes;
 			}	
-		}		
+		}
+		
+		public function getSpecificNodesAndParts($array)
+		{
+			$records=$this->model->Node->read($array);
+			$this->attachParts($records);
+			return $records;
+		}
+		
+		private function attachParts(&$records)
+		{
+			for ($i=0,$j=count($records); $i<$j; $i++)
+			{
+				$query=<<<SQL
+				SELECT node_part.value,content_part.ref
+				FROM node_part
+				LEFT JOIN content_part ON content_part.id=node_part.content_part_id
+				WHERE node_part.node_id=?
+				ORDER BY node_id DESC;
+SQL;
+				if ($this->db->select($query,array($records[$i]['id'])))
+				{
+					$nodePart=$this->db->result('assoc');
+
+					for ($k=0,$l=count($nodePart); $k<$l; $k++)
+					{
+						$records[$i][$nodePart[$k]['ref']]=$nodePart[$k]['value'];
+					}
+				}
+			}
+		}
+				
 	}
 }
 ?>

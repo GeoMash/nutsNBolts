@@ -6,7 +6,7 @@
  * Model Generator Plugin.
  * 
  * @package application-model
- * @since 21/10/2013 
+ * @since 30/10/2013 
  */
 namespace application\nutsNBolts\model\base
 {
@@ -26,7 +26,8 @@ namespace application\nutsNBolts\model\base
 			'bottle_by_bar_id' => 'int(11)' ,
 			'bar_id' => 'int(11)' ,
 			'date_opened' => 'timestamp' ,
-			'bottle_price' => 'double(15,2)' 
+			'bottle_price' => 'double(15,2)' ,
+			'volume_left' => 'int(10)' 
 		);
 	}
 }
