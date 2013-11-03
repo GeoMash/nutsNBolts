@@ -324,11 +324,20 @@ HTML;
 						case Node::STATUS_PUBLISHED:	$theStatus='Published';			break;
 						case Node::STATUS_ARCHIVED:		$theStatus='Archived';			break;
 					}
+					$user=$this->model->User->read($records[$i]['last_user_id']);
+					if (isset($user[0]))
+					{
+						$user=$user[0]['name_first'].' '.$user[0]['name_last'];
+					}
+					else
+					{
+						$user='Unknown';
+					}
 					$html[]=<<<HTML
 <tr>
 	<td><a href="/admin/content/edit/{$records[$i]['id']}">{$records[$i]['title']}</a></td>
 	<td>{$records[$i]['date_created']}</td>
-	<td>{$records[$i]['last_user_id']}</td>
+	<td>{$user}</td>
 	<td>{$theStatus}</td>
 	<td class="center">
 		<a href="/admin/content/archive/{$records[$i]['id']}?"><button title="Archive" class="btn btn-mini btn-primary">
