@@ -216,7 +216,7 @@ HTML;
 
 		public function authenticate(Array $array,$password)
 		{
-			$user		=$this->plugin->Mvc->model->User->read($array);
+			$user=$this->plugin->Mvc->model->User->read($array);
 			if (isset($user[0]))
 			{
 				$userSalt	=$user[0]['salt'];
@@ -251,7 +251,7 @@ HTML;
 
 		public function isAuthenticated()
 		{
-			return (bool)(Nutshell::getInstance()->plugin->Session);
+			return isset(Nutshell::getInstance()->plugin->Session->userId);
 		}
 
 		public function logout()
