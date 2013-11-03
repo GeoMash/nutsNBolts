@@ -340,9 +340,11 @@ HTML;
 	<td>{$user}</td>
 	<td>{$theStatus}</td>
 	<td class="center">
-		<a href="/admin/content/archive/{$records[$i]['id']}?"><button title="Archive" class="btn btn-mini btn-primary">
-			<i class="icon-signout"></i>
-		</button></a>
+		<a href="/admin/content/archive/{$records[$i]['id']}">
+			<button title="Archive" class="btn btn-mini btn-primary">
+				<i class="icon-signout"></i>
+			</button>
+		</a>
 	</td>
 </tr>
 HTML;
