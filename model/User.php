@@ -74,7 +74,14 @@ namespace application\nutsNBolts\model
 			}
 			return false;
 		}
-		
+
+		public function handleDeleteRecord($recordId)
+		{
+			$this->model->UserRole->delete(array('user_id'=>$recordId));
+			$this->delete($recordId);
+			return true;
+		}
+
 		public function extractRoles(&$record)
 		{
 			if (isset($record['role']))
