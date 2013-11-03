@@ -43,7 +43,7 @@ namespace application\nutsNBolts\controller
 				$fieldName='phone';
 				$params=array($fieldName=>$fieldValue);
 				$user=$this->plugin->UserAuth->authenticate($params,$request['password']);
-				if($user[0])
+				if($user)
 				{
 					$dt = new DateTime();
 					Nutshell::getInstance()->plugin->Session->email=$user['email'];
