@@ -21,6 +21,7 @@
 									<th><div>Name</div></th>
 									<th><div>Last Login</div></th>
 									<th><div>Status</div></th>
+									<th><div>Remove</div></th>
 								</tr>
 							</thead>
 							<tbody>
