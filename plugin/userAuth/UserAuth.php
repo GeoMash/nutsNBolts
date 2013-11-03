@@ -28,8 +28,6 @@ namespace application\nutsNBolts\plugin\userAuth
 			}
 			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 		}
-		
-
 
 		private function handleRecord($record)
 		{
@@ -205,7 +203,7 @@ HTML;
 		
 		public function userHasRole($userRoles,$role)
 		{
-			$key=is_numeric($role)?'role_id':'role_ref';
+			$key=is_numeric($role)?'id':'ref';
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)
 			{
 				if ($userRoles[$i][$key]==$role)
