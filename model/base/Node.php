@@ -32,7 +32,7 @@ namespace application\nutsNBolts\model\base
 			'original_user_id' => 'int(10)' ,
 			'last_user_id' => 'int(10) NOT NULL ' ,
 			'order' => 'int(5) NOT NULL ' ,
-			'status' => 'tinyint(1) NOT NULL ' 
+			'status' => 'tinyint(1) NOT NULL '
 		);
 	}
 }
