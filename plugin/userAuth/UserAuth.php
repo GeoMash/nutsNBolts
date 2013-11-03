@@ -17,17 +17,8 @@ namespace application\nutsNBolts\plugin\userAuth
 	class UserAuth extends Plugin implements Native,Singleton 
 	{
 		private $user=null;
-		// protected $vModelLoader = null;
-		
-		public static function loadDependencies()
-		{
-			// require_once('AppPluginExtension.php');
-		}
-		
-		public static function registerBehaviours()
-		{
-		
-		}
+
+		public static function registerBehaviours(){}
 		
 		public function init()
 		{
@@ -182,7 +173,6 @@ namespace application\nutsNBolts\plugin\userAuth
 		public function generateUserList()
 		{
 			return $this->plugin->Mvc->model->User->read();
-
 		}
 
 		public function generateRolesList($userId=null)
@@ -243,7 +233,7 @@ HTML;
 						'status'		=>1
 					)
 				);
-				
+
 				if (isset($result[0]))
 				{
 					return $result[0];
