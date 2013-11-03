@@ -213,11 +213,12 @@ HTML;
 			return $return;
 		}
 		
-		public function userHasRole($userRoles,$roleID)
+		public function userHasRole($userRoles,$role)
 		{
+			$key=is_numeric($role)?'role_id':'role_ref';
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)
 			{
-				if ($userRoles[$i]['role_id']==$roleID)
+				if ($userRoles[$i][$key]==$role)
 				{
 					return true;
 				}
