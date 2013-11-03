@@ -22,7 +22,8 @@
 									<th><div>Title</div></th>
 									<th><div>Date Created</div></th>
 									<th><div>Last Edited By</div></th>
-									<th><div>Published</div></th>
+									<th><div>Status</div></th>
+									<th><div>Archive</div></th>
 								</tr>
 							</thead>
 							<tbody>
