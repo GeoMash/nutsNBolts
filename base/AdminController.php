@@ -35,6 +35,10 @@ namespace application\nutsNBolts\base
 
 			if ($this->plugin->UserAuth->isAuthenticated())
 			{
+				if (!$this->isSuper() && $this->challangeRole('STANDARD'))
+				{
+					$this->redirect('/');
+				}
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
 				$this->view->setVar('nav_active_main',$mainNav);
@@ -234,12 +238,13 @@ HTML;
 		
 		public function getUser()
 		{
-			return $this->user;
+			return $this->plugin->UserAuth->getUser();
 		}
 		
 		public function getUserId()
 		{
-			return $this->user['id'];
+			$user=$this->plugin->UserAuth->getUser();
+			return isset($this->user['id'])?$this->user['id']:null;
 		}
 		
 		public function getWidgetInstance($classPath)

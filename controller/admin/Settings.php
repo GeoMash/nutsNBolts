@@ -174,6 +174,38 @@ namespace application\nutsNBolts\controller\admin
 				$this->view->setVar('record',array());
 			}
 		}
+
+		private function removeUser($id)
+		{
+			if ($id==-100)
+			{
+				$this->plugin->Notification->setError('The system super user cannot be removed.');
+				$this->redirect('/admin/settings/users/');
+			}
+			if ($id==$this->getUserId())
+			{
+				$this->plugin->Notification->setError('You cannot remove yourself.');
+				$this->redirect('/admin/settings/users/');
+			}
+			$roles=$this->model->User->getRoles($id);
+			if ($this->plugin->UserAuth->userHasRole($roles,'ADMIN')
+			&& !($this->isSuper() || $this->isAdmin()))
+			{
+				$this->plugin->Notification->setError('You do not have permission to remove this type of user.');
+				$this->redirect('/admin/settings/users/');
+			}
+
+			if ($this->model->User->handleDeleteRecord($id))
+			{
+				$this->plugin->Notification->setSuccess('User successfully removed.');
+				//TODO: Remove collection items? Needs discussion.
+				$this->redirect('/admin/settings/users/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
+		}
 		
 		public function generateUserList()
 		{
@@ -187,6 +219,13 @@ namespace application\nutsNBolts\controller\admin
 	<td class="">{$records[$i]['name_first']} {$records[$i]['name_last']}</td>
 	<td class="">{$records[$i]['date_lastlogin']}</td>
 	<td class="">{$records[$i]['status']}</td>
+	<td class="center">
+		<a href="/admin/settings/users/remove/{$records[$i]['id']}">
+			<button title="Archive" class="btn btn-mini btn-red">
+				<i class="icon-remove"></i>
+			</button>
+		</a>
+	</td>
 </tr>
 HTML;
 			}

@@ -17,17 +17,8 @@ namespace application\nutsNBolts\plugin\userAuth
 	class UserAuth extends Plugin implements Native,Singleton 
 	{
 		private $user=null;
-		// protected $vModelLoader = null;
-		
-		public static function loadDependencies()
-		{
-			// require_once('AppPluginExtension.php');
-		}
-		
-		public static function registerBehaviours()
-		{
-		
-		}
+
+		public static function registerBehaviours(){}
 		
 		public function init()
 		{
@@ -37,8 +28,6 @@ namespace application\nutsNBolts\plugin\userAuth
 			}
 			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 		}
-		
-
 
 		private function handleRecord($record)
 		{
@@ -182,7 +171,6 @@ namespace application\nutsNBolts\plugin\userAuth
 		public function generateUserList()
 		{
 			return $this->plugin->Mvc->model->User->read();
-
 		}
 
 		public function generateRolesList($userId=null)
@@ -213,11 +201,12 @@ HTML;
 			return $return;
 		}
 		
-		public function userHasRole($userRoles,$roleID)
+		public function userHasRole($userRoles,$role)
 		{
+			$key=is_numeric($role)?'id':'ref';
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)
 			{
-				if ($userRoles[$i]['role_id']==$roleID)
+				if ($userRoles[$i][$key]==$role)
 				{
 					return true;
 				}
@@ -227,7 +216,7 @@ HTML;
 
 		public function authenticate(Array $array,$password)
 		{
-			$user		=$this->plugin->Mvc->model->User->read($array);
+			$user=$this->plugin->Mvc->model->User->read($array);
 			if (isset($user[0]))
 			{
 				$userSalt	=$user[0]['salt'];
@@ -242,12 +231,13 @@ HTML;
 						'status'		=>1
 					)
 				);
-				
+
 				if (isset($result[0]))
 				{
 					return $result[0];
 				}
 			}
+			return false;
 		}
 
 		public function getUser()
@@ -262,7 +252,7 @@ HTML;
 
 		public function isAuthenticated()
 		{
-			return (bool)(Nutshell::getInstance()->plugin->Session);
+			return isset(Nutshell::getInstance()->plugin->Session->userId);
 		}
 
 		public function logout()

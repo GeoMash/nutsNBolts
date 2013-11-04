@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\model\common
 {
+	use application\nutsNBolts\exception\NutsNBoltsException;
 	use nutshell\plugin\mvc\model\CRUD;
 
 	abstract class Base extends CRUD
@@ -17,6 +18,18 @@ namespace application\nutsNBolts\model\common
 			else
 			{
 				return $this->insertAssoc($record);
+			}
+		}
+
+		public function setStatus($id,$status)
+		{
+			if (isset($this->columns['status']))
+			{
+				return $this->update(array('status'=>$status),array('id'=>$id));
+			}
+			else
+			{
+				throw new NutsNBoltsException('Status column doesn\'t exist for table "'.$this->name.'".');
 			}
 		}
 		
