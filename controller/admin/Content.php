@@ -107,6 +107,7 @@ namespace application\nutsNBolts\controller\admin
 				$record=$this->request->getAll();				
 				foreach ($record AS $key=>$rec)
 				{
+					if ($key=='url')continue;
 					// checking to see if an array is passed, and converting it to a json object
 					if(is_array($rec))
 					{
