@@ -210,8 +210,9 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				WHERE {$where}
 			)
-			ORDER BY node.id ASC;
+			ORDER BY node.id ASC
 			{$limitSql}
+			;
 SQL;
             if ($result=$this->plugin->Db->nutsnbolts->select($query))
             {
