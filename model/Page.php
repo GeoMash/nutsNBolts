@@ -24,9 +24,9 @@ namespace application\nutsNBolts\model
 			//For Inserts
 			else
 			{
+				$pageURLs	=$this->extractURLs($record,'page_id');
 				if ($id=$this->insertAssoc($record))
 				{
-					$pageURLs	=$this->extractURLs($record,'page_id');
 					for ($i=0,$j=count($pageURLs); $i<$j; $i++)
 					{
 						$pageURLs[$i]['page_id']=$id;
