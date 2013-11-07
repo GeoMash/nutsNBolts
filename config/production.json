@@ -120,11 +120,11 @@
 						"map":
 						{
 							"/admin/":		"admin/Index",
+                            "/rest/":       "rest/Index",
 							"/sandbox/":	"Sandbox",
 							"/_/":			"site/ActionHandler",
 							"/user/":		"User",
 							".":			"Index"
-							
 						}
 					}
 				]
