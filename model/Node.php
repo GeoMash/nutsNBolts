@@ -184,8 +184,8 @@ SQL;
 					node_part.value="{$value}"
 				)
 SQL_PART;
-            }
-            $where=implode(' AND ',$where);
+			}
+			$where=implode(' AND ',$where);
             if($limit > 0)
             {
                 $limitSql=<<<SQL_PART
@@ -196,9 +196,7 @@ SQL_PART;
             {
                 $limitSql='';
             }
-
-
-            $query=<<<SQL
+			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
@@ -212,8 +210,8 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				WHERE {$where}
 			)
-			ORDER BY node.id ASC
-			{$limitSql};
+			ORDER BY node.id ASC;
+			{$limitSql}
 SQL;
             if ($result=$this->plugin->Db->nutsnbolts->select($query))
             {
