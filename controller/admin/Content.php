@@ -2,7 +2,8 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
-	
+	use application\nutsNBolts\model\Node;
+
 	class Content extends AdminController
 	{
 		private $typeID		=null;
@@ -19,6 +20,12 @@ namespace application\nutsNBolts\controller\admin
 					break;
 				}
 				case 'edit':
+				{
+					$node			=$this->model->Node->read(array('id'=>$this->request->lastNode()));
+					$this->typeID	=$node[0]['content_type_id'];
+					break;
+				}
+				case 'remove':
 				{
 					$node			=$this->model->Node->read(array('id'=>$this->request->lastNode()));
 					$this->typeID	=$node[0]['content_type_id'];
@@ -83,6 +90,7 @@ namespace application\nutsNBolts\controller\admin
 				$this->addBreadcrumb('Add Content','icon-pencil','add/'.$typeID);
 				$this->view->setVar('contentTypeId',$typeID);
 				$this->view->setVar('hasWorkflow',(bool)$contentType[0]['workflow_id']);
+				$this->view->setVar('nodeURLs',array());
 				$this->view->getContext()
 				->registerCallback
 				(
@@ -157,7 +165,7 @@ namespace application\nutsNBolts\controller\admin
 
 				if (!$this->contentType['workflow_id'])
 				{
-					if ($this->model->Node->handleRecord($record))
+					if ($this->model->Node->handleRecord($record)!==false)
 					{
 						$this->plugin->Notification->setSuccess('Content successfully edited.');
 					}
@@ -242,6 +250,25 @@ HTML;
 			$this->addBreadcrumb('Edit Content','icon-pencil',$id);
 			$this->view->render();
 		}
+
+		public function archive($id)
+		{
+			$contentTypeForPermCheck=$this->model->ContentType->read($this->typeID);
+			if (!$this->userCanAccessContentType($contentTypeForPermCheck[0]))
+			{
+				$this->plugin->Notification->setError('You don\'t have permission to edit this content item!');
+				$this->redirect('/admin/dashboard/');
+			}
+			if ($this->model->Node->setStatus($id,Node::STATUS_DELETED))
+			{
+				$this->plugin->Notification->setSuccess('Content successfully removed.');
+				$this->redirect('/admin/content/view/'.$this->typeID);
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
+		}
 		
 		private function generateContentParts($contentTypeId=null)
 		{
@@ -275,10 +302,6 @@ HTML;
 						)).'.Main('.$contentType[$i]['content_part_id'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
-					else
-					{
-
-					}
 				}
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
@@ -291,28 +314,39 @@ HTML;
 		{
 			if ($this->canAccessContentType())
 			{
-				$records=$this->model->Node->read(array('content_type_id'=>$this->typeID));
+				$records=$this->model->Node->getWithoutParts($this->typeID,false);
 				$html	=array();
 				for ($i=0,$j=count($records); $i<$j; $i++)
 				{
-					if($records[$i]['status']==0)
+					switch ($records[$i]['status'])
 					{
-						$theStatus="saved";
+						case Node::STATUS_SAVED:		$theStatus='Unpublished';		break;
+						case Node::STATUS_SUBMITTED:	$theStatus='Waiting Approval';	break;
+						case Node::STATUS_PUBLISHED:	$theStatus='Published';			break;
+						case Node::STATUS_ARCHIVED:		$theStatus='Archived';			break;
 					}
-					if($records[$i]['status']==1)
+					$user=$this->model->User->read($records[$i]['last_user_id']);
+					if (isset($user[0]))
 					{
-						$theStatus="pending approval";
+						$user=$user[0]['name_first'].' '.$user[0]['name_last'];
 					}
-					if($records[$i]['status']==2)
+					else
 					{
-						$theStatus="published";
-					}					
+						$user='Unknown';
+					}
 					$html[]=<<<HTML
 <tr>
 	<td><a href="/admin/content/edit/{$records[$i]['id']}">{$records[$i]['title']}</a></td>
 	<td>{$records[$i]['date_created']}</td>
-	<td>{$records[$i]['last_user_id']}</td>
+	<td>{$user}</td>
 	<td>{$theStatus}</td>
+	<td class="center">
+		<a href="/admin/content/archive/{$records[$i]['id']}">
+			<button title="Archive" class="btn btn-mini btn-primary">
+				<i class="icon-signout"></i>
+			</button>
+		</a>
+	</td>
 </tr>
 HTML;
 				}

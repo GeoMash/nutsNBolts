@@ -10,11 +10,7 @@ namespace application\nutsNBolts\model
 		const STATUS_SAVED		=0;
 		const STATUS_SUBMITTED	=1;
 		const STATUS_PUBLISHED	=2;
-		const STATUS_DELETED	=3;
-
-
-
-
+		const STATUS_ARCHIVED	=3;
 
 		public function handleRecord($record)
 		{
@@ -23,7 +19,7 @@ namespace application\nutsNBolts\model
 			if (isset($record['id']) && is_numeric($record['id']))
 			{
 				$nodeParts		=$this->extractContentParts($record);
-				$nodeURLs		=$this->extractURLs($record);
+				$nodeURLs		=$this->extractURLs($record,'node_id');
 				$nodeTags		=$this->extractTags($record);
 				$return			=$this->update($this->removeJunk($record),array('id'=>$record['id']));
 				//Update parts.
@@ -61,7 +57,7 @@ namespace application\nutsNBolts\model
 			{
 				unset($record['id']);
 				$nodeParts	=$this->extractContentParts($record);
-				$nodeURLs	=$this->extractURLs($record);
+				$nodeURLs	=$this->extractURLs($record,'node_id');
 				$nodeTags	=$this->extractTags($record);
 				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{
@@ -94,7 +90,6 @@ namespace application\nutsNBolts\model
 			{
 				if (strstr($key,'node_part_id_'))
 				{
-					// die($key);
 					list($contentPartId,$nodePartId)=explode('_',str_replace('node_part_id_','',$key));
 					$contentPartId=(int)$contentPartId;
 					$nodePartId=(int)$nodePartId;
@@ -115,35 +110,8 @@ namespace application\nutsNBolts\model
 			return $nodeParts;
 		}
 		
-		private function extractURLs(&$record)
-		{
-			$urls=array();
-			$id=(!empty($record['id']))?$record['id']:0;
-			if(isset($record['url']))
-			{
-				for ($i=0,$j=count($record['url']); $i<$j; $i++)
-				{
-					$urls[]=array
-					(
-						'node_id'	=>$id,
-						'url'		=>$record['url'][$i]
-					);
-				}
-				unset($record['url']);
-			}
-			return $urls;
-		}
-		
 		private function extractTags(&$record)
 		{
-			// foreach ($record AS $key=>$rec)
-			// {
-			// 	if(preg_match('/$application\/json:/',$rec))	
-			// 	{
-			// 		$record[$key]=json_decode($rec);
-			// 	}
-			// }
-
 			$id		=(!empty($record['id']))?$record['id']:0;
 			$return	=array();
 			if(isset($record['tags']))
@@ -165,14 +133,51 @@ namespace application\nutsNBolts\model
 			return $return;
 		}
 		
-		
-		
-		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
+		public function getCount($contentTypeId)
 		{
-			$where=array();
-			foreach ($whereKeyVals as $field=>$value)
+			$query=<<<SQL
+			SELECT count(id) as total
+			FROM node
+			WHERE content_type_id=?;
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,array($contentTypeId)))
 			{
-				$where[]=<<<SQL_PART
+				$record=$this->plugin->Db->nutsnbolts->result('assoc');
+				return $record[0]['total'];
+			}
+			return 0;
+		}
+
+		public function getWithoutParts($contentTypeId,$excludeDeleted=true)
+		{
+			if ($excludeDeleted)
+			{
+				$status='AND status != '.self::STATUS_ARCHIVED;
+			}
+			else
+			{
+				$status='';
+			}
+			$query=<<<SQL
+			SELECT *
+			FROM node
+			WHERE content_type_id=?
+			{$status}
+			ORDER BY node.date_updated ASC;
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query,array($contentTypeId)))
+			{
+				return $this->plugin->Db->nutsnbolts->result('assoc');
+			}
+			return null;
+		}
+
+        public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
+        {
+            $where=array();
+            foreach ($whereKeyVals as $field=>$value)
+            {
+                $where[]=<<<SQL_PART
 				(
 					content_part.ref="{$field}"
 					AND
@@ -181,6 +186,16 @@ namespace application\nutsNBolts\model
 SQL_PART;
 			}
 			$where=implode(' AND ',$where);
+            if($limit > 0)
+            {
+                $limitSql=<<<SQL_PART
+             LIMIT {$offset},{$limit}
+SQL_PART;
+            }
+            else
+            {
+                $limitSql='';
+            }
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
@@ -196,53 +211,53 @@ SQL_PART;
 				WHERE {$where}
 			)
 			ORDER BY node.id ASC;
+			{$limitSql}
 SQL;
+            if ($result=$this->plugin->Db->nutsnbolts->select($query))
+            {
 
-			if ($result=$this->plugin->Db->nutsnbolts->select($query))
-			{
+                $records=$this->plugin->Db->nutsnbolts->result('assoc');
 
-				$records=$this->plugin->Db->nutsnbolts->result('assoc');
-				
-				$nodes=array();
-				for ($i=0,$j=count($records); $i<$j; $i++)
-				{
-					if (!isset($nodes[$records[$i]['id']]))
-					{
-						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
-						(
-							$records[$i],
-							array
-							(
-								'site_id',
-								'status'
-							)
-						);
-						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
-						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
-						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
-					}
-					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
-					
-				}
-				//Reset index.
-				sort($nodes);			
-				return $nodes;
-			}
-			else
-			{
-			}
-		}
+                $nodes=array();
+                for ($i=0,$j=count($records); $i<$j; $i++)
+                {
+                    if (!isset($nodes[$records[$i]['id']]))
+                    {
+                        $nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+                            (
+                                $records[$i],
+                                array
+                                (
+                                    'site_id',
+                                    'status'
+                                )
+                            );
+                        $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+                        $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+                        $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+                    }
+                    $nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+
+                }
+                //Reset index.
+                sort($nodes);
+                return $nodes;
+            }
+            else
+            {
+            }
+        }
 
 		public function getBlog($id)
 		{
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE node.id={$id}
-			AND node.status=2
+			AND node.status=2;
 SQL;
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
@@ -379,7 +394,7 @@ SQL_PART;
 SQL_PART;
 			}
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value,content_type_user.user_id
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
@@ -685,7 +700,38 @@ SQL;
 				sort($nodes);
 				return $nodes;
 			}	
-		}		
+		}
+		
+		public function getSpecificNodesAndParts($array)
+		{
+			$records=$this->model->Node->read($array);
+			$this->attachParts($records);
+			return $records;
+		}
+		
+		private function attachParts(&$records)
+		{
+			for ($i=0,$j=count($records); $i<$j; $i++)
+			{
+				$query=<<<SQL
+				SELECT node_part.value,content_part.ref
+				FROM node_part
+				LEFT JOIN content_part ON content_part.id=node_part.content_part_id
+				WHERE node_part.node_id=?
+				ORDER BY node_id DESC;
+SQL;
+				if ($this->db->select($query,array($records[$i]['id'])))
+				{
+					$nodePart=$this->db->result('assoc');
+
+					for ($k=0,$l=count($nodePart); $k<$l; $k++)
+					{
+						$records[$i][$nodePart[$k]['ref']]=$nodePart[$k]['value'];
+					}
+				}
+			}
+		}
+				
 	}
 }
 ?>

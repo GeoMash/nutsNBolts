@@ -3,7 +3,7 @@ namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\NutsNBolts;
 	use application\nutsNBolts\model\base\User as UserBase;
-	use nutshell\exception\NutshellException;
+	use nutshell\core\exception\NutshellException;
 	
 	class User extends UserBase
 	{
@@ -35,22 +35,20 @@ namespace application\nutsNBolts\model
 				{
 					unset($record['password']);
 				}
-				// var_dump($record);exit();
-
-				
-				if(isset($record['role']))
+				$result=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$this->model->UserRole->delete(array('user_id'=>$record['id']));
+				if (isset($record['role']))
 				{
-					$roles	=$this->extractRoles($record);
-					
-					$this->model->UserRole->delete(array('user_id'=>$record['id']));					
+					$roles=$this->extractRoles($record);
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
 						$this->model->UserRole->insert($roles[$i]);
-					}					
+					}
 				}
-				$return	=$this->update($record,array('id'=>$record['id']));
-				return $return;
-				
+				if ($result!==false)
+				{
+					return $this->read($record['id'])[0];
+				}
 			}
 			//For Inserts
 			else
@@ -59,21 +57,31 @@ namespace application\nutsNBolts\model
 				$record['date_created']		=date('Y-m-d H:i:s');
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
-				
-				$roles=$this->extractRoles($record);
-				if ($id=$this->insertAssoc($record))
+
+				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{
-					for ($i=0,$j=count($roles); $i<$j; $i++)
+					if (isset($record['role']))
 					{
-						$roles[$i]['user_id']=$id;
-						$this->model->UserRole->insertAssoc($roles[$i]);
+						$roles=$this->extractRoles($record);
+						for ($i=0,$j=count($roles); $i<$j; $i++)
+						{
+							$roles[$i]['user_id']=$id;
+							$this->model->UserRole->insert($roles[$i]);
+						}
 					}
-					return $id;
+					return $this->read($id)[0];
 				}
 			}
 			return false;
 		}
-		
+
+		public function handleDeleteRecord($recordId)
+		{
+			$this->model->UserRole->delete(array('user_id'=>$recordId));
+			$this->delete($recordId);
+			return true;
+		}
+
 		public function extractRoles(&$record)
 		{
 			if (isset($record['role']))
@@ -158,28 +166,42 @@ SQL;
 
 		public function getUsersByRole($role)
 		{
-			if (is_numeric($role))
+			if (!is_array($role))
 			{
+				$role=array($role);
+			}
+			$roleQueryPart=array();
+			if (is_numeric($role[0]))
+			{
+				for ($i=0,$j=count($role); $i<$j; $i++)
+				{
+					$roleQueryPart[]=$role[$i];
+				}
+				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
-SELECT *
+SELECT DISTINCT user.*
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id=?
+WHERE role.id=-100 OR role.id IN ({$roleQueryPart});
 SQL;
-
 			}
 			else
 			{
+				for ($i=0,$j=count($role); $i<$j; $i++)
+				{
+					$roleQueryPart[]='"'.$role[$i].'"';
+				}
+				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
-SELECT *
+SELECT DISTINCT user.*
 FROM USER
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.ref=?
+WHERE role.id=-100 OR role.ref IN ({$roleQueryPart});
 SQL;
 			}
-			if ($this->db->select($query,array($role)))
+			if ($this->db->select($query))
 			{
 				$records=$this->db->result('assoc');
 				return isset($records)?$records:null;

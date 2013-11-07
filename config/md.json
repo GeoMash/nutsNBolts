@@ -11,18 +11,18 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"mddev",
-						"password":		"k3yB0@rDm@5h",
-						"host":			"192.168.1.13",
+						"username":		"root",
+						"password":		"",
+						"host":			"127.0.0.1",
 						"port":			"3306",
-						"database":		"nutsnbolts"
+						"database":		"wtp"
 					}
 				}
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/usr/local/var/www/bizsmart/public/_collections/",
+				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/",
 				"thumbnails":
 				[
 					{

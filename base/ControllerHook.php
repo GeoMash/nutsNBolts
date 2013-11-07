@@ -13,8 +13,9 @@ namespace application\nutsNBolts\base
 	
 	class ControllerHook extends Component 
 	{
-		public $model		=null;
-		public $view		=null;
+		public $model			=null;
+		public $view			=null;
+		public $hookContainers 	=null;
 
 		public function __construct($model,$view)
 		{
@@ -32,6 +33,11 @@ namespace application\nutsNBolts\base
 			{
 				$this->init();
 			}
+		}
+
+		public function getView()
+		{
+			return $this->view;
 		}
 
 		public function __get($key)

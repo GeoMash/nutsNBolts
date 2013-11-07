@@ -30,13 +30,23 @@ namespace application\nutsNBolts\base
 
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
-			
+
+			$this->loadHooks(ObjectHelper::getBaseClassName($this),'admin');
+
 			if ($this->plugin->UserAuth->isAuthenticated())
 			{
+				if (!$this->isSuper() && $this->challangeRole('STANDARD'))
+				{
+					$this->redirect('/');
+				}
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
 				$this->view->setVar('nav_active_main',$mainNav);
 				$this->view->setVar('nav_active_sub',$this->request->node(2));
+
+				//Hook Containers
+				$this->view->setVar('aboveForm',array());
+				$this->view->setVar('belowForm',array());
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 
@@ -109,10 +119,6 @@ namespace application\nutsNBolts\base
 						print $this->unreadMessages;
 					}
 				);
-			if (method_exists($this,'init'))
-			{
-				$this->init();
-			}
 		}
 		
 		public function show404()
@@ -232,12 +238,13 @@ HTML;
 		
 		public function getUser()
 		{
-			return $this->user;
+			return $this->plugin->UserAuth->getUser();
 		}
 		
 		public function getUserId()
 		{
-			return $this->user['id'];
+			$user=$this->plugin->UserAuth->getUser();
+			return isset($this->user['id'])?$this->user['id']:null;
 		}
 		
 		public function getWidgetInstance($classPath)

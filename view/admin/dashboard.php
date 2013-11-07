@@ -19,6 +19,11 @@
 				</div>
 				<?php
 				endif;
+				$navButtons=$tpl->get('navButtons');
+				foreach ($navButtons as $navButton)
+				{
+					print $navButton;
+				}
 				?>
 			</div>
 		</div>

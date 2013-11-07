@@ -49,7 +49,7 @@ SQL;
 SQL;
 			if ($this->db->select($query))
 			{
-				$records=$this->db->result('assoc');
+				$records=$this->db->result('assoc');		
 				$this->attachParts($records);
 				return $records;
 			}
@@ -77,6 +77,7 @@ SQL;
 				}
 			}
 		}
+
 	}
 }
 ?>

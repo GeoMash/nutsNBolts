@@ -13,6 +13,8 @@ namespace application\nutsNBolts\controller\admin
 		public function index()
 		{
 			$this->show404();
+			$renderRef='index';
+			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 		
@@ -34,6 +36,7 @@ namespace application\nutsNBolts\controller\admin
 						}
 					);
 					$this->addUser();
+					$renderRef='users/add';
 					break;
 				}
 				case 'edit':
@@ -48,11 +51,13 @@ namespace application\nutsNBolts\controller\admin
 						}
 					);
 					$this->editUser($id);
+					$renderRef='users/edit';
 					break;
 				}
 				case 'remove':
 				{
 					$this->removeUser($id);
+					$renderRef='users/remove';
 					break;
 				}
 				//View
@@ -68,8 +73,23 @@ namespace application\nutsNBolts\controller\admin
 							print $this->generateUserList();
 						}
 					);
+					$renderRef='users';
 				}
 			}
+			// $this->setContentView('admin/settings/users');
+			
+			$this->view->getContext()
+			->registerCallback
+			(
+				'generateBarList',
+				function() use ($id)
+				{
+					print $this->generateBarList($id);
+				}
+			);
+								
+			$this->view->setVar('extraOptions',array());
+			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 		
@@ -92,9 +112,10 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Password cannot be blank.');
 				}
 				unset($record['password_confirm']);
-				if ($id=$this->model->User->handleRecord($record))
+				if ($user=$this->model->User->handleRecord($record))
 				{
-					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
+					$this->execHook('onAddUser',$user);
+					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
 
 					try
 					{
@@ -106,14 +127,14 @@ namespace application\nutsNBolts\controller\admin
 								'description'	=>'User Collection',
 								'status'		=>1
 							),
-							$id
+							$user['id']
 						);
 					}
 					catch(NutshellException $exception)
 					{
 						$this->plugin->Notification->setError($exception->getMessage());
 					}
-					$this->redirect('/admin/settings/users/edit/'.$id);
+					$this->redirect('/admin/settings/users/edit/'.$user['id']);
 				}
 				else
 				{
@@ -132,8 +153,9 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Passwords did not match. Please try again.');
 				}
 				unset($record['password_confirm']);
-				if ($this->model->User->handleRecord($record)!==false)
+				if ($user=$this->model->User->handleRecord($record))
 				{
+					$this->execHook('onEditUser',$user);
 					$this->plugin->Notification->setSuccess('User successfully edited.');
 				}
 				else
@@ -152,6 +174,38 @@ namespace application\nutsNBolts\controller\admin
 				$this->view->setVar('record',array());
 			}
 		}
+
+		private function removeUser($id)
+		{
+			if ($id==-100)
+			{
+				$this->plugin->Notification->setError('The system super user cannot be removed.');
+				$this->redirect('/admin/settings/users/');
+			}
+			if ($id==$this->getUserId())
+			{
+				$this->plugin->Notification->setError('You cannot remove yourself.');
+				$this->redirect('/admin/settings/users/');
+			}
+			$roles=$this->model->User->getRoles($id);
+			if ($this->plugin->UserAuth->userHasRole($roles,'ADMIN')
+			&& !($this->isSuper() || $this->isAdmin()))
+			{
+				$this->plugin->Notification->setError('You do not have permission to remove this type of user.');
+				$this->redirect('/admin/settings/users/');
+			}
+
+			if ($this->model->User->handleDeleteRecord($id))
+			{
+				$this->plugin->Notification->setSuccess('User successfully removed.');
+				//TODO: Remove collection items? Needs discussion.
+				$this->redirect('/admin/settings/users/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
+		}
 		
 		public function generateUserList()
 		{
@@ -165,6 +219,13 @@ namespace application\nutsNBolts\controller\admin
 	<td class="">{$records[$i]['name_first']} {$records[$i]['name_last']}</td>
 	<td class="">{$records[$i]['date_lastlogin']}</td>
 	<td class="">{$records[$i]['status']}</td>
+	<td class="center">
+		<a href="/admin/settings/users/remove/{$records[$i]['id']}">
+			<button title="Archive" class="btn btn-mini btn-red">
+				<i class="icon-remove"></i>
+			</button>
+		</a>
+	</td>
 </tr>
 HTML;
 			}
@@ -182,6 +243,10 @@ HTML;
 			$html	=array();
 			for ($i=0,$j=count($roles); $i<$j; $i++)
 			{
+				if ($roles[$i]['id']==-100)
+				{
+					continue;
+				}
 				$checked='';
 				if (isset($userRoles))
 				{
@@ -198,7 +263,7 @@ HTML;
 			$return=implode('',$html);
 			return $return;
 		}
-		
+
 		private function userHasRole($userRoles,$roleID)
 		{
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)

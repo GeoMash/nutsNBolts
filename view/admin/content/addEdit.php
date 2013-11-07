@@ -61,7 +61,7 @@
 																	<button data-action="removeURLfromContent" class="btn btn-danger btn-mini" type="button">&times;</button>
 																</td>
 															</tr>
-														<?php endfor; ?>
+															<?php endfor; ?>
 														</tbody>
 													</table>
 													<button type="button" class="btn btn-green" data-action="addURLToContent"><i class="icon-plus"></i> Add URL Path</button>

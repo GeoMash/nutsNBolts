@@ -17,17 +17,8 @@ namespace application\nutsNBolts\plugin\userAuth
 	class UserAuth extends Plugin implements Native,Singleton 
 	{
 		private $user=null;
-		// protected $vModelLoader = null;
-		
-		public static function loadDependencies()
-		{
-			// require_once('AppPluginExtension.php');
-		}
-		
-		public static function registerBehaviours()
-		{
-		
-		}
+
+		public static function registerBehaviours(){}
 		
 		public function init()
 		{
@@ -37,7 +28,7 @@ namespace application\nutsNBolts\plugin\userAuth
 			}
 			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 		}
-		
+
 		private function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
@@ -73,15 +64,15 @@ namespace application\nutsNBolts\plugin\userAuth
 				$record['date_created']		=date('Y-m-d H:i:s');
 				$record['date_lastlogin']	='0000-00-00 00:00:00';
 				$record['date_lastactive']	='0000-00-00 00:00:00';
+				$role=$record['role'];
+				unset($record['role']);
 				
 				$roles=$this->extractRoles($record);
-				if ($id=$this->plugin->Mvc->model->User->insertAssoc($record))
+				if ($id=$this->insertAssoc($record))
 				{
-					for ($i=0,$j=count($roles); $i<$j; $i++)
-					{
-						$roles[$i]['user_id']=$id;
-						$this->plugin->Mvc->model->UserRole->insertAssoc($roles[$i]);
-					}
+					$array=array('user_id'=>$id,'role_id'=>$role);
+					$this->model->UserRole->insertAssoc($array);
+					// var_dump($id); exit();
 					return $id;
 				}
 			}
@@ -180,7 +171,6 @@ namespace application\nutsNBolts\plugin\userAuth
 		public function generateUserList()
 		{
 			return $this->plugin->Mvc->model->User->read();
-
 		}
 
 		public function generateRolesList($userId=null)
@@ -211,11 +201,12 @@ HTML;
 			return $return;
 		}
 		
-		public function userHasRole($userRoles,$roleID)
+		public function userHasRole($userRoles,$role)
 		{
+			$key=is_numeric($role)?'id':'ref';
 			for ($i=0,$j=count($userRoles); $i<$j; $i++)
 			{
-				if ($userRoles[$i]['role_id']==$roleID)
+				if ($userRoles[$i][$key]==$role)
 				{
 					return true;
 				}
@@ -223,10 +214,9 @@ HTML;
 			return false;
 		}
 
-		public function authenticate($fieldName,$fieldValue,$password)
+		public function authenticate(Array $array,$password)
 		{
-			$user		=$this->plugin->Mvc->model->User->read(array($fieldName=>$fieldValue));
-			
+			$user=$this->plugin->Mvc->model->User->read($array);
 			if (isset($user[0]))
 			{
 				$userSalt	=$user[0]['salt'];
@@ -241,6 +231,7 @@ HTML;
 						'status'		=>1
 					)
 				);
+
 				if (isset($result[0]))
 				{
 					return $result[0];
@@ -261,7 +252,12 @@ HTML;
 
 		public function isAuthenticated()
 		{
-			return (bool)($this->plugin->Session->authenticated);
+			return isset(Nutshell::getInstance()->plugin->Session->userId);
+		}
+
+		public function logout()
+		{
+			Nutshell::getInstance()->plugin->Session->destroy();
 		}
 
 		public function isSuper()

@@ -1,0 +1,14 @@
+{
+	"config":
+	{
+		"timezone": "UTC",
+		"M3Tech":
+		{
+			"serviceURL":   "https://www.wcdma.com.my/imp/hlbb_praxis/submitsm.asp",
+			"UserKey":      null,
+			"Password":     null,
+			"ServiceId":    "000",
+			"MCN":          "push"
+		}
+	}
+}

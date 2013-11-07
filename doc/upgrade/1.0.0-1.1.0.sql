@@ -1,3 +1,4 @@
+ALTER TABLE `wtp`.`page` DROP COLUMN `url`;
 ALTER TABLE `content_type` ADD COLUMN `workflow_id` INT(10) NOT NULL AFTER `site_id`;
 ALTER TABLE `node` ADD COLUMN `workflow_step_id` INT(10) DEFAULT 0 NOT NULL AFTER `content_type_id`;
 ALTER TABLE `collection` CHANGE `descriptions` `description` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci NOT NULL;
@@ -70,7 +71,7 @@ ALTER TABLE `user` ADD COLUMN `image` VARCHAR(200) NOT NULL AFTER `gender`;
 
 /* page bunching */
 
-ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
+ALTER TABLE `content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 
 ALTER TABLE `user`
 ADD COLUMN `image` VARCHAR(100) NOT NULL AFTER `name_last`,
@@ -79,5 +80,5 @@ ADD COLUMN `company` VARCHAR(100) NOT NULL AFTER `position`,
 ADD COLUMN `about` TEXT NOT NULL AFTER `company`;
 
 
-ALTER TABLE `DBNAME`.`content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
+ALTER TABLE `content_type` ADD COLUMN `page_name` VARCHAR(20) NOT NULL;
 

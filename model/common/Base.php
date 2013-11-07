@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\model\common
 {
+	use application\nutsNBolts\exception\NutsNBoltsException;
 	use nutshell\plugin\mvc\model\CRUD;
 
 	abstract class Base extends CRUD
@@ -18,7 +19,18 @@ namespace application\nutsNBolts\model\common
 			{
 				return $this->insertAssoc($record);
 			}
-			return false;
+		}
+
+		public function setStatus($id,$status)
+		{
+			if (isset($this->columns['status']))
+			{
+				return $this->update(array('status'=>$status),array('id'=>$id));
+			}
+			else
+			{
+				throw new NutsNBoltsException('Status column doesn\'t exist for table "'.$this->name.'".');
+			}
 		}
 		
 		public function removeJunk($record)
@@ -32,6 +44,25 @@ namespace application\nutsNBolts\model\common
 				}
 			}
 			return $record;
+		}
+
+		public function extractURLs(&$record,$idField)
+		{
+			$urls=array();
+			$id=(!empty($record['id']))?$record['id']:0;
+			if(isset($record['url']))
+			{
+				for ($i=0,$j=count($record['url']); $i<$j; $i++)
+				{
+					$urls[]=array
+					(
+						$idField	=>$id,
+						'url'		=>$record['url'][$i]
+					);
+				}
+				unset($record['url']);
+			}
+			return $urls;
 		}
 	}
 }
