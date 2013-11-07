@@ -186,6 +186,16 @@ SQL;
 SQL_PART;
 			}
 			$where=implode(' AND ',$where);
+            if($limit > 0)
+            {
+                $limitSql=<<<SQL_PART
+             LIMIT {$offset},{$limit}
+SQL_PART;
+            }
+            else
+            {
+                $limitSql='';
+            }
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
@@ -201,6 +211,7 @@ SQL_PART;
 				WHERE {$where}
 			)
 			ORDER BY node.id ASC;
+			{$limitSql}
 SQL;
 
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
