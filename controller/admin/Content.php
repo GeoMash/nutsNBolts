@@ -20,12 +20,7 @@ namespace application\nutsNBolts\controller\admin
 					break;
 				}
 				case 'edit':
-				{
-					$node			=$this->model->Node->read(array('id'=>$this->request->lastNode()));
-					$this->typeID	=$node[0]['content_type_id'];
-					break;
-				}
-				case 'remove':
+				case 'archive':
 				{
 					$node			=$this->model->Node->read(array('id'=>$this->request->lastNode()));
 					$this->typeID	=$node[0]['content_type_id'];
@@ -259,15 +254,15 @@ HTML;
 				$this->plugin->Notification->setError('You don\'t have permission to edit this content item!');
 				$this->redirect('/admin/dashboard/');
 			}
-			if ($this->model->Node->setStatus($id,Node::STATUS_DELETED))
+			if ($this->model->Node->setStatus($id,Node::STATUS_ARCHIVED))
 			{
 				$this->plugin->Notification->setSuccess('Content successfully removed.');
-				$this->redirect('/admin/content/view/'.$this->typeID);
 			}
 			else
 			{
 				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 			}
+			$this->redirect('/admin/content/view/'.$this->typeID);
 		}
 		
 		private function generateContentParts($contentTypeId=null)
