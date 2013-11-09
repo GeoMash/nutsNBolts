@@ -45,20 +45,37 @@ namespace application\nutsNBolts\controller
 				$user=$this->plugin->UserAuth->authenticate($params,$request['password']);
 				if($user)
 				{
-					$dt = new DateTime();
-					Nutshell::getInstance()->plugin->Session->email=$user['email'];
-					Nutshell::getInstance()->plugin->Session->phone=$user['phone'];
-					Nutshell::getInstance()->plugin->Session->userId=$user['id'];
-					Nutshell::getInstance()->plugin->Session->authenticated=true;
-					
-					$this->plugin->Mvc->model->User->update(array('date_lastlogin'=> $dt->format('Y-m-d H:i:s')),array('phone'=>$user['phone']));
-					$this->filterRedirect($user['roles'][0]['ref']);
+
+                    if(strlen($user['email']) > 3)
+                    {
+                        $dt = new DateTime();
+                        Nutshell::getInstance()->plugin->Session->email=$user['email'];
+                        Nutshell::getInstance()->plugin->Session->phone=$user['phone'];
+                        Nutshell::getInstance()->plugin->Session->userId=$user['id'];
+                        Nutshell::getInstance()->plugin->Session->authenticated=true;
+                        $this->plugin->Mvc->model->User->update(array('date_lastlogin'=> $dt->format('Y-m-d H:i:s')),array('phone'=>$user['phone']));
+                        $this->filterRedirect($user['roles'][0]['ref']);
+                    }
+                    else
+                    {
+                        // user needs to fill in form
+                        Nutshell::getInstance()->plugin->Session->phone=$user['phone'];
+                        Nutshell::getInstance()->plugin->Session->authenticated=false;
+                        Nutshell::getInstance()->plugin->Session->password=$user['password'];
+                        Nutshell::getInstance()->plugin->Session->salt=$user['salt'];
+                        header('location:/login/complete');
+                        $this->plugin->Notification->setError("You need to fill in the form below before you can enter the website");
+                        exit();
+
+                    }
+
 				}
 				else
 				{
-					$this->plugin->Notification->setError("Username and/or password error");
-					header('location:/login');
-					exit();					
+
+                    $this->plugin->Notification->setError("Username and/or password error");
+                    header('location:/');
+                    exit();
 				}
 			}
 		}
@@ -70,9 +87,10 @@ namespace application\nutsNBolts\controller
 			header('location:/');
 			exit();			
 		}
+
 		
-		public function filterRedirect($role)
-		{
+		private function filterRedirect($role)
+        {
 			if(isset($role))
 			{
 				switch (strtoupper($role))
@@ -103,6 +121,7 @@ namespace application\nutsNBolts\controller
 						break;
 
 					default:
+                        die('here');
 							header('location:/login');
 							exit();
 						break;
