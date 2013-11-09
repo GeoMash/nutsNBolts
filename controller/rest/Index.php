@@ -1,13 +1,11 @@
 <?php
 namespace application\nutsNBolts\controller\rest
 {
-	use nutshell\Nutshell;
-	use nutshell\core\exception\NutshellException;
 	use application\nutsNBolts\base\Controller;
 
 	class Index extends Controller
 	{
-		const FORMAT_DEFAULT='json';
+		const FORMAT_DEFAULT='html';
 
 		private $restController=null;
 
@@ -16,7 +14,7 @@ namespace application\nutsNBolts\controller\rest
 			$request		=$this->request->getNodes();
 			$lastIndex		=count($request)-1;
 			$latNodeParts	=explode('.',$request[$lastIndex]);
-			if (isset($latNodeParts[1]))
+			if (isset($latNodeParts[1]) && $latNodeParts[1]!=$request[$lastIndex])
 			{
 				$format=$latNodeParts[1];
 				$request[$lastIndex]=str_replace('.'.$format,'',$request[$lastIndex]);
@@ -25,40 +23,42 @@ namespace application\nutsNBolts\controller\rest
 			{
 				$format=self::FORMAT_DEFAULT;
 			}
-			//Check for action.
-			$action	=isset($request[2])?$request[2]:null;
-			$args	=array();
-			$node	=3;
-			//Check for args.
-			if (!is_null($action))
+			if (isset($request[1]))
 			{
-				while (true)
+				$className=$this->getController($request[1]);
+				if (!empty($className))
 				{
-					//grab the next node
-					$arg = $request($node++);
-
-					if(is_null($arg))
-					{
-						break;
-					}
-					//append to the args array
-					$args[] = $arg;
+					array_shift($request);
+					array_shift($request);
+					$this->restController=new $className($this->MVC,$request,$format);
+					exit();
+				}
+				else
+				{
+					//TODO: Handle properly.
+					die('INVALID REQUEST');
 				}
 			}
-			else
+			//TODO: Handle properly.
+			die('INVALID REQUEST');
+		}
+
+		private function getController($serviceNode)
+		{
+			$return		=null;
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
-				$action='index';
+				$basePath=APP_HOME.lcfirst($applicationRef)._DS_.'controller'._DS_.'rest'._DS_;
+				if (is_file($basePath.ucfirst($serviceNode).'.php'))
+				{
+					$return=$this->application->getNamespace($applicationRef).'\controller\rest\\'.ucfirst($serviceNode);
+				}
+				else if (is_file($basePath.lcfirst($serviceNode)._DS_.'Index.php'))
+				{
+					$return=$this->application->getNamespace($applicationRef).'\controller\rest\\'.lcfirst($serviceNode).'\\'.'Index';
+				}
 			}
-			switch ($request[1])
-			{
-				case 'node':	$this->restController=new User($this->MVC,$format,$request);	break;
-				case 'user':	$this->restController=new Node($this->MVC,$format,$request);	break;
-			}
-			call_user_func_array
-			(
-				array($this->restController,$action),
-				$args
-			);
+			return $return;
 		}
 	}
 }
