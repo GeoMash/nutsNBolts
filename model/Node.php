@@ -172,20 +172,43 @@ SQL;
 			return null;
 		}
 		
-		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
+		public function getWithParts($whereKeyVals=array())
 		{
-			$where=array();
-			foreach ($whereKeyVals as $field=>$value)
+			if (count($whereKeyVals))
 			{
-				$where[]=<<<SQL_PART
-				(
-					content_part.ref="{$field}"
-					AND
-					node_part.value="{$value}"
-				)
+				$where=array();
+				foreach ($whereKeyVals as $field=>$value)
+				{
+					switch ($field)
+					{
+						case 'id':
+						{
+							$where[]='node.id="'.addslashes($value).'"';
+							break;
+						}
+						case 'content_type_id':
+						{
+							$where[]='node.content_type_id="'.addslashes($value).'"';
+							break;
+						}
+						default:
+						{
+							$where[]=<<<SQL_PART
+							(
+								content_part.ref="{$field}"
+								AND
+								node_part.value="{$value}"
+							)
 SQL_PART;
+						}
+					}
+				}
+				$where='WHERE '.implode(' AND ',$where);
 			}
-			$where=implode(' AND ',$where);
+			else
+			{
+				$where='';
+			}
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
@@ -198,7 +221,7 @@ SQL_PART;
 				FROM node
 				LEFT JOIN node_part ON node.id=node_part.node_id
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-				WHERE {$where}
+				{$where}
 			)
 			ORDER BY node.id ASC;
 SQL;
@@ -228,7 +251,7 @@ SQL;
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
 				//Reset index.
-				sort($nodes);			
+				sort($nodes);
 				return $nodes;
 			}
 			return null;
