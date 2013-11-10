@@ -228,12 +228,17 @@ HTML;
 		{
 			foreach ($paths as $path=>$action)
 			{
-				$path='/^'.str_replace
+				if (empty($path))
+				{
+					$this->paths[$path]=$action;
+					continue;
+				}
+				$path='/^('.str_replace
 				(
 					array('{int}','{string}','/'),
 					array('\d*','\w*','\/'),
 					$path
-				).'(\/\w)*$/';
+				).')(.*)$/';
 				$this->paths[$path]=$action;
 			}
 			return $this;
@@ -291,7 +296,7 @@ HTML;
 					}
 					else try
 					{
-						$request=explode('/',trim(preg_replace($path,'$1',$joinedRequest),'/'));
+						$request=explode('/',trim(preg_replace($path,'$2',$joinedRequest),'/'));
 						if (class_exists($pathAction,true))
 						{
 							$this->subController=new $pathAction($this->MVC,$request,$this->getFormat());
