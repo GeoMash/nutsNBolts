@@ -101,6 +101,24 @@ namespace application\nutsNBolts\base
 			return $this->_request;
 		}
 
+		public function getFullRequest()
+		{
+			$nodes=$this->request->getNodes();
+			$lastIndex=count($nodes)-1;
+			$nodes[$lastIndex]=str_replace('.'.$this->getFormat(),'',$nodes[$lastIndex]);
+			return ;
+		}
+
+		public function getFullRequestPart($part)
+		{
+			$part=$this->request->node($part);
+			if ($part==$this->request->lastNode())
+			{
+				$part=str_replace('.'.$this->getFormat(),'',$part);
+			}
+			return $part;
+		}
+
 		public function getFormat()
 		{
 			return $this->format;
@@ -185,6 +203,7 @@ HTML;
 					exit();
 				}
 				case 'json':
+				case 'jsonp':
 				{
 
 					break;
