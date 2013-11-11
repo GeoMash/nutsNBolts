@@ -24,7 +24,8 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(11) unsigned NOT NULL ' ,
 			'bottle_id' => 'int(11)' ,
 			'bar_id' => 'int(11)' ,
-			'bottle_price' => 'double(15,2)' 
+			'price' => 'double(15,2)',
+			'volume' => 'varchar(20)'
 		);
 	}
 }
