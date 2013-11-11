@@ -21,12 +21,12 @@
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/usr/local/var/www/wtp/public/_collections"
+				"collectionsDir": "/usr/local/var/www/wtp/public/_collections/"
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/usr/local/var/www/wtp/public/_collections"
+				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/"
 			}
 		}
 	}
