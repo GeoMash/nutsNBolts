@@ -33,7 +33,7 @@ namespace application\nutsNBolts\base
 					{
 						return $this->plugin->Notification->getAll();
 					}
-				);		
+				);
 			if (method_exists($this,'init'))
 			{
 				$this->init();
@@ -86,14 +86,13 @@ namespace application\nutsNBolts\base
 					require_once($path);
 					if (class_exists($className))
 					{
-						if(count($this->hookContainers) > 0)
+						if(count($this->hookContainers))
 						{
 							if (!is_array($this->hookContainers[$applicationRef]))
 							{
 								$this->hookContainers[$applicationRef]=array();
 							}
 						}
-
 						$this->hookContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
 					}
 					else

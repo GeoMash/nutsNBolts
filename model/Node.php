@@ -171,25 +171,48 @@ SQL;
 			}
 			return null;
 		}
-
-        public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
-        {
-            $where=array();
-            foreach ($whereKeyVals as $field=>$value)
-            {
-                $where[]=<<<SQL_PART
-				(
-					content_part.ref="{$field}"
-					AND
-					node_part.value="{$value}"
-				)
+		
+		public function getWithParts($whereKeyVals=array())
+		{
+			if (count($whereKeyVals))
+			{
+				$where=array();
+				foreach ($whereKeyVals as $field=>$value)
+				{
+					switch ($field)
+					{
+						case 'id':
+						{
+							$where[]='node.id="'.addslashes($value).'"';
+							break;
+						}
+						case 'content_type_id':
+						{
+							$where[]='node.content_type_id="'.addslashes($value).'"';
+							break;
+						}
+						default:
+						{
+							$where[]=<<<SQL_PART
+							(
+								content_part.ref="{$field}"
+								AND
+								node_part.value="{$value}"
+							)
 SQL_PART;
+						}
+					}
+				}
+				$where='WHERE '.implode(' AND ',$where);
 			}
-			$where=implode(' AND ',$where);
-            if($limit > 0)
+			else
+			{
+				$where='';
+			}
+			if($limit > 0)
             {
                 $limitSql=<<<SQL_PART
-             LIMIT {$offset},{$limit}
+             	LIMIT {$offset},{$limit}
 SQL_PART;
             }
             else
@@ -208,7 +231,7 @@ SQL_PART;
 				FROM node
 				LEFT JOIN node_part ON node.id=node_part.node_id
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-				WHERE {$where}
+				{$where}
 			)
 			ORDER BY node.id ASC
 			{$limitSql}
@@ -217,37 +240,37 @@ SQL;
             if ($result=$this->plugin->Db->nutsnbolts->select($query))
             {
 
-                $records=$this->plugin->Db->nutsnbolts->result('assoc');
 
-                $nodes=array();
-                for ($i=0,$j=count($records); $i<$j; $i++)
-                {
-                    if (!isset($nodes[$records[$i]['id']]))
-                    {
-                        $nodes[$records[$i]['id']]=ArrayHelper::withoutKey
-                            (
-                                $records[$i],
-                                array
-                                (
-                                    'site_id',
-                                    'status'
-                                )
-                            );
-                        $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
-                        $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
-                        $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
-                    }
-                    $nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
-
-                }
-                //Reset index.
-                sort($nodes);
-                return $nodes;
-            }
-            else
-            {
-            }
-        }
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}
+			return null;
+		}
 
 		public function getBlog($id)
 		{
