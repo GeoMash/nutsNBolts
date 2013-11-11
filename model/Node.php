@@ -172,7 +172,7 @@ SQL;
 			return null;
 		}
 		
-		public function getWithParts($whereKeyVals=array())
+		public function getWithParts($whereKeyVals=array(),$offset=null,$limit=null)
 		{
 			if (count($whereKeyVals))
 			{
@@ -209,7 +209,7 @@ SQL_PART;
 			{
 				$where='';
 			}
-			if($limit > 0)
+			if($offset && $limit)
             {
                 $limitSql=<<<SQL_PART
              	LIMIT {$offset},{$limit}
