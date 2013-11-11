@@ -237,10 +237,6 @@ SQL_PART;
 			{$limitSql}
 			;
 SQL;
-            if ($result=$this->plugin->Db->nutsnbolts->select($query))
-            {
-
-
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
