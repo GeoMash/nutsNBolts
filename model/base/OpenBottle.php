@@ -23,11 +23,12 @@ namespace application\nutsNBolts\model\base
 		(
 			'id' => 'int(11) unsigned NOT NULL ' ,
 			'user_id' => 'int(11)' ,
-			'bottle_by_bar_id' => 'int(11)' ,
+			'bottle_id' => 'int(11)' ,
 			'bar_id' => 'int(11)' ,
 			'date_opened' => 'timestamp' ,
 			'bottle_price' => 'double(15,2)' ,
-			'volume_left' => 'int(10)' 
+			'volume_original' => 'int(10)',
+			'volume_remaining' => 'int(10)'
 		);
 	}
 }
