@@ -300,7 +300,6 @@ HTML;
 			$action			=null;
 			foreach ($this->paths as $path=>$pathAction)
 			{
-				var_dump($path,$joinedRequest);
 				if ($joinedRequest==$path)
 				{
 					if (method_exists($this,$pathAction))
