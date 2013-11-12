@@ -19,6 +19,13 @@
 							<?php endif; ?>
 						</div>
 						<div class="box-content">
+							<?php
+							$extras=$tpl->get('aboveForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="padded">
 								<div class="control-group">
 									<label class="control-label">Title</label>
@@ -85,6 +92,13 @@
 									</div>
 								</div>
 							</div>
+							<?php
+							$extras=$tpl->get('belowForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="form-actions">
 								<div class="pull-right">
 									<?php if (!$tpl->get('hasWorkflow')): ?>

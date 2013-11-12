@@ -95,6 +95,8 @@ namespace application\nutsNBolts\controller\admin
 						$this->getWorkflowTransitions(null);
 					}
 				);
+				$renderRef='content/add';
+				$this->execHook('onBeforeRender',$renderRef);
 				$this->view->render();
 			}
 			else
@@ -173,7 +175,6 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 				}
-
 			}
 
 			$contentType=$this->model->ContentType->readWithParts($this->typeID);
@@ -243,6 +244,8 @@ HTML;
 			$this->addBreadcrumb('Content','icon-edit','content');
 			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
 			$this->addBreadcrumb('Edit Content','icon-pencil',$id);
+			$renderRef='content/edit';
+			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 
