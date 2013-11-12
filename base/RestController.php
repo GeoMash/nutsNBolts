@@ -297,9 +297,10 @@ HTML;
 		{
 			$request		=$this->getRequest();
 			$joinedRequest	=implode('/',$request);
-			$action		=null;
+			$action			=null;
 			foreach ($this->paths as $path=>$pathAction)
 			{
+				var_dump($path,$joinedRequest);
 				if ($joinedRequest==$path)
 				{
 					if (method_exists($this,$pathAction))
@@ -307,7 +308,7 @@ HTML;
 						$this->execAction($pathAction,$request);
 					}
 				}
-				else if (preg_match($path,$joinedRequest)===1)
+				else if (!empty($path) && preg_match($path,$joinedRequest)===1)
 				{
 					if (method_exists($this,$pathAction))
 					{
