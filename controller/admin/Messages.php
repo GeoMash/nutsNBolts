@@ -6,52 +6,8 @@ namespace application\nutsNBolts\controller\admin
 	
 	class Messages extends AdminController
 	{
-		public function init()
+		public function index()
 		{
-			$url=$this->request->getNodes();
-			$userId=$this->plugin->UserAuth->getUserId();
-			
-			switch (count($url))
-			{
-				case '2':
-					$this->viewAll($userId);
-				break;
-				
-				case '4':
-					$messageId=$url[3];
-					$this->view($userId,$messageId);
-				break;
-			}
-			
-		}
-		private function view($userId,$messageId)
-		{
-			$search=array
-			(
-			 	'id'	=>$messageId
-			);
-			
-			if($record=$this->model->Message->read($search))
-			{
-				$read=array
-				(
-				 	'status'	=>1
-				);
-				$this->model->Message->update($read,$search);
-			}
-			$this->view->setVar('record',$record);
-			$this->setContentView('admin/viewMessage');
-			$this->addBreadcrumb('Messages','icon-inbox','messages');
-			// $this->addBreadcrumb('Messages','icon-inbox','messages');		
-		}
-		
-		private function viewAll($id)
-		{
-			$search=array
-			(
-			 	'to_user_id'	=>$id
-			 );
-			
 			$this->setContentView('admin/messages');
 			$this->view->getContext()
 				->registerCallback
@@ -61,13 +17,25 @@ namespace application\nutsNBolts\controller\admin
 					{
 						print $this->generateMessageRows();
 					}
-				);			
-			$this->addBreadcrumb('Messages','icon-inbox','messages');		
+				);
+			$this->addBreadcrumb('Messages','icon-inbox','messages');
+			$this->view->render();
+		}
+
+		public function view($messageId)
+		{
+			if($record=$this->model->Message->read(array('id'=>$messageId)))
+			{
+				$this->model->Message->update(array('status'=>1),$search);
+			}
+			$this->view->setVar('record',$record);
+			$this->setContentView('admin/viewMessage');
+			$this->addBreadcrumb('Messages','icon-inbox','messages');
+			$this->view->render();
 		}
 		
 		private function generateMessageRows()
 		{
-
 			$records=$this->model->Message->read(array('to_user_id'=>$this->plugin->UserAuth->getUserId() ),array(),' ORDER BY id DESC');
 			$html	=array();
 			for ($i=0,$j=count($records); $i<$j; $i++)
