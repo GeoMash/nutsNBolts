@@ -77,7 +77,14 @@
 										</div>
 									</div>
 								</div>
-							<?php endif; ?>
+							<?php
+							endif;
+							$extras=$tpl->get('belowForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="container-fluid padded">
 								<div class="box">
 									<div class="box-header">
@@ -92,13 +99,6 @@
 									</div>
 								</div>
 							</div>
-							<?php
-							$extras=$tpl->get('belowForm');
-							foreach ($extras as $extra)
-							{
-								print $extra;
-							}
-							?>
 							<div class="form-actions">
 								<div class="pull-right">
 									<?php if (!$tpl->get('hasWorkflow')): ?>
