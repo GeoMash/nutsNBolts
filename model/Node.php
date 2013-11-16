@@ -50,7 +50,10 @@ namespace application\nutsNBolts\model
 					$this->model->NodeTag->insertAssoc($nodeTags[$i]);
 				}
 
-				return $return;
+				if ($return!==false)
+				{
+					return $this->getWithParts($record['id'])[0];
+				}
 			}
 			//For Inserts
 			else
@@ -174,35 +177,45 @@ SQL;
 		
 		public function getWithParts($whereKeyVals=array(),$offset=null,$limit=null)
 		{
+			$where=array();
 			if (count($whereKeyVals))
 			{
-				$where=array();
-				foreach ($whereKeyVals as $field=>$value)
+				if (is_numeric($whereKeyVals))
 				{
-					switch ($field)
+					$where[]='node.id="'.$whereKeyVals.'"';
+				}
+				else if (is_array($whereKeyVals))
+				{
+					foreach ($whereKeyVals as $field=>$value)
 					{
-						case 'id':
+						switch ($field)
 						{
-							$where[]='node.id="'.addslashes($value).'"';
-							break;
-						}
-						case 'content_type_id':
-						{
-							$where[]='node.content_type_id="'.addslashes($value).'"';
-							break;
-						}
-						default:
-						{
-							$where[]=<<<SQL_PART
-							(
-								content_part.ref="{$field}"
-								AND
-								node_part.value="{$value}"
-							)
+							case 'id':
+							{
+								$where[]='node.id="'.addslashes($value).'"';
+								break;
+							}
+							case 'content_type_id':
+							{
+								$where[]='node.content_type_id="'.addslashes($value).'"';
+								break;
+							}
+							default:
+							{
+								$where[]=<<<SQL_PART
+								(
+									content_part.ref="{$field}"
+									AND
+									node_part.value="{$value}"
+								)
 SQL_PART;
+							}
 						}
 					}
 				}
+			}
+			if ($where)
+			{
 				$where='WHERE '.implode(' AND ',$where);
 			}
 			else

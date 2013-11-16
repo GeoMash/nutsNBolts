@@ -121,9 +121,10 @@ namespace application\nutsNBolts\controller\admin
 				}
 				//TODO last_user_id
 
-				$id=$this->model->Node->handleRecord($record);				
+				$id=$this->model->Node->handleRecord($record);
 				if (is_numeric($id))
 				{
+					$this->execHook('onAddContent',$id);
 					$this->plugin->Notification->setSuccess('Content successfully added. Would you like to <a href="/admin/content/add/'.$typeID.'">Add another one?</a>');
 					$this->redirect('/admin/content/edit/'.$id);
 				}
@@ -162,8 +163,9 @@ namespace application\nutsNBolts\controller\admin
 
 				if (!$this->contentType['workflow_id'])
 				{
-					if ($this->model->Node->handleRecord($record)!==false)
+					if ($record=$this->model->Node->handleRecord($record))
 					{
+						$this->execHook('onEditContent',$record);
 						$this->plugin->Notification->setSuccess('Content successfully edited.');
 					}
 					else
