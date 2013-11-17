@@ -45,7 +45,7 @@ namespace application\nutsNBolts\widget\base
 		
 		public function setProperties($keyVals)
 		{
-			foreach ($keyvals as $key=>$val)
+			foreach ($keyVals as $key=>$val)
 			{
 				$this->setProperty($key,$val);
 			}
