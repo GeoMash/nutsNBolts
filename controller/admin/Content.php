@@ -294,7 +294,7 @@ HTML;
 							array('application\\','\\'),
 							array('','.'),
 							$contentType[$i]['widget']
-						)).'.Main('.$contentType[$i]['content_part_id'].')';
+						)).'.Main('.$contentType[$i]['content_part_id'].','.$contentType[$i]['config'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
 				}
