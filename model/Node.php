@@ -381,18 +381,8 @@ SQL;
 		public function getBlogsByBlogger($bloggerId, $category, $min, $max)
 		{
 			$where=null;
-			if(strlen($category) > 3)
+			if(strlen($category) > 0)
 			{
-				$where=<<<SQL_PART
-				AND node_part.value="{$category}"
-SQL_PART;
-			}
-			if(strlen($min) > 3)
-			{
-				$where=<<<SQL_PART
-				AND node.date_created BETWEEN "{$min}" AND "{$max}"
-SQL_PART;
-			}
 			$query=<<<SQL
 			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
@@ -401,9 +391,33 @@ SQL_PART;
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
 			AND node.status=2
-			{$where}
-			ORDER BY node.date_created DESC
 SQL;
+			}
+			elseif(strlen($min) > 3)
+			{
+			$query=<<<SQL
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=2
+			AND node.date_created BETWEEN "{$min}" AND "{$max}";	
+SQL;
+			}
+			else
+			{
+			$query=<<<SQL
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=2
+SQL;
+			}
 
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
@@ -428,6 +442,24 @@ SQL;
 						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				if(strlen($category) > 0)
+				{
+					$newNodes=$nodes;
+					unset($nodes);
+					foreach($newNodes AS $node)
+					{
+						// print_r($newNodes);
+						// die();
+						foreach ($node AS $key=>$value)
+						{
+							if($key=='category' && $value==$category)
+							{
+								$nodes[]=$node;
+							}							
+						}
+
+					}
 				}
 				//Reset index.
 				sort($nodes);
