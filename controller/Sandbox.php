@@ -9,10 +9,21 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			$SMS=$this->plugin->Sms('M3Tech');
-			$SMS->setMobileNumber('60172359029')
-				->setMessage('Test test test')
+			$mobileNumber	='60172359029';
+			$message		='WTP SMS Test 000002';
+			$SMS			=$this->plugin->Sms('M3Tech');
+			$SMS->setMobileNumber($mobileNumber)
+				->setMessage($message)
 				->send();
+			$this->model->Sms->insertAssoc
+			(
+				array
+				(
+					'bar_id'=>175,
+					'user_id'=>1,
+					'message'=>$message
+				)
+			);
 		}
 	}
 }
