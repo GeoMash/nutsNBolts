@@ -24,6 +24,7 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(11) unsigned NOT NULL ' ,
 			'bar_id' => 'int(11)' ,
 			'user_id' => 'int(11)' ,
+			'number' => 'int(11)',
 			'message' => 'text' ,
 			'date_sent' => 'timestamp' 
 		);
