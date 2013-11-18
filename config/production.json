@@ -21,7 +21,8 @@
 		{
 			"mode": 		"production",
 			"dataDir":		"./data/",
-			"salt":			"Squirrels love nuts!"
+			"salt":			"Squirrels love nuts!",
+			"smsQuotaAlert":0.9
 		},
 		"plugin":
 		{
