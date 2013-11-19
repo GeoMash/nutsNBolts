@@ -295,7 +295,6 @@ namespace application\nutsNBolts\base
 
 		public function getUserId()
 		{
-			$user=$this->plugin->UserAuth->getUser();
 			return isset($this->user['id'])?$this->user['id']:null;
 		}
 
