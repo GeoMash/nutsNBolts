@@ -185,20 +185,6 @@ namespace application\nutsNBolts\controller
 				 	{
 				 		return $this->getHomeTiles();
 				 	}
-				 )->registerCallback
-				 (
-					'isAuthenticated',
-					function()
-					{
-						return $this->plugin->UserAuth->isAuthenticated();
-					}
-				)->registerCallback
-				(
-				 	'logout',
-				 	function()
-				 	{
-				 		return $this->plugin->UserAuth->logout();
-				 	}
 				 );
 
 				$context=$this->view->getContext();

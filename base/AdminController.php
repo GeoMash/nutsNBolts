@@ -50,9 +50,6 @@ namespace application\nutsNBolts\base
 				
 				$this->addBreadcrumb('Dashboard','icon-dashboard','dashboard');
 
-				$this->user=$this->plugin->UserAuth->getUser();
-				$this->view->setVar('user',$this->user);
-
 				if($this->plugin->Message->getUnreadMessageCount()<1)
 				{
 					$this->unreadMessages="";
@@ -103,13 +100,6 @@ namespace application\nutsNBolts\base
 					function()
 					{
 						print $this->getNotifications();
-					}
-				)->registerCallback
-				(
-					'challangeRole',
-					function($allowedRoles)
-					{
-						return $this->challangeRole($allowedRoles);
 					}
 				)->registerCallback
 				(
@@ -236,17 +226,6 @@ HTML;
 			$this->view->render();
 		}
 		
-		public function getUser()
-		{
-			return $this->plugin->UserAuth->getUser();
-		}
-		
-		public function getUserId()
-		{
-			$user=$this->plugin->UserAuth->getUser();
-			return isset($this->user['id'])?$this->user['id']:null;
-		}
-		
 		public function getWidgetInstance($classPath)
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
@@ -325,66 +304,10 @@ HTML;
 			return (bool)($this->plugin->Session->authenticated);
 		}
 		
-		public function challangeRole($allowedRoles)
-		{
-			if ($this->isSuper())return true;
-			
-			if (!is_array($allowedRoles))
-			{
-				$allowedRoles=array($allowedRoles);
-			}
-			$user=$this->getUser();
-			for ($i=0,$j=count($allowedRoles); $i<$j; $i++)
-			{
-				for ($k=0,$l=count($user['roles']); $k<$l; $k++)
-				{
-					if (is_array($allowedRoles[$i]))
-					{
-						if ($allowedRoles[$i]['id']==$user['roles'][$k]['id'])
-						{
-							return true;
-						}
-					}
-					else if (is_numeric($allowedRoles[$i]))
-					{
-						if ($allowedRoles[$i]==$user['roles'][$k]['id'])
-						{
-							return true;
-						}
-					}
-					else if (is_string($allowedRoles[$i]))
-					{
-						if ($allowedRoles[$i]==$user['roles'][$k]['ref'])
-						{
-							return true;
-						}
-					}
-				}
-			}
-			return false;
-		}
-		
-		public function isSuper()
-		{
-			if($this->plugin->UserAuth->isSuper() || $this->isAdmin())
-			{
-				return true;	
-			}
-			else
-			{
-				return false;
-			}
-		}
-
-		public function isAdmin()
-		{
-			return $this->plugin->UserAuth->isAdmin();
-		}
-		
 		public function userCanAccessContentType($contentType)
 		{
 			if ($this->isSuper())return true;
-			if ($this->challangeRole($contentType['roles']))
+			if ($this->challengeRole($contentType['roles']))
 			{
 				if (!count($contentType['users']))
 				{
