@@ -574,7 +574,7 @@ namespace application\nutsNBolts\controller
 					}
 				}
 				//Fallback to DB
-				if ($record=$this->model->Node->read($filter))
+				if ($record=$this->model->Node->getWithParts($filter))
 				{
 					return $record[0];
 				}
