@@ -32,7 +32,7 @@
 			},
 			"Session":
 			{
-				"storage": 		"db",
+				"storage": 		"file",
 				"connector": 	"nutsnbolts",
 				"table":		"sessions"
 			},
