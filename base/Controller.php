@@ -13,6 +13,7 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
+			$this->plugin->Session();
 			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (isset($result[0]))
 			{
