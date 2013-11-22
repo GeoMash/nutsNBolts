@@ -9,8 +9,8 @@ namespace application\nutsNBolts\controller
 	{
 		public function index()
 		{
-			$mobileNumber	='60172359029';
-			$message		='WTP SMS Test 000002';
+			$mobileNumber	='0172359029';
+			$message		='WTP SMS Test 000001';
 			$SMS			=$this->plugin->Sms('M3Tech');
 			$SMS->setMobileNumber($mobileNumber)
 				->setMessage($message)
