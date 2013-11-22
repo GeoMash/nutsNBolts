@@ -161,9 +161,9 @@
 				"timezone": "Asia/Kuala_Lumpur",
 				"M3Tech":
 				{
-					"serviceURL":   "https://www.wcdma.com.my/imp/hlbb_praxis/submitsm.asp",
-					"UserKey":      "hlbbpraxis",
-					"Password":     "xdsf99b",
+					"serviceURL":   "https://www.wcdma.com.my/imp/golden_pesona/submitsm.asp",
+					"UserKey":      "golden_pesona",
+					"Password":     "wtpclub808",
 					"ServiceId":    "000",
 					"MCN":          "push"
 				}
