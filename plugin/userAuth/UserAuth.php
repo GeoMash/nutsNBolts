@@ -284,6 +284,45 @@ HTML;
 				}
 			}
 			return false;
-		}		
+		}
+
+        public function challengeRole($allowedRoles)
+        {
+            if ($this->isSuper())return true;
+
+            if (!is_array($allowedRoles))
+            {
+                $allowedRoles=array($allowedRoles);
+            }
+            $user=$this->getUser();
+            for ($i=0,$j=count($allowedRoles); $i<$j; $i++)
+            {
+                for ($k=0,$l=count($user['roles']); $k<$l; $k++)
+                {
+                    if (is_array($allowedRoles[$i]))
+                    {
+                        if ($allowedRoles[$i]['id']==$user['roles'][$k]['id'])
+                        {
+                            return true;
+                        }
+                    }
+                    else if (is_numeric($allowedRoles[$i]))
+                    {
+                        if ($allowedRoles[$i]==$user['roles'][$k]['id'])
+                        {
+                            return true;
+                        }
+                    }
+                    else if (is_string($allowedRoles[$i]))
+                    {
+                        if ($allowedRoles[$i]==$user['roles'][$k]['ref'])
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 	}
 }
