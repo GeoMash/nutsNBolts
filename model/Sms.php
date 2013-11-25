@@ -17,6 +17,8 @@ namespace application\nutsNBolts\model
 	{
 		public function send($barId,$toUserId,$mobileNumber,$message)
 		{
+            // add the country code
+            $mobileNumber.="06";
 			//Send SMS
 			$SMS=$this->plugin->Sms('M3Tech');
 			$SMS->setMobileNumber($mobileNumber)
