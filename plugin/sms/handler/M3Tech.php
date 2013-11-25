@@ -23,6 +23,7 @@ namespace application\nutsNBolts\plugin\sms\handler
 					'MsgId'		=>uniqid(),
 					'TimeStamp'	=>$time->format('dmYGis'),
 					'ServiceId'	=>$this->config->M3Tech->ServiceId,
+					'aSource'	=>$this->config->M3Tech->aSource,
 					'aMSG'		=>$this->getMessage(),
 					'Mobile'	=>$this->getMobileNumber(),
 					'MCN'		=>$this->config->M3Tech->MCN
