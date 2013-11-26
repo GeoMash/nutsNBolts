@@ -3,7 +3,8 @@ namespace application\nutsNBolts\base
 {
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\plugin\mvc\Controller as MvcController;
-	
+	use application\nutsNBolts\plugin\userAuth;
+
 	class Controller extends MvcController
 	{
 		private $site=null;
@@ -45,7 +46,7 @@ namespace application\nutsNBolts\base
 					'challangeRole',
 					function($allowedRoles)
 					{
-						return $this->challengeRole($allowedRoles);
+						return $this->plugin->UserAuth->challengeRole($allowedRoles);
 					}
 				)->registerCallback
 				 (
@@ -252,7 +253,41 @@ namespace application\nutsNBolts\base
 
 		public function challengeRole($allowedRoles)
 		{
-            $this->plugin->UserAuth->challengeRole($allowedRoles);
+			if ($this->isSuper())return true;
+
+			if (!is_array($allowedRoles))
+			{
+				$allowedRoles=array($allowedRoles);
+			}
+			$user=$this->getUser();
+			for ($i=0,$j=count($allowedRoles); $i<$j; $i++)
+			{
+				for ($k=0,$l=count($user['roles']); $k<$l; $k++)
+				{
+					if (is_array($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]['id']==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_numeric($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_string($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['ref'])
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 		public function getUser()
