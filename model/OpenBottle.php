@@ -6,8 +6,16 @@ namespace application\nutsNBolts\model
 
 	class OpenBottle extends OpenBottleBase
 	{
-        public function getCheckedOut($userId)
+        public function getCheckedOut($userId,$barId=null)
         {
+            $where='';
+            if($barId)
+            {
+                $where=<<<WHERE
+AND bar_id=$barId
+WHERE;
+
+            }
             $query=<<<SQL
 SELECT *
 FROM open_bottle t
@@ -15,16 +23,25 @@ WHERE date_opened = (
     SELECT max(date_opened)
     FROM open_bottle
     WHERE t.parent_id = parent_id
-    AND checked_out=1
     AND user_id=?
 )
+AND checked_out=1
+{$where}
 SQL;
             $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($userId));
             return $result;
         }
 
-        public function getCheckedIn($userId)
+        public function getCheckedIn($userId,$barId=null)
         {
+            $where='';
+            if($barId)
+            {
+                $where=<<<WHERE
+AND bar_id=$barId
+WHERE;
+
+            }
             $query=<<<SQL
 SELECT *
 FROM open_bottle t
@@ -32,9 +49,10 @@ WHERE date_opened = (
     SELECT max(date_opened)
     FROM open_bottle
     WHERE t.parent_id = parent_id
-    AND checked_out=0
     AND user_id=?
 )
+AND checked_out=0
+{$where}
 SQL;
             $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($userId));
             return $result;
