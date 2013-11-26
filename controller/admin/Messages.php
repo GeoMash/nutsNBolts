@@ -37,7 +37,7 @@ namespace application\nutsNBolts\controller\admin
 				(
 				 	'status'	=>1
 				);
-				$this->model->Message->update($read,$search);
+				$this->model->Message->update($read,$record);
 			}
 			$this->view->setVar('record',$record);
 			$this->setContentView('admin/viewMessage');
