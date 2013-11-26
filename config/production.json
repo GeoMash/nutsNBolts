@@ -137,7 +137,7 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/alliance/shared/_collections/",
+				"completed_dir":	"/datastore/www/wtp/shared/_collections/",
 				"thumbnails":
                 [
                     {
