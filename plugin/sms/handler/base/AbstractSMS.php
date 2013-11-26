@@ -48,11 +48,8 @@ namespace application\nutsNBolts\plugin\sms\handler\base
 		/**
 		 *  send
 		 *
-		 * @param string $to The Mobile Phone Number
-		 * @param string $message The Message to be sent to the $to number.
-		 *
 		 */
-		abstract public function send($to,$message);
+		abstract public function send();
 
 		/**
 		 * handleResponse

@@ -10,7 +10,7 @@ namespace application\nutsNBolts\plugin\sms\handler
 	{
 		public $SMSHandlerName='M3Tech';
 
-		public function send($to,$message)
+		public function send()
 		{
 			$time=new DateTime('now',new DateTimeZone($this->config->timezone));
 //			print($this->config->M3Tech->prettyPrint());

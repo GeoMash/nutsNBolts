@@ -3,7 +3,8 @@ namespace application\nutsNBolts\base
 {
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\plugin\mvc\Controller as MvcController;
-	
+	use application\nutsNBolts\plugin\userAuth;
+
 	class Controller extends MvcController
 	{
 		private $site=null;
@@ -45,7 +46,7 @@ namespace application\nutsNBolts\base
 					'challangeRole',
 					function($allowedRoles)
 					{
-						return $this->challengeRole($allowedRoles);
+						return $this->plugin->UserAuth->challengeRole($allowedRoles);
 					}
 				)->registerCallback
 				 (
