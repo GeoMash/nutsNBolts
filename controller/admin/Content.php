@@ -357,7 +357,7 @@ HTML;
 		
 		private function canAccessContentType()
 		{
-			return $this->challangeRole($this->contentType['roles']);
+			return $this->challengeRole($this->contentType['roles']);
 		}
 
 		public function getWorkflowTransitions($node)
