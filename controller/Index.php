@@ -192,7 +192,7 @@ namespace application\nutsNBolts\controller
 			}
 			else
 			{
-				$this->view->setTemplate('site/404');
+				$this->view->setTemplate('../../../../public/sites/'.$applicationName.'/404');
 			}
 			$requestVars=$this->request->getAll();
 			if (count($requestVars))
