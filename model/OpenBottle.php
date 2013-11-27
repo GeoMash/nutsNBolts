@@ -58,8 +58,16 @@ SQL;
             return $result;
         }
 
-        public function getBottles($userId)
+        public function getBottles($userId,$barId)
         {
+            $where='';
+            if($barId)
+            {
+                $where=<<<WHERE
+AND bar_id=$barId
+WHERE;
+
+            }
             $query=<<<SQL
 SELECT *
 FROM open_bottle t
@@ -68,6 +76,7 @@ WHERE date_opened = (
     FROM open_bottle
     WHERE t.parent_id = parent_id
     AND user_id=?
+    {$where}
 )
 SQL;
             $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($userId));
