@@ -112,6 +112,45 @@ SQL;
             return $result;
         }
 
+        public function viewExpiring($barId,$oneMonth,$daysToExpire)
+        {
+            $query=<<<SQL
+            SELECT *
+            FROM open_bottle t
+            WHERE id=parent_id
+            AND date_opened BETWEEN DATE_SUB(SYSDATE(), INTERVAL {$oneMonth} DAY) AND DATE_SUB(SYSDATE(), INTERVAL {$daysToExpire} DAY)
+            AND date_opened = (
+                SELECT max(date_opened)
+                FROM open_bottle
+                WHERE t.parent_id = parent_id
+                AND (checked_out=0 OR date_opened < DATE_SUB(SYSDATE(), INTERVAL 2 DAY))
+                AND bar_id=?
+            )
+SQL;
+            $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($barId));
+            return $result;
+        }
+
+        public function viewExpired($barId,$oneMonth)
+        {
+            $query=<<<SQL
+            SELECT *
+            FROM open_bottle t
+            WHERE id=parent_id
+            AND date_opened < DATE_ADD(SYSDATE(), INTERVAL {$oneMonth} DAY)
+            AND date_opened = (
+                SELECT max(date_opened)
+                FROM open_bottle
+                WHERE t.parent_id = parent_id
+                AND (checked_out=0 OR date_opened < DATE_SUB(SYSDATE(), INTERVAL 2 DAY))
+                AND bar_id=?
+            )
+            AND checked_out=0;
+SQL;
+            $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($barId));
+            return $result;
+        }
+
 	}
 }
 ?>
