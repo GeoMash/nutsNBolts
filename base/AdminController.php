@@ -35,7 +35,8 @@ namespace application\nutsNBolts\base
 
 			if ($this->plugin->UserAuth->isAuthenticated())
 			{
-				if (!$this->isSuper() && $this->challangeRole('STANDARD'))
+//				if (!$this->isSuper() && $this->challangeRole('STANDARD'))
+				if (!($this->isSuper() || $this->isAdmin()))
 				{
 					$this->redirect('/');
 				}
