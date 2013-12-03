@@ -132,7 +132,7 @@ namespace application\nutsNBolts\controller\admin
 					}
 					catch(NutshellException $exception)
 					{
-						$this->plugin->Notification->setError($exception->getMessage());
+//						$this->plugin->Notification->setError($exception->getMessage());
 					}
 					$this->redirect('/admin/settings/users/edit/'.$user['id']);
 				}
