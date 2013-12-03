@@ -112,45 +112,136 @@ SQL;
             return $result;
         }
 
-        public function viewExpiring($barId,$oneMonth,$daysToExpire)
+        public function viewExpiring($barId,$duration,$expireIn)
         {
             $query=<<<SQL
             SELECT *
-            FROM open_bottle t
+            FROM open_bottle ob
             WHERE id=parent_id
-            AND date_opened BETWEEN DATE_SUB(SYSDATE(), INTERVAL {$oneMonth} DAY) AND DATE_SUB(SYSDATE(), INTERVAL {$daysToExpire} DAY)
-            AND date_opened = (
-                SELECT max(date_opened)
-                FROM open_bottle
-                WHERE t.parent_id = parent_id
-                AND (checked_out=0 OR date_opened < DATE_SUB(SYSDATE(), INTERVAL 2 DAY))
-                AND bar_id=?
+            AND date_opened BETWEEN DATE_SUB(SYSDATE(), INTERVAL {$duration}-1 DAY) AND DATE_SUB(SYSDATE(), INTERVAL {$duration}-{$expireIn} DAY)
+            AND
+            (
+                (
+                    SELECT checked_out
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                    AND bar_id={$barId}
+                ) = 0
+            OR
+                (
+                    SELECT date_opened
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                    AND bar_id={$barId}
+                ) < DATE_SUB(SYSDATE(), INTERVAL 2 DAY)
+            )
+SQL;
+
+
+            $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($barId));
+            return $result;
+        }
+
+        public function viewExpired($barId,$duration)
+        {
+            $query=<<<SQL
+            SELECT *
+            FROM open_bottle ob
+            WHERE id=parent_id
+            AND date_opened < DATE_SUB(SYSDATE(), INTERVAL {$duration} DAY)
+            AND
+            (
+                (
+                    SELECT checked_out
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                    AND bar_id={$barId}
+                ) = 0
+            OR
+                (
+                    SELECT date_opened
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                    AND bar_id={$barId}
+                ) < DATE_SUB(SYSDATE(), INTERVAL 2 DAY)
             )
 SQL;
             $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($barId));
             return $result;
         }
 
-        public function viewExpired($barId,$oneMonth)
+        public function cronGetAllBottles($duration,$expireIn,$type)
         {
+            if($type=="expired")
+            {
+                $subQuery=$duration;
+            }
+            else
+            {
+                $subQuery=$duration-$expireIn;
+            }
+
             $query=<<<SQL
             SELECT *
-            FROM open_bottle t
+            FROM open_bottle ob
             WHERE id=parent_id
-            AND date_opened < DATE_ADD(SYSDATE(), INTERVAL {$oneMonth} DAY)
-            AND date_opened = (
-                SELECT max(date_opened)
-                FROM open_bottle
-                WHERE t.parent_id = parent_id
-                AND (checked_out=0 OR date_opened < DATE_SUB(SYSDATE(), INTERVAL 2 DAY))
-                AND bar_id=?
+            AND (DATE_FORMAT(date_opened, "%Y-%m-%d")) = DATE_SUB(DATE_FORMAT(SYSDATE(), "%Y-%m-%d"), INTERVAL {$subQuery} DAY)
+            AND
+            (
+                (
+                    SELECT checked_out
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                ) = 0
+            OR
+                (
+                    SELECT date_opened
+                    FROM open_bottle t
+                    WHERE ob.id = t.id
+                    AND date_opened =
+                    (
+                        SELECT max(date_opened)
+                        FROM open_bottle
+                        WHERE t.id = id
+                    )
+                ) < DATE_SUB(SYSDATE(), INTERVAL 2 DAY)
             )
-            AND checked_out=0;
 SQL;
-            $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query,array($barId));
+            $result=$this->plugin->Db->nutsnbolts->getResultFromQuery($query);
             return $result;
         }
+    }
 
-	}
+
 }
 ?>

@@ -40,6 +40,7 @@ namespace application\nutsNBolts\base
 				{
 					$this->redirect('/');
 				}
+
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
 				$this->view->setVar('nav_active_main',$mainNav);
