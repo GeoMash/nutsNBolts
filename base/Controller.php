@@ -302,7 +302,7 @@ namespace application\nutsNBolts\base
 
 		public function isSuper()
 		{
-			if($this->plugin->UserAuth->isSuper() || $this->isAdmin())
+			if($this->plugin->UserAuth->isSuper())
 			{
 				return true;
 			}
