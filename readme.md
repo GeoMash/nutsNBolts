@@ -53,6 +53,7 @@ Roadmap
 
 ### 1.3
 
+* Custom Models
 * Navigation API
 * Admin Panel UI API
 * Controller Overriding & Extending
@@ -62,7 +63,7 @@ Roadmap
 * Zone Management
 * Forms API
 
-### 1.4
+### 1.5
 * Custom Plugins
 * Plugin Center
 * ?
