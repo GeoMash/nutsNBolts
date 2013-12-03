@@ -9,7 +9,7 @@
 					</a>
 				</div>
 				<?php
-				if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+				if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 				?>
 				<div class="span2 action-nav-button">
 					<a href="/admin/settings/users/" title="Users">

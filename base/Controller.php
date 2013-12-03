@@ -43,7 +43,7 @@ namespace application\nutsNBolts\base
 					}
 				)->registerCallback
 				(
-					'challangeRole',
+					'challengeRole',
 					function($allowedRoles)
 					{
 						return $this->plugin->UserAuth->challengeRole($allowedRoles);

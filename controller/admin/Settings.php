@@ -134,7 +134,7 @@ namespace application\nutsNBolts\controller\admin
 					{
 //						$this->plugin->Notification->setError($exception->getMessage());
 					}
-					$this->redirect('/admin/settings/users/edit/'.$user['id']);
+					$this->redirect('/x/settings/users/edit/'.$user['id']);
 				}
 				else
 				{

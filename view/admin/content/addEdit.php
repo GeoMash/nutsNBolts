@@ -41,7 +41,7 @@
 									</div>
 								</div>
 							</div>
-							<?php if ($tpl->challangeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR'))): ?>
+							<?php if ($tpl->challengeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR'))): ?>
 								<div class="container-fluid padded">
 									<div class="box">
 										<div class="box-header">
