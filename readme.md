@@ -53,6 +53,7 @@ Roadmap
 
 ### 1.3
 
+* Gravatar Support
 * Custom Models
 * Navigation API
 * Admin Panel UI API
