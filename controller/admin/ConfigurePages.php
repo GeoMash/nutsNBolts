@@ -193,7 +193,7 @@ namespace application\nutsNBolts\controller\admin
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			$pageURLs	=$this->model->PageMap->read(array(page_id=>$id));
+			$pageURLs	=$this->model->PageMap->read(array('page_id'=>$id));
 
 			$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
 			$this->setContentView('admin/configurePages/addEditPage');
