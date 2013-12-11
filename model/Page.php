@@ -9,7 +9,7 @@ namespace application\nutsNBolts\model
 		{
 			if (!isset($record['status']))$record['status']=0;
 			//For Updates
-			if (isset($record['id']) && is_numeric($record['id']))
+			if (!empty($record['id']) && is_numeric($record['id']))
 			{
 				$pageURLs	=$this->extractURLs($record,'page_id');
 				$return		=$this->update($record,array('id'=>$record['id']));
