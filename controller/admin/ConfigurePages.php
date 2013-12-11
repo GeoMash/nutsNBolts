@@ -116,8 +116,9 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
+				$record=$this->request->getAll();
 				$record['site_id']=$this->getSiteId();
-				if ($id=$this->model->PageType->handleRecord($this->request->getAll()))
+				if ($id=$this->model->PageType->handleRecord($record))
 				{
 					$this->plugin->Notification->setSuccess('Page type successfully added. Would you like to <a href="/admin/configurepages/types/add/">Add another one?</a>');
 					$this->redirect('/admin/configurepages/types/edit/'.$id);
@@ -139,7 +140,9 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
-				if ($id=$this->model->Page->handleRecord($this->request->getAll()))
+				$record=$this->request->getAll();
+				$record['site_id']=$this->getSiteId();
+				if ($id=$this->model->Page->handleRecord($record))
 				{
 					$this->plugin->Notification->setSuccess('Page successfully added. Would you like to <a href="/admin/configurepages/pages/add/">Add another one?</a>');
 					$this->redirect('/admin/configurepages/pages/edit/'.$id);
