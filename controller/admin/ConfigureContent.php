@@ -120,7 +120,7 @@ namespace application\nutsNBolts\controller\admin
 			{
 
 				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();				
+				$record['site_id']=$this->getSiteId();		
 				if ($id=$this->model->ContentType->handleRecord($record))
 				{
 					$this->plugin->Notification->setSuccess('Content type successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
