@@ -116,6 +116,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
+				$record['site_id']=$this->getSiteId();
 				if ($id=$this->model->PageType->handleRecord($this->request->getAll()))
 				{
 					$this->plugin->Notification->setSuccess('Page type successfully added. Would you like to <a href="/admin/configurepages/types/add/">Add another one?</a>');

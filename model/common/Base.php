@@ -10,13 +10,14 @@ namespace application\nutsNBolts\model\common
 		{
 			if (!isset($record['status']))$record['status']=0;
 			//For Updates
-			if (isset($record['id']) && is_numeric($record['id']))
+			if (!empty($record['id']) && is_numeric($record['id']))
 			{
 				return $this->update($record,array('id'=>$record['id']));
 			}
 			//For Inserts
 			else
 			{
+				unset($record['id']);
 				return $this->insertAssoc($record);
 			}
 		}
