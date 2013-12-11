@@ -29,6 +29,12 @@
 										<textarea name="description" rows="6"><?php $tpl->description; ?></textarea>
 									</div>
 								</div>
+								<div class="control-group">
+									<label class="control-label">Ref</label>
+									<div class="controls">
+										<input type="text" name="ref" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->ref; ?>">
+									</div>
+								</div>
 							</div>
 							<div class="form-actions">
 								<div class="pull-right">
