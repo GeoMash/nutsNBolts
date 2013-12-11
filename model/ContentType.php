@@ -23,7 +23,7 @@ namespace application\nutsNBolts\model
 		{
 			if (!isset($record['status']))$record['status']=0;
 			//For Updates
-			if (isset($record['id']) && is_numeric($record['id']))
+			if (!empty($record['id']) && is_numeric($record['id']))
 			{
 
 				$existingParts	=$this->model->ContentPart->read(array('content_type_id'=>$record['id']));
