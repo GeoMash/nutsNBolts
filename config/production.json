@@ -43,10 +43,10 @@
 					{
 						"handler":		"MySQL",
 						"username":		"root",
-						"password":		"",
+						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"nutsnbolts"
+						"database":		"geomash_com"
 					}
 				}
 			},
@@ -57,13 +57,13 @@
 					"rootLog": 
 					{
 						"class":			"DailyFileWriter",
-						"output":			"{APP_HOME}nutsNBolts/logs/root-{DATE}.log",
+						"output":			"/var/log/nutsNBolts/root-{DATE}.log",
 						"mode":				666
 					},
 					"SMSLog":
 					{
 						"class":			"DailyFileWriter",
-						"output":			"{APP_HOME}nutsNBolts/logs/SMS-{DATE}.log",
+						"output":			"/var/log/nutsNBolts/SMS-{DATE}.log",
 						"mode":				666
 					}
 				},
