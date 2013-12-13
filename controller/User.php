@@ -52,7 +52,7 @@ namespace application\nutsNBolts\controller
 					Nutshell::getInstance()->plugin->Session->authenticated=true;
 					
 					$this->plugin->Mvc->model->User->update(array('date_lastlogin'=> $dt->format('Y-m-d H:i:s')),array('phone'=>$user['phone']));
-					$this->filterRedirect($user['roles'][0]['name']);
+					$this->filterRedirect($user['roles'][0]['ref']);
 				}
 				else
 				{
@@ -66,38 +66,38 @@ namespace application\nutsNBolts\controller
 		public function logout()
 		{
 			unset($this->plugin->Session->authenticated);
-			unset($this->plugin->Session->userId);
-			
+			unset($this->plugin->Session->userId);		
 			header('location:/');
 			exit();			
 		}
+		
 		public function filterRedirect($role)
 		{
 			if(isset($role))
 			{
-				switch (ucFirst($role))
+				switch (strtoupper($role))
 				{
-					case 'Super':
+					case 'SUPER':
 							header('location:/admin');
 							exit();
 						break;
 
-					case 'User':
+					case 'STANDARD':
 							header('location:/dashboard');
 							exit();
 						break;
 						
-					case 'Bartender':
+					case 'BARTENDER':
 							header('location:/bartender');
 							exit();
 						break;
 
-					case 'Manager':
+					case 'MANAGER':
 							header('location:/manager');
 							exit();
 						break;
 
-					case 'Admin':
+					case 'ADMIN':
 							header('location:/admin');
 							exit();
 						break;

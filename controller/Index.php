@@ -31,7 +31,7 @@ namespace application\nutsNBolts\controller
 
 			if(isset($page['ref']))
 			{
-				$pageRef=str_replace('/', '_', $page['ref']);
+				$pageRef=str_replace('/', '_', trim($page['ref'],'/'));
 				$this->loadHooks($pageRef);
 				$this->loadCustomWidgets($pageRef);
 			}

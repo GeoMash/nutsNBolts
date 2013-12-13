@@ -171,13 +171,13 @@ SQL;
 			}
 			return null;
 		}
-		
-		public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
-		{
-			$where=array();
-			foreach ($whereKeyVals as $field=>$value)
-			{
-				$where[]=<<<SQL_PART
+
+        public function getWithParts($whereKeyVals,$fields=array(),$limit=false,$offset=false,$orderBy='order',$order='ASC')
+        {
+            $where=array();
+            foreach ($whereKeyVals as $field=>$value)
+            {
+                $where[]=<<<SQL_PART
 				(
 					content_part.ref="{$field}"
 					AND
@@ -186,6 +186,16 @@ SQL;
 SQL_PART;
 			}
 			$where=implode(' AND ',$where);
+            if($limit > 0)
+            {
+                $limitSql=<<<SQL_PART
+             LIMIT {$offset},{$limit}
+SQL_PART;
+            }
+            else
+            {
+                $limitSql='';
+            }
 			$query=<<<SQL
 			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
 			FROM node
@@ -200,39 +210,43 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				WHERE {$where}
 			)
-			ORDER BY node.id ASC;
+			ORDER BY node.id ASC
+			{$limitSql};
 SQL;
+            if ($result=$this->plugin->Db->nutsnbolts->select($query))
+            {
 
-			if ($result=$this->plugin->Db->nutsnbolts->select($query))
-			{
-				$records=$this->plugin->Db->nutsnbolts->result('assoc');
-				
-				$nodes=array();
-				for ($i=0,$j=count($records); $i<$j; $i++)
-				{
-					if (!isset($nodes[$records[$i]['id']]))
-					{
-						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
-						(
-							$records[$i],
-							array
-							(
-								'site_id',
-								'status'
-							)
-						);
-						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
-						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
-						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
-					}
-					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
-				}
-				//Reset index.
-				sort($nodes);			
-				return $nodes;
-			}
-			return null;
-		}
+                $records=$this->plugin->Db->nutsnbolts->result('assoc');
+
+                $nodes=array();
+                for ($i=0,$j=count($records); $i<$j; $i++)
+                {
+                    if (!isset($nodes[$records[$i]['id']]))
+                    {
+                        $nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+                            (
+                                $records[$i],
+                                array
+                                (
+                                    'site_id',
+                                    'status'
+                                )
+                            );
+                        $nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+                        $nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+                        $nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+                    }
+                    $nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+
+                }
+                //Reset index.
+                sort($nodes);
+                return $nodes;
+            }
+            else
+            {
+            }
+        }
 
 		public function getBlog($id)
 		{
@@ -367,18 +381,8 @@ SQL;
 		public function getBlogsByBlogger($bloggerId, $category, $min, $max)
 		{
 			$where=null;
-			if(strlen($category) > 3)
+			if(strlen($category) > 0)
 			{
-				$where=<<<SQL_PART
-				AND node_part.value="{$category}"
-SQL_PART;
-			}
-			if(strlen($min) > 3)
-			{
-				$where=<<<SQL_PART
-				AND node.date_created BETWEEN "{$min}" AND "{$max}"
-SQL_PART;
-			}
 			$query=<<<SQL
 			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
 			FROM node
@@ -387,9 +391,33 @@ SQL_PART;
 			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
 			WHERE content_type_user.user_id={$bloggerId}
 			AND node.status=2
-			{$where}
-			ORDER BY node.date_created DESC
 SQL;
+			}
+			elseif(strlen($min) > 3)
+			{
+			$query=<<<SQL
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=2
+			AND node.date_created BETWEEN "{$min}" AND "{$max}";	
+SQL;
+			}
+			else
+			{
+			$query=<<<SQL
+			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE content_type_user.user_id={$bloggerId}
+			AND node.status=2
+SQL;
+			}
 
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
@@ -414,6 +442,24 @@ SQL;
 						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				if(strlen($category) > 0)
+				{
+					$newNodes=$nodes;
+					unset($nodes);
+					foreach($newNodes AS $node)
+					{
+						// print_r($newNodes);
+						// die();
+						foreach ($node AS $key=>$value)
+						{
+							if($key=='category' && $value==$category)
+							{
+								$nodes[]=$node;
+							}							
+						}
+
+					}
 				}
 				//Reset index.
 				sort($nodes);

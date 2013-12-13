@@ -30,7 +30,7 @@ namespace application\nutsNBolts\controller\site
 				$redirectTo=$_SERVER['HTTP_REFERER'];  
 				$redirectTo=rtrim($redirectTo,'/').'/';
 				$files=$this->request->getFiles();
-				if (!count(files) || $files['upload']['error']==4)
+				if (!count($files) || $files['upload']['error']==4)
 				{
 					$this->redirect($redirectTo.'success');
 					exit();

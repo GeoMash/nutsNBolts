@@ -99,7 +99,7 @@ namespace application\nutsNBolts\controller\admin
 					break;
 				}		
 				case 'messages':
-				{	
+				{
 					$this->routedController=new Messages($this->MVC);
 					break;
 				}								
