@@ -15,18 +15,18 @@
 						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"wtp"
+						"database":		"geomash_com"
 					}
 				}
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/wtp.dev.lan/public/_collections/"
+				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/api.geomash3.dev.lan/private/application/data/uploads/"
+				"completed_dir":	"/datastore/www/collections.geomash.dev.lan/"
 			}
 		}
 	}
