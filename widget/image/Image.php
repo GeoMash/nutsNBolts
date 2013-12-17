@@ -9,6 +9,12 @@ namespace application\nutsNBolts\widget\image
 		{
 			
 		}
+		
+		public function doSomething($param1,$param2,$param3)
+		{
+			var_dump($param1,$param2,$param3);
+			die('I did something');
+		}
 	}
 }
 ?>
