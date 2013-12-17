@@ -102,7 +102,12 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->routedController=new Messages($this->MVC);
 					break;
-				}								
+				}				
+				case 'widget':
+				{
+					$this->widget();
+					break;
+				}
 				default:
 				{
 					$this->view->render();
@@ -203,6 +208,31 @@ namespace application\nutsNBolts\controller\admin
 			$this->plugin	->Responder('html')
 							->setData($html)
 							->send();
+		}
+		
+		public function widget()
+		{
+			$nodes	=$this->request->getNodes();
+			if (isset($nodes[2]))
+			{
+				$widget	=urldecode($nodes[2]);
+				$parts	=explode('\\',$widget);
+				$widget	.='\\'.ucfirst(end($parts));
+			}
+			else
+			{
+				throw new NutshellException('Widget not specified.');
+			}
+			if (isset($nodes[3]))
+			{
+				$action=$nodes[3];
+			}
+			else
+			{
+				throw new NutshellException('Action not specified.');
+			}
+			$widgetInstance=new $widget();
+			call_user_func_array(array($widgetInstance,$action),array_slice($nodes,4));
 		}
 		
 		public function handleLogin()
