@@ -205,7 +205,7 @@ HTML;
 				case 'json':
 				case 'jsonp':
 				{
-					$data=mb_convert_encoding($data,'UTF-8');
+//					$data=mb_convert_encoding($data,'UTF-8');
 					break;
 				}
 				case 'xml':
