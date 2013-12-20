@@ -70,7 +70,7 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function add($typeID)
 		{
-			$contentType=$this->model->ContentType->read($this->request->node(3));
+            $contentType=$this->model->ContentType->read($this->request->node(3));
 			if (!$this->userCanAccessContentType($contentType[0]))
 			{
 				$this->plugin->Notification->setError('You don\'t have permission to add content to this!');
@@ -99,7 +99,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
-				$record=$this->request->getAll();				
+				$record=$this->request->getAll();
 				foreach ($record AS $key=>$rec)
 				{
 					if ($key=='url')continue;
@@ -157,7 +157,6 @@ namespace application\nutsNBolts\controller\admin
 						$record[$key]=$rec;
 					}
 				}
-
 				if (!$this->contentType['workflow_id'])
 				{
 					if ($this->model->Node->handleRecord($record)!==false)
@@ -173,9 +172,7 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 				}
-
 			}
-
 			$contentType=$this->model->ContentType->readWithParts($this->typeID);
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));

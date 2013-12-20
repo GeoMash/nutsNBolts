@@ -1,0 +1,37 @@
+{
+	"extends":	"dev",
+	"config":
+	{
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"alidev",
+						"password":		"p@ssw0rd",
+						"host":			"192.168.1.13",
+						"port":			"3306",
+						"database":		"geomash_com"
+					}
+				}
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"/usr/local/tmp/",
+				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/",
+				"thumbnails":
+				[
+					{
+						"width":		120,
+						"height":		120,
+						"constraint":	"crop"
+					}
+				]
+			}			
+		}
+	}
+}

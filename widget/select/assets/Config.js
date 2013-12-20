@@ -12,8 +12,6 @@ $JSKK.Class.create
 		{
 			$application.registerAction('widget.select.config.addOption',	this.addOption.bind(this))
 						.registerAction('widget.select.config.removeOption',this.removeOption.bind(this));
-			
-			
 		},
 		addOption: function(btn)
 		{
