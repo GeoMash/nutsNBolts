@@ -13,6 +13,7 @@ $JSKK.Class.create
         map: null,
 	    marker: null,
 	    location: null,
+	    zoomSlider: null,
         field:
         {
 			lng:    null,
@@ -26,9 +27,27 @@ $JSKK.Class.create
 	        this.field.lat=$('#map-'+id+' .map-lat');
 	        this.field.lng=$('#map-'+id+' .map-lng');
 	        this.field.zoom=$('#map-'+id+' .map-zoom');
+	        this.zoomSlider=$('#map-'+id+' .zoomSlider');
 	        this.bindEvents.bind(this);
             this.loadMap();
 	        this.bindEvents();
+
+			//Slider initialize
+	        $('.zoomSlider').slider
+	        (
+		        {
+			        min: 1,
+			        max: 20,
+			        animate: true,
+			        step:1,
+			        value:8,
+			        slide: function(event, ui)
+			        {
+				        this.field.zoom.val(this.zoomSlider.slider('values',0));
+				        this.onFieldChange();
+			        }.bind(this)
+		        }
+	        );
         },
         loadMap: function()
         {
@@ -106,9 +125,12 @@ $JSKK.Class.create
 				    }
 				)
 		    };
+		    //change Lat and Lng by drag down the marker & update the center
 		    google.maps.event.addListener
 		    (
-			    this.marker, 'dragend', function (event)
+			    this.marker,
+			    'dragend',
+			    function(event)
 			    {
 				    var position=this.marker.getPosition();
 				    this.field.lng.val(position.lng());
