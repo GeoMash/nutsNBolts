@@ -33,7 +33,7 @@ $JSKK.Class.create
 	        this.bindEvents();
 
 			//Slider initialize
-	        $('.zoomSlider').slider
+	        this.zoomSlider.slider
 	        (
 		        {
 			        min: 1,
@@ -43,11 +43,19 @@ $JSKK.Class.create
 			        value:8,
 			        slide: function(event, ui)
 			        {
-				        this.field.zoom.val(this.zoomSlider.slider('values',0));
+				        var handle=this.zoomSlider.find('.ui-slider-handle');
+				        this.field.zoom.val(ui.value);
 				        this.onFieldChange();
+				        // Add zoom value on top of the handler
+				        (function()
+				        {
+					        this.zoomSlider.find('p').css('left', handle.css('left'))
+						                             .text(ui.value);
+				        }.bind(this)).defer(1);
 			        }.bind(this)
 		        }
 	        );
+	        this.zoomSlider.append('<p></p>');
         },
         loadMap: function()
         {
@@ -84,7 +92,8 @@ $JSKK.Class.create
             {
                 center: defaultLatLng,
                 zoom: 8,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+	            disableDefaultUI:true
             },
             mapEl=$('#'+this.id);
             this.map = new google.maps.Map(mapEl[0],mapOptions);
