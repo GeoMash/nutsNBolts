@@ -23,7 +23,6 @@ $JSKK.Class.create
         init: function(id)
         {
             this.id=id;
-	        console.log(id);
 	        this.field.lat=$('#map-'+id+' .map-lat');
 	        this.field.lng=$('#map-'+id+' .map-lng');
 	        this.field.zoom=$('#map-'+id+' .map-zoom');
