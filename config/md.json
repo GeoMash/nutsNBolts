@@ -11,9 +11,9 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"mddev",
-						"password":		"k3yB0@rDm@5h",
-						"host":			"192.168.1.13",
+						"username":		"support",
+						"password":		"p@ssw0rd",
+						"host":			"localhost",
 						"port":			"3306",
 						"database":		"wtp"
 					}
@@ -21,12 +21,12 @@
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/usr/local/var/www/wtp/public/_collections/"
+				"collectionsDir": "/var/www/wtp.dev.lan/public/_collections/"
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/"
+				"completed_dir":	"/var/www/wtp.dev.lan/public/_collections/"
 			}
 		}
 	}
