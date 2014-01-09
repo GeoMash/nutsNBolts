@@ -13,7 +13,7 @@
 						"handler":		"MySQL",
 						"username":		"support",
 						"password":		"p@ssw0rd",
-						"host":			"localhost",
+						"host":			"192.168.1.13",
 						"port":			"3306",
 						"database":		"wtp"
 					}
