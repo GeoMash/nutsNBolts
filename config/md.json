@@ -19,15 +19,23 @@
 					}
 				}
 			},
-			"FileSystem":
-			{
-				"collectionsDir": "/var/www/wtp.dev.lan/public/_collections/"
-			},
-			"Plupload":
-			{
-				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/var/www/wtp.dev.lan/public/_collections/"
-			}
+            "Plupload":
+            {
+                "temporary_dir":        "/tmp/",
+                "completed_dir":        "/datastore/www/wtp.dev.lan/public/_collections/",
+                "thumbnails":
+                    [
+                        {
+                            "width":                120,
+                            "height":               120,
+                            "constraint":   "crop"
+                        }
+                    ]
+            },
+            "FileSystem":
+            {
+                "collectionsDir": "/datastore/www/wtp.dev.lan/public/_collections/"
+            }
 		}
 	}
 }
