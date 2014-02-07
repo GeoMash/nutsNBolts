@@ -27,54 +27,54 @@ class SimpleImage {
  
    function load($filename) {
  
-      $image_info = getimagesize($filename);
+      $image_info = \getimagesize($filename);
       $this->image_type = $image_info[2];
       if( $this->image_type == IMAGETYPE_JPEG ) {
  
-         $this->image = imagecreatefromjpeg($filename);
+         $this->image = \imagecreatefromjpeg($filename);
       } elseif( $this->image_type == IMAGETYPE_GIF ) {
  
-         $this->image = imagecreatefromgif($filename);
+         $this->image = \imagecreatefromgif($filename);
       } elseif( $this->image_type == IMAGETYPE_PNG ) {
  
-         $this->image = imagecreatefrompng($filename);
+         $this->image = \imagecreatefrompng($filename);
       }
    }
    function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null) {
  
       if( $image_type == IMAGETYPE_JPEG ) {
-         imagejpeg($this->image,$filename,$compression);
+         \imagejpeg($this->image,$filename,$compression);
       } elseif( $image_type == IMAGETYPE_GIF ) {
  
-         imagegif($this->image,$filename);
+         \imagegif($this->image,$filename);
       } elseif( $image_type == IMAGETYPE_PNG ) {
  
-         imagepng($this->image,$filename);
+         \imagepng($this->image,$filename);
       }
       if( $permissions != null) {
  
-         chmod($filename,$permissions);
+         \chmod($filename,$permissions);
       }
    }
    function output($image_type=IMAGETYPE_JPEG) {
  
       if( $image_type == IMAGETYPE_JPEG ) {
-         imagejpeg($this->image);
+         \imagejpeg($this->image);
       } elseif( $image_type == IMAGETYPE_GIF ) {
  
-         imagegif($this->image);
+         \imagegif($this->image);
       } elseif( $image_type == IMAGETYPE_PNG ) {
  
-         imagepng($this->image);
+         \imagepng($this->image);
       }
    }
    function getWidth() {
  
-      return imagesx($this->image);
+      return \imagesx($this->image);
    }
    function getHeight() {
  
-      return imagesy($this->image);
+      return \imagesy($this->image);
    }
    function resizeToHeight($height) {
  
@@ -96,8 +96,8 @@ class SimpleImage {
    }
  
    function resize($width,$height) {
-      $new_image = imagecreatetruecolor($width, $height);
-      imagecopyresampled
+      $new_image = \imagecreatetruecolor($width, $height);
+      \imagecopyresampled
       (
          $new_image,
          $this->image,
@@ -131,8 +131,8 @@ function cropToHeight($width, $height)
  function resize_image($destination_width, $destination_height, $type = 1) { 
    $source_image = $this->image;
     // $type (1=crop to fit, 2=letterbox) 
-    $source_width = imagesx($source_image); 
-    $source_height = imagesy($source_image); 
+    $source_width = \imagesx($source_image); 
+    $source_height = \imagesy($source_image); 
     $source_ratio = $source_width / $source_height; 
     $destination_ratio = $destination_width / $destination_height; 
     if ($type == 1) { 
@@ -176,11 +176,11 @@ function cropToHeight($width, $height)
         $new_destination_width = $temp_width; 
         $new_destination_height = $temp_height; 
     } 
-    $destination_image = imagecreatetruecolor($destination_width, $destination_height); 
+    $destination_image = \imagecreatetruecolor($destination_width, $destination_height); 
     if ($type > 1) { 
-        imagefill($destination_image, 0, 0, imagecolorallocate ($destination_image, 0, 0, 0)); 
+        \imagefill($destination_image, 0, 0, \imagecolorallocate ($destination_image, 0, 0, 0)); 
     } 
-    imagecopyresampled($destination_image, $source_image, $destination_x, $destination_y, $source_x, $source_y, $new_destination_width, $new_destination_height, $source_width, $source_height); 
+    \imagecopyresampled($destination_image, $source_image, $destination_x, $destination_y, $source_x, $source_y, $new_destination_width, $new_destination_height, $source_width, $source_height); 
     return $destination_image; 
 } 
 }
