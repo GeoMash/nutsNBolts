@@ -46,7 +46,7 @@ Versions
 * New WYSIWYG Widget - Now customizable
 * Base User API
 * SMS Plugin
-
+* Nav API
 
 Roadmap
 -------
