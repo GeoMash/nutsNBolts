@@ -106,40 +106,55 @@ namespace application\nutsNBolts\controller\admin
 				if ($record['password']!=$record['password_confirm'])
 				{
 					$this->plugin->Notification->setError('Passwords did not match. Please try again.');
+                    $error=true;
 				}
 				else if (empty($record['password']))
 				{
 					$this->plugin->Notification->setError('Password cannot be blank.');
+                    $error=true;
 				}
-				unset($record['password_confirm']);
-				if ($user=$this->model->User->handleRecord($record))
-				{
-					$this->execHook('onAddUser',$user);
-					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
 
-					try
-					{
-						$this->plugin->Collection->create
-						(
-							array
-							(
-								'name'			=>'My Files',
-								'description'	=>'User Collection',
-								'status'		=>1
-							),
-							$user['id']
-						);
-					}
-					catch(NutshellException $exception)
-					{
-//						$this->plugin->Notification->setError($exception->getMessage());
-					}
-					$this->redirect('/x/settings/users/edit/'.$user['id']);
-				}
-				else
-				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
-				}
+                $this->execHook('onBeforeAddUser',$record);
+				unset($record['password_confirm']);
+                if(!$record['error'])
+                {
+                    // no errors
+                    if ($user=$this->model->User->handleRecord($record))
+                    {
+                        $this->execHook('onAddUser',$user);
+                        $this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
+
+                        try
+                        {
+                            $this->plugin->Collection->create
+                                (
+                                    array
+                                    (
+                                        'name'			=>'My Files',
+                                        'description'	=>'User Collection',
+                                        'status'		=>1
+                                    ),
+                                    $user['id']
+                                );
+                        }
+                        catch(NutshellException $exception)
+                        {
+						$this->plugin->Notification->setError($exception->getMessage());
+                        }
+                        $this->redirect('/admin/settings/users/edit/'.$user['id']);
+                    }
+                    else
+                    {
+                        $this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+                    }
+                }
+                else
+                {
+                    // has errors
+                    $this->addBreadcrumb('Add User','icon-plus','add');
+                    $this->setContentView('admin/settings/addEditUser');
+                }
+
 			}
 		}
 		

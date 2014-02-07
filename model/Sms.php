@@ -33,7 +33,7 @@ namespace application\nutsNBolts\model
 					'bar_id'	=>$barId,
 					'user_id'	=>$toUserId,
 					'number'	=>$mobileNumber,
-					'message'	=>$message
+					'message'	=>preg_replace('/\[.*?\]/', '', $message)
 				)
 			);
 			//Check Quota

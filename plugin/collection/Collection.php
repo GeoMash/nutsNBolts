@@ -70,7 +70,7 @@ namespace application\nutsNBolts\plugin\collection
 
 		public function create($record,$userId)
 		{
-			$dir=PUBLIC_DIR.'_collections';
+			$dir=Nutshell::getInstance()->config->plugin->FileSystem->collectionsDir;
 			if (is_writable($dir))
 			{
 				$id=$this->model->Collection->insertAssoc($record);
