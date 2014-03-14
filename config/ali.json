@@ -15,7 +15,7 @@
 						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"rest"
+						"database":		"wtp"
 					}
 				}
 			},
