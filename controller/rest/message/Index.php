@@ -68,7 +68,7 @@ namespace application\nutsNBolts\controller\rest\message
 				$this->respond
 				(
 					false,
-					'Expecting message id to be integer.'
+					'Expecting message id to be an integer.'
 				);
 			}
 		}	
