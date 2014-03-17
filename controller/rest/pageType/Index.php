@@ -12,7 +12,7 @@ namespace application\nutsNBolts\controller\rest\pageType
 				array
 				(
 					''						=>'getAll',
-					'{int}/{string}'		=>'getByRef',
+					'{string}'				=>'getByRef',
 					'{int}'					=>'getById'
 				)
 			);
@@ -32,11 +32,11 @@ namespace application\nutsNBolts\controller\rest\pageType
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/pageType/1/home.json');
+		 * sample request: $.getJSON('/rest/pageType/home.json');
 		 */
 		public function getByRef()
 		{
-			$pageRef=$this->getFullRequestPart(3);
+			$pageRef=$this->getFullRequestPart(2);
 			if(isset($pageRef))
 			{
 				$page=$this->model->PageType->read(['ref'=>$pageRef]);
@@ -52,7 +52,7 @@ namespace application\nutsNBolts\controller\rest\pageType
 				}
 				else
 				{
-					// no page by that Ref
+					// no page type by that Ref
 					$this->setResponseCode(404);
 					$this->respond
 					(
@@ -92,7 +92,7 @@ namespace application\nutsNBolts\controller\rest\pageType
 				}
 				else
 				{
-					// no page by that id
+					// no page type by that id
 					$this->setResponseCode(404);
 					$this->respond
 					(
