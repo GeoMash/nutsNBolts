@@ -18,7 +18,7 @@ namespace application\nutsNBolts\controller\rest\collection
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/message/.json');
+		 * sample request: $.getJSON('/rest/collection/.json');
 		 */
 		public function getAll()
 		{
@@ -31,7 +31,7 @@ namespace application\nutsNBolts\controller\rest\collection
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/message/1.json');
+		 * sample request: $.getJSON('/rest/collection/1.json');
 		 */
 		public function getById()
 		{
@@ -51,7 +51,7 @@ namespace application\nutsNBolts\controller\rest\collection
 				}
 				else
 				{
-					// no message by that id
+					// no collection by that id
 					$this->setResponseCode(404);
 					$this->respond
 					(
