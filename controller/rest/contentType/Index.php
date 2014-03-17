@@ -32,7 +32,7 @@ namespace application\nutsNBolts\controller\rest\contentType
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/contentType/home.json');
+		 * sample request: $.getJSON('/rest/contentType/1/home.json');
 		 */
 		public function getByRef()
 		{
