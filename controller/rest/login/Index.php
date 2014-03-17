@@ -57,7 +57,7 @@ namespace application\nutsNBolts\controller\rest\login
 				$this->respond
 				(
 					false,
-					'Expecting user id to be integer.'
+					'Expecting user id to be an integer.'
 				);
 			}
 		}		

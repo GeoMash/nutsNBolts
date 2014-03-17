@@ -67,7 +67,7 @@ namespace application\nutsNBolts\controller\rest\collectionUser
 				$this->respond
 				(
 					false,
-					'Expecting collection user id to be integer.'
+					'Expecting collection user id to be an integer.'
 				);
 			}
 		}	
