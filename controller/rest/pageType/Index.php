@@ -32,7 +32,7 @@ namespace application\nutsNBolts\controller\rest\pageType
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/pageType/home.json');
+		 * sample request: $.getJSON('/rest/pageType/1/home.json');
 		 */
 		public function getByRef()
 		{
