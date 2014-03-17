@@ -12,7 +12,7 @@ namespace application\nutsNBolts\controller\rest\contentType
 				array
 				(
 					''						=>'getAll',
-					'{int}/{string}'		=>'getByRef',
+					'{string}'				=>'getByRef',
 					'{int}'					=>'getById',
 				)
 			);
@@ -32,11 +32,11 @@ namespace application\nutsNBolts\controller\rest\contentType
 		}
 		
 		/*
-		 * sample request: $.getJSON('/rest/contentType/1/home.json');
+		 * sample request: $.getJSON('/rest/contentType/home.json');
 		 */
 		public function getByRef()
 		{
-			$contentRef=$this->getFullRequestPart(3);
+			$contentRef=$this->getFullRequestPart(2);
 			if(isset($contentRef))
 			{
 				$content=$this->model->ContentType->read(['ref'=>$contentRef]);
@@ -52,7 +52,7 @@ namespace application\nutsNBolts\controller\rest\contentType
 				}
 				else
 				{
-					// no page by that Ref
+					// no content type by that Ref
 					$this->setResponseCode(404);
 					$this->respond
 					(
@@ -92,7 +92,7 @@ namespace application\nutsNBolts\controller\rest\contentType
 				}
 				else
 				{
-					// no page by that id
+					// no content type by that id
 					$this->setResponseCode(404);
 					$this->respond
 					(
