@@ -70,7 +70,7 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function add($typeID)
 		{
-            $contentType=$this->model->ContentType->read($this->request->node(3));
+			$contentType=$this->model->ContentType->read($this->request->node(3));
 			if (!$this->userCanAccessContentType($contentType[0]))
 			{
 				$this->plugin->Notification->setError('You don\'t have permission to add content to this!');
@@ -95,13 +95,11 @@ namespace application\nutsNBolts\controller\admin
 						$this->getWorkflowTransitions(null);
 					}
 				);
-				$renderRef='content/add';
-				$this->execHook('onBeforeRender',$renderRef);
 				$this->view->render();
 			}
 			else
 			{
-				$record=$this->request->getAll();
+				$record=$this->request->getAll();				
 				foreach ($record AS $key=>$rec)
 				{
 					if ($key=='url')continue;
@@ -121,10 +119,9 @@ namespace application\nutsNBolts\controller\admin
 				}
 				//TODO last_user_id
 
-				$id=$this->model->Node->handleRecord($record);
+				$id=$this->model->Node->handleRecord($record);				
 				if (is_numeric($id))
 				{
-					$this->execHook('onAddContent',$id);
 					$this->plugin->Notification->setSuccess('Content successfully added. Would you like to <a href="/admin/content/add/'.$typeID.'">Add another one?</a>');
 					$this->redirect('/admin/content/edit/'.$id);
 				}
@@ -160,11 +157,11 @@ namespace application\nutsNBolts\controller\admin
 						$record[$key]=$rec;
 					}
 				}
+
 				if (!$this->contentType['workflow_id'])
 				{
-					if ($record=$this->model->Node->handleRecord($record))
+					if ($this->model->Node->handleRecord($record)!==false)
 					{
-						$this->execHook('onEditContent',$record);
 						$this->plugin->Notification->setSuccess('Content successfully edited.');
 					}
 					else
@@ -176,7 +173,9 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 				}
+
 			}
+
 			$contentType=$this->model->ContentType->readWithParts($this->typeID);
 			$node		=$this->model->Node->read(array('id'=>$id));
 			$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
@@ -217,7 +216,7 @@ HTML;
 							array('application\\','\\'),
 							array('','.'),
 							$contentType[$i]['widget']
-						)).'.Main('.$contentType[$i]['content_part_id'].','.(!empty($contentType[$i]['config'])?$contentType[$i]['config']:'{}').')';
+						)).'.Main('.$contentType[$i]['content_part_id'].','.$contentType[$i]['config'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
 				}
@@ -244,8 +243,6 @@ HTML;
 			$this->addBreadcrumb('Content','icon-edit','content');
 			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
 			$this->addBreadcrumb('Edit Content','icon-pencil',$id);
-			$renderRef='content/edit';
-			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 
@@ -297,8 +294,7 @@ HTML;
 							array('application\\','\\'),
 							array('','.'),
 							$contentType[$i]['widget']
-                        )).'.Main('.$contentType[$i]['content_part_id'].','.(!empty($contentType[$i]['config'])?$contentType[$i]['config']:'{}').')';
-
+						)).'.Main('.$contentType[$i]['content_part_id'].','.$contentType[$i]['config'].')';
 						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
 					}
 				}
@@ -356,7 +352,7 @@ HTML;
 		
 		private function canAccessContentType()
 		{
-			return $this->challengeRole($this->contentType['roles']);
+			return $this->challangeRole($this->contentType['roles']);
 		}
 
 		public function getWorkflowTransitions($node)
