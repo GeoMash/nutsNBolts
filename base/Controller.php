@@ -3,15 +3,18 @@ namespace application\nutsNBolts\base
 {
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\plugin\mvc\Controller as MvcController;
-	
+	use application\nutsNBolts\plugin\userAuth;
+
 	class Controller extends MvcController
 	{
 		private $site=null;
+		private $user=null;
 		
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
+			$this->plugin->Session();
 			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (isset($result[0]))
 			{
@@ -25,6 +28,11 @@ namespace application\nutsNBolts\base
 			{
 				die('No site bound for this domain!');
 			}
+			if ($this->plugin->UserAuth->isAuthenticated())
+			{
+				$this->user=$this->plugin->UserAuth->getUser();
+				$this->view->setVar('user',$this->user);
+			}
 			$this->view->getContext()
 				->registerCallback
 				(
@@ -33,7 +41,28 @@ namespace application\nutsNBolts\base
 					{
 						return $this->plugin->Notification->getAll();
 					}
-				);		
+				)->registerCallback
+				(
+					'challengeRole',
+					function($allowedRoles)
+					{
+						return $this->plugin->UserAuth->challengeRole($allowedRoles);
+					}
+				)->registerCallback
+				 (
+					'isAuthenticated',
+					function()
+					{
+						return $this->plugin->UserAuth->isAuthenticated();
+					}
+				)->registerCallback
+				(
+				 	'logout',
+				 	function()
+				 	{
+				 		return $this->plugin->UserAuth->logout();
+				 	}
+				 );
 			if (method_exists($this,'init'))
 			{
 				$this->init();
@@ -86,14 +115,13 @@ namespace application\nutsNBolts\base
 					require_once($path);
 					if (class_exists($className))
 					{
-						if(count($this->hookContainers) > 0)
+						if(count($this->hookContainers))
 						{
 							if (!is_array($this->hookContainers[$applicationRef]))
 							{
 								$this->hookContainers[$applicationRef]=array();
 							}
 						}
-
 						$this->hookContainers[$applicationRef][$ref]=new $className($this->model,$this->view);
 					}
 					else
@@ -221,7 +249,73 @@ namespace application\nutsNBolts\base
 				}
 
 			}
-		}			
+		}
+
+		public function challengeRole($allowedRoles)
+		{
+			if ($this->isSuper())return true;
+
+			if (!is_array($allowedRoles))
+			{
+				$allowedRoles=array($allowedRoles);
+			}
+			$user=$this->getUser();
+			for ($i=0,$j=count($allowedRoles); $i<$j; $i++)
+			{
+				for ($k=0,$l=count($user['roles']); $k<$l; $k++)
+				{
+					if (is_array($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]['id']==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_numeric($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['id'])
+						{
+							return true;
+						}
+					}
+					else if (is_string($allowedRoles[$i]))
+					{
+						if ($allowedRoles[$i]==$user['roles'][$k]['ref'])
+						{
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
+		public function getUser()
+		{
+			return $this->plugin->UserAuth->getUser();
+		}
+
+		public function getUserId()
+		{
+			return isset($this->user['id'])?$this->user['id']:null;
+		}
+
+		public function isSuper()
+		{
+			if($this->plugin->UserAuth->isSuper())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public function isAdmin()
+		{
+			return $this->plugin->UserAuth->isAdmin();
+		}
 					
 	}
 }

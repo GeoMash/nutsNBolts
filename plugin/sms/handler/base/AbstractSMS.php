@@ -48,11 +48,8 @@ namespace application\nutsNBolts\plugin\sms\handler\base
 		/**
 		 *  send
 		 *
-		 * @param string $to The Mobile Phone Number
-		 * @param string $message The Message to be sent to the $to number.
-		 *
 		 */
-		abstract public function send($to,$message);
+		abstract public function send();
 
 		/**
 		 * handleResponse
@@ -127,8 +124,8 @@ namespace application\nutsNBolts\plugin\sms\handler\base
 
 
 			$response=file_get_contents($url.'?'.http_build_query($postData));
-			var_dump(http_build_query($postData));
-			var_dump($response);
+			$this->log('Response:'.print_r($response,true));
+			return $response;
 		}
 
 		/**

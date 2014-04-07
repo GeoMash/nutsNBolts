@@ -185,20 +185,6 @@ namespace application\nutsNBolts\controller
 				 	{
 				 		return $this->getHomeTiles();
 				 	}
-				 )->registerCallback
-				 (
-					'isAuthenticated',
-					function()
-					{
-						return $this->plugin->UserAuth->isAuthenticated();
-					}
-				)->registerCallback
-				(
-				 	'logout',
-				 	function()
-				 	{
-				 		return $this->plugin->UserAuth->logout();
-				 	}
 				 );
 
 				$context=$this->view->getContext();
@@ -206,7 +192,7 @@ namespace application\nutsNBolts\controller
 			}
 			else
 			{
-				$this->view->setTemplate('site/404');
+				$this->view->setTemplate('../../../../public/sites/'.$applicationName.'/404');
 			}
 			$requestVars=$this->request->getAll();
 			if (count($requestVars))
@@ -588,7 +574,7 @@ namespace application\nutsNBolts\controller
 					}
 				}
 				//Fallback to DB
-				if ($record=$this->model->Node->read($filter))
+				if ($record=$this->model->Node->getWithParts($filter))
 				{
 					return $record[0];
 				}

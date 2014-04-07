@@ -19,6 +19,13 @@
 							<?php endif; ?>
 						</div>
 						<div class="box-content">
+							<?php
+							$extras=$tpl->get('aboveForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="padded">
 								<div class="control-group">
 									<label class="control-label">Title</label>
@@ -34,7 +41,7 @@
 									</div>
 								</div>
 							</div>
-							<?php if ($tpl->challangeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR'))): ?>
+							<?php if ($tpl->challengeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR'))): ?>
 								<div class="container-fluid padded">
 									<div class="box">
 										<div class="box-header">
@@ -70,7 +77,14 @@
 										</div>
 									</div>
 								</div>
-							<?php endif; ?>
+							<?php
+							endif;
+							$extras=$tpl->get('belowForm');
+							foreach ($extras as $extra)
+							{
+								print $extra;
+							}
+							?>
 							<div class="container-fluid padded">
 								<div class="box">
 									<div class="box-header">

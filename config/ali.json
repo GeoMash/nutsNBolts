@@ -11,22 +11,22 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"support",
+						"username":		"root",
 						"password":		"p@ssw0rd",
-						"host":			"192.168.1.11",
+						"host":			"localhost",
 						"port":			"3306",
-						"database":		"geomash"
+						"database":		"wtp"
 					}
 				}
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"
+				"collectionsDir": "/usr/local/var/www/wtp/public/_collections/"
 			},
 			"Plupload":
 			{
-				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/collections.geomash.dev.lan/"
+				"temporary_dir":	"/usr/local/tmp/",
+				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/"
 			}
 		}
 	}

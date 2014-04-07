@@ -7,7 +7,7 @@
 		</a>
 	</li>
 	<?php
-	if ($tpl->challangeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR','BLOGGER'))):
+	if ($tpl->challengeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR','BLOGGER'))):
 	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='content')print 'active'; ?>">
 		<span class="glow"></span>
@@ -24,7 +24,7 @@
 	</li>
 	<?php
 	endif;
-	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurepages')print 'active'; ?>">
 		<span class="glow"></span>
@@ -60,7 +60,7 @@
 	</li>
 	<?php
 	endif;
-	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='configurecontent')print 'active'; ?>">
 		<span class="glow"></span>
@@ -91,7 +91,7 @@
 	</li>
 	<?php
 	endif;
-	if ($tpl->challangeRole(array('SUPER','ADMIN'))):
+	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">
 		<span class="glow"></span>

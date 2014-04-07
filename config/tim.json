@@ -13,7 +13,7 @@
 						"handler":		"MySQL",
 						"username":		"root",
 						"password":		"p@ssw0rd",
-						"host":			"localhost",
+						"host":			"vm-dev-tim",
 						"port":			"3306",
 						"database":		"geomash_com"
 					}

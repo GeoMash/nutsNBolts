@@ -23,10 +23,22 @@
 					}
 				}
 			},
-			"Plupload":
+            "Plupload":
 			{
-				"temporary_dir":	"D:/tmp/",
-				"completed_dir":	"D:/www/myblog/public/_collections/"
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/dev.wtp/shared/_collections/",
+				"thumbnails":
+                [
+                    {
+	                    "width":		120,
+	                    "height":		120,
+	                    "constraint":	"crop"
+                    }
+                ]
+			},
+            "FileSystem":
+			{
+				"collectionsDir": "/datastore/www/wtp/shared/_collections/"
 			},
 			"FaceBook":
 			{

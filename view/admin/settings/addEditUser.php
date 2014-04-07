@@ -61,8 +61,8 @@
 											<?php
 											$gender=(bool)$tpl->get('gender');
 											?>
-											<option <?php print (!$gender)?'selected':''; ?>>Male</option>
-											<option <?php print ($gender)?'selected':''; ?>>Female</option>
+											<option value="0" <?php print (!$gender)?'selected':''; ?>>Male</option>
+											<option value="1" <?php print ($gender)?'selected':''; ?>>Female</option>
 										</select>
 									</div>
 								</div>
@@ -78,12 +78,7 @@
 										<input type="text" name="position" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
 									</div>
 								</div>
-								<div class="control-group">
-									<label class="control-label">Position</label>
-									<div class="controls">
-										<input type="text" name="position" data-prompt-position="topLeft" value="<?php $tpl->position; ?>">
-									</div>
-								</div>
+
 								<div class="control-group">
 									<label class="control-label">Phone Number</label>
 									<div class="controls">

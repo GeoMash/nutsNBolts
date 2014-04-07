@@ -11,27 +11,14 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"mddev",
-						"password":		"k3yB0@rDm@5h",
-						"host":			"192.168.1.13",
+						"username":		"root",
+						"password":		"p@ssw0rd",
+						"host":			"localhost",
 						"port":			"3306",
 						"database":		"alliance_nutsnbolts_v2"
 					}
 				}
-			},
-			"Plupload":
-			{
-				"temporary_dir":	"/usr/local/tmp/",
-				"completed_dir":	"/usr/local/var/www/wtp/public/_collections/",
-				"thumbnails":
-				[
-					{
-						"width":		120,
-						"height":		120,
-						"constraint":	"crop"
-					}
-				]
-			}			
+			}
 		}
 	}
 }

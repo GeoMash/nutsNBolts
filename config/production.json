@@ -21,7 +21,8 @@
 		{
 			"mode": 		"production",
 			"dataDir":		"./data/",
-			"salt":			"Squirrels love nuts!"
+			"salt":			"Squirrels love nuts!",
+			"smsQuotaAlert":0.9
 		},
 		"plugin":
 		{
@@ -31,7 +32,7 @@
 			},
 			"Session":
 			{
-				"storage": 		"db",
+				"storage": 		"file",
 				"connector": 	"nutsnbolts",
 				"table":		"sessions"
 			},
@@ -120,11 +121,11 @@
 						"map":
 						{
 							"/admin/":		"admin/Index",
+                            "/rest/":       "rest/Index",
 							"/sandbox/":	"Sandbox",
 							"/_/":			"site/ActionHandler",
 							"/user/":		"User",
 							".":			"Index"
-							
 						}
 					}
 				]
@@ -136,7 +137,7 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/alliance/shared/_collections/",
+				"completed_dir":	"/datastore/www/wtp/shared/_collections/",
 				"thumbnails":
                 [
                     {
@@ -160,10 +161,11 @@
 				"timezone": "Asia/Kuala_Lumpur",
 				"M3Tech":
 				{
-					"serviceURL":   "https://www.wcdma.com.my/imp/hlbb_praxis/submitsm.asp",
-					"UserKey":      "hlbbpraxis",
-					"Password":     "xdsf99b",
+					"serviceURL":   "https://www.wcdma.com.my/imp/golden_pesona/submitsm.asp",
+					"UserKey":      "golden_pesona",
+					"Password":     "wtpclub808",
 					"ServiceId":    "000",
+                    "aSource":      "Where to party",
 					"MCN":          "push"
 				}
 			}

@@ -22,7 +22,10 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(11) unsigned NOT NULL ' ,
+			'bar_id' => 'int(11)' ,
 			'user_id' => 'int(11)' ,
+			'number' => 'varchar(11)',
+			'message' => 'text' ,
 			'date_sent' => 'timestamp' 
 		);
 	}

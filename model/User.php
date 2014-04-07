@@ -18,7 +18,7 @@ namespace application\nutsNBolts\model
 			return $result;
 		}
 		
-		public function handleRecord($record)
+		public function handleRecord($record,$removeRoles=false)
 		{
 			if (!isset($record['status']))$record['status']=0;
 			
@@ -36,14 +36,19 @@ namespace application\nutsNBolts\model
 					unset($record['password']);
 				}
 				$result=$this->update($this->removeJunk($record),array('id'=>$record['id']));
-				$this->model->UserRole->delete(array('user_id'=>$record['id']));
+
 				if (isset($record['role']))
 				{
-					$roles=$this->extractRoles($record);
-					for ($i=0,$j=count($roles); $i<$j; $i++)
-					{
-						$this->model->UserRole->insert($roles[$i]);
-					}
+                    if(!$removeRoles)
+                    {
+                        $this->model->UserRole->delete(array('user_id'=>$record['id']));
+                        $roles=$this->extractRoles($record);
+                        for ($i=0,$j=count($roles); $i<$j; $i++)
+                        {
+                            $this->model->UserRole->insert($roles[$i]);
+                        }
+                    }
+
 				}
 				if ($result!==false)
 				{
