@@ -223,11 +223,6 @@ HTML;
 			return implode('',$html);
 		}
 		
-		public function __call($action,$args)
-		{
-			$this->view->render();
-		}
-		
 		public function getWidgetInstance($classPath)
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
@@ -237,7 +232,6 @@ HTML;
 		
 		public function buildWidgetHTML($contentWidgets,$widgetIndex='',$part=null)
 		{
-		
 			$selectBoxOptions	=array();
 			$getConfigFor		=$contentWidgets['NutsNBolts'][0]['namespace'];
 			$template			=$this->plugin->Template();
