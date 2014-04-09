@@ -251,8 +251,8 @@ namespace application\nutsNBolts\base
 			}
 		}
 
-		public function challengeRole($allowedRoles)
-		{
+		public function challengeRole($allowedRoles=array())
+		{die('222');
 			if ($this->isSuper())return true;
 
 			if (!is_array($allowedRoles))
