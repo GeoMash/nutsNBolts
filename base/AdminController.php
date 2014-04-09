@@ -232,7 +232,6 @@ HTML;
 		{
 			$className=ObjectHelper::getBaseClassName($classPath);
 			$classPath.='\\'.ucwords($className);
-			$classPath;
 			return new $classPath;
 		}
 		
