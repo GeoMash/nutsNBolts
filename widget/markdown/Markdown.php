@@ -1,9 +1,9 @@
 <?php
-namespace application\nutsNBolts\widget\wysiwyg
+namespace application\nutsNBolts\widget\markdown
 {
 	use application\nutsNBolts\widget\base\Widget as WidgetBase;
 
-	class Wysiwyg extends WidgetBase
+	class Markdown extends WidgetBase
 	{
 		public function init()
 		{
