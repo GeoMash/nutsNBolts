@@ -15,7 +15,7 @@
 						"password":		"p@ssw0rd",
 						"host":			"vm-dev-tim",
 						"port":			"3306",
-						"database":		"geomash_com"
+						"database":		"intranet"
 					}
 				}
 			},
