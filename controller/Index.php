@@ -75,6 +75,13 @@ namespace application\nutsNBolts\controller
 					}
 				)->registerCallback
 				(
+					'getNodesByContentTypeRef',
+					function($ref)
+					{
+						return $this->getNodesByContentTypeRef($ref);
+					}
+				)->registerCallback
+				(
 					'defineZone',
 					function($config)
 					{
