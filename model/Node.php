@@ -351,6 +351,7 @@ SQL;
 				sort($nodes);
 				return $nodes;
 			}
+			return [];
 		}
 
 		public function getBlog($id)
