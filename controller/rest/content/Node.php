@@ -48,7 +48,6 @@ namespace application\nutsNBolts\controller\rest\content
 		public function getByTag($tags)
 		{
 			$tags=explode(',',$tags);
-			var_dump($tags);exit();
 			$this->setResponseCode(200);
 			$this->respond
 			(
