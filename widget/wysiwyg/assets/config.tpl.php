@@ -577,10 +577,10 @@ $parseChecked=function($category,$button,$type) use($options)
 							<tr>
 								<td>Background Color</td>
 								<td>
-									<input class="iButton-icons-tab" type="checkbox" <?php $parseChecked('insert','BGColor','enabled'); ?> name="widget[<?php $tpl->widgetIndex; ?>][config][insert][]" value="BGColor">
+									<input class="iButton-icons-tab" type="checkbox" <?php $parseChecked('colors','BGColor','enabled'); ?> name="widget[<?php $tpl->widgetIndex; ?>][config][colors][]" value="BGColor">
 								</td>
 								<td>
-									<input type="checkbox" class="icheck" <?php $parseChecked('insert','BGColor','split'); ?> name="widget[<?php $tpl->widgetIndex; ?>][config][insert][]" value="-">
+									<input type="checkbox" class="icheck" <?php $parseChecked('colors','BGColor','split'); ?> name="widget[<?php $tpl->widgetIndex; ?>][config][colors][]" value="-">
 								</td>
 							</tr>
 						</tbody>
