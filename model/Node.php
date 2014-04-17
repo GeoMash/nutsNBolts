@@ -175,7 +175,7 @@ SQL;
 			return null;
 		}
 		
-		public function getWithParts($whereKeyVals=array(),$offset=null,$limit=null)
+		public function getWithParts($whereKeyVals=array(),$offset=null,$limit=null,$status=self::STATUS_PUBLISHED)
 		{
 			$where=array();
 			if (count($whereKeyVals))
@@ -246,6 +246,7 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				{$where}
 			)
+			AND node.status={$status}
 			ORDER BY node.id ASC
 			{$limitSql}
 			;
@@ -281,7 +282,7 @@ SQL;
 			return null;
 		}
 		
-		public function getByTags($tags,$offset=null,$limit=null)
+		public function getByTags($tags,$offset=null,$limit=null,$status=self::STATUS_PUBLISHED)
 		{
 			if (!is_array($tags))
 			{
@@ -319,6 +320,7 @@ SQL_PART;
 				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
 				WHERE node_tag.tag IN ({$tags})
 			)
+			AND node.status={$status}
 			ORDER BY node.id ASC
 			{$limitSql}
 			;
