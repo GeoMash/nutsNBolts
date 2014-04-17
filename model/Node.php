@@ -280,6 +280,78 @@ SQL;
 			}
 			return null;
 		}
+		
+		public function getByTags($tags,$offset=null,$limit=null)
+		{
+			if (!is_array($tags))
+			{
+				$tags=[$tags];
+			}
+			if (!count($tags))
+			{
+				return [];
+			}
+			
+			$tags='"'.implode('","',$tags).'"';
+			
+			if($offset && $limit)
+            {
+                $limitSql=<<<SQL_PART
+             	LIMIT {$offset},{$limit}
+SQL_PART;
+            }
+            else
+            {
+                $limitSql='';
+            }
+			$query=<<<SQL
+			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+			WHERE node.id IN
+			(
+				SELECT node.id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN node_tag ON node.id=node_tag.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				WHERE node_tag.tag IN ({$tags})
+			)
+			ORDER BY node.id ASC
+			{$limitSql}
+			;
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				
+				$nodes=array();
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!isset($nodes[$records[$i]['id']]))
+					{
+						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
+						(
+							$records[$i],
+							array
+							(
+								'site_id',
+								'status'
+							)
+						);
+						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+					}
+					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
+				}
+				//Reset index.
+				sort($nodes);
+				return $nodes;
+			}
+		}
 
 		public function getBlog($id)
 		{
