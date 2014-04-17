@@ -5,18 +5,12 @@ namespace application\nutsNBolts\controller\rest\pageType
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					''						=>'getAll',
-					'{string}'				=>'getByRef',
-					'{int}'					=>'getById'
-				)
-			);
-		}
+		private $map=array
+		(
+			''						=>'getAll',
+			'{string}'				=>'getByRef',
+			'{int}'					=>'getById'
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/pageType/.json');

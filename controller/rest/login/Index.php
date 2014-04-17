@@ -7,16 +7,10 @@ namespace application\nutsNBolts\controller\rest\login
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					'{int}'		=>'checkById'
-				)
-			);
-		}
+		private $map=array
+		(
+			'{int}'		=>'checkById'
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/login/1.json');
