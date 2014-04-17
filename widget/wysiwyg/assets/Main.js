@@ -16,6 +16,7 @@ $JSKK.Class.create
 					'paragraph',
 					'/',
 					'styles',
+					'colors',
 					'links',
 					'insert',
 					'/',
