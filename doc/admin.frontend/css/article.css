@@ -1,0 +1,170 @@
+/*
+	Mehrdad Dastgir
+	Property of PraxisBT
+	SmartBiz CSS 
+	articles  CSS
+*/
+section.news {
+  width: 725px;
+  float: left;
+}
+section.news section {
+  border: 1px solid silver;
+  background-color: #f3f4f6;
+  border-left: 0;
+  border-right: 0;
+  min-height: 25px;
+  line-height: 25px;
+  padding: 10px 0;
+  width: 100%;
+  float: left;
+}
+section.news #links {
+  text-align: right;
+}
+section.news span.part {
+  width: 45%;
+  padding: 0 2.5%;
+  float: left;
+  display: inline-block;
+}
+section.news span.part time {
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 20px;
+}
+section.news span.part h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
+section.news span.part img {
+  margin-right: 5px;
+  cursor: pointer;
+}
+section.news span.part span {
+  padding-right: 30px;
+}
+section.news span.part .callout {
+  font-size: 14px;
+  color: grey;
+  display: inline-block;
+  height: 24px;
+  min-width: 26px;
+  line-height: 20px;
+  background-image: url(../img/icons/speech_bubble.png);
+  background-size: cover;
+  text-align: center;
+}
+section.news article.news {
+  font-family: "FranklinGothicBook";
+  width: 94%;
+  float: left;
+  padding: 3%;
+}
+section.news article.news h1 {
+  width: 100%;
+  max-height: 80px;
+  font-size: 30px;
+  line-height: 30px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+section.news article.news p {
+  width: 100%;
+  font-size: 16px;
+  line-height: 19px;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+section.news section.comments {
+  border-top: none;
+  width: 86%;
+  background-color: white;
+  float: left;
+  padding: 3%;
+}
+section.news section.comments ul {
+  width: 100%;
+  float: left;
+}
+section.news section.comments li {
+  border-bottom: 1px solid silver;
+  margin: 0 0 10px 0;
+  width: 100%;
+  float: left;
+}
+section.news section.comments li img {
+  width: 80px;
+  height: 80px;
+  float: left;
+  margin-right: 5px;
+}
+section.news section.comments li h3 {
+  font-size: 14px;
+  font-weight: bold;
+  float: left;
+  line-height: 18px;
+  width: 535px;
+  height: 20px;
+  padding: 0;
+  overflow: hidden;
+}
+section.news section.comments li p {
+  font-size: 14px;
+  float: left;
+  width: 535px;
+  height: 45px;
+  overflow: hidden;
+  line-height: 15px;
+}
+section.news section.comments li time {
+  font-size: 12px;
+  color: grey;
+  float: left;
+}
+section.news section.comments li:last-of-type {
+  border-bottom: none;
+}
+section.news section.comments textarea {
+  background-color: white;
+  border: none;
+  border: 1px solid silver;
+  height: 100px;
+  resize: none;
+  width: 618px;
+  padding: 2px;
+}
+section.news section.comments button {
+  padding: 0;
+  margin: 0;
+}
+section.news section.comments .submit {
+  -moz-box-shadow: inset 0px 1px 0px 0px #cf866c;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #cf866c;
+  box-shadow: inset 0px 1px 0px 0px #cf866c;
+  background-color: #ed2b26;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #ef3e38;
+  display: inline-block;
+  color: #ffffff;
+  font-family: arial;
+  font-size: 13px;
+  font-weight: normal;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #854629;
+  float: right;
+}
+section.news section.comments .submit:hover {
+  background-color: #d4232a;
+}
+section.news section.comments .submit:active {
+  position: relative;
+  top: 1px;
+}
+aside {
+  float: left;
+  width: 245px;
+}

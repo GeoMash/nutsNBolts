@@ -1,0 +1,42 @@
+/*
+	Mehrdad Dastgir
+	Property of PraxisBT
+	SmartBiz CSS
+	Font imports
+*/
+@font-face {
+  font-family: HelveticaLTStdRoman;
+  src: url('../fonts/helvetica-lt-std-roman.otf');
+}
+@font-face {
+  font-family: AvantGardeMedium;
+  src: url('../fonts/Avant Garde Medium BT.ttf');
+}
+@font-face {
+  font-family: FranklinGothicBook;
+  src: url('../fonts/franklinbook.ttf');
+}
+@font-face {
+  font-family: FranklinGothicBookItalic;
+  src: url('../fonts/FRABKIT.TTF');
+}
+@font-face {
+  font-family: FranklinGothicDemi;
+  src: url('../fonts/FRADM.TTF');
+}
+@font-face {
+  font-family: FranklinGothicHeavy;
+  src: url('../fonts/FRAHV.TTF');
+}
+@font-face {
+  font-family: FranklinGothicMediumCond;
+  src: url('../fonts/FRAMDCN.TTF');
+}
+@font-face {
+  font-family: FranklinGothicMedium;
+  src: url('../fonts/framd_0.ttf');
+}
+@font-face {
+  font-family: FranklinGothicItalic;
+  src: url('../fonts/FRABKIT.TTF');
+}
