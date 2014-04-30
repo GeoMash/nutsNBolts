@@ -1,0 +1,33 @@
+{
+	"extends":	"dev",
+	"config":
+	{
+		"plugin":
+		{
+			"Db":
+			{
+				"connections":
+				{
+					"nutsnbolts":
+					{
+						"handler":		"MySQL",
+						"username":		"root",
+						"password":		"p@ssw0rd",
+						"host":			"localhost",
+						"port":			"3306",
+						"database":		"geomash_com"
+					}
+				}
+			},
+			"FileSystem":
+			{
+				"collectionsDir": "/datastore/www/geomash.dev.lan/public/_collections/"
+			},
+			"Plupload":
+			{
+				"temporary_dir":	"/tmp/",
+				"completed_dir":	"/datastore/www/geomash.dev.lan/public/_collections/"
+			}
+		}
+	}
+}
