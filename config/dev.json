@@ -16,17 +16,17 @@
 					{
 						"handler":		"MySQL",
 						"username":		"root",
-						"password":		"root",
+						"password":		"p@ssw0rd",
 						"host":			"localhost",
 						"port":			"3306",
-						"database":		"myblog"
+						"database":		"geomash_com"
 					}
 				}
 			},
             "Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/dev.wtp/shared/_collections/",
+				"completed_dir":	"/datastore/www/collections.geomash.dev.lan/",
 				"thumbnails":
                 [
                     {
@@ -38,7 +38,7 @@
 			},
             "FileSystem":
 			{
-				"collectionsDir": "/datastore/www/wtp/shared/_collections/"
+				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"
 			},
 			"FaceBook":
 			{

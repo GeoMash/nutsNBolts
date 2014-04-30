@@ -4,21 +4,6 @@
 	{
 		"plugin":
 		{
-			"Db":
-			{
-				"connections":
-				{
-					"nutsnbolts":
-					{
-						"handler":		"MySQL",
-						"username":		"root",
-						"password":		"p@ssw0rd",
-						"host":			"vm-dev-tim",
-						"port":			"3306",
-						"database":		"intranet"
-					}
-				}
-			},
 			"FileSystem":
 			{
 				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"

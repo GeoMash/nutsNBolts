@@ -43,9 +43,9 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"root",
-						"password":		"p@ssw0rd",
-						"host":			"localhost",
+						"username":		"developer",
+						"password":		"g30m@5h",
+						"host":			"192.168.1.160",
 						"port":			"3306",
 						"database":		"geomash_com"
 					}
