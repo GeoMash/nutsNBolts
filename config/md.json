@@ -13,9 +13,9 @@
 						"handler":		"MySQL",
 						"username":		"root",
 						"password":		"p@ssw0rd",
-						"host":			"localhost",
+						"host":			"192.168.1.54",
 						"port":			"3306",
-						"database":		"geomash_com"
+						"database":		"opensource"
 					}
 				}
 			},

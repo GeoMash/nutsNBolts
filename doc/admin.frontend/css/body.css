@@ -1,0 +1,26 @@
+/*
+	Mehrdad Dastgir
+	Property of PraxisBT
+	SmartBiz CSS 
+	Main body CSS
+*/
+div.main {
+  width: 970px;
+  margin-bottom: 30px;
+  float: left;
+  position: relative;
+}
+#slides img {
+  display: none;
+}
+div.text {
+  width: 100%;
+  float: left;
+  height: 200px;
+  overflow: hidden;
+  display: block;
+}
+.main#home_screen_tiles,
+.main #home_screen_tiles {
+  position: relative;
+}
