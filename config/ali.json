@@ -13,7 +13,7 @@
 						"handler":		"MySQL",
 						"username":		"root",
 						"password":		"p@ssw0rd",
-						"host":			"localhost",
+						"host":			"192.168.1.54",
 						"port":			"3306",
 						"database":		"geomash_com"
 					}
@@ -26,7 +26,19 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/geomash.dev.lan/public/_collections/"
+				"completed_dir":	"/datastore/www/collections.geomash.dev.lan/",
+				"thumbnails":
+                [
+                    {
+	                    "width":		120,
+	                    "height":		120,
+	                    "constraint":	"crop"
+                    }
+                ]
+			},
+            "FileSystem":
+			{
+				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"
 			}
 		}
 	}
