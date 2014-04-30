@@ -5,15 +5,25 @@ A modern, developer-friendly, PHP5 Content Manament System (CMS) designed for de
 
 Developer Features
 --------
-* Developer Hooks
+* Built on Nutshell Framework
+* Built in REST Service
+* Extendable REST Service
+* Functionality Hooks
+* Admin Panel Hooks
 * Simple to use View API
-* Custom Widgets
+* Custom Widget API
+* Custom Workflow Engine
+
 
 
 User Features
 -------------
 * Simple Content Authoring
-* 
+* Easy to Learn
+* Powerful Content Type Creation
+* Inbuilt Blogging Tools
+* Custom User Permissions
+* Archivable Content
 
 
 Installation
