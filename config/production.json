@@ -168,6 +168,13 @@
                     "aSource":      "Where to party",
 					"MCN":          "push"
 				}
+			},
+			"Rest":
+			{
+				"dir":
+				{
+					"controllers":	"controller/rest"
+				}
 			}
 		}
 	}
