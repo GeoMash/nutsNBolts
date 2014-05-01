@@ -11,13 +11,8 @@
     ],
 	"require":
     {
-        "nutshell/nutshell": "dev-1.1.0.dev"
-    },
-	"repositories":
-    [
-        {
-            "type": "git",
-            "url":  "http://git.geomash.com/open-source/nutshell.git"
-        }
-    ]
+		"geomash/installer": "dev-master",
+        "nutshell/nutshell": "dev-1.1.0.dev",
+		"nutshell/rest":	"1.0.0"
+    }
 }
