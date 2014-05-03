@@ -1,7 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest\message
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Index extends RestController
 	{

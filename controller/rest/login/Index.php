@@ -1,7 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest\login
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 	use nutshell\Nutshell;
 	use nutshell\plugin\session; 
 
