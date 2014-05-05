@@ -1,22 +1,16 @@
 <?php
 namespace application\nutsNBolts\controller\rest\login
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 	use nutshell\Nutshell;
 	use nutshell\plugin\session; 
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					'{int}'		=>'checkById'
-				)
-			);
-		}
+		private $map=array
+		(
+			'{int}'		=>'checkById'
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/login/1.json');

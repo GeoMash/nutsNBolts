@@ -5,16 +5,10 @@ namespace application\nutsNBolts\controller\rest\userRole
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					'{int}'				=>'getByUserId'
-				)
-			);
-		}
+		private $map=array
+		(
+			'{int}'				=>'getByUserId'
+		);
 		
 		public function getByUserId()
 		{

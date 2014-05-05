@@ -1,22 +1,16 @@
 <?php
 namespace application\nutsNBolts\controller\rest\message
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					''					=>'getAll',
-					'{int}/getAllUser'	=>'getAllUser',
-					'{int}'				=>'getById'
-				)
-			);
-		}
+		private $map=array
+		(
+			''					=>'getAll',
+			'{int}/getAllUser'	=>'getAllUser',
+			'{int}'				=>'getById'
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/message/.json');

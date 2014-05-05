@@ -1,21 +1,15 @@
 <?php
 namespace application\nutsNBolts\controller\rest\collectionUser
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					''					=>'getAll',
-					'{int}'				=>'getById'
-				)
-			);
-		}
+		private $map=array
+		(
+			''					=>'getAll',
+			'{int}'				=>'getById'
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/CollectionUser/.json');

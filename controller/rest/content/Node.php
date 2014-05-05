@@ -1,21 +1,25 @@
 <?php
 namespace application\nutsNBolts\controller\rest\content
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Node extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					''		=>'getAll',
-					'{int}'	=>'getById'
-				)
-			);
-		}
+		private $map=array
+		(
+//			'test1/{*}'						=>'test1',
+//			'test2/[*]'						=>'test2',
+//			'test3/{*}/[...]'				=>'test3',
+//			'test4/{int}/[...]'				=>'test4',
+//			'test5/{string}/[...]'			=>'test5',
+//			'test6/[string]'				=>'test6',
+//			'test7/[string]/[...]'			=>'test7',
+//			'test8/{string}/{int}'			=>'test8',
+//			'test9/{string}/{int}/[...]'	=>'test9',
+			''								=>'getAll',
+			'{int}'							=>'getById',
+			'getByTag/{string}'				=>'getByTag'
+		);
 
 		public function getById($id)
 		{
@@ -39,6 +43,18 @@ namespace application\nutsNBolts\controller\rest\content
 					'Node not found.'
 				);
 			}
+		}
+		
+		public function getByTag($tags)
+		{
+			$tags=explode(',',$tags);
+			$this->setResponseCode(200);
+			$this->respond
+			(
+				true,
+				'OK',
+				$this->model->Node->getByTags($tags)
+			);
 		}
 
 		public function getAll()

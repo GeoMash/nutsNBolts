@@ -1,20 +1,15 @@
 <?php
 namespace application\nutsNBolts\controller\rest\contentTypeRole
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					'{int}'				=>'getByContentId',
-				)
-			);
-		}
+		private $map=array
+		(
+			'{int}'				=>'getByContentId',
+		);
+		
 		/*
 		 * sample request: $.getJSON('/rest/contentType/1.json');
 		 */

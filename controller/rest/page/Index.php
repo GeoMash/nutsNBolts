@@ -1,22 +1,16 @@
 <?php
 namespace application\nutsNBolts\controller\rest\page
 {
-	use application\nutsNBolts\base\RestController;
+	use application\plugin\rest\RestController;
 
 	class Index extends RestController
 	{
-		public function init()
-		{
-			$this->bindPaths
-			(
-				array
-				(
-					''						=>'getAll',
-					'{string}'				=>'getByRef',
-					'{int}'					=>'getById',
-				)
-			);
-		}
+		private $map=array
+		(
+			''						=>'getAll',
+			'{string}'				=>'getByRef',
+			'{int}'					=>'getById',
+		);
 		
 		/*
 		 * sample request: $.getJSON('/rest/page/.json');
