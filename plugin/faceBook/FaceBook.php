@@ -14,8 +14,6 @@ namespace application\nutsNBolts\plugin\faceBook
 	{
 		private $facebook;
 		private $isLoggedIn=FALSE;
-		private $appId='576839855687694';
-		private $secret='efeb1366341aceaace574ca42291bae3';
 		private $user;
 		private $access_token;
 
@@ -24,6 +22,7 @@ namespace application\nutsNBolts\plugin\faceBook
 
 		}
 
+		
 		public function init()
 		{
 			require_once(__DIR__._DS_.'impl/base_facebook.php');
@@ -31,7 +30,7 @@ namespace application\nutsNBolts\plugin\faceBook
 				array(
 					'appId'  => $this->config->app_id,
   					'secret' => $this->config->app_secret,
-  					'cookie'=>TRUE
+  					'cookie' => TRUE
 					)
 				);
 		}
