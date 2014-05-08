@@ -185,6 +185,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getAllDates($id);
 					}
+				)->registerCallback
+				(
+					'parseMarkdown',
+					function($markdown)
+					{
+						return $this->plugin->MarkDown->text($markdown);
+					}
 				);
 				//Project specific. Should not be here.
 //				->registerCallback
