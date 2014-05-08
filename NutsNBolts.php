@@ -160,20 +160,25 @@ namespace application\nutsNBolts
 			{
 				$folder	=__DIR__._DS_.'widget';
 				$folder=str_replace("nutsNBolts", lcfirst($applicationRef), $folder);
-				foreach (new DirectoryIterator($folder) as $iteration)
+				// MD check to see if directory exists before attempting to iterate it
+				if(is_dir($folder))
 				{
-					//We don't load folders or files from within folders.
-					if ($iteration->isDir() && !$iteration->isDot()
-					&& $iteration->getFilename()!='base')
+					foreach (new DirectoryIterator($folder) as $iteration)
 					{
-						$widget[$applicationRef][]=array
-						(
-							'namespace'		=>'application\\'.lcfirst($applicationRef).'\\widget\\'.$iteration->getFilename(),
-							'name'			=>ucwords($iteration->getFilename()),
-							'application'	=>$applicationRef
-						);
+						//We don't load folders or files from within folders.
+						if ($iteration->isDir() && !$iteration->isDot()
+						&& $iteration->getFilename()!='base')
+						{
+							$widget[$applicationRef][]=array
+							(
+								'namespace'		=>'application\\'.lcfirst($applicationRef).'\\widget\\'.$iteration->getFilename(),
+								'name'			=>ucwords($iteration->getFilename()),
+								'application'	=>$applicationRef
+							);
+						}
 					}
-				}						
+				}
+						
 			}
 			return $widget;
 		}
