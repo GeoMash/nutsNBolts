@@ -56,13 +56,13 @@ Versions
 * New WYSIWYG Widget - Now customizable
 * Base User API
 * SMS Plugin
-* Nav API
 
 Roadmap
 -------
 
 ### 1.3
 
+* Nav API
 * Gravatar Support
 * Custom Models
 * Navigation API
