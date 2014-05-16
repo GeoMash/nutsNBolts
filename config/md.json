@@ -15,18 +15,30 @@
 						"password":		"p@ssw0rd",
 						"host":			"192.168.1.54",
 						"port":			"3306",
-						"database":		"opensource"
+						"database":		"wtp"
 					}
 				}
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/geomash.dev.lan/public/_collections/"
+				"collectionsDir": "/datastore/www/wtp.dev.lan/public/_collections/"
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/geomash.dev.lan/public/_collections/"
+				"completed_dir":	"/datastore/www/collections.wtp.dev.lan/",
+				"thumbnails":
+                [
+                    {
+	                    "width":		120,
+	                    "height":		120,
+	                    "constraint":	"crop"
+                    }
+                ]
+			},
+            "FileSystem":
+			{
+				"collectionsDir": "/datastore/www/collections.wtp.dev.lan/"
 			}
 		}
 	}
