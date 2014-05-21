@@ -1,11 +1,67 @@
 <ul class="nav nav-collapse collapse nav-collapse-primary">
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='dashboard')print 'active'; ?>">
 		<span class="glow"></span>
-		<a href="/admin">
+		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#dashboard-subs">
 			<i class="icon-dashboard icon-2x"></i>
-			<span>Dashboard</span>
+			<span>
+				Dashboard
+				<i class="icon-caret-down"></i>
+			</span>
 		</a>
+		<ul id="dashboard-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='dashboard')print 'in'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='configure')print 'active'; ?>">
+				<a href="/admin/dashboard/configure">
+					<i class="icon-th"></i> Configure Dashboard
+				</a>
+			</li>
+		</ul>
 	</li>
+	<?php
+	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
+	?>
+	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">
+		<span class="glow"></span>
+		<a data-toggle="collapse" href="#settings-subs">
+			<i class="icon-wrench icon-2x"></i>
+			<span>
+				Settings
+				<i class="icon-caret-down"></i>
+			</span>
+		</a>
+		<ul id="settings-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='settings')print 'in'; ?>">
+			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
+				<a href="/admin/settings/nnb">
+					<i class="icon-circle-blank"></i> Nuts n Bolts Settings
+				</a>
+			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
+				<a href="/admin/settings/site">
+					<i class="icon-circle-blank"></i> Site Settings
+				</a>
+			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='users')print 'active'; ?>">
+				<a href="/admin/settings/users">
+					<i class="icon-user"></i> Users
+				</a>
+			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='passwordPolicy')print 'active'; ?>">
+				<a href="/admin/settings/passwordPolicy">
+					<i class="icon-user"></i> Password Policy
+				</a>
+			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='files')print 'active'; ?>">
+				<a href="#fileManagerWindow" role="button" data-toggle="bigmodal">
+					<i class="icon-folder-open"></i> File Manager
+				</a>
+			</li>
+			<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>" style="display:none;">
+				<a href="/admin/settings/plugins">
+					<i class="icon-bolt"></i> Plugins
+				</a>
+			</li>
+		</ul>
+	</li>
+	<?php endif; ?>
 	<?php
 	if ($tpl->challengeRole(array('SUPER','ADMIN','CONTENT_CREATOR','CONTENT_EDITOR','BLOGGER'))):
 	?>
@@ -91,39 +147,5 @@
 	</li>
 	<?php
 	endif;
-	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 	?>
-	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">
-		<span class="glow"></span>
-		<a data-toggle="collapse" href="#settings-subs">
-			<i class="icon-wrench icon-2x"></i>
-			<span>
-				System Settings
-				<i class="icon-caret-down"></i>
-			</span>
-		</a>
-		<ul id="settings-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='settings')print 'in'; ?>">
-			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>" style="display:none;">
-				<a href="/admin/settings/general">
-					<i class="icon-circle-blank"></i> General
-				</a>
-			</li>
-			<li class="<?php if ($tpl->get('nav_active_sub')=='users')print 'active'; ?>">
-				<a href="/admin/settings/users">
-					<i class="icon-user"></i> Users
-				</a>
-			</li>
-			<li class="<?php if ($tpl->get('nav_active_sub')=='files')print 'active'; ?>">
-				<a href="#fileManagerWindow" role="button" data-toggle="bigmodal">
-					<i class="icon-folder-open"></i> File Manager
-				</a>
-			</li>
-			<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>" style="display:none;">
-				<a href="/admin/settings/plugins">
-					<i class="icon-bolt"></i> Plugins
-				</a>
-			</li>
-		</ul>
-	</li>
-	<?php endif; ?>
 </ul>
