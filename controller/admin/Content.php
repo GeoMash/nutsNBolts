@@ -243,6 +243,8 @@ HTML;
 			$this->addBreadcrumb('Content','icon-edit','content');
 			$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
 			$this->addBreadcrumb('Edit Content','icon-pencil',$id);
+			$renderRef='content/edit';
+			$this->execHook('onBeforeRender',$renderRef);			
 			$this->view->render();
 		}
 
