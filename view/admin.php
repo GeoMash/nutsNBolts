@@ -26,7 +26,7 @@
 		<div class="navbar navbar-top navbar-inverse">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-					<a class="brand" href="#"><?php $tpl->brandTitle; ?></a>
+					<a class="brand" href="/admin"><?php $tpl->brandTitle; ?></a>
 					<!-- the new toggle buttons -->
 					<ul class="nav pull-right">
 						<li class="toggle-primary-sidebar hidden-desktop" data-toggle="collapse" data-target=".nav-collapse-primary"><button type="button" class="btn btn-navbar"><i class="icon-th-list"></i></button></li>
