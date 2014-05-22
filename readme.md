@@ -62,20 +62,20 @@ Roadmap
 
 ### 1.3
 
-* Nav API
+* Navigation API
 * Gravatar Support
 * Custom Models
-* Navigation API
-* Admin Panel UI API
 * Controller Overriding & Extending
 
 ### 1.4
+* Admin Panel UI API
 * Template Management
 * Zone Management
 * Forms API
 
 ### 1.5
 * Custom Plugins
+* Plugin Hooks
 * Plugin Center
 * ?
 
