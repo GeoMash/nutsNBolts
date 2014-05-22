@@ -1,3 +1,34 @@
+.main-content
+{
+	margin-left: 0;
+}
+.navbar-inverse .nav.nav-2x
+{
+	margin-top: 6px;
+}
+
+.navbar-inverse .nav.nav-2x > li > a
+{
+	height:			30px;
+	font-size:		14px;
+	font-weight:	bold;
+}
+
+.navbar-inverse .nav.nav-2x > li > a > i
+{
+	vertical-align:	middle;
+}
+
+.navbar-inverse .nav.nav-2x > li > a > span
+{
+	vertical-align:	middle;
+}
+
+.navbar .nav.nav-2x .dropdown-toggle .caret
+{
+	margin-top: 12px;
+}
+
 .bigmodal {
   width: 90%;
   height: 90%;
@@ -27,7 +58,7 @@
 }
 #fileManagerWindow .icon
 {
-	fon!t-size:	8em;
+	/*font-size:	8em;*/
 }
 .imageSelector
 {

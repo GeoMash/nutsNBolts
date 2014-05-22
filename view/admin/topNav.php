@@ -1,7 +1,17 @@
 <?php
 $user=$tpl->get('user');
+$gravatarHash=md5(strtolower(trim($user['email'])));
 ?>
 <div class="nav-collapse nav-collapse-top collapse">
+	<ul class="nav nav-2x">
+		<?php $tpl->loadView('/admin/nav/dashboard'); ?>
+		<?php $tpl->loadView('/admin/nav/fileManager'); ?>
+		<?php $tpl->loadView('/admin/nav/content'); ?>
+		<?php $tpl->loadView('/admin/nav/pages'); ?>
+		<?php $tpl->loadView('/admin/nav/settings'); ?>
+		
+		
+	</ul>
 	<ul class="nav full pull-right">
 		<li class="dropdown user-avatar">
 
@@ -9,7 +19,11 @@ $user=$tpl->get('user');
 
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				<span>
-					<img class="menu-avatar" src="<?php echo $user['image']; ?>" />
+					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
+						<img src="<?php echo $user['image']; ?>" />
+					<?php else: ?>
+						<img src="http://www.gravatar.com/avatar/<?php print $gravatarHash; ?>" />
+					<?php endif; ?>
 					<span><?php print $user['name_first'].' '.$user['name_last']; ?> <i class="icon-caret-down"></i></span>
 					<span class="badge badge-dark-red"><?php $tpl->getUnreadMessages(); ?></span>
 				</span>
@@ -24,7 +38,7 @@ $user=$tpl->get('user');
 					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
 						<img src="<?php echo $user['image']; ?>" />
 					<?php else: ?>
-						<img src="/images/avatars/silhouette.png" />
+						<img src="http://www.gravatar.com/avatar/<?php print $gravatarHash; ?>" />
 					<?php endif; ?>
 					</div>
 					<span><?php print $user['name_first'].' '.$user['name_last']; ?></span>

@@ -196,19 +196,6 @@ HTML;
 				if ($this->userCanAccessContentType($contentTypes[$i]))
 				{
 					$active=($this->request->node(3)==$contentTypes[$i]['id'])?'active':'';
-					if(isset($contentTypes[$i]['page_name']))
-					{
-						if($contentTypes[$i]['page_name']!=$previousPage)
-						{
-						$html[]	=<<<HTML
-			<i class="icon-edit icon-2x"></i>
-			<span>
-				{$contentTypes[$i]['page_name']}
-				
-			</span>						
-HTML;
-						}	
-					}
 				
 					$html[]	=<<<HTML
 <li class="{$active}">

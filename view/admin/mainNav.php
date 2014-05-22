@@ -1,22 +1,6 @@
 <ul class="nav nav-collapse collapse nav-collapse-primary">
-	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='dashboard')print 'active'; ?>">
-		<span class="glow"></span>
-		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#dashboard-subs">
-			<i class="icon-dashboard icon-2x"></i>
-			<span>
-				Dashboard
-				<i class="icon-caret-down"></i>
-			</span>
-		</a>
-		<ul id="dashboard-subs" class="collapse <?php if ($tpl->get('nav_active_main')=='dashboard')print 'in'; ?>">
-			<li class="<?php if ($tpl->get('nav_active_sub')=='configure')print 'active'; ?>">
-				<a href="/admin/dashboard/configure">
-					<i class="icon-th"></i> Configure Dashboard
-				</a>
-			</li>
-		</ul>
-	</li>
 	<?php
+	$tpl->loadView('/admin/mainNav/dashboard');
 	if ($tpl->challengeRole(array('SUPER','ADMIN'))):
 	?>
 	<li class="dark-nav <?php if ($tpl->get('nav_active_main')=='settings')print 'active'; ?>">

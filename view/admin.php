@@ -36,12 +36,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="sidebar-background">
-			<div class="primary-sidebar-background"></div>
-		</div>
-		<div class="primary-sidebar">
-			<?php $tpl->loadView('admin/mainNav'); ?>
-		</div>
 		<div class="main-content">
 			<div class="container-fluid">
 				<div class="row-fluid">

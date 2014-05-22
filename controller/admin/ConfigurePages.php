@@ -108,7 +108,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			else
 			{
-				$this->plugin->Notification->setInfo('Hey there! I noticed you haven\'t created a page type yet. <a href="/admin/configurepages/types">Click here to create one.</a>');
+				$this->plugin->Notification->setInfo('Hey there! I noticed you haven\'t created a page type yet. <a href="/admin/configurepages/types/add">Click here to create one.</a>');
 				$this->setContentView('admin/blank');
 			}
 			
