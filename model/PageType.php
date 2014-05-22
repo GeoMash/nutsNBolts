@@ -5,7 +5,10 @@ namespace application\nutsNBolts\model
 	
 	class PageType extends PageTypeBase	
 	{
-		
+		public function handleDeleteRecord($id)
+		{
+			return $this->delete(array('id'=>$id));
+		}
 	}
 }
 ?>

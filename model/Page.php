@@ -38,6 +38,11 @@ namespace application\nutsNBolts\model
 			}
 			return false;
 		}
+		
+		public function handleDeleteRecord($id)
+		{
+			return $this->delete(array('id'=>$id));
+		}
 	}
 }
 ?>
