@@ -51,6 +51,7 @@ namespace application\nutsNBolts\controller\admin
 					];
 				}
 				$this->model->SiteSettings->insertAll($records);
+				$this->plugin->Notification->setSuccess('Settings saved.');
 			}
 			
 			$settings=$this->model->SiteSettings->read();
