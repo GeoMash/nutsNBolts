@@ -67,42 +67,51 @@ namespace application\nutsNBolts\controller\admin
 		{
 			$this->addBreadcrumb('Configure Pages','icon-cogs','configurepages');
 			$this->addBreadcrumb('Pages','icon-copy','pages');
-			switch ($action)
+			if ($this->model->PageType->count())
 			{
-				case 'add':
+				switch ($action)
 				{
-					$this->addPage();
-					break;
+					case 'add':
+					{
+						$this->addPage();
+						break;
+					}
+					case 'edit':
+					{
+						$this->editPage($id);
+						break;
+					}
+					case 'remove':	$this->removePage($id);	break;
+					default:
+					{
+						$this->setContentView('admin/configurePages/pages');
+						$this->view->getContext()
+						->registerCallback
+						(	
+							'getPagesList',
+							function()
+							{
+								print $this->generatePageList();
+							}
+						);
+					}
 				}
-				case 'edit':
-				{
-					$this->editPage($id);
-					break;
-				}
-				case 'remove':	$this->removePage($id);	break;
-				default:
-				{
-					$this->setContentView('admin/configurePages/pages');
-					$this->view->getContext()
-					->registerCallback
-					(	
-						'getPagesList',
-						function()
-						{
-							print $this->generatePageList();
-						}
-					);
-				}
+				$this->view->getContext()
+				->registerCallback
+				(	
+					'getPageTypeOptions',
+					function($options=null)
+					{
+						print $this->getPageTypeOptions($options);
+					}
+				);
 			}
-			$this->view->getContext()
-			->registerCallback
-			(	
-				'getPageTypeOptions',
-				function($options=null)
-				{
-					print $this->getPageTypeOptions($options);
-				}
-			);
+			else
+			{
+				$this->plugin->Notification->setInfo('Hey there! I noticed you haven\'t created a page type yet. <a href="/admin/configurepages/types">Click here to create one.</a>');
+				$this->setContentView('admin/blank');
+			}
+			
 			$this->view->render();
 		}
 		
