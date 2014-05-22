@@ -288,6 +288,39 @@ $JSKK.Class.create
 			var table=btn.parents('table');
 			btn.parents('tr').remove();
 			// this.reindex(table);
+		},
+		addNewSetting: function(btn)
+		{
+			btn.siblings('table').find('tbody').append
+			(
+				[
+					'<tr>',
+						'<td>',
+							'<input type="text" class="input-medium" value="" data-prompt-position="topLeft" class="validate[required]" name="key[]">',
+						'</td>',
+						'<td>',
+							'<input type="text" class="input-medium" value="" data-prompt-position="topLeft" class="validate[required]" name="value[]">',
+						'</td>',
+						'<td>',
+							'<button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button>',
+						'</td>',
+					'</tr>'
+				].join('')
+			);
+		},
+		removeRow: function(btn)
+		{
+			var table=btn.parents('table');
+			btn.parents('tr').remove();
+		},
+		makeSafeFieldName: function(string)
+		{
+			string=string.replace(/[^\w]/g,'_');
+			while (string.indexOf('__')!==-1)
+			{
+				string=string.replace('__','_');
+			}
+			return string;
 		}
 	}
 );

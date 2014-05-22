@@ -36,7 +36,7 @@
 			</li>
 			<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
 				<a href="/admin/settings/site">
-					<i class="icon-circle-blank"></i> Site Settings
+					<i class="icon-circle"></i> Site Settings
 				</a>
 			</li>
 			<li class="<?php if ($tpl->get('nav_active_sub')=='users')print 'active'; ?>">

@@ -192,6 +192,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->plugin->MarkDown->text($markdown);
 					}
+				)->registerCallback
+				(
+					'getSiteSetting',
+					function($key)
+					{
+						return $this->getSiteSetting($key);
+					}
 				);
 				//Project specific. Should not be here.
 //				->registerCallback
@@ -683,7 +690,12 @@ namespace application\nutsNBolts\controller
 		{
 			$tiles=$this->model->Node->getHomeTiles();
 			return $tiles;
-		}		
+		}
+		
+		public function getSiteSetting($key)
+		{
+			return $this->model->SiteSetting->read(['key'=>$key])[0];
+		}
 	}
 }
 ?>

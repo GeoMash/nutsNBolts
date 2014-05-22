@@ -18,6 +18,50 @@ namespace application\nutsNBolts\controller\admin
 			$this->view->render();
 		}
 		
+		public function nnb()
+		{
+			$this->addBreadcrumb('System','icon-wrench','settings');
+			$this->addBreadcrumb('Nuts n Bolts Settings','icon-circle-blank','nnb');
+			
+			
+			$renderRef='nnb';
+			$this->view->setVar('extraOptions',array());
+			$this->execHook('onBeforeRender',$renderRef);
+			$this->view->render();
+		}
+		
+		public function site()
+		{
+			$this->addBreadcrumb('System','icon-wrench','settings');
+			$this->addBreadcrumb('Site Settings','icon-circle','site');
+			$this->setContentView('admin/settings/siteSettings');
+			
+			if ($this->request->get('key'))
+			{
+				$keys	=$this->request->get('key');
+				$values	=$this->request->get('value');
+				$records=[];
+				for ($i=0,$j=count($keys); $i<$j; $i++)
+				{
+					$records[]=
+					[
+						'label'	=>$keys[$i],
+						'key'	=>$keys[$i],
+						'value'	=>$values[$i],
+					];
+				}
+				$this->model->SiteSettings->insertAll($records);
+			}
+			
+			$settings=$this->model->SiteSettings->read();
+			
+			$this->view->setVar('settings',$settings);
+			$renderRef='site';
+			$this->view->setVar('extraOptions',array());
+			$this->execHook('onBeforeRender',$renderRef);
+			$this->view->render();
+		}
+		
 		public function users($action=null,$id=null)
 		{
 			$this->addBreadcrumb('System Settings','icon-wrench','settings');
@@ -87,7 +131,7 @@ namespace application\nutsNBolts\controller\admin
 					print $this->generateBarList($id);
 				}
 			);
-								
+			
 			$this->view->setVar('extraOptions',array());
 			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();

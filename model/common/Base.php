@@ -65,5 +65,15 @@ namespace application\nutsNBolts\model\common
 			}
 			return $urls;
 		}
+		
+		public function makeSafeFieldName($string)
+		{
+			$string=preg_replace('/[^\w]/','_',strtolower($string));
+			while (strstr($string,'__'))
+			{
+				$string=str_replace('__','_',$string);
+			}
+			return $string;
+		}
 	}
 }
