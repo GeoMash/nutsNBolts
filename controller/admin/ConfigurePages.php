@@ -37,7 +37,7 @@ namespace application\nutsNBolts\controller\admin
 					->registerCallback
 					(
 						'getUserRoles',
-						function()
+						function() use ($id)
 						{
 							print $this->generateRolesList($id);
 						}
