@@ -6,6 +6,26 @@ namespace application\nutsNBolts\model\common
 
 	abstract class Base extends CRUD
 	{
+		public function count($whereKeyVals=array())
+		{
+			if (count($whereKeyVals))
+			{
+				$where=[];
+				foreach ($whereKeyVals as $key=>$val)
+				{
+					$where[]=$key.'='.$val;
+				}
+				$where=implode(' AND ',$where);
+				$this->getDb()->query('SELECT COUNT(*) AS count FROM '.$this->name.' WHERE '.$where.';');
+			}
+			else
+			{
+				$this->getDb()->query('SELECT COUNT(*) AS count FROM '.$this->name.';');
+			}
+			$result=$this->getDb()->result('assoc');
+			return $result[0]['count'];
+		}
+		
 		public function handleRecord($record)
 		{
 			if (!isset($record['status']))$record['status']=0;
