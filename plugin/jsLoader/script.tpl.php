@@ -3,7 +3,7 @@ requirejs.config
 (
 	{
 		waitSeconds:	20,
-		baseUrl:		'/js',
+		baseUrl:		'/admin/js/',
 		paths:
 		{
 			jskk:				'vendor/jskk/jskk-1.1.0.min',
