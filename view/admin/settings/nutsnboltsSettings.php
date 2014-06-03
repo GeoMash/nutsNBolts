@@ -57,7 +57,7 @@
 														?>
 														<tr>
 															<td>
-																<input type="text" class="input-medium" value="<?php print $urls[$i]['url']; ?>" data-prompt-position="topLeft" name="url[]">
+																<input type="text" class="input-medium" value="<?php print $urls[$i]['url']; ?>" data-prompt-position="topLeft" class="validate[required]" name="url[]">
 															</td>
 															<td>
 																<button data-action="removeURLfromContent" class="btn btn-danger btn-mini" type="button">&times;</button>

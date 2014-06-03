@@ -35,58 +35,11 @@ $JSKK.Class.create
 					radioClass:		'iradio_flat-aero'
 				}
 			);
-			$(".iButton-icons").iButton
-			(
-				{
-					labelOn:		"<i class='icon-ok'></i>",
-					labelOff:		"<i class='icon-remove'></i>",
-					handleWidth:	30
-				}
-			);
-			$(".iButton-icons-tab").each
-			(
-				function()
-				{
-					if ($(this).is(":visible"))
-					{
-						return $(this).iButton
-						(
-							{
-								labelOn:        "<i class='icon-ok'></i>",
-								labelOff:       "<i class='icon-remove'></i>",
-								handleWidth:    30
-							}
-						);
-					}
-				}
-			);
-			$('[data-toggle="tab"]').on
-			(
-				'shown',
-				function(e)
-				{
-					var id = $(e.target).attr("href");
-					return $(id).find(".iButton-icons-tab").iButton
-					(
-						{
-							labelOn:     "<i class='icon-ok'></i>",
-							labelOff:       "<i class='icon-remove'></i>",
-							handleWidth:    30
-						}
-					);
-				}
-			);
+			this.initIButtons();
 
-			$(".iButton-enabled").iButton
-			(
-				{
-					labelOn:		"ENABLED",
-					labelOff:		"DISABLED",
-					handleWidth:	30
-				}
-			);
-			$(".iButton").iButton();
-			$('.chzn-select:not(.select2-container),select').select2();
+			
+			
+			this.initSelect2();
 			
 			$.extend
 			(
@@ -121,7 +74,84 @@ $JSKK.Class.create
 					todayBtn:   true,
 					format:     'yyyy/mm/dd'
 				}
-			)
+			);
+			
+			
+			
+			$('[data-sortable="true"] tbody').sortable
+			(
+				{
+					handle:	'.icon-reorder',
+					stop:	function(event,ui)
+					{
+						$('[name="order[]"]',ui.item.parent().children()).each
+						(
+							function(i)
+							{
+								$(this).val(i);
+							}
+						);
+					}
+				}
+			);
+			
+		},
+		initSelect2: function()
+		{
+			$('.chzn-select:not(.select2-container),select').select2();
+		},
+		initIButtons: function()
+		{
+			$('.iButton-icons').iButton
+			(
+				{
+					labelOn:		'<i class="icon-ok"></i>',
+					labelOff:		'<i class="icon-remove"></i>',
+					handleWidth:	30
+				}
+			);
+			$('.iButton-icons-tab').each
+			(
+				function()
+				{
+					if ($(this).is(':visible'))
+					{
+						return $(this).iButton
+						(
+							{
+								labelOn:        "<i class='icon-ok'></i>",
+								labelOff:       "<i class='icon-remove'></i>",
+								handleWidth:    30
+							}
+						);
+					}
+				}
+			);
+			$('.iButton-enabled').iButton
+			(
+				{
+					labelOn:		'ENABLED',
+					labelOff:		'DISABLED',
+					handleWidth:	30
+				}
+			);
+			$('[data-toggle="tab"]').on
+			(
+				'shown',
+				function(e)
+				{
+					var id = $(e.target).attr("href");
+					return $(id).find(".iButton-icons-tab").iButton
+					(
+						{
+							labelOn:    	'<i class="icon-ok"></i>',
+							labelOff:       '<i class="icon-remove"></i>',
+							handleWidth:    30
+						}
+					);
+				}
+			);
+			$('.iButton').iButton();
 		},
 		registerAction: function(key,callback)
 		{
@@ -161,14 +191,14 @@ $JSKK.Class.create
 				null,
 				function onActionClick(event)
 				{
-					var	btn		=$(event.currentTarget),
-						action	=btn.data('action');
+					var	el		=$(event.currentTarget),
+						action	=el.data('action');
 					
 					for (var key in this.actionRegistry)
 					{
 						if (key==action && Object.isFunction(this.actionRegistry[key]))
 						{
-							this.actionRegistry[key](btn);
+							this.actionRegistry[key](el);
 						}
 					}
 					if (Object.isFunction(this[action]))
@@ -285,6 +315,10 @@ $JSKK.Class.create
 		},
 		removeURLfromContent: function(btn)
 		{
+			this.removeURLfromContent(btn);
+		},
+		removeRow: function(btn)
+		{
 			var table=btn.parents('table');
 			btn.parents('tr').remove();
 			// this.reindex(table);
@@ -321,6 +355,95 @@ $JSKK.Class.create
 				string=string.replace('__','_');
 			}
 			return string;
+		},
+		navChangeType: function(select)
+		{
+			var linkCol=select.parent().next();
+			switch (select.val())
+			{
+				case 'select':
+				{
+					linkCol.html('<p>(Select a Type)</p>');
+					break;
+				}
+				case 'page':
+				{
+					var select=$('<select name="page_id[]"></select>');
+					select.append($('[data-template="pageOptions"]').children().clone());
+					linkCol.html
+					(
+						[
+							'<input type="hidden" class="input-medium" value="" name="node_id[]">',
+							'<input type="hidden" class="input-medium" value="" name="url[]">'
+						].join('')
+					);
+					linkCol.append(select);
+					select.select2();
+					break;
+				}
+				case 'node':
+				{
+					var select=$('<select name="node_id[]"></select>');
+					select.append($('[data-template="nodeOptions"]').children().clone());
+					linkCol.html
+					(
+						[
+							'<input type="hidden" class="input-medium" value="" name="page_id[]">',
+							'<input type="hidden" class="input-medium" value="" name="url[]">'
+						].join('')
+					);
+					linkCol.append(select);
+					select.select2();
+					break;
+				}
+				case 'url':
+				{
+					linkCol.html
+					(
+						[
+							'<input type="hidden" class="input-medium" value="" name="page_id[]">',
+							'<input type="hidden" class="input-medium" value="" name="node_id[]">',
+							'<input type="text" class="input-medium" value="" name="url[]">'
+						].join('')
+					);
+					break;
+				}
+			}
+		},
+		addNavigationRow: function(btn)
+		{
+			var tbody=btn.siblings('table').find('tbody'),
+				order=tbody.children().length;
+			tbody.append
+			(
+				[
+					'<tr>',
+						'<td>',
+							'<input type="hidden" name="order[]" value="'+order+'">',
+							'<p><i class="icon-reorder cursor-move"></i></p>',
+						'</td>',
+						'<td>',
+							'<input type="text" class="input-medium" value="" name="label[]">',
+						'</td>',
+						'<td>',
+							'<select name="type" data-action="navChangeType">',
+								'<option value="select">Select Type</option>',
+								'<option value="page">Page</option>',
+								'<option value="node">Content Item</option>',
+								'<option value="url">URL</option>',
+							'</select>',
+						'</td>',
+						'<td>',
+							'<p>(Select a Type)</p>',
+						'</td>',
+						'<td>',
+							'<button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button>',
+						'</td>',
+					'</tr>'
+				].join('')
+			);
+			this.initSelect2();
+			this.initIButtons();
 		}
 	}
 );

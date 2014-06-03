@@ -2,8 +2,8 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
-	use nutshell\helper\ObjectHelper;
-	
+	use application\nutsNBolts\model\Node;
+
 	class ConfigureContent extends AdminController
 	{
 		
@@ -573,7 +573,6 @@ HTML;
  			}
 			if($roles['roles'] > 0)
 			{
-
 				foreach ($roles['roles'] AS $role)
 				{
 					$role=array
@@ -582,7 +581,6 @@ HTML;
 						'role_id'				=>$role['id']
 					);
 					$this->model->ContentTypeRole->insert($role);
-
 				}
 
 				foreach ($roles['users'] AS $user)
@@ -593,11 +591,195 @@ HTML;
 						'user_id'				=>$user['id']
 					);
 					$this->model->ContentTypeUser->insert($user);
-					
 				}				
 			}
 			$this->redirect('/admin/configureContent/types/edit/'.$contentTypeId);
 			die();
+		}
+		
+		
+		/*** NAV ***/
+		
+		public function nav($action=null,$id=null)
+		{
+			$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
+			$this->addBreadcrumb('Navigation','icon-th','types');
+			switch ($action)
+			{
+				case 'add':
+				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'printPageOptions',
+						function($id=null)
+						{
+							print $this->generatePageList($id);
+						}
+					)->registerCallback
+					(
+						'printNodeOptions',
+						function($id=null)
+						{
+							print $this->generateNodeList($id);
+						}
+					);
+					$this->addNav();
+					break;
+				}
+				case 'edit':
+				{
+					$this->view->getContext()
+					->registerCallback
+					(
+						'printPageOptions',
+						function($id=null)
+						{
+							print $this->generatePageList($id);
+						}
+					)->registerCallback
+					(
+						'printNodeOptions',
+						function($id=null)
+						{
+							print $this->generateNodeList($id);
+						}
+					);
+					$this->editNav($id);
+					break;
+				}
+				case 'remove':
+				{
+					$this->removeNav($id);
+					break;
+				}
+				default:
+				{
+					$this->setContentView('admin/configureContent/nav');
+					$this->view->getContext()
+					->registerCallback
+					(
+						'getNavList',
+						function()
+						{
+							print $this->generateNavTypeList();
+						}
+					);
+				}
+			}
+			$this->view->render();
+		}
+		
+		public function generateNavTypeList()
+		{
+			$html=array();
+			$navs=$this->model->Nav->read();
+			for ($i=0,$j=count($navs); $i<$j; $i++)
+			{
+				$html[]=<<<HTML
+<div class="box-section news with-icons relative">
+	<div class="avatar blue"><i class="icon-2x"></i></div>
+	<a href="/admin/configurecontent/nav/remove/{$navs[$i]['id']}">
+		<span class="triangle-button red"><i class="icon-remove"></i></span>
+	</a>
+	<div class="news-content">
+		<div class="news-title"><a href="/admin/configurecontent/nav/edit/{$navs[$i]['id']}">{$navs[$i]['name']}</a></div>
+		<div class="news-text">{$navs[$i]['description']}</div>
+	</div>
+</div>
+HTML;
+			}
+			return implode('',$html);
+		}
+		
+		public function addNav()
+		{
+			if (!$this->request->get('name'))
+			{
+				$this->addBreadcrumb('Add Navigation','icon-plus','add');
+				$this->setContentView('admin/configureContent/addEditNav');
+			}
+			else
+			{
+
+				$record=$this->request->getAll();
+				$record['site_id']=$this->getSiteId();
+				$this->view->setVar('pageUrls',array());
+				if ($id=$this->model->Nav->handleRecord($record))
+				{
+					$this->plugin->Notification->setSuccess('Navigation successfully added. Would you like to <a href="/admin/configurecontent/nav/add/">Add another one?</a>');
+					$this->redirect('/admin/configureContent/nav/edit/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
+			}
+		}
+		
+		public function editNav($id)
+		{
+			if ($this->request->get('name'))
+			{
+				if ($this->model->Nav->handleRecord($this->request->getAll())!==false)
+				{
+
+					$this->plugin->Notification->setSuccess('Navigation successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
+			}
+			$this->addBreadcrumb('Edit Nav','icon-edit','edit/'.$id);
+			$this->setContentView('admin/configureContent/addEditNav');
+			$navItems=$this->model->NavPart->read(array('nav_id'=>$id));
+			$this->view->setVar('navItems',$navItems);
+			if ($record=$this->model->Nav->read($id))
+			{
+				$this->view->setVars($record[0]);
+			}
+			else
+			{
+				$this->view->setVar('record',array());
+			}
+		}
+		
+		public function generatePageList($id)
+		{
+			$pages	=$this->model->Nav->read(array('status'=>1));
+			$options=[];
+			for ($i=0,$j=count($pages); $i<$j; $i++)
+			{
+				$selected	=($id==$pages[$i]['id'])?' selected':'';
+				$options[]	='<option value="'.$pages[$i]['id'].'"'.$selected.'>'.$pages[$i]['name'].'</option>';
+			}
+			return implode('',$options);
+		}
+		
+		public function generateNodeList($id)
+		{
+			$pages	=$this->model->Node->read();
+			$options=[];
+			for ($i=0,$j=count($pages); $i<$j; $i++)
+			{
+				$selected	=($id==$pages[$i]['id'])?'selected':'';
+				$options[]	='<option value="'.$pages[$i]['id'].'"'.$selected.'>'.$pages[$i]['title'].'</option>';
+			}
+			return implode('',$options);
+		}
+		
+		public function removeNav($id)
+		{
+			if ($this->model->Nav->delete(array('id'=>$id)))
+			{
+				$this->plugin->Notification->setSuccess('Navigation successfully removed.');
+				$this->redirect('/admin/configurecontent/nav/');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
 		}
 	}
 }
