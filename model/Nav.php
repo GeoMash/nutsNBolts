@@ -73,6 +73,37 @@ namespace application\nutsNBolts\model
 			}
 			return $navItems;
 		}
+		
+		public function getWithParts($id,$status=1)
+		{
+			if (is_numeric($id))
+			{
+				$nav=$this->model->Nav->read
+				(
+					[
+						'id'	=>$id,
+						'status'=>$status
+					]
+				);
+			}
+			else
+			{
+				$nav=$this->model->Nav->read
+				(
+					[
+						'ref'	=>$id,
+						'status'=>$status
+					]
+				);
+			}
+			if (isset($nav[0]))
+			{
+				$nav=$nav[0];
+				$nav['items']=$this->model->NavPart->read(['nav_id'=>$nav['id']]);
+				return $nav;
+			}
+			return false;
+		}
 	}
 }
 ?>
