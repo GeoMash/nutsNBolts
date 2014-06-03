@@ -9,8 +9,6 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 		<?php $tpl->loadView('/admin/nav/content'); ?>
 		<?php $tpl->loadView('/admin/nav/pages'); ?>
 		<?php $tpl->loadView('/admin/nav/settings'); ?>
-		
-		
 	</ul>
 	<ul class="nav full pull-right">
 		<li class="dropdown user-avatar">

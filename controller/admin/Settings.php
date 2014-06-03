@@ -47,7 +47,7 @@ namespace application\nutsNBolts\controller\admin
 					[
 						'label'	=>$keys[$i],
 						'key'	=>$keys[$i],
-						'value'	=>$values[$i],
+						'value'	=>$values[$i]
 					];
 				}
 				$this->model->SiteSettings->insertAll($records);
