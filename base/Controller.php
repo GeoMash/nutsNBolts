@@ -253,7 +253,7 @@ namespace application\nutsNBolts\base
 
 		public function challengeRole($allowedRoles=array())
 		{
-			if ($this->isSuper())return true;
+			if ($this->isSuper() || $this->isAdmin())return true;
 
 			if (!is_array($allowedRoles))
 			{
