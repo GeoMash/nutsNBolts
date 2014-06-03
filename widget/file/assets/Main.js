@@ -1,7 +1,7 @@
 $JSKK.Class.create
 (
 	{
-		$namespace:	'nutsnbolts.widget.image',
+		$namespace:	'nutsnbolts.widget.file',
 		$name:		'Main'
 	}
 )
@@ -12,9 +12,9 @@ $JSKK.Class.create
 		init: function(id)
 		{
 			this.widget=$('[data-id="'+id+'"]')
-			$application.registerAction('widget.image.main.browseImage',this.browseImage.bind(this))
+			$application.registerAction('widget.file.main.browseFile',this.browseFile.bind(this))
 		},
-		browseImage: function()
+		browseFile: function()
 		{
 			$application.fileManager.show
 			(
@@ -22,7 +22,7 @@ $JSKK.Class.create
 					buttons:
 					[
 						{
-							label:		'Select Image',
+							label:		'Select File',
 							icon:		'icon-ok',
 							handler:	this.onSelect.bind(this)
 						}
@@ -34,11 +34,13 @@ $JSKK.Class.create
 		{
 			fileManager.hide();
 			var selected=fileManager.getSelected();
-			this.widget.find('.imageSelector').addClass('selected');
-			this.widget.find('input').val(selected.src);
-			this.widget.find('.thumbs a')	.attr('title',selected.title)
-											.css('background-image',selected.thumb)
-											.html('');
+			console.log(selected);
+			alert('salam');
+//			this.widget.find('.imageSelector').addClass('selected');
+//			this.widget.find('input').val(selected.src);
+//			this.widget.find('.thumbs a')	.attr('title',selected.title)
+//											.css('background-image',selected.thumb)
+//											.html('');
 		}
 	}
 );
