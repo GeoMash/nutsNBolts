@@ -186,11 +186,7 @@ HTML;
 		public function generateContentTypesforNav()
 		{
 			$html=array();
-			
-
 			$contentTypes=$this->model->ContentType->read(array(),array(),' ORDER BY page_name');
-	
-			$previousPage="";
 			for ($i=0,$j=count($contentTypes); $i<$j; $i++)
 			{
 				if ($this->userCanAccessContentType($contentTypes[$i]))
@@ -204,7 +200,6 @@ HTML;
 	</a>
 </li>
 HTML;
-					$previousPage=$contentTypes[$i]['page_name'];
 				}
 			}
 			return implode('',$html);
@@ -288,7 +283,10 @@ HTML;
 		
 		public function userCanAccessContentType($contentType)
 		{
-			if ($this->isSuper())return true;
+			if ($this->isSuper() || is_null($contentType['roles']))
+			{
+				return true;
+			}
 			if ($this->challengeRole($contentType['roles']))
 			{
 				if (!count($contentType['users']))
