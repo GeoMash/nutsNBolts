@@ -25,6 +25,7 @@ namespace application\nutsNBolts\model\base
 			'site_id' => 'int(10) NOT NULL ' ,
 			'name' => 'varchar(100) NOT NULL ' ,
 			'description' => 'text NOT NULL ' ,
+			'ref' => 'varchar(100) NOT NULL ' ,
 			'status' => 'tinyint(1) NOT NULL ' 
 		);
 	}
