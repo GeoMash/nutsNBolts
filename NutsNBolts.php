@@ -62,6 +62,9 @@ namespace application\nutsNBolts
 		
 		public function exec()
 		{
+			$this->plugin->Mvc('nutsNBolts',true);
+			$this->bindApplicationModelLoaders();
+			
 			//Initiate the MVC.
 			try
 			{
@@ -72,7 +75,7 @@ namespace application\nutsNBolts
 				}
 				if (NS_INTERFACE!= Nutshell::INTERFACE_PHPUNIT)
 				{
-					$this->plugin->Mvc('nutsNBolts');
+					$this->plugin->Mvc->initController();
 				}
 			}
 			catch(NutshellException $exception)//TODO: Change this - its not always a 404 (It can sometimes be a 500).
@@ -181,6 +184,23 @@ namespace application\nutsNBolts
 						
 			}
 			return $widget;
+		}
+		
+		private function bindApplicationModelLoaders()
+		{
+			foreach ($this->application->getLoaded() as $applicationRef=>$application)
+			{
+				if ($applicationRef=='NutsNBolts')
+				{
+					continue;
+				}
+				$this->plugin->Mvc->getModelLoader()->registerContainer
+				(
+					'model.'.$applicationRef,
+					APP_HOME.lcfirst($applicationRef).'/model/',
+					'application\\'.lcfirst($applicationRef).'\\model\\'
+				);
+			}
 		}
 		
 		public function loadPHPPatches()
