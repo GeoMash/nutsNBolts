@@ -23,7 +23,7 @@
 		
 	</head>
 	<body>
-		<div class="navbar navbar-top navbar-inverse">
+		<div class="navbar navbar-top navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container-fluid">
 					<a class="brand" href="/admin"><?php $tpl->brandTitle; ?></a>
@@ -92,6 +92,12 @@
 				</div>
 			</div>
 			<?php $tpl->loadView($tpl->get('contentView')); ?>
-			<?php $tpl->loadView('admin/fileManager/main'); ?>
+		</div>
+		<?php $tpl->loadView('admin/fileManager/main'); ?>
+		<footer>
+			<div class="container">
+				<p class="text-center">Nuts n' Bolts version <?php print $tpl->version; ?></p>
+			</div>
+		</footer>
 	</body>
 </html>
