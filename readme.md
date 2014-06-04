@@ -57,6 +57,13 @@ Versions
 * Base User API
 * SMS Plugin
 
+### New in 1.3
+
+* Admin UI Refinements
+* Navigation API
+* Gravatar Support
+* Custom Models
+
 Roadmap
 -------
 
