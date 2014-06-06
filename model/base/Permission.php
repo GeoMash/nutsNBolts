@@ -21,7 +21,8 @@ namespace application\nutsNBolts\model\base
 			'id' => 'int(10) NOT NULL ' ,
 			'key' => 'varchar(100) NOT NULL ' ,
 			'name' => 'varchar(100) NOT NULL ' ,
-			'description' => 'text NOT NULL '
+			'description' => 'text NOT NULL ' ,
+			'category' => 'text NOT NULL '
 		);
 	}
 }
