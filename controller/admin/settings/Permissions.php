@@ -93,7 +93,7 @@ namespace application\nutsNBolts\controller\admin\settings
 		{
 			for ($i=0,$j=count($rolePermissions); $i<$j; $i++)
 			{
-				if ($rolePermissions[$i]['permission_id']==$id
+				if ($rolePermissions[$i]['permission_id']==$id)
 				&& (bool)(int)$rolePermissions[$i]['permit'])
 				{
 					return true;
