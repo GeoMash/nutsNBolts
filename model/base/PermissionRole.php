@@ -19,8 +19,7 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'permission_id' => 'int(10) NOT NULL ' ,
-			'role_id' => 'int(10) NOT NULL ' ,
-			'permit' => 'tinyint(1) NOT NULL '
+			'role_id' => 'int(10) NOT NULL ' 
 		);
 	}
 }
