@@ -47,7 +47,7 @@ namespace application\nutsNBolts\controller\admin\settings
 			if ($this->request->get('id'))
 			{
 				$record=$this->request->getAll();
-				if ($role=$this->model->Role->handleRecord($record))
+				if ($role=$this->model->Role->handleRecord($record)!==false)
 				{
 					$this->plugin->Notification->setSuccess('Role successfully edited.');
 				}
