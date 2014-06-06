@@ -172,19 +172,19 @@ namespace application\nutsNBolts\controller\admin
                         try
                         {
                             $this->plugin->Collection->create
-                                (
-                                    array
-                                    (
-                                        'name'			=>'My Files',
-                                        'description'	=>'User Collection',
-                                        'status'		=>1
-                                    ),
-                                    $user['id']
-                                );
+							(
+								array
+								(
+									'name'			=>'My Files',
+									'description'	=>'User Collection',
+									'status'		=>1
+								),
+								$user['id']
+							);
                         }
                         catch(NutshellException $exception)
                         {
-						$this->plugin->Notification->setError($exception->getMessage());
+							$this->plugin->Notification->setError($exception->getMessage());
                         }
                         $this->redirect('/admin/settings/users/edit/'.$user['id']);
                     }
