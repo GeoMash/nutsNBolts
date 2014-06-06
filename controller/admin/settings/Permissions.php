@@ -60,9 +60,13 @@ namespace application\nutsNBolts\controller\admin\settings
 					}
 				);
 			
-			
 			$renderRef='editRole';
 			$this->execHook('onBeforeRender',$renderRef);
+			
+			if ($record=$this->model->Role->read($this->request->lastNode()))
+			{
+				$this->view->setVars($record[0]);
+			}
 			$this->view->render();
 		}
 		
@@ -75,7 +79,27 @@ namespace application\nutsNBolts\controller\admin\settings
 		
 		public function getPermissionTable()
 		{
-			return $this->model->Permission->read();
+			$roleId=$this->request->lastNode();
+			$permissions=$this->model->Permission->read();
+			$rolePermissions=$this->model->PermissionRole->read(['role_id'=>$roleId]);
+			for ($i=0,$j=count($permissions); $i<$j; $i++)
+			{
+				$permissions[$i]['permit']=$this->isPermitted($permissions[$i]['id'],$rolePermissions);
+			}
+			return $permissions;
+		}
+		
+		private function isPermitted($id,&$rolePermissions)
+		{
+			for ($i=0,$j=count($rolePermissions); $i<$j; $i++)
+			{
+				if ($rolePermissions[$i]['permission_id']==$id
+				&& (bool)(int)$rolePermissions[$i]['permit'])
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

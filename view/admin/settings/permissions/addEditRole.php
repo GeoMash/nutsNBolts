@@ -5,7 +5,7 @@
 					<form class="form-horizontal fill-up validatable" method="post">
 						<input type="hidden" name="id" value="<?php $tpl->id; ?>">
 						<div class="box-header">
-							<span class="title">User</span>
+							<span class="title">Role</span>
 							<ul class="box-toolbar">
 								<li>
 									<span>Enabled: </span>
@@ -39,15 +39,16 @@
 							<div class="container-fluid padded">
 								<div class="box">
 									<div class="box-header">
-										<span class="title"><i class="icon-beaker"></i> Permissions</span>
+										<span class="title"><i class="icon-bolt"></i> Permissions</span>
 									</div>
 									<div class="content-box">
 										<div class="padded">
 											<table class="table table-hover">
 												<thead>
 													<tr>
-														<th><div>Permit</div></th>
-														<th><div>Name</div></th>
+														<th class="span2"><div>Permit</div></th>
+														<th class="span3"><div>Key</div></th>
+														<th class="span3"><div>Name</div></th>
 														<th><div>Description</div></th>
 													</tr>
 												</thead>
@@ -55,12 +56,13 @@
 													<?php
 														$permissions=$tpl->getPermissionTable();
 														for ($i=0,$j=count($permissions); $i<$j; $i++):
+															$checked=$permissions[$i]['permit']?'checked':'';
 														?>
 														<tr>
-															<td class=""><input type="checkbox" name="permit[]" value="<?php print $permissions[$i]['id']; ?>"></td>
+															<td class=""><input type="checkbox" name="permit[]" value="<?php print $permissions[$i]['id']; ?>" <?php print $checked; ?>></td>
+															<td class=""><?php print $permissions[$i]['key']; ?></td>
+															<td class=""><?php print $permissions[$i]['name']; ?></td>
 															<td class=""><?php print $permissions[$i]['description']; ?></td>
-															<td class=""><?php print $permissions[$i]['ref']; ?></td>
-															<td class=""><?php print $permissions[$i]['status']; ?></td>
 														</tr>
 														<?php
 														endfor;
