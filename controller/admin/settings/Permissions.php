@@ -44,6 +44,19 @@ namespace application\nutsNBolts\controller\admin\settings
 		
 		public function editRole($id)
 		{
+			if ($this->request->get('id'))
+			{
+				$record=$this->request->getAll();
+				if ($role=$this->model->Role->handleRecord($record))
+				{
+					$this->plugin->Notification->setSuccess('Role successfully edited.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
+			}
+			
 			$this->addBreadcrumb('System','icon-wrench','settings');
 			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
 			$this->addBreadcrumb('Edit Role','icon-pencil','editRole');
@@ -63,7 +76,7 @@ namespace application\nutsNBolts\controller\admin\settings
 			$renderRef='editRole';
 			$this->execHook('onBeforeRender',$renderRef);
 			
-			if ($record=$this->model->Role->read($this->request->lastNode()))
+			if ($record=$this->model->Role->read($id))
 			{
 				$this->view->setVars($record[0]);
 			}
@@ -94,7 +107,6 @@ namespace application\nutsNBolts\controller\admin\settings
 			for ($i=0,$j=count($rolePermissions); $i<$j; $i++)
 			{
 				if ($rolePermissions[$i]['permission_id']==$id)
-				&& (bool)(int)$rolePermissions[$i]['permit'])
 				{
 					return true;
 				}
