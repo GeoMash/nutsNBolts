@@ -33,6 +33,11 @@
 				<i class="icon-user"></i> Password Policy
 			</a>
 		</li>
+		<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>">
+			<a href="/admin/settings/permissions">
+				<i class="icon-bolt"></i> Permissions
+			</a>
+		</li>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>" style="display:none;">
 			<a href="/admin/settings/plugins">
 				<i class="icon-bolt"></i> Plugins
