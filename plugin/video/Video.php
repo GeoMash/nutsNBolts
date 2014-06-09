@@ -1,8 +1,10 @@
 <?php
 namespace application\nutsNBolts\plugin\video
 {
+	use nutshell\Nutshell;
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
+
 	class Video extends Plugin implements Singleton
 	{
 		public function init()
@@ -30,12 +32,12 @@ namespace application\nutsNBolts\plugin\video
 		
 		public function getThumbnail($url,$quality='medium')
 		{
-			$type=self::getType($url);
+			$type=$this->getType($url);
 			switch($type)
 			{
 				case 'youtube':
 				{
-					$videoId=self::getYoutubeVideoId($url);
+					$videoId=$this->getYoutubeVideoId($url);
 					$thumbnail=null;
 					
 					switch($quality)
@@ -44,21 +46,22 @@ namespace application\nutsNBolts\plugin\video
 						case 'normal':
 						{
 							$thumbnail='http://i1.ytimg.com/vi/'.$videoId.'/default.jpg';
+							break;
 						}
-						break;
 						
 						case 'medium':
 						{
 							$thumbnail='http://i1.ytimg.com/vi/'.$videoId.'/mqdefault.jpg';
+							break;
 						}
-						break;
 						
 						case 'high':
 						{
 							$thumbnail='http://i1.ytimg.com/vi/'.$videoId.'/hqdefault.jpg';
+							break;
 						}
-						break;
 						
+
 						default:
 						{
 							$thumbnail='http://i1.ytimg.com/vi/'.$videoId.'/default.jpg';
@@ -69,17 +72,18 @@ namespace application\nutsNBolts\plugin\video
 				
 				case 'vimeo':
 				{
-					$videoId=self::getVimeoVideoId($url);
-					self::getVimeoThumbnail($videoId);
-					
+					$videoId=$this->getVimeoVideoId($url);
+					$thumbnail=$this->getVimeoThumbnail($videoId->video_id, $quality);
+					break;
 				}
-				break;
-				
+
 				default:
 				{
 					exit('unknown type');
 				}
 			}
+			
+			return $thumbnail;
 		}
 		
 		public function getYoutubeVideoId($url)
@@ -96,16 +100,74 @@ namespace application\nutsNBolts\plugin\video
 		{
 			$apiCall		='http://vimeo.com/api/oembed.json?url='.urlencode($url);
 			$videoData		=file_get_contents($apiCall);
-			
-			return(json_decode($videoData->vide_id));
+		
+			return
+			(
+				json_decode($videoData)->video_id
+			);
 		}
 		
-		public function getVimeoThumbnail($videoId)
+		public function getVimeoThumbnail($videoId, $quality='medium')
 		{
-			echo "inja";
 			$hash = unserialize(file_get_contents('http://vimeo.com/api/v2/video/'.$videoId.'.php'));
-			print_r($hash);
-//			echo $hash[0]['thumbnail_medium'];
+			switch($quality)
+			{
+				case 'normal':
+				{
+					$thumbnail=$hash[0]['thumbnail_small'];
+					break;
+				}
+					
+				case 'medium':
+				{
+					$thumbnail=$hash[0]['thumbnail_medium'];
+					break;
+				}
+			
+				case 'high':
+				{
+					$thumbnail=$hash[0]['thumbnail_large'];
+					break;
+				}
+	
+				default:
+				{
+					$thumbnail=$hash[0]['thumbnail_medium'];
+				}					
+			}
+			return $thumbnail;
+		}
+		
+		public function renderPlayer($url)
+		{
+			$html=null;
+			switch($this->getType($url))
+			{
+				case 'youtube':
+				{
+					$html= $this->renderYoutube($url);
+					break;
+				}
+					
+				case 'vimeo':
+				{
+					$html= $this->renderVimeo($url);
+					break;
+				}
+			}
+			return $html;
+		}
+		
+		public function renderYoutube($url)
+		{
+			parse_str(parse_url($url, PHP_URL_QUERY), $variables);
+			return '<iframe width="560" height="315" src="http://www.youtube.com/embed/'.$variables['v'].'" frameborder="0" allowfullscreen></iframe>';
+		}
+		
+		public function renderVimeo($url)
+		{
+			$videoId=$this->getVimeoVideoId($url);
+			return '<iframe src="http://player.vimeo.com/video/'.$videoId.'" width="560" height="315" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>';
 		}
 	}
 }
