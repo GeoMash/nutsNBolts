@@ -14,6 +14,11 @@
 				<i class="icon-th"></i> Content Types
 			</a>
 		</li>
+		<li class="<?php if ($tpl->get('nav_active_sub')=='nav')print 'active'; ?>">
+			<a href="/admin/configurecontent/nav">
+				<i class="icon-beaker"></i> Navigation
+			</a>
+		</li>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='forms')print 'active'; ?>">
 			<a href="/admin/configurecontent/forms">
 				<i class="icon-list-alt"></i> Forms

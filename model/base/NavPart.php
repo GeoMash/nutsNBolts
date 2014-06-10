@@ -26,7 +26,8 @@ namespace application\nutsNBolts\model\base
 			'nav_id' => 'int(10) NOT NULL ' ,
 			'node_id' => 'int(10) NOT NULL ' ,
 			'label' => 'varchar(100) NOT NULL ' ,
-			'url' => 'varchar(200) NOT NULL ' 
+			'url' => 'varchar(200) NOT NULL ',
+			'order' => 'tinyint(1) NOT NULL '
 		);
 	}
 }

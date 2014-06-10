@@ -57,17 +57,19 @@ Versions
 * Base User API
 * SMS Plugin
 
-Roadmap
--------
+### New in 1.3
 
-### 1.3
-
+* Admin UI Refinements
 * Navigation API
 * Gravatar Support
 * Custom Models
-* Controller Overriding & Extending
+
+Roadmap
+-------
 
 ### 1.4
+* New Permissions Engine
+* Controller Overriding & Extending
 * Admin Panel UI API
 * Template Management
 * Zone Management

@@ -26,7 +26,7 @@ namespace application\nutsNBolts\base
 			}
 			if (!$this->application->NutsNBolts->getSiteBinding($this->getSiteRef()))
 			{
-				die('No site bound for this domain!');
+				die('No site bound for this domain! Site should be "'.$this->getSiteRef().'".');
 			}
 			if ($this->plugin->UserAuth->isAuthenticated())
 			{

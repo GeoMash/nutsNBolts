@@ -72,7 +72,26 @@ namespace application\nutsNBolts\controller\admin
 				}
 				case 'settings':
 				{
-					$this->routedController=new Settings($this->MVC);
+					if ($this->request->node(2))
+					{
+						switch (strtolower($this->request->node(2)))
+						{
+							case 'permissions':
+							{
+								$this->routedController=new settings\Permissions($this->MVC);
+								$this->routeAction(3);
+								return;
+							}
+							default:
+							{
+								$this->routedController=new Settings($this->MVC);
+							}
+						}
+					}
+					else
+					{
+						$this->routedController=new Settings($this->MVC);
+					}
 					break;
 				}
 				case '':
@@ -114,10 +133,15 @@ namespace application\nutsNBolts\controller\admin
 					exit();
 				}
 			}
+			$this->routeAction(2);
+		}
+		
+		private function routeAction($fromNode)
+		{
 			//Check for action.
-			$action	=$this->request->node(2);
+			$action	=$this->request->node($fromNode);
 			$args	=array();
-			$node	=3;
+			$node	=$fromNode+1;
 			//Check for args.
 			if (!is_null($action))
 			{

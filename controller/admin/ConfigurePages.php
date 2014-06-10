@@ -301,10 +301,11 @@ HTML;
 		
 		public function generateRolesList($contentTypeId=null)
 		{
-			$return='';
-			if (is_numeric($userId))
+			$return				='';
+			$contentTypeRoles	=array();
+			if (is_numeric($contentTypeId))
 			{
-				$contentTypeRoles=$this->model->ContentTypePermission->read(array('content_type_id'=>$userId));
+				$contentTypeRoles=$this->model->ContentTypePermission->read(array('content_type_id'=>$contentTypeId));
 			}
 			$roles	=$this->model->Role->read();
 			$html	=array();

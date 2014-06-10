@@ -25,8 +25,10 @@ namespace application\nutsNBolts\base
 		public function __construct(Mvc $MVC)
 		{
 			parent::__construct($MVC);
-
+			
 			$this->plugin->UserAuth();
+
+			$this->view->setVar('version',NutsNBolts::VERSION);
 
 			$this->JSLoader	=$this->plugin->JsLoader();
 			$this->config	=$this->application->NutsNBolts->config;
