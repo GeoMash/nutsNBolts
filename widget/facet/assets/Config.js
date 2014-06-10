@@ -1,7 +1,7 @@
 $JSKK.Class.create
 (
 	{
-		$namespace:	'nutsnbolts.widget.select',
+		$namespace:	'nutsnbolts.widget.facet',
 		$name:		'Config'
 	}
 )
