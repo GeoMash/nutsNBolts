@@ -73,7 +73,7 @@ namespace application\nutsNBolts\plugin\video
 				case 'vimeo':
 				{
 					$videoId=$this->getVimeoVideoId($url);
-					$thumbnail=$this->getVimeoThumbnail($videoId->video_id, $quality);
+					$thumbnail=$this->getVimeoThumbnail($videoId, $quality);
 					break;
 				}
 
