@@ -1,14 +1,4 @@
 <div class="control-group">
-	<label class="control-label">Facet Name</label>
-	<div class="controls">
-		<div class="row-fluid">
-			<div>
-				<input type="text" class="input-small" name="widget[<?php $tpl->widgetIndex; ?>][config][facet]" value="<?php echo $tpl->get('facet');?>">
-			</div>
-		</div>
-	</div>
-</div>
-<div class="control-group">
 	<h5>Options:</h5>
 	<br />
 	<table class="table table-hover">
