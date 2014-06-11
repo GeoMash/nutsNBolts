@@ -30,16 +30,28 @@ namespace application\nutsNBolts\controller\admin\settings
 			$this->view->render();
 		}
 		
-		public function addRole($id)
+		public function addRole()
 		{
 			$this->addBreadcrumb('System','icon-wrench','settings');
 			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
 			$this->addBreadcrumb('Add Role','icon-pencil','editRole');
 			
+			if ($this->request->get('name'))
+			{
+				$record=$this->request->getAll();
+				if ($id=$this->model->Role->handleRecord($record)!==false)
+				{
+					var_dump($id);exit();
+					$this->plugin->Notification->setSuccess('Role successfully added. Would you like to <a href="/admin/settings/permissions/addRole/">Add another one?</a>');
+					$this->redirect('/admin/settings/permissions/editRole/'.$id);
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
+			}
 			
-			$renderRef='editRole';
-			$this->execHook('onBeforeRender',$renderRef);
-			$this->view->render();
+			$this->setupAddEditPage();
 		}
 		
 		public function editRole($id)
@@ -61,6 +73,15 @@ namespace application\nutsNBolts\controller\admin\settings
 			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
 			$this->addBreadcrumb('Edit Role','icon-pencil','editRole');
 			
+			if ($record=$this->model->Role->read($id))
+			{
+				$this->view->setVars($record[0]);
+			}
+			$this->setupAddEditPage();
+		}
+		
+		private function setupAddEditPage()
+		{
 			$this->setContentView('admin/settings/permissions/addEditRole');
 			
 			$this->view->getContext()
@@ -76,10 +97,6 @@ namespace application\nutsNBolts\controller\admin\settings
 			$renderRef='editRole';
 			$this->execHook('onBeforeRender',$renderRef);
 			
-			if ($record=$this->model->Role->read($id))
-			{
-				$this->view->setVars($record[0]);
-			}
 			$this->view->render();
 		}
 		

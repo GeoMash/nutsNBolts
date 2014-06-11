@@ -31,10 +31,10 @@ namespace application\nutsNBolts\model
 				{
 					for ($i=0,$j=count($permissions); $i<$j; $i++)
 					{
-						$permissions[$i]['role_id']=$record['id'];
+						$permissions[$i]['role_id']=$id;
 						$this->model->PermissionRole->insertAssoc($permissions[$i]);
 					}
-					return $id;
+					return $this->read($id)[0];
 				}
 			}
 			return false;
