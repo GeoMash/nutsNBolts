@@ -45,6 +45,10 @@ namespace application\nutsNBolts\controller\rest
 							{
 								unset($allVideos[$i]);
 							}
+							else
+							{
+								$allVideos[$i]['thumbnail']=$this->plugin->Video->getThumbnail($allVideos[$i]['video']);
+							}
 						}
 					}
 				}
