@@ -57,7 +57,7 @@ namespace application\nutsNBolts\controller\rest
 				(
 					true,
 					'OK',
-					array('results'=>$allVideos)
+					array('results'=>array_values($allVideos))
 				);
 			}
 			else
