@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
 	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ObjectHelper;
@@ -20,47 +21,68 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function nnb()
 		{
-			$this->addBreadcrumb('System','icon-wrench','settings');
-			$this->addBreadcrumb('Nuts n Bolts Settings','icon-circle-blank','nnb');
-			
-			
-			$renderRef='nnb';
-			$this->view->setVar('extraOptions',array());
-			$this->execHook('onBeforeRender',$renderRef);
-			$this->view->render();
+			try
+			{
+				$this->plugin->Auth	->can('admin.setting.nutsNBolts.create')
+									->can('admin.setting.nutsNBolts.read');
+				$this->addBreadcrumb('System','icon-wrench','settings');
+				$this->addBreadcrumb('Nuts n Bolts Settings','icon-circle-blank','nnb');
+				
+				$renderRef='nnb';
+				$this->view->setVar('extraOptions',array());
+				$this->execHook('onBeforeRender',$renderRef);
+				$this->view->render();
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		public function site()
 		{
-			$this->addBreadcrumb('System','icon-wrench','settings');
-			$this->addBreadcrumb('Site Settings','icon-circle','site');
-			$this->setContentView('admin/settings/siteSettings');
-			
-			if ($this->request->get('key'))
+			try
 			{
-				$keys	=$this->request->get('key');
-				$values	=$this->request->get('value');
-				$records=[];
-				for ($i=0,$j=count($keys); $i<$j; $i++)
+				$this->plugin->Auth	->can('admin.setting.site.create')
+									->can('admin.setting.site.read')
+									->can('admin.setting.site.update')
+									->can('admin.setting.site.delete');
+				$this->addBreadcrumb('System','icon-wrench','settings');
+				$this->addBreadcrumb('Site Settings','icon-circle','site');
+				$this->setContentView('admin/settings/siteSettings');
+				
+				if ($this->request->get('key'))
 				{
-					$records[]=
-					[
-						'label'	=>$keys[$i],
-						'key'	=>$keys[$i],
-						'value'	=>$values[$i]
-					];
+					$keys	=$this->request->get('key');
+					$values	=$this->request->get('value');
+					$records=[];
+					for ($i=0,$j=count($keys); $i<$j; $i++)
+					{
+						$records[]=
+						[
+							'label'	=>$keys[$i],
+							'key'	=>$keys[$i],
+							'value'	=>$values[$i]
+						];
+					}
+					$this->model->SiteSettings->insertAll($records);
+					$this->plugin->Notification->setSuccess('Settings saved.');
 				}
-				$this->model->SiteSettings->insertAll($records);
-				$this->plugin->Notification->setSuccess('Settings saved.');
+				
+				$settings=$this->model->SiteSettings->read();
+				
+				$this->view->setVar('settings',$settings);
+				$renderRef='site';
+				$this->view->setVar('extraOptions',array());
+				$this->execHook('onBeforeRender',$renderRef);
+				$this->view->render();
 			}
-			
-			$settings=$this->model->SiteSettings->read();
-			
-			$this->view->setVar('settings',$settings);
-			$renderRef='site';
-			$this->view->setVar('extraOptions',array());
-			$this->execHook('onBeforeRender',$renderRef);
-			$this->view->render();
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		public function users($action=null,$id=null)
@@ -108,21 +130,31 @@ namespace application\nutsNBolts\controller\admin
 				//View
 				default:
 				{
-					$this->setContentView('admin/settings/users');
-					$this->view->getContext()
-					->registerCallback
-					(
-						'getUserList',
-						function()
-						{
-							print $this->generateUserList();
-						}
-					);
-					$renderRef='users';
+					try
+					{
+						$this->plugin->Auth->can('admin.user.read');
+						$this->setContentView('admin/settings/users');
+						$this->view->getContext()
+						->registerCallback
+						(
+							'getUserList',
+							function()
+							{
+								print $this->generateUserList();
+							}
+						);
+						$renderRef='users';
+					}
+					catch(AuthException $exception)
+					{
+						$this->setContentView('admin/noPermission');
+						$this->view->render();
+					}
 				}
 			}
 			// $this->setContentView('admin/settings/users');
 			
+			//TODO: Remove this project specific callback.
 			$this->view->getContext()
 			->registerCallback
 			(
@@ -140,130 +172,151 @@ namespace application\nutsNBolts\controller\admin
 		
 		private function addUser()
 		{
-			if (!$this->request->get('email'))
+			try
 			{
-				$this->addBreadcrumb('Add User','icon-plus','add');
-				$this->setContentView('admin/settings/addEditUser');
-			}
-			else
-			{
-				$record=$this->request->getAll();
-				if ($record['password']!=$record['password_confirm'])
+				$this->plugin->Auth->can('admin.user.create');
+				$this->plugin->Auth->can('admin.collection.create');
+				if (!$this->request->get('email'))
 				{
-					$this->plugin->Notification->setError('Passwords did not match. Please try again.');
-                    $error=true;
+					$this->addBreadcrumb('Add User','icon-plus','add');
+					$this->setContentView('admin/settings/addEditUser');
 				}
-				else if (empty($record['password']))
+				else
 				{
-					$this->plugin->Notification->setError('Password cannot be blank.');
-                    $error=true;
-				}
-
-                $this->execHook('onBeforeAddUser',$record);
-				unset($record['password_confirm']);
-                if(!$record['error'])
-                {
-                    // no errors
-                    if ($user=$this->model->User->handleRecord($record))
-                    {
-                        $this->execHook('onAddUser',$user);
-                        $this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
-
-                        try
-                        {
-                            $this->plugin->Collection->create
-							(
-								array
+					$record=$this->request->getAll();
+					if ($record['password']!=$record['password_confirm'])
+					{
+						$this->plugin->Notification->setError('Passwords did not match. Please try again.');
+						$error=true;
+					}
+					else if (empty($record['password']))
+					{
+						$this->plugin->Notification->setError('Password cannot be blank.');
+						$error=true;
+					}
+	
+					$this->execHook('onBeforeAddUser',$record);
+					unset($record['password_confirm']);
+					if(!$record['error'])
+					{
+						// no errors
+						if ($user=$this->model->User->handleRecord($record))
+						{
+							$this->execHook('onAddUser',$user);
+							$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
+	
+							try
+							{
+								$this->plugin->Collection->create
 								(
-									'name'			=>'My Files',
-									'description'	=>'User Collection',
-									'status'		=>1
-								),
-								$user['id']
-							);
-                        }
-                        catch(NutshellException $exception)
-                        {
-							$this->plugin->Notification->setError($exception->getMessage());
-                        }
-                        $this->redirect('/admin/settings/users/edit/'.$user['id']);
-                    }
-                    else
-                    {
-                        $this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
-                    }
-                }
-                else
-                {
-                    // has errors
-                    $this->addBreadcrumb('Add User','icon-plus','add');
-                    $this->setContentView('admin/settings/addEditUser');
-                }
-
+									array
+									(
+										'name'			=>'My Files',
+										'description'	=>'User Collection',
+										'status'		=>1
+									),
+									$user['id']
+								);
+							}
+							catch(NutshellException $exception)
+							{
+								$this->plugin->Notification->setError($exception->getMessage());
+							}
+							$this->redirect('/admin/settings/users/edit/'.$user['id']);
+						}
+						else
+						{
+							$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+						}
+					}
+					else
+					{
+						// has errors
+						$this->addBreadcrumb('Add User','icon-plus','add');
+						$this->setContentView('admin/settings/addEditUser');
+					}
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function editUser($id)
 		{
-			if ($this->request->get('email'))
+			try
 			{
-				$record=$this->request->getAll();
-				if ($record['password']!=$record['password_confirm'])
+				$this->plugin->Auth	->can('admin.user.read')
+									->can('admin.user.update');
+				if ($this->request->get('email'))
 				{
-					$this->plugin->Notification->setError('Passwords did not match. Please try again.');
+					$record=$this->request->getAll();
+					if ($record['password']!=$record['password_confirm'])
+					{
+						$this->plugin->Notification->setError('Passwords did not match. Please try again.');
+					}
+					unset($record['password_confirm']);
+					if ($user=$this->model->User->handleRecord($record))
+					{
+						$this->execHook('onEditUser',$user);
+						$this->plugin->Notification->setSuccess('User successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
-				unset($record['password_confirm']);
-				if ($user=$this->model->User->handleRecord($record))
+				$this->addBreadcrumb('Edit User','icon-edit','edit/'.$id);
+				$this->setContentView('admin/settings/addEditUser');
+				if ($record=$this->model->User->read($id))
 				{
-					$this->execHook('onEditUser',$user);
-					$this->plugin->Notification->setSuccess('User successfully edited.');
+					$this->view->setVars($record[0]);
+				}
+				else
+				{
+					$this->view->setVar('record',array());
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+
+		private function removeUser($id)
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.user.delete');
+				if ($id==-100)
+				{
+					$this->plugin->Notification->setError('The system super user cannot be removed.');
+					$this->redirect('/admin/settings/users/');
+				}
+				if ($id==$this->getUserId())
+				{
+					$this->plugin->Notification->setError('You cannot remove yourself.');
+					$this->redirect('/admin/settings/users/');
+				}
+	
+				if ($this->model->User->handleDeleteRecord($id))
+				{
+					$this->plugin->Notification->setSuccess('User successfully removed.');
+					//TODO: Remove collection items? Needs discussion.
+					$this->redirect('/admin/settings/users/');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			$this->addBreadcrumb('Edit User','icon-edit','edit/'.$id);
-			$this->setContentView('admin/settings/addEditUser');
-			if ($record=$this->model->User->read($id))
+			catch(AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
-			}
-		}
-
-		private function removeUser($id)
-		{
-			if ($id==-100)
-			{
-				$this->plugin->Notification->setError('The system super user cannot be removed.');
-				$this->redirect('/admin/settings/users/');
-			}
-			if ($id==$this->getUserId())
-			{
-				$this->plugin->Notification->setError('You cannot remove yourself.');
-				$this->redirect('/admin/settings/users/');
-			}
-			$roles=$this->model->User->getRoles($id);
-			if ($this->plugin->UserAuth->userHasRole($roles,'ADMIN')
-			&& !($this->isSuper() || $this->isAdmin()))
-			{
-				$this->plugin->Notification->setError('You do not have permission to remove this type of user.');
-				$this->redirect('/admin/settings/users/');
-			}
-
-			if ($this->model->User->handleDeleteRecord($id))
-			{
-				$this->plugin->Notification->setSuccess('User successfully removed.');
-				//TODO: Remove collection items? Needs discussion.
-				$this->redirect('/admin/settings/users/');
-			}
-			else
-			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		

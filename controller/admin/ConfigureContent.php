@@ -3,6 +3,7 @@ namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
 	use application\nutsNBolts\model\Node;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 
 	class ConfigureContent extends AdminController
 	{
@@ -91,19 +92,28 @@ namespace application\nutsNBolts\controller\admin
 				{
 					$this->duplicateContentType($id);
 					break;
-				}				
+				}
 				default:
 				{
-					$this->setContentView('admin/configureContent/types');
-					$this->view->getContext()
-					->registerCallback
-					(
-						'getContentTypesList',
-						function()
-						{
-							print $this->generateContentTypeList();
-						}
-					);
+					try
+					{
+						$this->plugin->Auth->can('admin.content.contentType.read');
+						$this->setContentView('admin/configureContent/types');
+						$this->view->getContext()
+						->registerCallback
+						(
+							'getContentTypesList',
+							function()
+							{
+								print $this->generateContentTypeList();
+							}
+						);
+					}
+					catch(AuthException $exception)
+					{
+						$this->setContentView('admin/noPermission');
+						$this->view->render();
+					}
 				}
 			}
 			$this->view->render();
@@ -111,80 +121,107 @@ namespace application\nutsNBolts\controller\admin
 		
 		private function addType()
 		{
-			if (!$this->request->get('name'))
+			try
 			{
-				$this->addBreadcrumb('Add Content Type','icon-plus','add');
-				$this->setContentView('admin/configureContent/addEditType');
-			}
-			else
-			{
-
-				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();		
-				if ($id=$this->model->ContentType->handleRecord($record))
+				$this->plugin->Auth->can('admin.content.contentType.create');
+				if (!$this->request->get('name'))
 				{
-					$this->plugin->Notification->setSuccess('Content type successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
-					$this->redirect('/admin/configureContent/types/edit/'.$id);
+					$this->addBreadcrumb('Add Content Type','icon-plus','add');
+					$this->setContentView('admin/configureContent/addEditType');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$record=$this->request->getAll();
+					$record['site_id']=$this->getSiteId();		
+					if ($id=$this->model->ContentType->handleRecord($record))
+					{
+						$this->plugin->Notification->setSuccess('Content type successfully added. Would you like to <a href="/admin/configurecontent/types/add/">Add another one?</a>');
+						$this->redirect('/admin/configureContent/types/edit/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function editType($id)
 		{
-			if ($this->request->get('name'))
+			try
 			{
-				if ($this->model->ContentType->handleRecord($this->request->getAll())!==false)
+				$this->plugin->Auth	->can('admin.content.contentType.create')
+									->can('admin.content.contentType.read');
+				if ($this->request->get('name'))
 				{
-					$this->plugin->Notification->setSuccess('Content type successfully edited.');
+					if ($this->model->ContentType->handleRecord($this->request->getAll())!==false)
+					{
+						$this->plugin->Notification->setSuccess('Content type successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
+				}
+				if ($this->returnToAction)
+				{
+					$this->plugin->Notification->setInfo('Do you want to return to <a href="'.$this->returnToAction.'">editing the content item</a>?');
+				}
+				$this->addBreadcrumb('Edit Content Type','icon-edit','edit/'.$id);
+				$this->setContentView('admin/configureContent/addEditType');
+				if ($record=$this->model->ContentType->read($id))
+				{
+					$record		=$record[0];
+					$partHTML	='';
+					$this->view->setVars($record);
+					$parts=$this->model->ContentPart->read(array('content_type_id'=>$id));
+					if (count($parts))
+					{
+						$contentWidgets=$this->application->NutsNBolts->getWidgetList();
+						for ($i=0,$j=count($parts); $i<$j; $i++)
+						{
+							 $partHTML.=$this->buildWidgetHTML($contentWidgets,$i,$parts[$i]);
+						}
+						$partHTML.=$this->JSLoader->getLoaderHTML();
+					}
+					$this->view->setVar('parts',$partHTML);
+				}
+				else
+				{
+					$this->view->setVar('record',array());
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+		
+		public function removeType($id)
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.content.contentType.delete');
+				if ($this->model->ContentType->handleDeleteRecord($id))
+				{
+					$this->plugin->Notification->setSuccess('Content type successfully removed.');
+					$this->redirect('/admin/configurecontent/types/');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			if ($this->returnToAction)
+			catch(AuthException $exception)
 			{
-				$this->plugin->Notification->setInfo('Do you want to return to <a href="'.$this->returnToAction.'">editing the content item</a>?');
-			}
-			$this->addBreadcrumb('Edit Content Type','icon-edit','edit/'.$id);
-			$this->setContentView('admin/configureContent/addEditType');
-			if ($record=$this->model->ContentType->read($id))
-			{
-				$record		=$record[0];
-				$partHTML	='';
-				$this->view->setVars($record);
-				$parts=$this->model->ContentPart->read(array('content_type_id'=>$id));
-				if (count($parts))
-				{
-					$contentWidgets=$this->application->NutsNBolts->getWidgetList();
-					for ($i=0,$j=count($parts); $i<$j; $i++)
-					{
-						 $partHTML.=$this->buildWidgetHTML($contentWidgets,$i,$parts[$i]);
-					}
-					$partHTML.=$this->JSLoader->getLoaderHTML();
-				}
-				$this->view->setVar('parts',$partHTML);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
-			}
-		}
-		
-		public function removeType($id)
-		{
-			if ($this->model->ContentType->handleDeleteRecord($id))
-			{
-				$this->plugin->Notification->setSuccess('Content type successfully removed.');
-				$this->redirect('/admin/configurecontent/types/');
-			}
-			else
-			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
@@ -389,16 +426,25 @@ HTML;
 				}
 				default:
 				{
-					$this->setContentView('admin/configureContent/forms');
-					$this->view->getContext()
-					->registerCallback
-					(
-						'getFormsList',
-						function()
-						{
-							print $this->generateFormsList();
-						}
-					);
+					try
+					{
+						$this->plugin->Auth->can('admin.content.form.read');
+						$this->setContentView('admin/configureContent/forms');
+						$this->view->getContext()
+						->registerCallback
+						(
+							'getFormsList',
+							function()
+							{
+								print $this->generateFormsList();
+							}
+						);
+					}
+					catch(AuthException $exception)
+					{
+						$this->setContentView('admin/noPermission');
+						$this->view->render();
+					}
 				}
 			}
 			$this->view->render();
@@ -406,64 +452,92 @@ HTML;
 		
 		private function addForm()
 		{
-			if (!$this->request->get('name'))
+			try
 			{
-				$this->addBreadcrumb('Add Form','icon-plus','add');
-				$this->setContentView('admin/configureContent/addEditForm');
-			}
-			else
-			{
-				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();
-				
-				if ($id=$this->model->Form->handleRecord($record))
+				$this->plugin->Auth->can('admin.content.form.create');
+				if (!$this->request->get('name'))
 				{
-					$this->plugin->Notification->setSuccess('Form successfully added. Would you like to <a href="/admin/configurecontent/forms/add/">Add another one?</a>');
-					$this->redirect('/admin/configureContent/forms/edit/'.$id);
+					$this->addBreadcrumb('Add Form','icon-plus','add');
+					$this->setContentView('admin/configureContent/addEditForm');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$record=$this->request->getAll();
+					$record['site_id']=$this->getSiteId();
+					
+					if ($id=$this->model->Form->handleRecord($record))
+					{
+						$this->plugin->Notification->setSuccess('Form successfully added. Would you like to <a href="/admin/configurecontent/forms/add/">Add another one?</a>');
+						$this->redirect('/admin/configureContent/forms/edit/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function editForm($id)
 		{
-			if ($this->request->get('name'))
+			try
 			{
-				if ($this->model->Form->handleRecord($this->request->getAll())!==false)
+				$this->plugin->Auth	->can('admin.content.form.read')
+									->can('admin.content.form.update');
+				if ($this->request->get('name'))
 				{
-
-					$this->plugin->Notification->setSuccess('Form successfully edited.');
+					if ($this->model->Form->handleRecord($this->request->getAll())!==false)
+					{
+	
+						$this->plugin->Notification->setSuccess('Form successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
+				}
+				$this->addBreadcrumb('Edit Form','icon-edit','edit/'.$id);
+				$this->setContentView('admin/configureContent/addEditForm');
+				if ($record=$this->model->Form->read($id))
+				{
+					$this->view->setVars($record[0]);
+				}
+				else
+				{
+					$this->view->setVar('record',array());
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+		
+		private function removeForm($id)
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.content.form.delete');
+				if ($this->model->Form->delete(array('id'=>$id)))
+				{
+					$this->plugin->Notification->setSuccess('Form successfully removed.');
+					$this->redirect('/admin/configurecontent/forms/');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			$this->addBreadcrumb('Edit Form','icon-edit','edit/'.$id);
-			$this->setContentView('admin/configureContent/addEditForm');
-			if ($record=$this->model->Form->read($id))
+			catch(AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
-			}
-		}
-		
-		private function removeForm($id)
-		{
-			if ($this->model->Form->delete(array('id'=>$id)))
-			{
-				$this->plugin->Notification->setSuccess('Form successfully removed.');
-				$this->redirect('/admin/configurecontent/forms/');
-			}
-			else
-			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
@@ -493,35 +567,44 @@ HTML;
 		
 		private function downloadFormRecords($id)
 		{
-			$form		=$this->model->Form->read($id);
-			if (isset($form[0]))
+			try
 			{
-				$records	=$this->model->FormSubmission->exportNewRecords($id);
-				if (count($records))
+				$this->plugin->Auth->can('admin.content.form.read');
+				$form=$this->model->Form->read($id);
+				if (isset($form[0]))
 				{
-					$headers	=$this->getHeaders($records);
-					$fileName	=$form[0]['ref'].'_'.time().'_.csv';
-					$CSV=$this->plugin->Format('CSV');
-					$CSV->set_base_dir(APP_HOME.'nutsNBolts'._DS_.'data'._DS_);
-					$CSV->setHeaders($headers);
-					$CSV->new_file($fileName);
-					$CSV->process($records);
-					$CSV->close_file();
-					$this->plugin	->Responder('csv')
-									->forceDownload($fileName)
-									->setData($CSV->read())
-									->send();
+					$records	=$this->model->FormSubmission->exportNewRecords($id);
+					if (count($records))
+					{
+						$headers	=$this->getHeaders($records);
+						$fileName	=$form[0]['ref'].'_'.time().'_.csv';
+						$CSV=$this->plugin->Format('CSV');
+						$CSV->set_base_dir(APP_HOME.'nutsNBolts'._DS_.'data'._DS_);
+						$CSV->setHeaders($headers);
+						$CSV->new_file($fileName);
+						$CSV->process($records);
+						$CSV->close_file();
+						$this->plugin	->Responder('csv')
+										->forceDownload($fileName)
+										->setData($CSV->read())
+										->send();
+					}
+					else
+					{
+						$this->plugin->Notification->setInfo('Sorry, no new records found for export.');
+					}
 				}
 				else
 				{
-					$this->plugin->Notification->setInfo('Sorry, no new records found for export.');
+					$this->plugin->Notification->setError('Cannot export from invalid form.');
 				}
+				$this->redirect('/admin/configurecontent/forms/');
 			}
-			else
+			catch(AuthException $exception)
 			{
-				$this->plugin->Notification->setError('Cannot export from invalid form.');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
-			$this->redirect('/admin/configurecontent/forms/');
 		}
 		
 		private function getHeaders(&$records)
@@ -542,59 +625,69 @@ HTML;
 
 		private function duplicateContentType($id)
 		{
-			$roles=array();
-			$thisContentType=$this->model->ContentType->read(array('id'=>$id));
-
-			if(isset($thisContentType[0]['id']))
+			try
 			{
-				$thisContentType[0]['name'].= " (copy)";	
-				unset($thisContentType[0]['id']);
-
-				$roles['roles']=$thisContentType[0]['roles'];
-				$roles['users']=$thisContentType[0]['users'];
-
-				unset($thisContentType[0]['roles']);
-				unset($thisContentType[0]['users']);					
-			}
-			
-			$duplicatedContentType=$thisContentType[0];
-			$contentTypeId=$this->model->ContentType->insert($duplicatedContentType);
-
-			$thisContentPart=$this->model->ContentPart->read(array('content_type_id'=>$id));
-			for($i=0;$i<count($thisContentPart); $i++)
-			{
-				unset($thisContentPart[$i]['id']);
-				$thisContentPart[$i]['content_type_id']=$contentTypeId;
-			}
- 
- 			foreach($thisContentPart AS $part)
- 			{
- 				$this->model->ContentPart->insert($part);
- 			}
-			if($roles['roles'] > 0)
-			{
-				foreach ($roles['roles'] AS $role)
+				$this->plugin->Auth	->can('admin.content.contentType.read')
+									->can('admin.content.contentType.create');
+				$roles=array();
+				$thisContentType=$this->model->ContentType->read(array('id'=>$id));
+	
+				if(isset($thisContentType[0]['id']))
 				{
-					$role=array
-					(
-						'content_type_id'		=>$contentTypeId,
-						'role_id'				=>$role['id']
-					);
-					$this->model->ContentTypeRole->insert($role);
+					$thisContentType[0]['name'].= " (copy)";	
+					unset($thisContentType[0]['id']);
+	
+					$roles['roles']=$thisContentType[0]['roles'];
+					$roles['users']=$thisContentType[0]['users'];
+	
+					unset($thisContentType[0]['roles']);
+					unset($thisContentType[0]['users']);					
 				}
-
-				foreach ($roles['users'] AS $user)
+				
+				$duplicatedContentType=$thisContentType[0];
+				$contentTypeId=$this->model->ContentType->insert($duplicatedContentType);
+	
+				$thisContentPart=$this->model->ContentPart->read(array('content_type_id'=>$id));
+				for($i=0;$i<count($thisContentPart); $i++)
 				{
-					$user=array
-					(
-						'content_type_id'		=>$contentTypeId,
-						'user_id'				=>$user['id']
-					);
-					$this->model->ContentTypeUser->insert($user);
-				}				
+					unset($thisContentPart[$i]['id']);
+					$thisContentPart[$i]['content_type_id']=$contentTypeId;
+				}
+	 
+				foreach($thisContentPart AS $part)
+				{
+					$this->model->ContentPart->insert($part);
+				}
+				if($roles['roles'] > 0)
+				{
+					foreach ($roles['roles'] AS $role)
+					{
+						$role=array
+						(
+							'content_type_id'		=>$contentTypeId,
+							'role_id'				=>$role['id']
+						);
+						$this->model->ContentTypeRole->insert($role);
+					}
+	
+					foreach ($roles['users'] AS $user)
+					{
+						$user=array
+						(
+							'content_type_id'		=>$contentTypeId,
+							'user_id'				=>$user['id']
+						);
+						$this->model->ContentTypeUser->insert($user);
+					}				
+				}
+				$this->redirect('/admin/configureContent/types/edit/'.$contentTypeId);
+				exit();
 			}
-			$this->redirect('/admin/configureContent/types/edit/'.$contentTypeId);
-			die();
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		
@@ -655,16 +748,25 @@ HTML;
 				}
 				default:
 				{
-					$this->setContentView('admin/configureContent/nav');
-					$this->view->getContext()
-					->registerCallback
-					(
-						'getNavList',
-						function()
-						{
-							print $this->generateNavTypeList();
-						}
-					);
+					try
+					{
+						$this->plugin->Auth->can('admin.content.navigation.read');
+						$this->setContentView('admin/configureContent/nav');
+						$this->view->getContext()
+						->registerCallback
+						(
+							'getNavList',
+							function()
+							{
+								print $this->generateNavTypeList();
+							}
+						);
+					}
+					catch(AuthException $exception)
+					{
+						$this->setContentView('admin/noPermission');
+						$this->view->render();
+					}
 				}
 			}
 			$this->view->render();
@@ -694,54 +796,73 @@ HTML;
 		
 		public function addNav()
 		{
-			if (!$this->request->get('name'))
+			try
 			{
-				$this->addBreadcrumb('Add Navigation','icon-plus','add');
-				$this->setContentView('admin/configureContent/addEditNav');
-			}
-			else
-			{
-
-				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();
-				$this->view->setVar('pageUrls',array());
-				if ($id=$this->model->Nav->handleRecord($record))
+				$this->plugin->Auth->can('admin.content.navigation.create');
+				if (!$this->request->get('name'))
 				{
-					$this->plugin->Notification->setSuccess('Navigation successfully added. Would you like to <a href="/admin/configurecontent/nav/add/">Add another one?</a>');
-					$this->redirect('/admin/configureContent/nav/edit/'.$id);
+					$this->addBreadcrumb('Add Navigation','icon-plus','add');
+					$this->setContentView('admin/configureContent/addEditNav');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+	
+					$record=$this->request->getAll();
+					$record['site_id']=$this->getSiteId();
+					$this->view->setVar('pageUrls',array());
+					if ($id=$this->model->Nav->handleRecord($record))
+					{
+						$this->plugin->Notification->setSuccess('Navigation successfully added. Would you like to <a href="/admin/configurecontent/nav/add/">Add another one?</a>');
+						$this->redirect('/admin/configureContent/nav/edit/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		public function editNav($id)
 		{
-			if ($this->request->get('name'))
+			try
 			{
-				if ($this->model->Nav->handleRecord($this->request->getAll())!==false)
+				$this->plugin->Auth	->can('admin.content.navigation.read')
+									->can('admin.content.navigation.update');
+				if ($this->request->get('name'))
 				{
-
-					$this->plugin->Notification->setSuccess('Navigation successfully edited.');
+					if ($this->model->Nav->handleRecord($this->request->getAll())!==false)
+					{
+	
+						$this->plugin->Notification->setSuccess('Navigation successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
+				}
+				$this->addBreadcrumb('Edit Nav','icon-edit','edit/'.$id);
+				$this->setContentView('admin/configureContent/addEditNav');
+				$navItems=$this->model->NavPart->read(array('nav_id'=>$id));
+				$this->view->setVar('navItems',$navItems);
+				if ($record=$this->model->Nav->read($id))
+				{
+					$this->view->setVars($record[0]);
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$this->view->setVar('record',array());
 				}
 			}
-			$this->addBreadcrumb('Edit Nav','icon-edit','edit/'.$id);
-			$this->setContentView('admin/configureContent/addEditNav');
-			$navItems=$this->model->NavPart->read(array('nav_id'=>$id));
-			$this->view->setVar('navItems',$navItems);
-			if ($record=$this->model->Nav->read($id))
+			catch(AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
@@ -771,14 +892,23 @@ HTML;
 		
 		public function removeNav($id)
 		{
-			if ($this->model->Nav->delete(array('id'=>$id)))
+			try
 			{
-				$this->plugin->Notification->setSuccess('Navigation successfully removed.');
-				$this->redirect('/admin/configurecontent/nav/');
+				$this->plugin->Auth->can('admin.content.navigation.delete');
+				if ($this->model->Nav->delete(array('id'=>$id)))
+				{
+					$this->plugin->Notification->setSuccess('Navigation successfully removed.');
+					$this->redirect('/admin/configurecontent/nav/');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
-			else
+			catch(AuthException $exception)
 			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 	}

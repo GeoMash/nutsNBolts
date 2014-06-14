@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\controller\admin\settings
 {
 	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
 	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ObjectHelper;
@@ -10,77 +11,107 @@ namespace application\nutsNBolts\controller\admin\settings
 	{
 		public function index()
 		{
-			$this->addBreadcrumb('System','icon-wrench','settings');
-			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
-			
-			$this->setContentView('admin/settings/permissions/roles');
-			
-			$this->view->getContext()
-				->registerCallback
-				(
-					'getRoles',
-					function()
-					{
-						return $this->getRoles(null);
-					}
-				);
-			
-			$renderRef='permissions';
-			$this->execHook('onBeforeRender',$renderRef);
-			$this->view->render();
+			try
+			{
+				$this->plugin->Auth->can('admin.permissions.role.read');
+				
+				$this->addBreadcrumb('System','icon-wrench','settings');
+				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
+				
+				$this->setContentView('admin/settings/permissions/roles');
+				
+				$this->view->getContext()
+					->registerCallback
+					(
+						'getRoles',
+						function()
+						{
+							return $this->getRoles(null);
+						}
+					);
+				
+				$renderRef='permissions';
+				$this->execHook('onBeforeRender',$renderRef);
+				$this->view->render();
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		public function addRole()
 		{
-			$this->addBreadcrumb('System','icon-wrench','settings');
-			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
-			$this->addBreadcrumb('Add Role','icon-pencil','editRole');
-			
-			if ($this->request->get('name'))
+			try
 			{
-				$record=$this->request->getAll();
-				if ($id=$this->model->Role->handleRecord($record)!==false)
+				$this->plugin->Auth->can('admin.permissions.role.create');
+				
+				$this->addBreadcrumb('System','icon-wrench','settings');
+				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
+				$this->addBreadcrumb('Add Role','icon-pencil','editRole');
+				
+				if ($this->request->get('name'))
 				{
-					var_dump($id);exit();
-					$this->plugin->Notification->setSuccess('Role successfully added. Would you like to <a href="/admin/settings/permissions/addRole/">Add another one?</a>');
-					$this->redirect('/admin/settings/permissions/editRole/'.$id);
+					$record=$this->request->getAll();
+					if ($id=$this->model->Role->handleRecord($record)!==false)
+					{
+						var_dump($id);exit();
+						$this->plugin->Notification->setSuccess('Role successfully added. Would you like to <a href="/admin/settings/permissions/addRole/">Add another one?</a>');
+						$this->redirect('/admin/settings/permissions/editRole/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
-				else
-				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
-				}
+				
+				$this->setupAddEditPage();
 			}
-			
-			$this->setupAddEditPage();
+			catch (AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		public function editRole($id)
 		{
-			if ($this->request->get('id'))
+			try
 			{
-				$record=$this->request->getAll();
-				if ($role=$this->model->Role->handleRecord($record)!==false)
+				$this->plugin->Auth	->can('admin.permissions.role.read')
+									->can('admin.permissions.role.update');
+				if ($this->request->get('id'))
 				{
-					$this->plugin->Notification->setSuccess('Role successfully edited.');
+					$record=$this->request->getAll();
+					if ($role=$this->model->Role->handleRecord($record)!==false)
+					{
+						$this->plugin->Notification->setSuccess('Role successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
-				else
+				
+				$this->addBreadcrumb('System','icon-wrench','settings');
+				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
+				$this->addBreadcrumb('Edit Role','icon-pencil','editRole');
+				
+				if ($record=$this->model->Role->read($id))
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$this->view->setVars($record[0]);
 				}
+				$this->setupAddEditRole();
 			}
-			
-			$this->addBreadcrumb('System','icon-wrench','settings');
-			$this->addBreadcrumb('Permissions','icon-bolt','permissions');
-			$this->addBreadcrumb('Edit Role','icon-pencil','editRole');
-			
-			if ($record=$this->model->Role->read($id))
+			catch (AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
-			$this->setupAddEditPage();
 		}
 		
-		private function setupAddEditPage()
+		private function setupAddEditRole()
 		{
 			$this->setContentView('admin/settings/permissions/addEditRole');
 			
@@ -99,8 +130,6 @@ namespace application\nutsNBolts\controller\admin\settings
 			
 			$this->view->render();
 		}
-		
-		
 		
 		public function getRoles()
 		{
