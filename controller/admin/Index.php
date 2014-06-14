@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use nutshell\helper\ArrayHelper;
 	use nutshell\core\exception\NutshellException;
 	// use application\nutsNBolts\controller\admin\ConfigureContent;
@@ -265,37 +266,43 @@ namespace application\nutsNBolts\controller\admin
 			{
 				$this->view->setTemplate('login');
 			}
-			else
+			else try
 			{
-				$result=$this->model->User->authenticate
+				$this->plugin->Auth->authenticate
 				(
 					$this->request->get('username'),
 					$this->request->get('password')
 				);
-				if ($result)
+				$this->plugin->Auth	->can('login')
+									->can('access.adminPanel');
+				if (!empty($this->plugin->Session->returnURL))
 				{
-					$this->plugin->Session->authenticated=true;
-					$this->plugin->Session->userId=$result['id'];
-					if (!empty($this->plugin->Session->returnURL))
-					{
-						$this->redirect($this->plugin->Session->returnURL);
-					}
-					else
-					{
-						$this->redirect('/admin/dashboard');
-					}
+					$this->redirect($this->plugin->Session->returnURL);
 				}
 				else
 				{
-					$this->view->setTemplate('login');
+					$this->redirect('/admin/dashboard');
 				}
+			}
+			catch (AuthException $exception)
+			{
+				$code=$exception->getCode();
+				if ($code==AuthException::PERMISSION_DENIED)
+				{
+					$this->plugin->Notification->setError('['.$code.'] You are not allowed to login here.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('['.$code.'] Your login details were incorrect.');
+				}
+				$this->plugin->Auth->unauthenticate();
+				$this->view->setTemplate('login');
 			}
 		}
 		
 		public function logout()
 		{
-			unset($this->plugin->Session->authenticated);
-			unset($this->plugin->Session->userId);
+			$this->plugin->Auth->unauthenticate();
 			$this->redirect('/admin/login/');
 		}
 	}
