@@ -24,14 +24,14 @@ namespace application\nutsNBolts\controller\admin
 
         public function view($messageId)
         {
-            if($record=$this->model->Message->read(array('id'=>$messageId)))
-            {
-                $this->model->Message->update(array('status'=>1),$search);
-            }
-            $this->view->setVar('record',$record);
-            $this->setContentView('admin/viewMessage');
-            $this->addBreadcrumb('Messages','icon-inbox','messages');
-            $this->view->render();
+				if($record=$this->model->Message->read(array('id'=>$messageId)))
+				{
+					$this->model->Message->update(array('status'=>1));
+				}
+				$this->view->setVar('record',$record);
+				$this->setContentView('admin/viewMessage');
+				$this->addBreadcrumb('Messages','icon-inbox','messages');
+				$this->view->render();
         }
 
         private function generateMessageRows()
