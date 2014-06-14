@@ -172,63 +172,72 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function template()
 		{
-			$nodes=$this->request->getNodes();
-			ArrayHelper::without
-			(
-				$nodes,
-				array
-				(
-					$this->request->node(0),
-					$this->request->node(1)
-				)
-			);
-			$templatePath	='admin/'.implode('/',$nodes);
-			// $template		=$this->plugin->Template();
-			// $template->setTemplate($this->view->buildViewPath($templatePath));
-			
-			switch ($templatePath)
+			$html='';
+			try
 			{
-				case 'admin/configureContent/addWidgetSelection':
-				{
-					$html=$this->buildWidgetHTML
+				$nodes=$this->request->getNodes();
+				ArrayHelper::without
+				(
+					$nodes,
+					array
 					(
-						$this->application->NutsNBolts->getWidgetList(),
-						$this->request->get('index')
-					);
-					break;
-				}
-				case 'admin/fileManager/collections':
+						$this->request->node(0),
+						$this->request->node(1)
+					)
+				);
+				$templatePath	='admin/'.implode('/',$nodes);
+				// $template		=$this->plugin->Template();
+				// $template->setTemplate($this->view->buildViewPath($templatePath));
+				
+				switch ($templatePath)
 				{
-					$template=$this->plugin->Template();
-					$template->setTemplate($this->view->buildViewPath('admin/fileManager/collections'));
-
-					$template->setKeyVal('collections',$this->plugin->Collection->getCollections());
-					$html=$template->compile();
-					break;
-				}
-				case 'admin/fileManager/files':
-				{
-					$template=$this->plugin->Template();
-					$template->setTemplate($this->view->buildViewPath('admin/fileManager/files'));
-					
-					$collection=$this->model->Collection->read($this->request->get('id'))[0];
-					$template->setKeyVal('collectionName',$collection['name']);
-					
-					try
+					case 'admin/configureContent/addWidgetSelection':
 					{
-						$fileList=$this->plugin->FileSystem->getFileListFromCollection($this->request->get('id'));
-						$template->setKeyVal('files',$fileList);
+						$html=$this->buildWidgetHTML
+						(
+							$this->application->NutsNBolts->getWidgetList(),
+							$this->request->get('index')
+						);
+						break;
 					}
-					catch (NutshellException $exception)
+					case 'admin/fileManager/collections':
 					{
-						$template->setKeyVal('files',array());
+						$this->plugin->Auth->can('admin.collection.read');
+						$template=$this->plugin->Template();
+						$template->setTemplate($this->view->buildViewPath('admin/fileManager/collections'));
+	
+						$template->setKeyVal('collections',$this->plugin->Collection->getCollections());
+						$html=$template->compile();
+						break;
 					}
-					
-
-					
-					$html=$template->compile();
-					break;
+					case 'admin/fileManager/files':
+					{
+						$this->plugin->Auth->can('admin.collection.read');
+						$template=$this->plugin->Template();
+						$template->setTemplate($this->view->buildViewPath('admin/fileManager/files'));
+						
+						$collection=$this->model->Collection->read($this->request->get('id'))[0];
+						$template->setKeyVal('collectionName',$collection['name']);
+						
+						try
+						{
+							$fileList=$this->plugin->FileSystem->getFileListFromCollection($this->request->get('id'));
+							$template->setKeyVal('files',$fileList);
+						}
+						catch (NutshellException $exception)
+						{
+							$template->setKeyVal('files',array());
+						}
+						$html=$template->compile();
+						break;
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$template=$this->plugin->Template();
+				$template->setTemplate($this->view->buildViewPath('admin/noPermission'));
+				$html=$template->compile();
 			}
 			$this->plugin	->Responder('html')
 							->setData($html)
