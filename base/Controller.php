@@ -28,9 +28,10 @@ namespace application\nutsNBolts\base
 			{
 				die('No site bound for this domain! Site should be "'.$this->getSiteRef().'".');
 			}
-			if ($this->plugin->UserAuth->isAuthenticated())
+			$this->plugin->Auth();
+			if ($this->plugin->Auth->isAuthenticated())
 			{
-				$this->user=$this->plugin->UserAuth->getUser();
+				$this->user=$this->plugin->Auth->getUser();
 				$this->view->setVar('user',$this->user);
 			}
 			$this->view->getContext()
