@@ -15,57 +15,53 @@ namespace application\nutsNBolts\controller\rest
 
 		public function search()
 		{
-			$facets=$this->request->get('facets');
-			if(count($facets))
+			$facets=$this->request->get('item');
+			if($facets[0])
 			{
+				$json=json_decode($facets,true);
+
+				$videoContentTypeId=\application\efti\Efti::CONTENT_TYPE_VIDEO;
+				$allVideos=$this->model->Node->getWithParts(['content_type_id'=>$videoContentTypeId]);
+				$requiredKeys=[];
 				
+				foreach($json AS $searchKeys=>$searchItem)
+				{
+					// generate an array of the required facet keys to search the node data with.
+					$facetKey=strtolower(str_replace('-','_',$searchKeys));
+					$requiredKeys[]=$facetKey;
+					// cleanup the json array with the proper index to help speed up the search speed.
+					$json[$facetKey]=$json[$searchKeys];
+					unset($json[$searchKeys]);
+				}
+				
+				for($i=0,$j=count($allVideos);$i<$j;$i++)
+				{
+					if(count(array_intersect_key(array_flip($requiredKeys), $allVideos[$i])) === count($requiredKeys))
+					{
+						// all the search criteria exists (not the search value)
+						for($b=0,$c=count($requiredKeys);$b<$c;$b++)
+						{
+							if(!in_array($allVideos[$i][$requiredKeys[$b]],$json[$requiredKeys[$b]]))
+							{
+								unset($allVideos[$i]);
+							}
+							else
+							{
+								$allVideos[$i]['thumbnail']=$this->plugin->Video->getThumbnail($allVideos[$i]['video']);
+							}
+						}
+					}
+				}
 			}
-			
-			$this->setResponseCode(200);
-			$this->respond
-			(
-				true,
-				'OK HaHa',
-				$facets
-			);			
-		}
-		
-		/*
-		 * sample request: $.getJSON('/rest/login/loginByEmail/xxx/***.json');
-		 */
-		public function loginByEmail()
-		{
-			
-			$user=$this->plugin->UserAuth->authenticate
-			(
-				[
-					'email'=>$this->request->get('email')
-				],
-					$this->request->get('password')
-			);
-			if ($user)
+
+			if(count($allVideos))
 			{
-				$dateTime=new DateTime();
-				if (isset($this->request->get['email']))
-				{
-					$this->plugin->Mvc->model->User->update(array('date_lastlogin'=> $dateTime->format('Y-m-d H:i:s')),array('email'=>$user['email']));
-				}
-				else if (isset($this->request->get['phone']))
-				{
-					$this->plugin->Mvc->model->User->update(array('date_lastlogin'=> $dateTime->format('Y-m-d H:i:s')),array('phone'=>$user['phone']));
-				}
-				$session=Nutshell::getInstance()->plugin->Session;
-				$session->email=$user['email'];
-				$session->phone=$user['phone'];
-				$session->userId=$user['id'];
-				$session->authenticated=true;
-				
 				$this->setResponseCode(200);
 				$this->respond
 				(
 					true,
 					'OK',
-					true
+					array('results'=>array_values($allVideos))
 				);
 			}
 			else
@@ -74,11 +70,11 @@ namespace application\nutsNBolts\controller\rest
 				$this->respond
 				(
 					true,
-					'OK',
-					false
+					'EMPTY',
+					null
 				);
 			}
-		}
+		}	
 	}
 }
 ?>
