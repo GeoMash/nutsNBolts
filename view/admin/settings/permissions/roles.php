@@ -37,7 +37,7 @@
 									<td class=""><?php print $roles[$i]['ref']; ?></td>
 									<td class=""><?php print $roles[$i]['status']; ?></td>
 									<td class="center">
-										<a href="/admin/settings/users/remove/<?php print $roles[$i]['id']; ?>">
+										<a href="/admin/settings/permissions/removeRole/<?php print $roles[$i]['id']; ?>">
 											<button title="Archive" class="btn btn-mini btn-red">
 												<i class="icon-remove"></i>
 											</button>
