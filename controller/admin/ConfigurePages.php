@@ -2,7 +2,8 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
-	
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
+
 	class ConfigurePages extends AdminController
 	{
 		public function index()
@@ -48,16 +49,25 @@ namespace application\nutsNBolts\controller\admin
 				case 'remove':	$this->removeType($id);	break;
 				default:
 				{
-					$this->setContentView('admin/configurePages/types');
-					$this->view->getContext()
-					->registerCallback
-					(
-						'getTypesList',
-						function()
-						{
-							print $this->generateTypeList();
-						}
-					);
+					try
+					{
+						$this->plugin->Auth->can('admin.pageType.read');
+						$this->setContentView('admin/configurePages/types');
+						$this->view->getContext()
+						->registerCallback
+						(
+							'getTypesList',
+							function()
+							{
+								print $this->generateTypeList();
+							}
+						);
+					}
+					catch(AuthException $exception)
+					{
+						$this->setContentView('admin/noPermission');
+						$this->view->render();
+					}
 				}
 			}
 			$this->view->render();
@@ -84,16 +94,25 @@ namespace application\nutsNBolts\controller\admin
 					case 'remove':	$this->removePage($id);	break;
 					default:
 					{
-						$this->setContentView('admin/configurePages/pages');
-						$this->view->getContext()
-						->registerCallback
-						(	
-							'getPagesList',
-							function()
-							{
-								print $this->generatePageList();
-							}
-						);
+						try
+						{
+							$this->plugin->Auth->can('admin.pages.read');
+							$this->setContentView('admin/configurePages/pages');
+							$this->view->getContext()
+							->registerCallback
+							(	
+								'getPagesList',
+								function()
+								{
+									print $this->generatePageList();
+								}
+							);
+						}
+						catch(AuthException $exception)
+						{
+							$this->setContentView('admin/noPermission');
+							$this->view->render();
+						}
 					}
 				}
 				$this->view->getContext()
@@ -117,129 +136,184 @@ namespace application\nutsNBolts\controller\admin
 		
 		private function addType()
 		{
-
-			if (!$this->request->get('name'))
+			try
 			{
-				$this->addBreadcrumb('Add Page','icon-copy','add');
-				$this->setContentView('admin/configurePages/addEditType');
-			}
-			else
-			{
-				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();
-				if ($id=$this->model->PageType->handleRecord($record))
+				$this->plugin->Auth->can('');
+				if (!$this->request->get('name'))
 				{
-					$this->plugin->Notification->setSuccess('Page type successfully added. Would you like to <a href="/admin/configurepages/types/add/">Add another one?</a>');
-					$this->redirect('/admin/configurepages/types/edit/'.$id);
+					$this->addBreadcrumb('Add Page','icon-copy','add');
+					$this->setContentView('admin/configurePages/addEditType');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$record=$this->request->getAll();
+					$record['site_id']=$this->getSiteId();
+					if ($id=$this->model->PageType->handleRecord($record))
+					{
+						$this->plugin->Notification->setSuccess('Page type successfully added. Would you like to <a href="/admin/configurepages/types/add/">Add another one?</a>');
+						$this->redirect('/admin/configurepages/types/edit/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function addPage()
 		{
-			// MD we dont have field with "name", checking the next best thing which is URL
-			if (!$this->request->get('url'))
+			try
 			{
-				$this->addBreadcrumb('Add Page','icon-plus','add');
-				$this->setContentView('admin/configurePages/addEditPage');
-			}
-			else
-			{
-				$record=$this->request->getAll();
-				$record['site_id']=$this->getSiteId();
-				if ($id=$this->model->Page->handleRecord($record))
+				$this->plugin->Auth->can('admin.pages.create');
+				// MD we dont have field with "name", checking the next best thing which is URL
+				if (!$this->request->get('url'))
 				{
-					$this->plugin->Notification->setSuccess('Page successfully added. Would you like to <a href="/admin/configurepages/pages/add/">Add another one?</a>');
-					$this->redirect('/admin/configurepages/pages/edit/'.$id);
+					$this->addBreadcrumb('Add Page','icon-plus','add');
+					$this->setContentView('admin/configurePages/addEditPage');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$record=$this->request->getAll();
+					$record['site_id']=$this->getSiteId();
+					if ($id=$this->model->Page->handleRecord($record))
+					{
+						$this->plugin->Notification->setSuccess('Page successfully added. Would you like to <a href="/admin/configurepages/pages/add/">Add another one?</a>');
+						$this->redirect('/admin/configurepages/pages/edit/'.$id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
 				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function editType($id)
 		{
-			if ($this->request->get('id'))
+			try
 			{
-				if ($this->model->PageType->handleRecord($this->request->getAll())!==false)
+				$this->plugin->Auth->can('admin.pageType.read');
+				$this->plugin->Auth->can('admin.pageType.update');
+				if ($this->request->get('id'))
 				{
-					$this->plugin->Notification->setSuccess('Page type successfully edited.');
+					if ($this->model->PageType->handleRecord($this->request->getAll())!==false)
+					{
+						$this->plugin->Notification->setSuccess('Page type successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
+				}
+				$this->addBreadcrumb('Edit Page Type','icon-edit','edit/'.$id);
+				$this->setContentView('admin/configurePages/addEditType');
+				$this->view->setVar('pageUrls',array());
+				if ($record=$this->model->PageType->read($id))
+				{
+					$this->view->setVars($record[0]);
 				}
 				else
 				{
-					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					$this->view->setVar('record',array());
 				}
 			}
-			$this->addBreadcrumb('Edit Page Type','icon-edit','edit/'.$id);
-			$this->setContentView('admin/configurePages/addEditType');
-			$this->view->setVar('pageUrls',array());
-			if ($record=$this->model->PageType->read($id))
+			catch(AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		private function editPage($id)
 		{
-			if ($this->request->get('id'))
+			try
 			{
-				if ($this->model->Page->handleRecord($this->request->getAll())!==false)
+				$this->plugin->Auth->can('admin.pages.read');
+				$this->plugin->Auth->can('admin.pages.update');
+				if ($this->request->get('id'))
 				{
-					$this->plugin->Notification->setSuccess('Page successfully edited.');
+					if ($this->model->Page->handleRecord($this->request->getAll())!==false)
+					{
+						$this->plugin->Notification->setSuccess('Page successfully edited.');
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+					}
+				}
+				$pageURLs	=$this->model->PageMap->read(array('page_id'=>$id));
+	
+				$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
+				$this->setContentView('admin/configurePages/addEditPage');
+				$this->view->setVar('pageUrls',$pageURLs);
+				if ($record=$this->model->Page->read($id))
+				{
+					$this->view->setVars($record[0]);
+				}
+				else
+				{
+					$this->view->setVar('record',array());
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+		
+		public function removeType($id)
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.pageType.delete');
+				if ($this->model->PageType->handleDeleteRecord($id))
+				{
+					$this->plugin->Notification->setSuccess('Page type successfully removed.');
+					$this->redirect('/admin/configurepages/types/');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
 			}
-			$pageURLs	=$this->model->PageMap->read(array('page_id'=>$id));
-
-			$this->addBreadcrumb('Edit Page','icon-edit','edit/'.$id);
-			$this->setContentView('admin/configurePages/addEditPage');
-			$this->view->setVar('pageUrls',$pageURLs);
-			if ($record=$this->model->Page->read($id))
+			catch(AuthException $exception)
 			{
-				$this->view->setVars($record[0]);
-			}
-			else
-			{
-				$this->view->setVar('record',array());
-			}
-		}
-		
-		public function removeType($id)
-		{
-			if ($this->model->PageType->handleDeleteRecord($id))
-			{
-				$this->plugin->Notification->setSuccess('Page type successfully removed.');
-				$this->redirect('/admin/configurepages/types/');
-			}
-			else
-			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		
 		public function removePage($id)
 		{
-			if ($this->model->Page->handleDeleteRecord($id))
+			try
 			{
-				$this->plugin->Notification->setSuccess('Page successfully removed.');
-				$this->redirect('/admin/configurepages/pages/');
+				$this->plugin->Auth->can('admin.pages.delete');
+				if ($this->model->Page->handleDeleteRecord($id))
+				{
+					$this->plugin->Notification->setSuccess('Page successfully removed.');
+					$this->redirect('/admin/configurepages/pages/');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
 			}
-			else
+			catch(AuthException $exception)
 			{
-				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
 			}
 		}
 		

@@ -1,0 +1,194 @@
+<?php
+namespace application\nutsNBolts\plugin\auth
+{
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
+	use nutshell\behaviour\Native;
+	use nutshell\behaviour\Singleton;
+	use nutshell\Nutshell;
+	use application\nutsNBolts\base\Plugin;
+	use application\nutsNBolts\NutsNBolts;
+
+	class Auth extends Plugin implements Singleton, Native
+	{
+		private $user					=null;
+		private $impersonatingUser		=null;
+		private $permissionFullMatrix	=null;
+		private $permissionKeyMatrix	=null;
+
+		public static function registerBehaviours(){}
+		
+		public function init()
+		{
+			if ($connection=Nutshell::getInstance()->config->plugin->Mvc->connection)
+			{
+				$this->db=$this->plugin->Db->{$connection};
+			}
+			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
+			if ($this->isAuthenticated())
+			{
+				$this->generateUserPermissionsMatrix();
+			}
+		}
+		
+		public function authenticate($email,$password)
+		{
+			$user=$this->plugin->Mvc->model->User->read(['email'=>$email]);
+			if (isset($user[0]))
+			{
+				$userSalt	=$user[0]['salt'];
+				$systemSalt	=Nutshell::getInstance()->config->application->salt;
+				$email		=$user[0]['email'];
+				$result		=$this->plugin->Mvc->model->User->read
+				(
+					array
+					(
+						'email'			=>$email,
+						'password'		=>md5($systemSalt.$userSalt.$password),
+						'status'		=>1
+					)
+				);
+				
+				if (isset($result[0]))
+				{
+					$this->plugin->Session->authenticated=true;
+					$this->plugin->Session->userId=$result[0]['id'];
+					return $result[0];
+				}
+				else
+				{
+					throw new AuthException(AuthException::INVALID_PASSWORD,'Invalid login.');
+				}
+			}
+			else
+			{
+				throw new AuthException(AuthException::INVALID_USERNAME,'Sorry, username not registered.');
+			}
+		}
+
+		public function unauthenticate()
+		{
+			$session=Nutshell::getInstance()->plugin->Session;
+			unset($session->authenticated);
+			unset($session->userId);
+			$session->destroy();
+		}
+		
+		public function startImpersonating($userId)
+		{
+			$user=$this->plugin->Mvc->model->User->read(['id'=>$userId]);
+			if (isset($user[0]))
+			{
+				$this->impersonatingUser=$user;
+			}
+			$this->generateUserPermissionsMatrix();
+			return $this;
+		}
+		
+		public function stopImpersonating()
+		{
+			$this->impersonatingUser=null;
+			$this->generateUserPermissionsMatrix();
+			return $this;
+		}
+		
+		public function isImpersonating()
+		{
+			return (!is_null($this->impersonatingUser));
+		}
+
+		public function getUser()
+		{
+			return $this->user;
+		}
+
+		public function getUserId()
+		{
+			return $this->user['id'];
+		}
+
+		public function isAuthenticated()
+		{
+			return isset(Nutshell::getInstance()->plugin->Session->userId);
+		}
+
+		public function isSuperUser()
+		{
+			$user=$this->getUser();
+			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
+			{
+				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		public function getUserRoles()
+		{
+			return $this->getUser()['roles'];
+		}
+		
+		public function generateUserPermissionsMatrix()
+		{
+			if (is_null($this->permissionMatrix))
+			{
+				$roles			=$this->getUserRoles();
+				$permissionIDs	=[];
+				//Capture the permission id of every assigned permission in every role assigned to the user.
+				for ($i=0,$j=count($roles); $i<$j; $i++)
+				{
+					$thesePermissions=$this->model->PermissionRole->read(['role_id'=>$roles[$i]['id']]);
+					for ($k=0,$l=count($thesePermissions); $k<$l; $k++)
+					{
+						$permissionIDs[]=$thesePermissions[$k]['permission_id'];
+					}
+				}
+				//Now capture every permission id which is explicitly assigned to the user.
+				$thesePermissions	=$this->model->PermissionUser->read(['user_id'=>$this->getUserId()]);
+				for ($i=0,$j=count($thesePermissions); $i<$j; $i++)
+				{
+					$permissionIDs[]=$thesePermissions[$i]['permission_id'];
+				}
+				if (count($permissionIDs))
+				{
+					//Generate a single query to capture all the permissions.
+					$permissionIDs=implode(',',$permissionIDs);
+					$query=<<<SQL
+					SELECT * FROM permission
+					WHERE id IN({$permissionIDs});
+SQL;
+					$result=$this->plugin->Db->nutsnbolts->select($query);
+					if ($result)
+					{
+						$this->permissionFullMatrix=$this->plugin->Db->nutsnbolts->result('assoc');
+					}
+					else
+					{
+						$this->permissionFullMatrix=[];
+					}
+					$this->permissionKeyMatrix=[];
+					for ($i=0,$j=count($this->permissionFullMatrix); $i<$j; $i++)
+					{
+						$this->permissionKeyMatrix[]=$this->permissionFullMatrix[$i]['key'];
+					}
+				}
+				else
+				{
+					$this->permissionFullMatrix	=[];
+					$this->permissionKeyMatrix	=[];
+				}
+			}
+			return $this;
+		}
+		
+		public function can($do)
+		{
+			if ($this->isSuperUser() || in_array($do,$this->permissionKeyMatrix))
+			{
+				return $this;
+			}
+			throw new AuthException(AuthException::PERMISSION_DENIED,'Permission Denied.');
+		}
+	}
+}

@@ -2,36 +2,55 @@
 namespace application\nutsNBolts\controller\admin
 {
     use application\nutsNBolts\base\AdminController;
-    use nutshell\helper\ObjectHelper;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
+	use nutshell\helper\ObjectHelper;
 
     class Messages extends AdminController
     {
         public function index()
         {
-            $this->setContentView('admin/messages');
-            $this->view->getContext()
-                ->registerCallback
-                (
-                    'allMessages',
-                    function()
-                    {
-                        print $this->generateMessageRows();
-                    }
-                );
-            $this->addBreadcrumb('Messages','icon-inbox','messages');
-            $this->view->render();
+			try
+			{
+				$this->plugin->Auth->can('user.messsage.read');
+				$this->setContentView('admin/messages');
+				$this->view->getContext()
+					->registerCallback
+					(
+						'allMessages',
+						function()
+						{
+							print $this->generateMessageRows();
+						}
+					);
+				$this->addBreadcrumb('Messages','icon-inbox','messages');
+				$this->view->render();
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
         }
 
         public function view($messageId)
         {
-            if($record=$this->model->Message->read(array('id'=>$messageId)))
-            {
-                $this->model->Message->update(array('status'=>1),$search);
-            }
-            $this->view->setVar('record',$record);
-            $this->setContentView('admin/viewMessage');
-            $this->addBreadcrumb('Messages','icon-inbox','messages');
-            $this->view->render();
+			try
+			{
+				$this->plugin->Auth->can('user.messsage.read');
+				if($record=$this->model->Message->read(array('id'=>$messageId)))
+				{
+					$this->model->Message->update(array('status'=>1));
+				}
+				$this->view->setVar('record',$record);
+				$this->setContentView('admin/viewMessage');
+				$this->addBreadcrumb('Messages','icon-inbox','messages');
+				$this->view->render();
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
         }
 
         private function generateMessageRows()

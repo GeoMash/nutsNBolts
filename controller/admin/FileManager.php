@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\controller\admin
 {
 	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
 	use nutshell\helper\ObjectHelper;
 	
@@ -16,9 +17,18 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function upload($collectionID)
 		{
-			$this->collectionID=$collectionID;
-			$this->plugin->Plupload->setCallback(array($this,'uploadComplete'));
-			$this->plugin->Plupload->upload();
+			try
+			{
+				$this->plugin->Auth->can('admin.collection.create');
+				$this->collectionID=$collectionID;
+				$this->plugin->Plupload->setCallback(array($this,'uploadComplete'));
+				$this->plugin->Plupload->upload();
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
 		}
 		
 		public function uploadComplete($basename)
