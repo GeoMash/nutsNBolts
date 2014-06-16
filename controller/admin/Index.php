@@ -283,7 +283,7 @@ namespace application\nutsNBolts\controller\admin
 					$this->request->get('password')
 				);
 				$this->plugin->Auth	->can('login')
-									->can('access.adminPanel');
+									->can('admin.access');
 				if (!empty($this->plugin->Session->returnURL))
 				{
 					$this->redirect($this->plugin->Session->returnURL);
