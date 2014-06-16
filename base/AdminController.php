@@ -34,12 +34,6 @@ namespace application\nutsNBolts\base
 
 			if ($this->plugin->Auth->isAuthenticated())
 			{
-//				if (!$this->isSuper() && $this->challengeRole('STANDARD'))
-				if (!($this->isSuper() || $this->isAdmin()))
-				{
-					$this->redirect('/');
-				}
-
 				$this->view->setTemplate('admin');
 				$mainNav=($this->request->node(1))?$this->request->node(1):'dashboard';
 				$this->view->setVar('nav_active_main',$mainNav);
