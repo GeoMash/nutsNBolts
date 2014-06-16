@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest
 {
+	use application\efti\Efti;
 	use application\plugin\rest\RestController;
 	use nutshell\Nutshell;
 	use nutshell\plugin\session; 
@@ -10,8 +11,11 @@ namespace application\nutsNBolts\controller\rest
 	{
 		private $map=array
 		(
-			'facetedSearch'				=>'search'
+			'facetedSearch'					=>'search',
+			'createPlaylist'				=>'createPlaylist',
+			'addToPlaylist'					=>'addToPlaylist'
 		);
+		
 
 		public function search()
 		{
@@ -74,7 +78,108 @@ namespace application\nutsNBolts\controller\rest
 					null
 				);
 			}
-		}	
+		}
+		
+		public function createPlaylist()
+		{
+			$record							=[];
+			$record['original_user_id']		=$this->plugin->Session->userId;
+			$record['status']				=2;
+			
+			foreach($this->request->getAll() AS $key=>$val)
+			{
+				$record[$key]=$val;				
+			}
+			
+			$nodeId=$this->plugin->Mvc->model->Node->handleRecord($record);
+			
+			$record['id']=$nodeId;
+			$this->setResponseCode(200);
+			$this->respond
+			(
+				true,
+				'OK',
+				$record
+			);
+		}
+		
+		public function addToPlaylist()
+		{
+			$record							=[];
+			$record['original_user_id']		=$this->plugin->Session->userId;
+			$record['status']				=2;
+
+			$thisPlayList=$this->plugin->Mvc->model->Node->read
+			(
+				[
+					'id'				=>$this->request->get('_playlist'),
+					'original_user_id'	=>$this->plugin->Session->userId,
+					'content_type_id'	=>Efti::CONTENT_TYPE_PLAYLIST
+				]
+			);
+
+			$allPlayLists=$this->plugin->Mvc->model->Node->getWithParts
+			(
+				[
+					'id'	=>$thisPlayList[0]['id']
+				]	
+			);
+//			$lastOrder=0;
+//			if(count($allPlayLists))
+//			{
+//				for($i=0,$j=count($allPlayLists);$i<$j;$i++)
+//				{
+//					if($allPlayLists[$i]['order'] > $lastOrder)
+//					{
+//						$oldOrder=$allPlayLists[$i]['order'];
+//					}
+//				}
+//			}
+//			else
+//			{
+//				$oldOrder=0;
+//			}
+			
+			$order=1;
+			
+			foreach($this->request->getAll() AS $key=>$val)
+			{
+				if($key=='_playlist')
+				{
+					continue;
+				}
+				$record[$key]=$val;				
+			}
+			
+			$record['last_user_id'] = $this->plugin->Session->userId;
+			$record['id'] = '';
+			$record['transition_id'] = '';
+			$record["node_part_id_".Efti::PLAYLIST_ORDER."_0"]=$order;
+
+			$id=$this->plugin->Mvc->model->Node->handleRecord($record);
+			
+			if($id)
+			{
+				$this->setResponseCode(200);
+				$this->respond
+				(
+					true,
+					'OK',
+					true
+				);
+			}
+			else
+			{
+				$this->setResponseCode(200);
+				$this->respond
+				(
+					true,
+					'ERROR',
+					false
+				);
+			}
+			
+		}
 	}
 }
 ?>
