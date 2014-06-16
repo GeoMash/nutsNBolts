@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest
 {
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\plugin\rest\RestController;
 	use nutshell\Nutshell;
 	use nutshell\plugin\session; 
@@ -9,15 +10,94 @@ namespace application\nutsNBolts\controller\rest
 	{
 		private $map=array
 		(
-			'edit'						=>'edit',
+			''								=>'getAll',
+			'search'						=>'search',
+			'{int}'							=>'getById',
+			'edit'							=>'edit',
+			'impersonate/{string}/{int}'	=>'impersonate'
 		);
+		
+		/*
+		 * sample request: $.getJSON('/rest/user.json?name=Joe');
+		 */
+		public function getAll()
+		{
+			$users=$this->model->User->read($this->request->getAll());
+			$this->filterUserData($users);
+			$this->setResponseCode(200);
+			$this->respond(true,'OK',$users);
+		}
+		
+		public function search()
+		{
+			$search=$this->request->get('query');
+			if (is_numeric($search))
+			{
+				$query='SELECT * FROM user WHERE id=?;';
+			}
+			else
+			{
+				$query	='SELECT * FROM user WHERE email LIKE ?;';
+				$search	='%'.$search.'%';
+			}
+			$users=[];
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,[$search]))
+			{
+				$users=$this->plugin->Db->nutsnbolts->result('assoc');
+				$this->filterUserData($users);
+			}
+			$this->setResponseCode(200);
+			$this->respond(true,'OK',$users);
+		}
+		
+		private function filterUserData(Array &$users)
+		{
+			for ($i=0,$j=count($users); $i<$j; $i++)
+			{
+				unset($users[$i]['password']);
+				unset($users[$i]['salt']);
+			}
+		}
+		
+		/*
+		 * sample request: $.getJSON('/rest/user/1.json');
+		 */
+		public function getById()
+		{
+			$userId=$this->getFullRequestPart(2);
+			if (isset($userId) && is_numeric($userId))
+			{
+				$user=$this->model->User->read(['id'=>$userId]);
+				$this->filterUserData($user);
+				if($user[0])
+				{
+					$this->setResponseCode(200);
+					$this->respond
+					(
+						true,
+						'OK',
+						$user[0]
+					);					
+				}
+			}
+			else
+			{
+				$this->setResponseCode(404);
+				$this->respond
+				(
+					false,
+					'Expecting user id to be an integer.'
+				);
+			}
+		}	
 		
 		public function edit()
 		{
-			$userId=$this->plugin->Session->userId;
-			if(isset($userId) && is_numeric($userId))
+			try
 			{
-				if($this->plugin->Session->authenticated)
+				$this->plugin->Auth->can('admin.user.update');
+				$userId=$this->plugin->Session->userId;
+				if (isset($userId) && is_numeric($userId))
 				{
 					// logged in
 					$key		=$this->request->get('key');
@@ -34,35 +114,72 @@ namespace application\nutsNBolts\controller\rest
 					);
 					
 					$this->setResponseCode(200);
-					$this->respond
-					(
-						true,
-						'OK',
-						true
-					);								
+					$this->respond(true,'OK');
 				}
 				else
 				{
-					// logged out
-					$this->setResponseCode(200);
+					$this->setResponseCode(404);
 					$this->respond
 					(
-						true,
-						'OK',
-						'asfasf'
-					);								
+						false,
+						'Expecting user id to be an integer.'
+					);
 				}
-
 			}
-			else
+			catch(AuthException $exception)
 			{
-				$this->setResponseCode(404);
+				$this->setResponseCode(401);
 				$this->respond
 				(
 					false,
-					'Expecting user id to be an integer.'
+					'Permission denied'
 				);
 			}
+		}
+		
+		public function impersonate()
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.user.impersonate');
+				$action=$this->getFullRequestPart(3);
+				var_dump($action);
+				if ($action=='start')
+				{
+					$userId=$this->getFullRequestPart(4);
+					if (is_numeric($userId))
+					{
+						$this->plugin->Auth->startImpersonating($userId);
+						$this->setResponseCode(200);
+						$this->respond(true,'OK');
+					}
+				}
+				else if ($action=='stop')
+				{
+					$this->plugin->Auth->stopImpersonating();
+					$this->setResponseCode(200);
+					$this->respond(true,'OK');
+				}
+				else
+				{
+					$this->setResponseCode(417);
+					$this->respond
+					(
+						false,
+						'Expected action "start" or "stop".'
+					);
+				}
+			}
+			catch(AuthException $exception)
+			{
+				$this->setResponseCode(401);
+				$this->respond
+				(
+					false,
+					'Permission denied'
+				);
+			}
+			
 		}
 	}
 }
