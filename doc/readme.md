@@ -62,11 +62,6 @@ admin.content.node.update
 admin.content.node.delete
 admin.content.node.archive
 
-admin.content.node.create
-admin.content.node.read
-admin.content.node.update
-admin.content.node.delete
-
 admin.collection.create
 admin.collection.read
 admin.collection.update
