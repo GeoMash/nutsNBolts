@@ -2,9 +2,11 @@
 namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\model\base\Node as NodeBase;
+	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ArrayHelper;
 	use \DateTime;
-	
+	use nutshell\plugin\mvc\exception\MvcException;
+
 	class Node extends NodeBase	
 	{
 		const STATUS_SAVED		=0;
@@ -891,6 +893,74 @@ SQL;
 						$records[$i][$nodePart[$k]['ref']]=$nodePart[$k]['value'];
 					}
 				}
+			}
+		}
+		
+		public function markAsRead($nodeId,$userId)
+		{
+			$node=$this->read(['id'=>$nodeId]);
+			if (isset($node[0]))
+			{
+				$user=$this->model->User->read(['id'=>$userId]);
+				if (isset($user[0]))
+				{
+					$query=
+					[
+						'node_id'			=>$nodeId,
+						'user_id'			=>$userId,
+						'content_type_id'	=>$node[0]['content_type_id']
+					];
+					$result=$this->model->NodeRead->read($query);
+					if (!isset($result[0]))
+					{
+						$this->model->NodeRead->insert($query);
+					}
+					return true;
+				}
+				else
+				{
+					throw new MvcException('Cannot mark node as read. Could not find user.');
+				}
+			}
+			else
+			{
+				throw new MvcException('Cannot mark node as read. Could not find node.');
+			}
+		}
+		
+		public function rate($nodeId,$userId,$rating)
+		{
+			$node=$this->read(['id'=>$nodeId]);
+			if (isset($node[0]))
+			{
+				$user=$this->model->User->read(['id'=>$userId]);
+				if (isset($user[0]))
+				{
+					$query=
+					[
+						'node_id'			=>$nodeId,
+						'user_id'			=>$userId
+					];
+					$result=$this->model->NodeRating->read($query);
+					if (!isset($result[0]))
+					{
+						$query['rating']=$rating;
+						$this->model->NodeRating->insert($query);
+						return true;
+					}
+					else
+					{
+						throw new NutshellException('A user cannot rate a node more than once.');
+					}
+				}
+				else
+				{
+					throw new MvcException('Cannot rate node. Could not find user.');
+				}
+			}
+			else
+			{
+				throw new MvcException('Cannot rate node. Could not find node.');
 			}
 		}
 				
