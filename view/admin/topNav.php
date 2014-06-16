@@ -12,9 +12,7 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 	</ul>
 	<ul class="nav full pull-right">
 		<li class="dropdown user-avatar">
-
 			<!-- the dropdown has a custom user-avatar class, this is the small avatar with the badge -->
-
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				<span>
 					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
@@ -26,11 +24,8 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 					<span class="badge badge-dark-red"><?php $tpl->getUnreadMessages(); ?></span>
 				</span>
 			</a>
-
 			<ul class="dropdown-menu">
-
 				<!-- the first element is the one with the big avatar, add a with-image class to it -->
-
 				<li class="with-image">
 					<div class="avatar">
 					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
@@ -50,6 +45,10 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 		</li>
 	</ul>
 	<ul class="nav pull-right">
+		<li>
+			<input id="impersonateUser" name="impersonate">
+			&nbsp;&nbsp;
+		</li>
 		<li><a href="/" target="_blank" title="View Website"><i class="icon-globe"></i> View Website</a></li>
 	</ul>
 </div>
