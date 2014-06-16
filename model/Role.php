@@ -56,6 +56,15 @@ namespace application\nutsNBolts\model
 			}
 			return $permissions;
 		}
+		
+		public function handleDeleteRecord($id)
+		{
+			$this->model->Role->delete($id);
+			$this->model->UserRole->delete([
+				'role_id' => $id 
+				]);
+			return true;
+		}
 	}
 }
 ?>

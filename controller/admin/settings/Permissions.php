@@ -131,6 +131,29 @@ namespace application\nutsNBolts\controller\admin\settings
 			$this->view->render();
 		}
 		
+		public function removeRole($id)
+		{
+			
+			try
+			{
+				$this->plugin->Auth->can('admin.role.delete');
+				if ($this->model->Role->handleDeleteRecord($id))
+				{
+					$this->plugin->Notification->setSuccess('Role successfully removed.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+				}
+				$this->redirect('/admin/settings/permissions/');
+			}
+			catch(AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+		
 		public function getRoles()
 		{
 			return $this->model->Role->read();
