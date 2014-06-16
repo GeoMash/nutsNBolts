@@ -20,6 +20,7 @@ admin.user.create
 admin.user.read
 admin.user.update
 admin.user.delete
+admin.user.impersonate
 
 admin.permissions.role.create
 admin.permissions.role.read
