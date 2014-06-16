@@ -16,7 +16,6 @@ namespace application\nutsNBolts\base
 		private $jsScriptsToLoad	=array();
 		private $jsClassesToExecute	=array();
 		
-		private $user				=null;
 		public $JSLoader			=null;
 		public $config				=null;
 		public $returnToAction		=false;
@@ -26,8 +25,6 @@ namespace application\nutsNBolts\base
 		{
 			parent::__construct($MVC);
 			
-			$this->plugin->UserAuth();
-
 			$this->view->setVar('version',NutsNBolts::VERSION);
 
 			$this->JSLoader	=$this->plugin->JsLoader();
@@ -35,7 +32,7 @@ namespace application\nutsNBolts\base
 
 			$this->loadHooks(ObjectHelper::getBaseClassName($this),'admin');
 
-			if ($this->plugin->UserAuth->isAuthenticated())
+			if ($this->plugin->Auth->isAuthenticated())
 			{
 //				if (!$this->isSuper() && $this->challengeRole('STANDARD'))
 				if (!($this->isSuper() || $this->isAdmin()))
