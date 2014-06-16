@@ -66,7 +66,7 @@ namespace application\nutsNBolts\controller\admin\settings
 					}
 				}
 				
-				$this->setupAddEditPage();
+				$this->setupAddEditRole();
 			}
 			catch (AuthException $exception)
 			{
