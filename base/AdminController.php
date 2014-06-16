@@ -103,6 +103,13 @@ namespace application\nutsNBolts\base
 					{
 						print $this->unreadMessages;
 					}
+				)->registerCallback
+				(
+					'isImpersonating',
+					function()
+					{
+						return $this->plugin->Auth->isImpersonating();
+					}
 				);
 		}
 		
