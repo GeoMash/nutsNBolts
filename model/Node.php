@@ -904,6 +904,7 @@ SQL;
 				$user=$this->model->User->read(['id'=>$userId]);
 				if (isset($user[0]))
 				{
+					
 					$query=
 					[
 						'node_id'			=>$nodeId,
@@ -913,7 +914,7 @@ SQL;
 					$result=$this->model->NodeRead->read($query);
 					if (!isset($result[0]))
 					{
-						$this->model->NodeRead->insert($query);
+						$this->model->NodeRead->insertAssoc($query);
 					}
 					return true;
 				}

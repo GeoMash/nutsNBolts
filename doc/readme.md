@@ -20,6 +20,7 @@ admin.user.create
 admin.user.read
 admin.user.update
 admin.user.delete
+admin.user.impersonate
 
 admin.permissions.role.create
 admin.permissions.role.read
@@ -61,11 +62,6 @@ admin.content.node.read
 admin.content.node.update
 admin.content.node.delete
 admin.content.node.archive
-
-admin.content.node.create
-admin.content.node.read
-admin.content.node.update
-admin.content.node.delete
 
 admin.collection.create
 admin.collection.read
