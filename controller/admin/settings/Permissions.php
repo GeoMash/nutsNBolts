@@ -131,6 +131,18 @@ namespace application\nutsNBolts\controller\admin\settings
 			$this->view->render();
 		}
 		
+		public function removeRole($id)
+		{
+			if ($this->model->Role->handleDeleteRecord($id))
+			{
+				$this->plugin->Notification->setSuccess('Role successfully removed.');
+			}
+			else
+			{
+				$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
+			}
+		}
+		
 		public function getRoles()
 		{
 			return $this->model->Role->read();
