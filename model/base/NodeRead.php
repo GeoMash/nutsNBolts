@@ -19,10 +19,10 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ' ,
-			'user_id' => 'int(10) NOT NULL ' ,
 			'content_type_id' => 'int(10) NOT NULL ' ,
+			'node_id' => 'int(10) NOT NULL ' ,
+			'user_id' => 'int(10) NOT NULL ' ,
 			'timestamp' => 'timestamp',
-			'rating' => 'tinyint(3) NOT NULL '
 		);
 	}
 }
