@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\base
 {
+	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\plugin\mvc\Controller as MvcController;
 	use application\nutsNBolts\plugin\userAuth;
@@ -44,26 +45,27 @@ namespace application\nutsNBolts\base
 					}
 				)->registerCallback
 				(
-					'challengeRole',
-					function($allowedRoles)
+					'can',
+					function($key)
 					{
-						return $this->plugin->UserAuth->challengeRole($allowedRoles);
+						try
+						{
+							$this->plugin->Auth->can($key);
+							return true;
+						}
+						catch (AuthException $exception)
+						{
+							return false;
+						}
 					}
 				)->registerCallback
 				 (
 					'isAuthenticated',
 					function()
 					{
-						return $this->plugin->UserAuth->isAuthenticated();
+						return $this->plugin->Auth->isAuthenticated();
 					}
-				)->registerCallback
-				(
-				 	'logout',
-				 	function()
-				 	{
-				 		return $this->plugin->UserAuth->logout();
-				 	}
-				 );
+				);
 			if (method_exists($this,'init'))
 			{
 				$this->init();
