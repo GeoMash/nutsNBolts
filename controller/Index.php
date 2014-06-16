@@ -206,17 +206,38 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getNav($id);
 					}
+				)->registerCallback
+				(
+					'markNodeAsRead',
+					function($nodeId)
+					{
+						if (!$this->plugin->Auth->isAuthenticated())
+						{
+							return false;
+						}
+						$userId=$this->plugin->Auth->getUserId();
+						return $this->model->Node->markAsRead($nodeId,$userId);
+					}
+				)->registerCallback
+				(
+					'rateNode',
+					function($nodeId,$rating)
+					{
+						if (!$this->plugin->Auth->isAuthenticated())
+						{
+							return false;
+						}
+						$userId=$this->plugin->Auth->getUserId();
+						return $this->model->Node->rate($nodeId,$userId,$rating);
+					}
+				)->registerCallback
+				(
+					'getNav',
+					function($id)
+					{
+						return $this->getNav($id);
+					}
 				);
-				//Project specific. Should not be here.
-//				->registerCallback
-//				(
-//				 	'getHomeTiles',
-//				 	function()
-//				 	{
-//				 		return $this->getHomeTiles();
-//				 	}
-//				 );
-
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
 			}
