@@ -38,8 +38,8 @@ $JSKK.Class.create
 			this.initIButtons();
 
 			
-			
-			this.initSelect2();
+			this.initImpersonateSelect2();
+//			this.initSelect2();
 			
 			$.extend
 			(
@@ -95,6 +95,66 @@ $JSKK.Class.create
 				}
 			);
 			
+		},
+		initImpersonateSelect2: function()
+		{
+			$('#impersonateUser').select2
+			(
+				{
+					placeholder:		'Impersonate User',
+					minimumInputLength: 1,
+					ajax:
+					{
+						cache:	true,
+						url:	'/rest/user/search.json',
+						data:	function(term,page)
+						{
+							return {
+								query:	term
+							};
+						},
+						results: function(response,page)
+						{
+							var results=[];
+							for (var i= 0,j=response.data.length; i<j; i++)
+							{
+								results.push
+								(
+									{
+										id:		response.data[i].id,
+										text:	response.data[i].name_first+' '
+												+response.data[i].name_last+' ('
+												+response.data[i].email+')'
+									}
+								);
+							}
+							return {results: results}
+						}
+					},
+//					formatResult: function(result)
+//					{
+//						
+//					}
+				}
+			).on
+			(
+				'change',
+				function(event)
+				{
+					var select=$('#impersonateUser');
+					$.getJSON
+					(
+						'/rest/user/impersonate/start/'+select.val()+'.json',
+						function()
+						{
+							//Refresh the window.
+							alert('Switching to impersonate user mode.');
+							window.location=window.location;
+						}
+					);
+					select.val()
+				}.bind(this)
+			);
 		},
 		initSelect2: function()
 		{
