@@ -33,7 +33,10 @@ footer p
 	}
 }
 
-
+.btn-red
+{
+	border: 1px solid #a54747
+}
 
 .cursor-move
 {
