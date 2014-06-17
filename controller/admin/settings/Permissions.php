@@ -56,7 +56,6 @@ namespace application\nutsNBolts\controller\admin\settings
 					$record=$this->request->getAll();
 					if ($id=$this->model->Role->handleRecord($record)!==false)
 					{
-						var_dump($id);exit();
 						$this->plugin->Notification->setSuccess('Role successfully added. Would you like to <a href="/admin/settings/permissions/addRole/">Add another one?</a>');
 						$this->redirect('/admin/settings/permissions/editRole/'.$id);
 					}
