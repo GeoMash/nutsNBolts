@@ -164,7 +164,16 @@ namespace application\nutsNBolts\controller\rest
 						$this->respond
 						(
 							false,
-							'Cannot impersonate root!'
+							'You cannot impersonate root!'
+						);
+					}
+					if ($userId==$this->plugin->Auth->getUserId())
+					{
+						$this->setResponseCode(417);
+						$this->respond
+						(
+							false,
+							'You cannot impersonate yourself!'
 						);
 					}
 					if (is_numeric($userId))
