@@ -1,0 +1,14 @@
+[
+	{
+		"key":			"login",
+		"name":			"Login",
+		"description":	"Allows a user to login to nuts n bolts.",
+		"category":		"Core"
+	},
+	{
+		"key":			"user.impersonate",
+		"name":			"Impersonate User",
+		"description":	"Allows a user to impersonate another user.",
+		"category":		"Core"
+	}
+]
