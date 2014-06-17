@@ -78,6 +78,12 @@ namespace application\nutsNBolts\controller\admin
 					{
 						switch (strtolower($this->request->node(2)))
 						{
+							case 'users':
+							{
+								$this->routedController=new settings\Users($this->MVC);
+								$this->routeAction(3);
+								break;
+							}
 							case 'permissions':
 							{
 								$this->routedController=new settings\Permissions($this->MVC);

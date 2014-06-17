@@ -55,7 +55,7 @@ namespace application\nutsNBolts\controller\rest
 		{
 			for ($i=0,$j=count($users); $i<$j; $i++)
 			{
-				if ((int)$users[$i]['id']===-Auth::USER_SUPER)
+				if ((int)$users[$i]['id']===Auth::USER_SUPER)
 				{
 					unset($users[$i]);
 					continue;
