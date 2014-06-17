@@ -38,7 +38,7 @@ $JSKK.Class.create
 			this.initIButtons();
 
 			
-			this.initImpersonateSelect2();
+			this.initImpersonateUser();
 //			this.initSelect2();
 			
 			$.extend
@@ -94,9 +94,8 @@ $JSKK.Class.create
 					}
 				}
 			);
-			
 		},
-		initImpersonateSelect2: function()
+		initImpersonateUser: function()
 		{
 			$('#impersonateUser').select2
 			(
@@ -149,10 +148,27 @@ $JSKK.Class.create
 						{
 							//Refresh the window.
 							alert('Switching to impersonate user mode.');
-							window.location=window.location;
+							window.location.reload();
 						}
 					);
 					select.val()
+				}.bind(this)
+			);
+			
+			$('#stopImpersonatingUser').click
+			(
+				function()
+				{
+					$.getJSON
+					(
+						'/rest/user/impersonate/stop.json',
+						function()
+						{
+							//Refresh the window.
+							alert('Switching to non-impersonation mode.');
+							window.location.reload();
+						}
+					);
 				}.bind(this)
 			);
 		},

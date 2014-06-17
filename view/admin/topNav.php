@@ -46,8 +46,19 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 	</ul>
 	<ul class="nav pull-right">
 		<li>
+			<?php if (!$tpl->isImpersonating()): ?>
 			<input id="impersonateUser" name="impersonate">
 			&nbsp;&nbsp;
+			<?php
+				else:
+				$user=$tpl->get('user');
+				?>
+					<a id="stopImpersonatingUser" class="btn-red" href="javascript:{}">
+						<i class="icon-user ixon-x2"></i> Impersonating User
+						<?php print $user['name_first'].' '.$user['name_last'].' ('.$user['email'].')' ?>
+						<i class="icon-remove"></i>
+					</a>
+			<?php endif; ?>
 		</li>
 		<li><a href="/" target="_blank" title="View Website"><i class="icon-globe"></i> View Website</a></li>
 	</ul>

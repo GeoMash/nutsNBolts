@@ -30,8 +30,9 @@ namespace application\nutsNBolts\controller\admin
 				$this->plugin->Session->returnURL='/'.implode('/',$this->request->getNodes());
 				$this->redirect('/admin/login/');
 			}
-			elseif ($this->isAuthenticated() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED)
-			{
+			elseif ($this->isAuthenticated()
+			&& (!$this->plugin->Auth->isImpersonating() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED))
+			{die('222');
 				$control='logout';
 			}
 			

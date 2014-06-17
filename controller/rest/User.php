@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest
 {
+	use application\nutsNBolts\plugin\auth\Auth;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\plugin\rest\RestController;
 	use nutshell\Nutshell;
@@ -14,7 +15,7 @@ namespace application\nutsNBolts\controller\rest
 			'search'						=>'search',
 			'{int}'							=>'getById',
 			'edit'							=>'edit',
-			'impersonate/{string}/{int}'	=>'impersonate'
+			'impersonate/{string}/[*]'		=>'impersonate'
 		);
 		
 		/*
@@ -54,6 +55,11 @@ namespace application\nutsNBolts\controller\rest
 		{
 			for ($i=0,$j=count($users); $i<$j; $i++)
 			{
+				if ((int)$users[$i]['id']===-Auth::USER_SUPER)
+				{
+					unset($users[$i]);
+					continue;
+				}
 				unset($users[$i]['password']);
 				unset($users[$i]['salt']);
 			}
@@ -141,34 +147,43 @@ namespace application\nutsNBolts\controller\rest
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.user.impersonate');
 				$action=$this->getFullRequestPart(3);
-				var_dump($action);
-				if ($action=='start')
+				if ($this->plugin->Auth->isImpersonating() && $action=='stop')
 				{
+					$this->plugin->Auth->stopImpersonating();
+					$this->setResponseCode(200);
+					$this->respond(true,'OK');
+				}
+				else if ($action=='start')
+				{
+					$this->plugin->Auth->can('admin.user.impersonate');
 					$userId=$this->getFullRequestPart(4);
+					if ($userId==Auth::USER_SUPER)
+					{
+						$this->setResponseCode(417);
+						$this->respond
+						(
+							false,
+							'Cannot impersonate root!'
+						);
+					}
 					if (is_numeric($userId))
 					{
 						$this->plugin->Auth->startImpersonating($userId);
 						$this->setResponseCode(200);
 						$this->respond(true,'OK');
 					}
+					else
+					{
+						$this->setResponseCode(417);
+						$this->respond
+						(
+							false,
+							'Invalid user ID.'
+						);
+					}
 				}
-				else if ($action=='stop')
-				{
-					$this->plugin->Auth->stopImpersonating();
-					$this->setResponseCode(200);
-					$this->respond(true,'OK');
-				}
-				else
-				{
-					$this->setResponseCode(417);
-					$this->respond
-					(
-						false,
-						'Expected action "start" or "stop".'
-					);
-				}
+				
 			}
 			catch(AuthException $exception)
 			{
