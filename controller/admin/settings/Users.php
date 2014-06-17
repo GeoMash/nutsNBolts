@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\controller\admin\settings
 {
 	use application\nutsNBolts\base\AdminController;
+	use application\nutsNBolts\plugin\auth\Auth;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
 	use nutshell\core\exception\NutshellException;
@@ -18,14 +19,14 @@ namespace application\nutsNBolts\controller\admin\settings
 				$this->addBreadcrumb('System Settings','icon-wrench','settings');
 				$this->addBreadcrumb('Users','icon-user','users');
 				
-				$this->setContentView('admin/settings/users');
+				$this->setContentView('admin/settings/users/list');
 				$this->view->getContext()
 				->registerCallback
 				(
-					'getUserList',
+					'getUsers',
 					function()
 					{
-						print $this->generateUserList();
+						return $this->getUsers();
 					}
 				);
 				
@@ -190,9 +191,42 @@ namespace application\nutsNBolts\controller\admin\settings
 			}
 		}
 		
+		public function impersonate($id)
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.user.impersonate');
+				if ($id==Auth::USER_SUPER)
+				{
+					$this->plugin->Notification->setError('You cannot impersonate root.');
+					$this->redirect('/admin/settings/users/');
+				}
+				if ($id==$this->getUserId())
+				{
+					$this->plugin->Notification->setError('You cannot impersonate yourself.');
+					$this->redirect('/admin/settings/users/');
+				}
+				if (is_numeric($id))
+				{
+					$this->plugin->Auth->startImpersonating($id);
+					$this->plugin->Notification->setSuccess('You\'ve started impersonating a user. Click the button in the nav to stop.');
+				}
+				else
+				{
+					$this->plugin->Notification->setError('Invalid User! Unable to impersonate this.');
+				}
+				$this->redirect('/admin/settings/users/');
+			}
+			catch(AuthException $exception)
+			{
+				$this->plugin->Notification->setError('Nope, you don\'t have permission to impersonate other users!');
+			}
+			
+		}
+		
 		private function setupAddEdit(&$renderRef)
 		{
-			$this->setContentView('admin/settings/addEditUser');
+			$this->setContentView('admin/settings/users/addEdit');
 			
 			$this->view->getContext()
 				->registerCallback
@@ -245,31 +279,6 @@ HTML;
 			}
 			$return=implode('',$html);
 			return $return;
-		}
-		
-		public function generateUserList()
-		{
-			$records=$this->model->User->read();
-			$html	=array();
-			for ($i=0,$j=count($records); $i<$j; $i++)
-			{
-				$html[]=<<<HTML
-<tr>
-	<td class=""><a href="/admin/settings/users/edit/{$records[$i]['id']}">{$records[$i]['email']}</a></td>
-	<td class="">{$records[$i]['name_first']} {$records[$i]['name_last']}</td>
-	<td class="">{$records[$i]['date_lastlogin']}</td>
-	<td class="">{$records[$i]['status']}</td>
-	<td class="center">
-		<a href="/admin/settings/users/remove/{$records[$i]['id']}">
-			<button title="Archive" class="btn btn-mini btn-red">
-				<i class="icon-remove"></i>
-			</button>
-		</a>
-	</td>
-</tr>
-HTML;
-			}
-			return implode('',$html);
 		}
 		
 		private function userHasRole($userRoles,$roleID)
