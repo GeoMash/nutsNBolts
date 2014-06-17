@@ -10,6 +10,8 @@ namespace application\nutsNBolts\plugin\auth
 
 	class Auth extends Plugin implements Singleton, Native
 	{
+		const USER_SUPER				=-100;
+		
 		private $user					=null;
 		private $originalUser			=null;
 		private $impersonating			=false;
@@ -130,7 +132,7 @@ namespace application\nutsNBolts\plugin\auth
 			$user=$this->getUser();
 			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
 			{
-				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
+				if ($user['roles'][$i]['id']==self::USER_SUPER)
 				{
 					return true;
 				}
