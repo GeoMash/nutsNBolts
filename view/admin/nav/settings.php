@@ -1,11 +1,12 @@
 <?php
 if ($tpl->can('admin.setting.nutsNBolts.read')
 || $tpl->can('admin.setting.site.read')
-|| $tpl->can('admin.dashboard.read')
+//|| $tpl->can('admin.dashboard.read')
 || $tpl->can('admin.user.read')
 || $tpl->can('admin.policies.password.read')
 || $tpl->can('admin.user.read')
-|| $tpl->can('admin.plugin.read')):
+//|| $tpl->can('admin.plugin.read')
+):
 ?>
 <li class="dropdown">
 	<a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -35,7 +36,7 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 			endif;
 			if ($tpl->can('admin.dashboard.read')):
 		?>
-		<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>">
+		<li class="<?php if ($tpl->get('nav_active_sub')=='general')print 'active'; ?>" style="display:none;">
 			<a href="/admin/settings/dashboard">
 				<i class="icon-dashboard"></i> Configure Dashboard
 			</a>
