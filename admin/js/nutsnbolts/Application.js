@@ -36,10 +36,10 @@ $JSKK.Class.create
 				}
 			);
 			this.initIButtons();
-
-			
 			this.initImpersonateUser();
-//			this.initSelect2();
+			this.initSelect2();
+			
+			$('[data-toggle="tooltip"]').tooltip()
 			
 			$.extend
 			(
