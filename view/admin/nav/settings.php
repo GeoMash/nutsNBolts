@@ -3,7 +3,7 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 || $tpl->can('admin.setting.site.read')
 //|| $tpl->can('admin.dashboard.read')
 || $tpl->can('admin.user.read')
-|| $tpl->can('admin.policies.password.read')
+|| $tpl->can('admin.policies.read')
 || $tpl->can('admin.user.read')
 //|| $tpl->can('admin.plugin.read')
 ):
@@ -52,11 +52,11 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 		</li>
 		<?php
 			endif;
-			if ($tpl->can('admin.policies.password.read')):
+			if ($tpl->can('admin.policies.read')):
 		?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='passwordPolicy')print 'active'; ?>">
-			<a href="/admin/settings/passwordPolicy">
-				<i class="icon-user"></i> Password Policy
+			<a href="/admin/settings/policies">
+				<i class="icon-lock"></i> Policies
 			</a>
 		</li>
 		<?php
