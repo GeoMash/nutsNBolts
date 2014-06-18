@@ -1,21 +1,5 @@
 <?php
-$options=$tpl->get('options');
-$parseChecked=function($category,$button,$type) use($options)
-{
-	if (is_null($options))
-	{
-		if ($type=='enabled')
-		{
-			print 'checked';
-		}
-		print '';
-	}
-	if (isset($options->{$category}) && in_array($button,$options->{$category}))
-	{
-		print 'checked';
-	}
-	print '';
-};
+$record=$tpl->get('record');
 ?>
 <div class="container-fluid padded">
 	<div class="row-fluid">
@@ -42,17 +26,24 @@ $parseChecked=function($category,$button,$type) use($options)
 									<tbody>
 										<tr>
 											<td>
-												<input class="iButton-icons-tab" type="checkbox" <?php $parseChecked('password','length_minimum','enabled'); ?> name="length_minimum[enabled]" value="1">
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_force_random'); ?> name="password_force_random[enabled]" value="1">
 											</td>
-											<td>Minimum Length</td>
-											<td><input class="input-medium-large" type="number" name="length_minimum[value]"></td>
+											<td>Enable User Passwords</td>
+											<td></td>
 										</tr>
 										<tr>
 											<td>
-												<input class="iButton-icons-tab" type="checkbox" <?php $parseChecked('password','length_maximum','enabled'); ?> name="length_maximum[enabled]" value="1">
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_length_minimum'); ?> name="password_length_minimum[enabled]" value="1">
+											</td>
+											<td>Minimum Length</td>
+											<td><input class="input-medium-large" type="number" name="password_length_minimum[value]" value="<?php print $record['password_length_minimum'] ?>"></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_length_maximum'); ?> name="password_length_maximum[enabled]" value="1">
 											</td>
 											<td>Maximum Length</td>
-											<td><input class="input-medium-large" type="number" name="length_maximum[value]"></td>
+											<td><input class="input-medium-large" type="number" name="password_length_maximum[value]" value="<?php print $record['password_length_maximum'] ?>"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -69,7 +60,7 @@ $parseChecked=function($category,$button,$type) use($options)
 									<tbody>
 										<tr>
 											<td>
-												<input class="iButton-icons-tab" type="checkbox" <?php $parseChecked('logging','','enabled'); ?> name="" value="1">
+												<input class="iButton-icons-tab" type="checkbox"  name="" value="1">
 											</td>
 											<td>?????</td>
 											<td><input class="input-medium" type="text"></td>
