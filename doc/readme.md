@@ -27,6 +27,11 @@ admin.permissions.role.read
 admin.permissions.role.update
 admin.permissions.role.delete
 
+admin.policies.create
+admin.policies.read
+admin.policies.update
+admin.policies.delete
+
 admin.policies.password.create
 admin.policies.password.read
 admin.policies.password.update
