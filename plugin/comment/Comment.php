@@ -19,14 +19,14 @@ namespace application\nutsNBolts\plugin\comment
 			}
 		}
 
-		public function getComments($nodeId,$limit=50)
+		public function getComments($nodeId,$limit=50,$order=' ORDER BY id DESC')
 		{
-			return $this->model->NodeComment->read(array('node_id'=>$nodeId),array(),'LIMIT '.$limit);
+			return $this->model->NodeComment->read(array('node_id'=>$nodeId),array(),$order.' LIMIT '.$limit);
 		}
 		
-		public function getCommentsWithUserDetails($nodeId,$limit)
+		public function getCommentsWithUserDetails($nodeId,$limit,$order=' ORDER BY id DESC')
 		{
-			$comments=$this->getComments($nodeId,$limit);
+			$comments=$this->getComments($nodeId,$limit, $order);
 			
 			for($i=0,$j=count($comments);$i<$j;$i++)
 			{
