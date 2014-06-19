@@ -36,14 +36,56 @@ $record=$tpl->get('record');
 												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_length_minimum'); ?> name="password_length_minimum[enabled]" value="1">
 											</td>
 											<td>Minimum Length</td>
-											<td><input class="input-medium-large" type="number" name="password_length_minimum[value]" value="<?php print $record['password_length_minimum'] ?>"></td>
+											<td><input class="input-small" type="number" name="password_length_minimum[value]" value="<?php print $record['password_length_minimum'] ?>"></td>
 										</tr>
 										<tr>
 											<td>
 												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_length_maximum'); ?> name="password_length_maximum[enabled]" value="1">
 											</td>
 											<td>Maximum Length</td>
-											<td><input class="input-medium-large" type="number" name="password_length_maximum[value]" value="<?php print $record['password_length_maximum'] ?>"></td>
+											<td><input class="input-small" type="number" name="password_length_maximum[value]" value="<?php print $record['password_length_maximum'] ?>"></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Must Contain Special Characters</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Must Contain Numeric Digits</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Must Contain Upper and Lower Case Characters</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Must Not Contain Any User Details</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Password Expiry</td>
+											<td><input class="input-small" type="number" name="[value]" value="<?php print $record[''] ?>"><span class="help-inline">Days</span></td>
+										</tr>
+										<tr>
+											<td>
+												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked(''); ?> name="[enabled]" value="1">
+											</td>
+											<td>Prevent Past Passwords</td>
+											<td><input class="input-small" type="number" name="[value]" value="<?php print $record[''] ?>"><span class="help-inline">Past Passwords</span></td>
 										</tr>
 									</tbody>
 								</table>
@@ -70,12 +112,6 @@ $record=$tpl->get('record');
 							</div>
 						</div>
 					</div>
-					
-					
-					
-					
-					
-					
 					<div class="box-content">
 						
 						<div class="form-actions">
