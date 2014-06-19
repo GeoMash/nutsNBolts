@@ -94,6 +94,18 @@ $JSKK.Class.create
 					}
 				}
 			);
+			
+			$('input[type="number"]').TouchSpin
+			(
+				{
+//					min:	0,
+//					max: 100,
+					step:			1,
+					decimals:		0,
+					boostat:		5,
+					maxboostedstep:	10
+				}
+			);
 		},
 		initImpersonateUser: function()
 		{
