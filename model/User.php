@@ -168,13 +168,17 @@ SQL;
 			return null;
 		}
 
-		public function getUsersByRole($role)
+		public function getUsersByRole($role, $where=null)
 		{
 			if (!is_array($role))
 			{
 				$role=array($role);
 			}
 			$roleQueryPart=array();
+			if(!$where)
+			{
+				$where='';
+			}
 			if (is_numeric($role[0]))
 			{
 				for ($i=0,$j=count($role); $i<$j; $i++)
@@ -187,7 +191,9 @@ SELECT DISTINCT user.*
 FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id IN ({$roleQueryPart});
+WHERE role.id=-100 OR role.id IN ({$roleQueryPart})
+{$where}
+;
 SQL;
 			}
 			else
