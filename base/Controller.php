@@ -65,6 +65,13 @@ namespace application\nutsNBolts\base
 					{
 						return $this->plugin->Auth->isAuthenticated();
 					}
+				)->registerCallback
+				 (
+					'getPolicy',
+					function($category,$policy)
+					{
+						return $this->plugin->Policy->getPolicyValue($category,$policy);
+					}
 				);
 			if (method_exists($this,'init'))
 			{
