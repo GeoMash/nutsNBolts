@@ -91,6 +91,38 @@
 							</div>
 						</div>
 						
+						<div class="container-fluid padded">
+							<div class="box">
+								<div class="box-header">
+									<span class="title"><i class="icon-key"></i> Change Password</span>
+								</div>
+								<div class="content-box">
+									<div class="padded">
+										<?php if (!$tpl->getPolicy('password','force_random')): ?>
+										<div class="control-group">
+											<label class="control-label">New Password</label>
+											<div class="controls">
+												<input type="password" name="password" autocomplete="off">
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Confirm New Password</label>
+											<div class="controls">
+												<input type="password" name="password_confirm" autocomplete="off">
+											</div>
+										</div>
+										<?php else: ?>
+										<div class="control-group">
+											<label class="control-label">New Random Password</label>
+											<div class="controls">
+												<input type="checkbox" name="set_random" value="1"><span class="help-inline">(Your new password will be emailed to you.)</span>
+											</div>
+										</div>
+										<?php endif; ?>
+									</div>
+								</div>
+							</div>
+						</div>
 						
 						<?php
 						$extras=$tpl->get('belowForm');
