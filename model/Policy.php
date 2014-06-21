@@ -9,7 +9,7 @@ namespace application\nutsNBolts\model
 		{
 			$record=[];
 			$key='password_force_random';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=1;
 			}
@@ -18,7 +18,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_length_minimum';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=(int)$data[$key]['value'];
 			}
@@ -27,7 +27,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_length_maximum';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=(int)$data[$key]['value'];
 			}
@@ -36,7 +36,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_special_characters';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=1;
 			}
@@ -45,7 +45,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_numeric_digits';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=1;
 			}
@@ -54,7 +54,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_upper_lower_characters';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=1;
 			}
@@ -63,7 +63,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_expiry';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=(int)$data[$key]['value'];
 			}
@@ -72,7 +72,7 @@ namespace application\nutsNBolts\model
 				$record[$key]=null;
 			}
 			$key='password_past_passwords';
-			if ((bool)(int)$data[$key]['enabled'])
+			if (isset($data[$key]['enabled']) && (bool)(int)$data[$key]['enabled'])
 			{
 				$record[$key]=(int)$data[$key]['value'];
 			}
