@@ -35,7 +35,7 @@ namespace application\nutsNBolts\controller\admin\settings
 				
 				$this->setContentView('admin/settings/policies');
 				
-				if ($this->request->get('password_force_random'))
+				if ($this->request->get('_'))
 				{
 					$this->model->Policy->handleRecord($this->request->getAll());
 					$this->plugin->Notification->setSuccess('Policies Updated.');

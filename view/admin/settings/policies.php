@@ -6,6 +6,7 @@ $record=$tpl->get('record');
 		<div class="span12">
 			<div class="box">
 				<form class="form-horizontal validatable" method="post">
+					<input type="hidden" name="_" value="1">
 					<div class="box-header">
 						<ul class="nav nav-tabs nav-tabs-left">
 							<li class="active"><a href="#passwords" data-toggle="tab"><i class="icon-key"></i> <span>Passwords</span></a></li>
@@ -28,7 +29,7 @@ $record=$tpl->get('record');
 											<td>
 												<input class="iButton-icons-tab" type="checkbox" <?php $tpl->isChecked('password_force_random'); ?> name="password_force_random[enabled]" value="1">
 											</td>
-											<td>Enable User Passwords</td>
+											<td>Force Random Passwords</td>
 											<td></td>
 										</tr>
 										<tr>
