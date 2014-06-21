@@ -5,7 +5,7 @@
 					<form class="form-horizontal fill-up validatable" method="post">
 						<input type="hidden" name="id" value="<?php $tpl->id; ?>">
 						<div class="box-header">
-							<span class="title">User</span>
+							<span class="title">User Details</span>
 							<ul class="box-toolbar">
 								<li>
 									<span>Enabled: </span>
@@ -28,18 +28,6 @@
 									<label class="control-label">Email Address</label>
 									<div class="controls">
 										<input type="text" name="email" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->email; ?>" autocomplete="off">
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Password</label>
-									<div class="controls">
-										<input type="password" name="password" autocomplete="off">
-									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Confirm Password</label>
-									<div class="controls">
-										<input type="password" name="password_confirm" autocomplete="off">
 									</div>
 								</div>
 								<div class="control-group">
@@ -95,6 +83,47 @@
 									<label class="control-label">Income Range</label>
 									<div class="controls">
 										<input type="text" name="income_range" data-prompt-position="topLeft" value="<?php $tpl->income_range; ?>">
+									</div>
+								</div>
+								
+								
+								
+								
+								
+							</div>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-key"></i> Password</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<div class="control-group">
+												<label class="control-label">Force Change</label>
+												<div class="controls">
+													<input type="checkbox" name="force_change" value="1">
+													 (on next login)
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Set Random</label>
+												<div class="controls">
+													<input type="checkbox" name="set_random" value="1">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">New Password</label>
+												<div class="controls">
+													<input type="password" name="password" autocomplete="off">
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Confirm New Password</label>
+												<div class="controls">
+													<input type="password" name="password_confirm" autocomplete="off">
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
