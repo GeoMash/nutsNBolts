@@ -398,3 +398,8 @@ input[type=number]::-webkit-inner-spin-button {
 {
 	padding:	3px 10px;
 }
+
+input[disabled]
+{
+	background-color: #f4f4f4;
+}
