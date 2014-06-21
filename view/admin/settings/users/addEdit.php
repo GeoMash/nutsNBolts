@@ -102,7 +102,7 @@
 											<label class="control-label">Force Change</label>
 											<div class="controls">
 												<input type="checkbox" name="force_change" value="1">
-												 (on next login)
+												(on next login)
 											</div>
 										</div>
 										<div class="control-group">
