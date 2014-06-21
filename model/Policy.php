@@ -35,6 +35,51 @@ namespace application\nutsNBolts\model
 			{
 				$record[$key]=null;
 			}
+			$key='password_special_characters';
+			if ((bool)(int)$data[$key]['enabled'])
+			{
+				$record[$key]=1;
+			}
+			else
+			{
+				$record[$key]=null;
+			}
+			$key='password_numeric_digits';
+			if ((bool)(int)$data[$key]['enabled'])
+			{
+				$record[$key]=1;
+			}
+			else
+			{
+				$record[$key]=null;
+			}
+			$key='password_upper_lower_characters';
+			if ((bool)(int)$data[$key]['enabled'])
+			{
+				$record[$key]=1;
+			}
+			else
+			{
+				$record[$key]=null;
+			}
+			$key='password_expiry';
+			if ((bool)(int)$data[$key]['enabled'])
+			{
+				$record[$key]=(int)$data[$key]['value'];
+			}
+			else
+			{
+				$record[$key]=null;
+			}
+			$key='password_past_passwords';
+			if ((bool)(int)$data[$key]['enabled'])
+			{
+				$record[$key]=(int)$data[$key]['value'];
+			}
+			else
+			{
+				$record[$key]=null;
+			}
 			$this->delete();
 			$this->insertAssoc($record);
 		}
