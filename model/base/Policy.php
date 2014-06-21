@@ -20,7 +20,12 @@ namespace application\nutsNBolts\model\base
 		(
 			'password_force_random' => 'tinyint(1) NULL ',
 			'password_length_minimum' => 'tinyint(2) NULL ',
-			'password_length_maximum' => 'tinyint(2) NULL '
+			'password_length_maximum' => 'tinyint(2) NULL ',
+			'password_special_characters' => 'tinyint(2) NULL ',
+			'password_numeric_digits' => 'tinyint(2) NULL ',
+			'password_upper_lower_characters' => 'tinyint(2) NULL ',
+			'password_expiry' => 'tinyint(2) NULL ',
+			'password_past_passwords' => 'tinyint(2) NULL '
 		);
 	}
 }
