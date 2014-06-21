@@ -28,13 +28,15 @@ $JSKK.Class.create
 			
 			$('.tags').tagsInput({width: 'auto'});
 			
-			$('.icheck').iCheck
-			(
-				{
-					checkboxClass:	'icheckbox_flat-aero',
-					radioClass:		'iradio_flat-aero'
-				}
-			);
+			$('input[type=checkbox]:not(.iButton-icons)')
+				.addClass('iCheck')
+				.iCheck
+				(
+					{
+						checkboxClass:	'icheckbox_flat-aero',
+						radioClass:		'iradio_flat-aero'
+					}
+				);
 			this.initIButtons();
 			this.initImpersonateUser();
 			this.initSelect2();
@@ -104,6 +106,25 @@ $JSKK.Class.create
 					decimals:		0,
 					boostat:		5,
 					maxboostedstep:	10
+				}
+			);
+			
+			
+			$('input[name="set_random"]').on
+			(
+				'ifChanged',
+				function(event)
+				{
+					if ($(event.target).is(':checked'))
+					{
+						$('input[name="password"]').attr('disabled',true);
+						$('input[name="password_confirm"]').attr('disabled',true);
+					}
+					else
+					{
+						$('input[name="password"]').attr('disabled',false);
+						$('input[name="password_confirm"]').attr('disabled',false);
+					}
 				}
 			);
 		},
