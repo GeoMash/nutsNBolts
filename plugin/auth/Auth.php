@@ -230,5 +230,10 @@ SQL;
 			}
 			throw new AuthException(AuthException::PERMISSION_DENIED,'Permission Denied.');
 		}
+		
+		private function generateSalt(&$record)
+		{
+			$record['salt']=sha1('wheretoparty_ce1833cca4627da0751a2dcdde1f0b3b_'.time());
+		}
 	}
 }

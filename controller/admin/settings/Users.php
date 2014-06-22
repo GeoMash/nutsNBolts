@@ -5,6 +5,8 @@ namespace application\nutsNBolts\controller\admin\settings
 	use application\nutsNBolts\plugin\auth\Auth;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
+	use application\nutsNBolts\plugin\policy\exception\PolicyException;
+	use application\nutsNBolts\plugin\user\exception\UserException;
 	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ObjectHelper;
 	
@@ -52,60 +54,44 @@ namespace application\nutsNBolts\controller\admin\settings
 				$this->plugin->Auth->can('admin.user.create');
 				$this->plugin->Auth->can('admin.collection.create');
 				
+				$record=$this->request->getAll();
+				
 				if ($this->request->get('email'))
 				{
-					$record=$this->request->getAll();
-					if ($record['password']!=$record['password_confirm'])
-					{
-						$this->plugin->Notification->setError('Passwords did not match. Please try again.');
-						$error=true;
-					}
-					else if (empty($record['password']))
-					{
-						$this->plugin->Notification->setError('Password cannot be blank.');
-						$error=true;
-					}
-	
-					$this->execHook('onBeforeAddUser',$record);
-					unset($record['password_confirm']);
-					if(!$record['error'])
-					{
-						// no errors
-						if ($user=$this->model->User->handleRecord($record))
-						{
-							$this->execHook('onAddUser',$user);
-							$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
-	
-							try
-							{
-								$this->plugin->Collection->create
-								(
-									array
-									(
-										'name'			=>'My Files',
-										'description'	=>'User Collection',
-										'status'		=>1
-									),
-									$user['id']
-								);
-							}
-							catch(NutshellException $exception)
-							{
-								$this->plugin->Notification->setError($exception->getMessage());
-							}
-							$this->redirect('/admin/settings/users/edit/'.$user['id']);
-						}
-						else
-						{
-							$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
-						}
-					}
+					$user=$this->plugin->User->create($record);
+					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
+					$this->execHook('onAddUser',$user);
+					$this->plugin->Collection->create
+					(
+						array
+						(
+							'name'			=>'My Files',
+							'description'	=>'User Collection',
+							'status'		=>1
+						),
+						$user['id']
+					);
+					$this->redirect('/admin/settings/users/edit/'.$user['id']);
 				}
 			}
-			catch(AuthException $exception)
+			catch (AuthException $exception)
 			{
 				$this->setContentView('admin/noPermission');
 			}
+			catch (UserException $userException)
+			{
+				$this->plugin->Notification->setError($userException->getMessage());
+			}
+			catch (PolicyException $policyException)
+			{
+				$this->plugin->Notification->setError($policyException->getMessage());
+			}
+			catch (NutshellException $exception)
+			{
+				$this->plugin->Notification->setError('Internal nuts n bolts error. Check the logs.');
+			}
+			$this->execHook('onBeforeAddUser',$record);
+			$this->view->setVars($record);
 			$renderRef='users/add';
 			$this->setupAddEdit($renderRef);
 		}
@@ -121,38 +107,38 @@ namespace application\nutsNBolts\controller\admin\settings
 				$this->plugin->Auth	->can('admin.user.read')
 									->can('admin.user.update');
 				
+				$record=$this->request->getAll();
+				
 				if ($this->request->get('email'))
 				{
-					$record=$this->request->getAll();
-					if ($record['password']!=$record['password_confirm'])
-					{
-						$this->plugin->Notification->setError('Passwords did not match. Please try again.');
-					}
-					unset($record['password_confirm']);
-					if ($user=$this->model->User->handleRecord($record))
-					{
-						$this->execHook('onEditUser',$user);
-						$this->plugin->Notification->setSuccess('User successfully edited.');
-					}
-					else
-					{
-						$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
-					}
+					$user=$this->plugin->User->update($record,true);
+					$this->execHook('onEditUser',$user);
 				}
-				
-				if ($record=$this->model->User->read($id))
-				{
+			}
+			catch (AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+			}
+			catch (UserException $userException)
+			{
+				$this->plugin->Notification->setError($userException->getMessage());
+			}
+			catch (PolicyException $policyException)
+			{
+				$this->plugin->Notification->setError($policyException->getMessage());
+			}
+			catch (NutshellException $exception)
+			{
+				$this->plugin->Notification->setError('Internal nuts n bolts error. Check the logs.');
+			}
+			if ($record=$this->model->User->read($id))
+			{
 					$this->view->setVars($record[0]);
 				}
 				else
 				{
 					$this->view->setVar('record',array());
 				}
-			}
-			catch(AuthException $exception)
-			{
-				$this->setContentView('admin/noPermission');
-			}
 			$renderRef='users/edit';
 			$this->setupAddEdit($renderRef);
 		}

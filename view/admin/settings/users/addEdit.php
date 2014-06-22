@@ -98,6 +98,7 @@
 								</div>
 								<div class="content-box">
 									<div class="padded">
+										<?php if (!$tpl->getPolicy('password','force_random')): ?>
 										<div class="control-group">
 											<label class="control-label">Force Change</label>
 											<div class="controls">
@@ -123,6 +124,27 @@
 												<input type="password" name="password_confirm" autocomplete="off">
 											</div>
 										</div>
+										<?php
+										else:
+											if (!$tpl->get('id')):
+										?>
+										<input type="hidden" name="set_random" value="1">
+										<span>Current password policy is set to randomly generate user passwords. The user will be emailed their new password.</span>
+										<?php
+											
+											else:
+										?>
+										<div class="control-group">
+											<label class="control-label">New Random Password</label>
+											<div class="controls">
+												<input type="checkbox" name="set_random" value="1"><span class="help-inline">(The user will be emailed their new password.)</span>
+											</div>
+										</div>
+										<?php
+											endif;
+										?>
+										
+										<?php endif; ?>
 									</div>
 								</div>
 							</div>
