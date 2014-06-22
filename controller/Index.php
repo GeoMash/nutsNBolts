@@ -244,6 +244,13 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getProfilePicture($userId);
 					}
+				)->registerCallback
+				(
+					'getNotifications',
+					function()
+					{
+						return $this->getNotifications();
+					}
 				);
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
@@ -801,6 +808,11 @@ namespace application\nutsNBolts\controller
 			}
 			
 			return $picture;
+		}
+		
+		public function getNotifications()
+		{
+			return $this->plugin->Notification->getAll();
 		}
 	}
 }
