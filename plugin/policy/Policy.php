@@ -51,10 +51,5 @@ namespace application\nutsNBolts\plugin\policy
 		{
 			return $this->policies[$category][$policy];
 		}
-		
-		public function validatePassword($password)
-		{
-			
-		}
 	}
 }
