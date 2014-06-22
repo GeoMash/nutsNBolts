@@ -39,16 +39,15 @@ namespace application\nutsNBolts\model
 
 				if (isset($record['role']))
 				{
-                    if(!$removeRoles)
+                    if($removeRoles)
                     {
                         $this->model->UserRole->delete(array('user_id'=>$record['id']));
-                        $roles=$this->extractRoles($record);
-                        for ($i=0,$j=count($roles); $i<$j; $i++)
-                        {
-                            $this->model->UserRole->insert($roles[$i]);
-                        }
                     }
-
+					$roles=$this->extractRoles($record);
+					for ($i=0,$j=count($roles); $i<$j; $i++)
+					{
+						$this->model->UserRole->insert($roles[$i]);
+					}
 				}
 				if ($result!==false)
 				{
