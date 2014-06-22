@@ -184,7 +184,7 @@ SQL;
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT DISTINCT user.*
-FROM USER
+FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
 WHERE role.id=-100 OR role.id IN ({$roleQueryPart});
@@ -199,7 +199,7 @@ SQL;
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT DISTINCT user.*
-FROM USER
+FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
 WHERE role.id=-100 OR role.ref IN ({$roleQueryPart});
