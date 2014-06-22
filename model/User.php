@@ -191,7 +191,7 @@ SELECT DISTINCT user.*
 FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id IN ({$roleQueryPart})
+WHERE (role.id IN ({$roleQueryPart}))
 {$where}
 ;
 SQL;
