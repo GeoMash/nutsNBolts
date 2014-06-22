@@ -140,5 +140,21 @@ namespace application\nutsNBolts\plugin\user
 			$password=str_shuffle($password);
 			return $password;
 		}
+		
+		public function generateConfirmationCode()
+		{
+			$length=20;
+			if (function_exists('openssl_random_pseudo_bytes'))
+			{
+				$code=openssl_random_pseudo_bytes($length/2);
+			}
+			else
+			{
+				$process	=fopen('/dev/urandom','rb');
+				$code		=fread($process,$length/2);
+				fclose($process);
+			}
+			return bin2hex($code);
+		}
 	}
 }
