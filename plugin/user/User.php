@@ -49,6 +49,10 @@ namespace application\nutsNBolts\plugin\user
 		
 		private function validate(&$record)
 		{
+			if (empty($record['password']))
+			{
+				return;
+			}
 			if (!$this->plugin->Policy->getPolicyValue('password','force_random'))
 			{
 				if ($record['password']!=$record['password_confirm'])
