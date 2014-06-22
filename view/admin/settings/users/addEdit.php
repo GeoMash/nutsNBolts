@@ -142,9 +142,8 @@
 										</div>
 										<?php
 											endif;
+										endif;
 										?>
-										
-										<?php endif; ?>
 									</div>
 								</div>
 							</div>
