@@ -61,11 +61,11 @@ namespace application\nutsNBolts\plugin\user
 				$upperLowerChars=(bool)$this->plugin->Policy->getPolicyValue('password','upper_lower_characters');
 				$numericDigits	=(bool)$this->plugin->Policy->getPolicyValue('password','numeric_digits');
 				
-				if ($minLength && !strlen($record['password'])<$minLength)
+				if ($minLength && strlen($record['password'])<$minLength)
 				{
 					throw new PolicyException(PolicyException::PASSWORD_TOO_SHORT,'Password must be at least "'.$minLength.'" characters in length.');
 				}
-				if ($maxLength && !strlen($record['password'])>$maxLength)
+				if ($maxLength && strlen($record['password'])>$maxLength)
 				{
 					throw new PolicyException(PolicyException::PASSWORD_TOO_LONG,'Password cannot be more than "'.$maxLength.'" characters in length.');
 				}
