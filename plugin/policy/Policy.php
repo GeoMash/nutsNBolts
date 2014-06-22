@@ -56,13 +56,5 @@ namespace application\nutsNBolts\plugin\policy
 		{
 			
 		}
-		
-		public function generateRandomPassword()
-		{
-			if (function_exists('openssl_random_pseudo_bytes'))
-			{
-				
-			}
-		}
 	}
 }
