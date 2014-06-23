@@ -146,7 +146,7 @@ $JSKK.Class.create
 								query:	term
 							};
 						},
-						results: this.handleuserResults.bind(this)
+						results: this.handleUserResults.bind(this)
 					},
 //					formatResult: function(result)
 //					{
@@ -197,6 +197,22 @@ $JSKK.Class.create
 				{
 					placeholder:		'Select User',
 					minimumInputLength: 1,
+					initSelection: function(element, callback)
+					{
+						$.getJSON
+						(
+							'/rest/user/search.json',
+							{
+								query: element.val()
+							},
+							function(response)
+							{
+								var results=this.handleUserResults(response);
+								console.debug(results.results);
+								callback(results.results[0]);
+							}.bind(this)
+						);
+					}.bind(this),
 					ajax:
 					{
 						cache:	true,
@@ -207,7 +223,7 @@ $JSKK.Class.create
 								query:	term
 							};
 						},
-						results: this.handleuserResults.bind(this)
+						results: this.handleUserResults.bind(this)
 					},
 //					formatResult: function(result)
 //					{
@@ -216,7 +232,7 @@ $JSKK.Class.create
 				}
 			)
 		},
-		handleuserResults: function(response,page)
+		handleUserResults: function(response,page)
 		{
 			var results=[];
 			for (var i= 0,j=response.data.length; i<j; i++)
