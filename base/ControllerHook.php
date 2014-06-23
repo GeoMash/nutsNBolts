@@ -55,6 +55,12 @@ namespace application\nutsNBolts\base
 				}
 			}
 		}
+		
+		public function redirect($path)
+		{
+			header('location:'.$path);
+			exit();
+		}
 	}
 }
 ?>

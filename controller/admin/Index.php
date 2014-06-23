@@ -30,8 +30,9 @@ namespace application\nutsNBolts\controller\admin
 				$this->plugin->Session->returnURL='/'.implode('/',$this->request->getNodes());
 				$this->redirect('/admin/login/');
 			}
-			elseif ($this->isAuthenticated() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED)
-			{
+			elseif ($this->isAuthenticated()
+			&& (!$this->plugin->Auth->isImpersonating() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED))
+			{die('222');
 				$control='logout';
 			}
 			
@@ -77,9 +78,21 @@ namespace application\nutsNBolts\controller\admin
 					{
 						switch (strtolower($this->request->node(2)))
 						{
+							case 'users':
+							{
+								$this->routedController=new settings\Users($this->MVC);
+								$this->routeAction(3);
+								break;
+							}
 							case 'permissions':
 							{
 								$this->routedController=new settings\Permissions($this->MVC);
+								$this->routeAction(3);
+								return;
+							}
+							case 'policies':
+							{
+								$this->routedController=new settings\Policies($this->MVC);
 								$this->routeAction(3);
 								return;
 							}
@@ -283,7 +296,7 @@ namespace application\nutsNBolts\controller\admin
 					$this->request->get('password')
 				);
 				$this->plugin->Auth	->can('login')
-									->can('access.adminPanel');
+									->can('admin.access');
 				if (!empty($this->plugin->Session->returnURL))
 				{
 					$this->redirect($this->plugin->Session->returnURL);

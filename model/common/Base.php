@@ -13,7 +13,7 @@ namespace application\nutsNBolts\model\common
 				$where=[];
 				foreach ($whereKeyVals as $key=>$val)
 				{
-					$where[]=$key.'='.$val;
+					$where[]=$key.'="'.$val.'"';
 				}
 				$where=implode(' AND ',$where);
 				$this->getDb()->query('SELECT COUNT(*) AS count FROM '.$this->name.' WHERE '.$where.';');

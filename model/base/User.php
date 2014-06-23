@@ -38,7 +38,13 @@ namespace application\nutsNBolts\model\base
 			'phone' => 'varchar(50)' ,
 			'dob' => 'varchar(200)' ,
 			'income_range' => 'varchar(20)' ,
-			'gender' => 'varchar(10)' 
+			'gender' => 'varchar(10)',
+			'force_password_change' => 'TINYINT(1) DEFAULT 0',
+			'confirmation_code' => 'varchar(200)',
+			'address1' => 'varchar(255)',
+			'address2' => 'varchar(255)',
+			'country' => 'varchar(100)',
+			'zip' => 'int(6)'
 		);
 	}
 }

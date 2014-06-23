@@ -64,18 +64,31 @@ Versions
 * Gravatar Support
 * Custom Models
 
+
+### New in 1.4
+* New Permissions Engine
+* User Read & Rate Node Tracking
+
+
+
 Roadmap
 -------
 
 ### 1.4
-* New Permissions Engine
+* Password Policies
+
+
+### 1.6
+* New Collections Manager
+* New Plugin Architecture
 * Controller Overriding & Extending
 * Admin Panel UI API
 * Template Management
 * Zone Management
 * Forms API
 
-### 1.5
+### 1.8
+
 * Custom Plugins
 * Plugin Hooks
 * Plugin Center

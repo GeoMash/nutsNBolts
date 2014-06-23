@@ -40,7 +40,7 @@ namespace application\nutsNBolts\model
 			return false;
 		}
 		
-		public function delete($query)
+		public function delete($query=null)
 		{
 			$nav=$this->read($query);
 			var_dump($nav);

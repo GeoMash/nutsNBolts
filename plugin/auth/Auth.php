@@ -10,8 +10,11 @@ namespace application\nutsNBolts\plugin\auth
 
 	class Auth extends Plugin implements Singleton, Native
 	{
+		const USER_SUPER				=-100;
+		
 		private $user					=null;
-		private $impersonatingUser		=null;
+		private $originalUser			=null;
+		private $impersonating			=false;
 		private $permissionFullMatrix	=null;
 		private $permissionKeyMatrix	=null;
 
@@ -23,9 +26,11 @@ namespace application\nutsNBolts\plugin\auth
 			{
 				$this->db=$this->plugin->Db->{$connection};
 			}
-			$this->user=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 			if ($this->isAuthenticated())
 			{
+				$this->impersonating	=$this->plugin->Session->impersonating;
+				$this->user				=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
+				$this->originalUser		=$this->plugin->Mvc->model->User->read($this->plugin->Session->originalUserId)[0];
 				$this->generateUserPermissionsMatrix();
 			}
 		}
@@ -50,9 +55,14 @@ namespace application\nutsNBolts\plugin\auth
 				
 				if (isset($result[0]))
 				{
-					$this->plugin->Session->authenticated=true;
-					$this->plugin->Session->userId=$result[0]['id'];
-					return $result[0];
+					$this->plugin->Session->authenticated	=true;
+					$this->plugin->Session->impersonating	=false;
+					$this->plugin->Session->userId			=$user[0]['id'];
+					$this->plugin->Session->originalUserId	=$user[0]['id'];
+					$this->user								=$user[0];
+					$this->originalUser						=$user[0];
+					$this->generateUserPermissionsMatrix();
+					return $user[0];
 				}
 				else
 				{
@@ -78,22 +88,28 @@ namespace application\nutsNBolts\plugin\auth
 			$user=$this->plugin->Mvc->model->User->read(['id'=>$userId]);
 			if (isset($user[0]))
 			{
-				$this->impersonatingUser=$user;
+				$this->impersonating					=true;
+				$this->plugin->Session->impersonating	=true;
+				$this->plugin->Session->userId			=$user[0]['id'];
+				$this->user								=$user[0];
+				$this->generateUserPermissionsMatrix();
 			}
-			$this->generateUserPermissionsMatrix();
 			return $this;
 		}
 		
 		public function stopImpersonating()
 		{
-			$this->impersonatingUser=null;
+			$this->impersonating					=false;
+			$this->plugin->Session->impersonating	=false;
+			$this->plugin->Session->userId			=$this->plugin->Session->originalUserId;
+			$this->user								=$this->originalUser;
 			$this->generateUserPermissionsMatrix();
 			return $this;
 		}
 		
 		public function isImpersonating()
 		{
-			return (!is_null($this->impersonatingUser));
+			return $this->impersonating;
 		}
 
 		public function getUser()
@@ -116,7 +132,7 @@ namespace application\nutsNBolts\plugin\auth
 			$user=$this->getUser();
 			for ($i=0,$j=count($user['roles']); $i<$j; $i++)
 			{
-				if ($user['roles'][$i]['id']==NutsNBolts::USER_SUPER)
+				if ($user['roles'][$i]['id']==self::USER_SUPER)
 				{
 					return true;
 				}
@@ -129,9 +145,33 @@ namespace application\nutsNBolts\plugin\auth
 			return $this->getUser()['roles'];
 		}
 		
+		public function hasRole($roles)
+		{
+			if (is_null($roles) || $this->isSuperUser())
+			{
+				return true;
+			}
+			if (!is_array($roles))
+			{
+				$roles=[$roles];
+			}
+			$userRoles=$this->getUserRoles();
+			for ($i=0,$j=count($roles); $i<$j; $i++)
+			{
+				for ($k=0,$l=count($userRoles); $k<$l; $k++)
+				{
+					if ($roles[$i]['id']==$userRoles[$i]['id'])
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
 		public function generateUserPermissionsMatrix()
 		{
-			if (is_null($this->permissionMatrix))
+			if (is_null($this->permissionFullMatrix))
 			{
 				$roles			=$this->getUserRoles();
 				$permissionIDs	=[];
@@ -189,6 +229,11 @@ SQL;
 				return $this;
 			}
 			throw new AuthException(AuthException::PERMISSION_DENIED,'Permission Denied.');
+		}
+		
+		private function generateSalt(&$record)
+		{
+			$record['salt']=sha1('wheretoparty_ce1833cca4627da0751a2dcdde1f0b3b_'.time());
 		}
 	}
 }

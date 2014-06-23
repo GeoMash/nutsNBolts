@@ -20,11 +20,17 @@ admin.user.create
 admin.user.read
 admin.user.update
 admin.user.delete
+admin.user.impersonate
 
 admin.permissions.role.create
 admin.permissions.role.read
 admin.permissions.role.update
 admin.permissions.role.delete
+
+admin.policies.create
+admin.policies.read
+admin.policies.update
+admin.policies.delete
 
 admin.policies.password.create
 admin.policies.password.read
@@ -62,11 +68,6 @@ admin.content.node.update
 admin.content.node.delete
 admin.content.node.archive
 
-admin.content.node.create
-admin.content.node.read
-admin.content.node.update
-admin.content.node.delete
-
 admin.collection.create
 admin.collection.read
 admin.collection.update
@@ -84,6 +85,11 @@ user.messsage.delete
 
 user.profile.read
 user.profile.update
+
+admin.content.subscription.create
+admin.content.subscription.read
+admin.content.subscription.update
+admin.content.subscription.delete
 
 
 

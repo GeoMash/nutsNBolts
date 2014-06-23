@@ -21,8 +21,11 @@ namespace application\nutsNBolts
 		const VERSION_MICRO				=0;
 		const VERSION_STAGE				='';
 		const VERSION_STAGE_NUM			=0;
-		
-		const USER_SUPER				=-100;
+
+		/**
+		 * @deprecated
+		 */
+		const USER_SUPER				=-100;//TODO Remove
 		
 		private $siteBindings=array();
 		

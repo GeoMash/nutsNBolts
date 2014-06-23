@@ -32,6 +32,7 @@ requirejs
 		'jquery/validationEngine-en',
 		'jquery/ibutton',
 		'jquery/select2',
+		'jquery/bootstrap-touchspin',
 		'jquery/dataTables',
 		'jquery/tags_input',
 		'jquery/autosize',

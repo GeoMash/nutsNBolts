@@ -39,16 +39,15 @@ namespace application\nutsNBolts\model
 
 				if (isset($record['role']))
 				{
-                    if(!$removeRoles)
+                    if($removeRoles)
                     {
                         $this->model->UserRole->delete(array('user_id'=>$record['id']));
-                        $roles=$this->extractRoles($record);
-                        for ($i=0,$j=count($roles); $i<$j; $i++)
-                        {
-                            $this->model->UserRole->insert($roles[$i]);
-                        }
                     }
-
+					$roles=$this->extractRoles($record);
+					for ($i=0,$j=count($roles); $i<$j; $i++)
+					{
+						$this->model->UserRole->insert($roles[$i]);
+					}
 				}
 				if ($result!==false)
 				{
@@ -169,13 +168,17 @@ SQL;
 			return null;
 		}
 
-		public function getUsersByRole($role)
+		public function getUsersByRole($role, $where=null)
 		{
 			if (!is_array($role))
 			{
 				$role=array($role);
 			}
 			$roleQueryPart=array();
+			if(!$where)
+			{
+				$where='';
+			}
 			if (is_numeric($role[0]))
 			{
 				for ($i=0,$j=count($role); $i<$j; $i++)
@@ -185,10 +188,12 @@ SQL;
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT DISTINCT user.*
-FROM USER
+FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
-WHERE role.id=-100 OR role.id IN ({$roleQueryPart});
+WHERE (role.id IN ({$roleQueryPart}))
+{$where}
+;
 SQL;
 			}
 			else
@@ -200,7 +205,7 @@ SQL;
 				$roleQueryPart=implode(',',$roleQueryPart);
 				$query=<<<SQL
 SELECT DISTINCT user.*
-FROM USER
+FROM user
 LEFT JOIN user_role ON user_role.user_id=user.id
 LEFT JOIN role ON role.id=user_role.role_id
 WHERE role.id=-100 OR role.ref IN ({$roleQueryPart});

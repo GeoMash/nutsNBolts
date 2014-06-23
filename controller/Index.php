@@ -237,6 +237,20 @@ namespace application\nutsNBolts\controller
 					{
 						return $this->getNav($id);
 					}
+				)->registerCallback
+				(
+					'getProfilePicture',
+					function($userId)
+					{
+						return $this->getProfilePicture($userId);
+					}
+				)->registerCallback
+				(
+					'getNotifications',
+					function()
+					{
+						return $this->getNotifications();
+					}
 				);
 				$context=$this->view->getContext();
 				$this->execHook('bindViewCallbacks',$context);
@@ -779,6 +793,26 @@ namespace application\nutsNBolts\controller
 				return $nav;
 			}
 			return false;
+		}
+		
+		public function getProfilePicture($userId)
+		{
+			$user=$this->model->User->read(['id'=>$userId]);
+			if(isset($user[0]['image']) && strlen($user[0]['image']))
+			{
+				$picture=$user[0]['image'];
+			}
+			else
+			{
+				$picture='/admin/images/avatars/default.jpg';
+			}
+			
+			return $picture;
+		}
+		
+		public function getNotifications()
+		{
+			return $this->plugin->Notification->getAll();
 		}
 	}
 }

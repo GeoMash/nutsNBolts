@@ -12,9 +12,7 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 	</ul>
 	<ul class="nav full pull-right">
 		<li class="dropdown user-avatar">
-
 			<!-- the dropdown has a custom user-avatar class, this is the small avatar with the badge -->
-
 			<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				<span>
 					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
@@ -26,11 +24,8 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 					<span class="badge badge-dark-red"><?php $tpl->getUnreadMessages(); ?></span>
 				</span>
 			</a>
-
 			<ul class="dropdown-menu">
-
 				<!-- the first element is the one with the big avatar, add a with-image class to it -->
-
 				<li class="with-image">
 					<div class="avatar">
 					<?php if(isset($user['image']) && strlen($user['image'])>0): ?>
@@ -50,6 +45,21 @@ $gravatarHash=md5(strtolower(trim($user['email'])));
 		</li>
 	</ul>
 	<ul class="nav pull-right">
+		<li>
+			<?php if (!$tpl->isImpersonating()): ?>
+			<input id="impersonateUser" name="impersonate">
+			&nbsp;&nbsp;
+			<?php
+				else:
+				$user=$tpl->get('user');
+				?>
+					<a id="stopImpersonatingUser" class="btn-red" href="javascript:{}">
+						<i class="icon-user ixon-x2"></i> Impersonating User
+						<?php print $user['name_first'].' '.$user['name_last'].' ('.$user['email'].')' ?>
+						<i class="icon-remove"></i>
+					</a>
+			<?php endif; ?>
+		</li>
 		<li><a href="/" target="_blank" title="View Website"><i class="icon-globe"></i> View Website</a></li>
 	</ul>
 </div>

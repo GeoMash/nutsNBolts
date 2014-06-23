@@ -28,18 +28,20 @@ $JSKK.Class.create
 			
 			$('.tags').tagsInput({width: 'auto'});
 			
-			$('.icheck').iCheck
-			(
-				{
-					checkboxClass:	'icheckbox_flat-aero',
-					radioClass:		'iradio_flat-aero'
-				}
-			);
+			$('input[type=checkbox]:not(.iButton-icons)')
+				.addClass('iCheck')
+				.iCheck
+				(
+					{
+						checkboxClass:	'icheckbox_flat-aero',
+						radioClass:		'iradio_flat-aero'
+					}
+				);
 			this.initIButtons();
-
-			
-			
+			this.initImpersonateUser();
 			this.initSelect2();
+			
+			$('[data-toggle="tooltip"]').tooltip()
 			
 			$.extend
 			(
@@ -95,6 +97,113 @@ $JSKK.Class.create
 				}
 			);
 			
+			$('input[type="number"]').TouchSpin
+			(
+				{
+//					min:	0,
+//					max: 100,
+					step:			1,
+					decimals:		0,
+					boostat:		5,
+					maxboostedstep:	10
+				}
+			);
+			
+			
+			$('input[name="set_random"]').on
+			(
+				'ifChanged',
+				function(event)
+				{
+					if ($(event.target).is(':checked'))
+					{
+						$('input[name="password"]').attr('disabled',true);
+						$('input[name="password_confirm"]').attr('disabled',true);
+					}
+					else
+					{
+						$('input[name="password"]').attr('disabled',false);
+						$('input[name="password_confirm"]').attr('disabled',false);
+					}
+				}
+			);
+		},
+		initImpersonateUser: function()
+		{
+			$('#impersonateUser').select2
+			(
+				{
+					placeholder:		'Impersonate User',
+					minimumInputLength: 1,
+					ajax:
+					{
+						cache:	true,
+						url:	'/rest/user/search.json',
+						data:	function(term,page)
+						{
+							return {
+								query:	term
+							};
+						},
+						results: function(response,page)
+						{
+							var results=[];
+							for (var i= 0,j=response.data.length; i<j; i++)
+							{
+								results.push
+								(
+									{
+										id:		response.data[i].id,
+										text:	response.data[i].name_first+' '
+												+response.data[i].name_last+' ('
+												+response.data[i].email+')'
+									}
+								);
+							}
+							return {results: results}
+						}
+					},
+//					formatResult: function(result)
+//					{
+//						
+//					}
+				}
+			).on
+			(
+				'change',
+				function(event)
+				{
+					var select=$('#impersonateUser');
+					$.getJSON
+					(
+						'/rest/user/impersonate/start/'+select.val()+'.json',
+						function()
+						{
+							//Refresh the window.
+							alert('Switching to impersonate user mode.');
+							window.location.reload();
+						}
+					);
+					select.val()
+				}.bind(this)
+			);
+			
+			$('#stopImpersonatingUser').click
+			(
+				function()
+				{
+					$.getJSON
+					(
+						'/rest/user/impersonate/stop.json',
+						function()
+						{
+							//Refresh the window.
+							alert('Switching to non-impersonation mode.');
+							window.location.reload();
+						}
+					);
+				}.bind(this)
+			);
 		},
 		initSelect2: function()
 		{
