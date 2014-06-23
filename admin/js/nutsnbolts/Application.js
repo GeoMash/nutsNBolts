@@ -39,6 +39,7 @@ $JSKK.Class.create
 				);
 			this.initIButtons();
 			this.initImpersonateUser();
+			this.initUserSelect();
 			this.initSelect2();
 			
 			$('[data-toggle="tooltip"]').tooltip()
@@ -145,23 +146,7 @@ $JSKK.Class.create
 								query:	term
 							};
 						},
-						results: function(response,page)
-						{
-							var results=[];
-							for (var i= 0,j=response.data.length; i<j; i++)
-							{
-								results.push
-								(
-									{
-										id:		response.data[i].id,
-										text:	response.data[i].name_first+' '
-												+response.data[i].name_last+' ('
-												+response.data[i].email+')'
-									}
-								);
-							}
-							return {results: results}
-						}
+						results: this.handleuserResults.bind(this)
 					},
 //					formatResult: function(result)
 //					{
@@ -204,6 +189,49 @@ $JSKK.Class.create
 					);
 				}.bind(this)
 			);
+		},
+		initUserSelect: function()
+		{
+			$('[data-role=selectUser]').select2
+			(
+				{
+					placeholder:		'Select User',
+					minimumInputLength: 1,
+					ajax:
+					{
+						cache:	true,
+						url:	'/rest/user/search.json',
+						data:	function(term,page)
+						{
+							return {
+								query:	term
+							};
+						},
+						results: this.handleuserResults.bind(this)
+					},
+//					formatResult: function(result)
+//					{
+//						
+//					}
+				}
+			)
+		},
+		handleuserResults: function(response,page)
+		{
+			var results=[];
+			for (var i= 0,j=response.data.length; i<j; i++)
+			{
+				results.push
+				(
+					{
+						id:		response.data[i].id,
+						text:	response.data[i].name_first+' '
+								+response.data[i].name_last+' ('
+								+response.data[i].email+')'
+					}
+				);
+			}
+			return {results: results}
 		},
 		initSelect2: function()
 		{
