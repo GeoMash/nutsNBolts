@@ -22,7 +22,7 @@ if ($tpl->can('admin.content.contentType.read')
 		</li>
 		<?php
 			endif;
-			if ($tpl->can('admin.content.nav.read')):
+			if ($tpl->can('admin.content.navigation.read')):
 		?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='nav')print 'active'; ?>">
 			<a href="/admin/configurecontent/nav">
