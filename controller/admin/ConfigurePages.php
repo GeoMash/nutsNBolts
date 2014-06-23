@@ -138,7 +138,7 @@ namespace application\nutsNBolts\controller\admin
 		{
 			try
 			{
-				$this->plugin->Auth->can('');
+				$this->plugin->Auth->can('admin.pageType.create');
 				if (!$this->request->get('name'))
 				{
 					$this->addBreadcrumb('Add Page','icon-copy','add');

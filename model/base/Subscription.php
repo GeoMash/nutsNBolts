@@ -22,6 +22,7 @@ namespace application\nutsNBolts\model\base
 			'name' => 'varchar(100) NOT NULL ',
 			'description' => 'text NOT NULL ',
 			'duration' => 'tinyint(3) NOT NULL ',
+			'recurring' => 'tinyint(1) NOT NULL ',
 			'amount' => 'int(10) NOT NULL ',
 			'currency' => 'varchar(3) NOT NULL ',
 			'status' => 'tinyint(1) NOT NULL '
