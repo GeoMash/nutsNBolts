@@ -16,23 +16,23 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.user.read');
+				$this->plugin->Auth->can('admin.content.subscription.read');
 				
-				$this->addBreadcrumb('System Settings','icon-wrench','settings');
-				$this->addBreadcrumb('Users','icon-user','users');
+				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
+				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				
-				$this->setContentView('admin/settings/users/list');
+				$this->setContentView('admin/configureContent/subscriptions/list');
 				$this->view->getContext()
 				->registerCallback
 				(
-					'getUsers',
+					'getSubscriptions',
 					function()
 					{
-						return $this->getUsers();
+						return $this->getSubscriptions();
 					}
 				);
 				
-				$renderRef='users';
+				$renderRef='subscriptions';
 				$this->view->setVar('extraOptions',array());
 				$this->execHook('onBeforeRender',$renderRef);
 			}
@@ -47,44 +47,25 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->addBreadcrumb('System Settings','icon-wrench','settings');
-				$this->addBreadcrumb('Users','icon-user','users');
+				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
+				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Add','icon-plus','add');
 				
-				$this->plugin->Auth->can('admin.user.create');
-				$this->plugin->Auth->can('admin.collection.create');
+				$this->plugin->Auth->can('admin.content.subscription.create');
 				
 				$record=$this->request->getAll();
 				
-				if ($this->request->get('email'))
+				if ($this->request->get('name'))
 				{
-					$user=$this->plugin->User->create($record);
-					$this->plugin->Notification->setSuccess('User successfully added. Would you like to <a href="/admin/settings/users/add/">Add another one?</a>');
-					$this->execHook('onAddUser',$user);
-					$this->plugin->Collection->create
-					(
-						array
-						(
-							'name'			=>'My Files',
-							'description'	=>'User Collection',
-							'status'		=>1
-						),
-						$user['id']
-					);
-					$this->redirect('/admin/settings/users/edit/'.$user['id']);
+					$subscription=$this->model->Subscription->handleRecord($record);
+					$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/configurecontent/subscriptions/add/">Add another one?</a>');
+					$this->execHook('onAddSubscription',$subscription);
+					$this->redirect('/admin/configurecontent/subscriptions/edit/'.$subscription['id']);
 				}
 			}
 			catch (AuthException $exception)
 			{
 				$this->setContentView('admin/noPermission');
-			}
-			catch (UserException $userException)
-			{
-				$this->plugin->Notification->setError($userException->getMessage());
-			}
-			catch (PolicyException $policyException)
-			{
-				$this->plugin->Notification->setError($policyException->getMessage());
 			}
 			catch (NutshellException $exception)
 			{
@@ -92,7 +73,7 @@ namespace application\nutsNBolts\controller\admin\configureContent
 			}
 			$this->execHook('onBeforeAddUser',$record);
 			$this->view->setVars($record);
-			$renderRef='users/add';
+			$renderRef='subscriptions/add';
 			$this->setupAddEdit($renderRef);
 		}
 		
@@ -100,38 +81,31 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->addBreadcrumb('System Settings','icon-wrench','settings');
-				$this->addBreadcrumb('Users','icon-user','users');
+				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
+				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Edit','icon-edit','edit/'.$id);
 				
-				$this->plugin->Auth	->can('admin.user.read')
-									->can('admin.user.update');
+				$this->plugin->Auth	->can('admin.content.subscription.read')
+									->can('admin.content.subscription.update');
 				
 				$record=$this->request->getAll();
 				
-				if ($this->request->get('email'))
+				if ($this->request->get('name'))
 				{
-					$user=$this->plugin->User->update($record,true);
-					$this->execHook('onEditUser',$user);
+					$subscription=$this->model->Subscription->handleRecord($record);
+					$this->plugin->Notification->setSuccess('Subscription successfully updated.');
+					$this->execHook('onEditSubscription',$subscription);
 				}
 			}
 			catch (AuthException $exception)
 			{
 				$this->setContentView('admin/noPermission');
 			}
-			catch (UserException $userException)
-			{
-				$this->plugin->Notification->setError($userException->getMessage());
-			}
-			catch (PolicyException $policyException)
-			{
-				$this->plugin->Notification->setError($policyException->getMessage());
-			}
 			catch (NutshellException $exception)
 			{
 				$this->plugin->Notification->setError('Internal nuts n bolts error. Check the logs.');
 			}
-			if ($record=$this->model->User->read($id))
+			if ($record=$this->model->Subscription->read($id))
 			{
 					$this->view->setVars($record[0]);
 				}
@@ -139,7 +113,7 @@ namespace application\nutsNBolts\controller\admin\configureContent
 				{
 					$this->view->setVar('record',array());
 				}
-			$renderRef='users/edit';
+			$renderRef='subscriptions/edit';
 			$this->setupAddEdit($renderRef);
 		}
 		
@@ -147,23 +121,12 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.user.delete');
-				if ($id==-100)
+				$this->plugin->Auth->can('admin.content.subscription.delete');
+				
+				if ($this->model->Subscription->delete($id))
 				{
-					$this->plugin->Notification->setError('The system super user cannot be removed.');
-					$this->redirect('/admin/settings/users/');
-				}
-				if ($id==$this->getUserId())
-				{
-					$this->plugin->Notification->setError('You cannot remove yourself.');
-					$this->redirect('/admin/settings/users/');
-				}
-	
-				if ($this->model->User->handleDeleteRecord($id))
-				{
-					$this->plugin->Notification->setSuccess('User successfully removed.');
-					//TODO: Remove collection items? Needs discussion.
-					$this->redirect('/admin/settings/users/');
+					$this->plugin->Notification->setSuccess('Subscription successfully removed.');
+					$this->redirect('/admin/configurecontent/subscriptions/');
 				}
 				else
 				{
@@ -177,59 +140,20 @@ namespace application\nutsNBolts\controller\admin\configureContent
 			}
 		}
 		
-		public function impersonate($id)
-		{
-			try
-			{
-				$this->plugin->Auth->can('admin.user.impersonate');
-				if ($id==Auth::USER_SUPER)
-				{
-					$this->plugin->Notification->setError('You cannot impersonate root.');
-					$this->redirect('/admin/settings/users/');
-				}
-				if ($id==$this->getUserId())
-				{
-					$this->plugin->Notification->setError('You cannot impersonate yourself.');
-					$this->redirect('/admin/settings/users/');
-				}
-				if (is_numeric($id))
-				{
-					$this->plugin->Auth->startImpersonating($id);
-					$this->plugin->Notification->setSuccess('You\'ve started impersonating a user. Click the button in the nav to stop.');
-				}
-				else
-				{
-					$this->plugin->Notification->setError('Invalid User! Unable to impersonate this.');
-				}
-				$this->redirect('/admin/settings/users/');
-			}
-			catch(AuthException $exception)
-			{
-				$this->plugin->Notification->setError('Nope, you don\'t have permission to impersonate other users!');
-			}
-			
-		}
-		
 		private function setupAddEdit(&$renderRef)
 		{
-			$this->setContentView('admin/settings/users/addEdit');
-			
-			$this->view->getContext()
-				->registerCallback
-				(
-					'getUserRoles',
-					function()
-					{
-						$id=$this->request->lastNode();
-						print $this->generateRolesList($id);
-					}
-				);
+			$this->setContentView('admin/configureContent/subscriptions/addEdit');
 			
 			$this->view->setVar('extraOptions',array());
 			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
 		
+		
+		public function getSubscriptions()
+		{
+			return $this->model->Subscription->read();
+		}
 		
 	}
 }
