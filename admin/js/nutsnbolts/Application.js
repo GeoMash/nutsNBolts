@@ -101,7 +101,7 @@ $JSKK.Class.create
 			(
 				{
 //					min:	0,
-//					max: 100,
+					max: 9999999999,
 					step:			1,
 					decimals:		0,
 					boostat:		5,
