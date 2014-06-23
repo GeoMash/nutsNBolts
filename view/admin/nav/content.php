@@ -2,7 +2,8 @@
 if ($tpl->can('admin.content.contentType.read')
 || $tpl->can('admin.content.navigation.read')
 || $tpl->can('admin.content.form.read')
-|| $tpl->can('admin.content.widget.read')
+|| $tpl->can('user.content.subscription.read')
+//|| $tpl->can('admin.content.widget.read')
 || $tpl->can('admin.content.node.read')):
 ?>
 <li class="dropdown <?php if ($tpl->get('nav_active_main')=='content')print 'active'; ?>">
@@ -36,6 +37,15 @@ if ($tpl->can('admin.content.contentType.read')
 		<li class="<?php if ($tpl->get('nav_active_sub')=='forms')print 'active'; ?>">
 			<a href="/admin/configurecontent/forms">
 				<i class="icon-list-alt"></i> Forms
+			</a>
+		</li>
+		<?php
+			endif;
+			if ($tpl->can('admin.content.subscription.read')):
+		?>
+		<li class="<?php if ($tpl->get('nav_active_sub')=='subscriptions')print 'active'; ?>">
+			<a href="/admin/configurecontent/subscriptions">
+				<i class="icon-envelope"></i> Subscriptions
 			</a>
 		</li>
 		<?php
