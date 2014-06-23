@@ -17,6 +17,18 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function upload($collectionID)
 		{
+			if(!$collectionID)
+			{
+				$collections=$this->model->CollectionUser->read
+				(
+					[
+						'user_id'		=>$this->plugin->Session->userId
+					]	
+				);
+
+				$collectionID=$collections[0]['collection_id'];
+			}
+			
 			try
 			{
 				$this->plugin->Auth->can('admin.collection.create');
