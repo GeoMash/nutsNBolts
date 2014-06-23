@@ -26,7 +26,7 @@ if ($tpl->can('admin.content.contentType.read')
 		?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='nav')print 'active'; ?>">
 			<a href="/admin/configurecontent/nav">
-				<i class="icon-beaker"></i> Navigation
+				<i class="icon-list-ul"></i> Navigation
 			</a>
 		</li>
 		<?php
