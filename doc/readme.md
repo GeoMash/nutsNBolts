@@ -86,10 +86,10 @@ user.messsage.delete
 user.profile.read
 user.profile.update
 
-user.content.subscription.create
-user.content.subscription.read
-user.content.subscription.update
-user.content.subscription.delete
+admin.content.subscription.create
+admin.content.subscription.read
+admin.content.subscription.update
+admin.content.subscription.delete
 
 
 
