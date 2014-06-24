@@ -15,7 +15,7 @@ namespace application\nutsNBolts\controller\admin
 			
 		}
 		
-		public function upload($collectionID)
+		public function upload($collectionID=null)
 		{
 			if(!$collectionID)
 			{
