@@ -11,7 +11,8 @@ namespace application\nutsNBolts\plugin\auth\exception
 	{
 		const PERMISSION_DENIED	=1;
 		const NOT_AUTHENTICATED	=2;
-		const INVALID_USERNAME	=3;
+		const INVALID_EMAIL		=3;
 		const INVALID_PASSWORD	=4;
+		const INVALID_USER_ID	=5;
 	}
 }
