@@ -802,13 +802,19 @@ namespace application\nutsNBolts\controller
 			if(strlen($user[0]['image']))
 			{
 				$picture=$user[0]['image'];
+				
+				$pictureArray	=explode('/',$picture);
+				$fileName		=$pictureArray[3];
+				$collectionId	=$pictureArray[2];
+				
+				$pictureString='/_collections/'.$collectionId.'/_thumbs/120x120/'.$fileName;
 			}
 			else
 			{
-				$picture='/admin/images/avatars/default.jpg';
-			}
+				$pictureString='/admin/images/avatars/default.jpg';
+			}		
 			
-			return $picture;
+			return $pictureString;
 		}
 		
 		public function getNotifications()
