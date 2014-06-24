@@ -19,6 +19,7 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ',
+			'user_id' => 'int(10) NOT NULL ',
 			'subscription_id' => 'int(10) NOT NULL ',
 			'arb_id' => 'int(13) NOT NULL ',
 			'timestamp' => 'timestamp NOT NULL ',

@@ -39,6 +39,7 @@ $JSKK.Class.create
 				);
 			this.initIButtons();
 			this.initImpersonateUser();
+			this.initUserSelect();
 			this.initSelect2();
 			
 			$('[data-toggle="tooltip"]').tooltip()
@@ -101,7 +102,7 @@ $JSKK.Class.create
 			(
 				{
 //					min:	0,
-//					max: 100,
+					max: 9999999999,
 					step:			1,
 					decimals:		0,
 					boostat:		5,
@@ -145,23 +146,7 @@ $JSKK.Class.create
 								query:	term
 							};
 						},
-						results: function(response,page)
-						{
-							var results=[];
-							for (var i= 0,j=response.data.length; i<j; i++)
-							{
-								results.push
-								(
-									{
-										id:		response.data[i].id,
-										text:	response.data[i].name_first+' '
-												+response.data[i].name_last+' ('
-												+response.data[i].email+')'
-									}
-								);
-							}
-							return {results: results}
-						}
+						results: this.handleUserResults.bind(this)
 					},
 //					formatResult: function(result)
 //					{
@@ -204,6 +189,65 @@ $JSKK.Class.create
 					);
 				}.bind(this)
 			);
+		},
+		initUserSelect: function()
+		{
+			$('[data-role=selectUser]').select2
+			(
+				{
+					placeholder:		'Select User',
+					minimumInputLength: 1,
+					initSelection: function(element, callback)
+					{
+						$.getJSON
+						(
+							'/rest/user/search.json',
+							{
+								query: element.val()
+							},
+							function(response)
+							{
+								var results=this.handleUserResults(response);
+								console.debug(results.results);
+								callback(results.results[0]);
+							}.bind(this)
+						);
+					}.bind(this),
+					ajax:
+					{
+						cache:	true,
+						url:	'/rest/user/search.json',
+						data:	function(term,page)
+						{
+							return {
+								query:	term
+							};
+						},
+						results: this.handleUserResults.bind(this)
+					},
+//					formatResult: function(result)
+//					{
+//						
+//					}
+				}
+			)
+		},
+		handleUserResults: function(response,page)
+		{
+			var results=[];
+			for (var i= 0,j=response.data.length; i<j; i++)
+			{
+				results.push
+				(
+					{
+						id:		response.data[i].id,
+						text:	response.data[i].name_first+' '
+								+response.data[i].name_last+' ('
+								+response.data[i].email+')'
+					}
+				);
+			}
+			return {results: results}
 		},
 		initSelect2: function()
 		{

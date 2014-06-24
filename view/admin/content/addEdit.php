@@ -40,6 +40,14 @@
 										<textarea class="tags" name="tags" placeholder="add a tag"><?php $tpl->nodeTags; ?></textarea>
 									</div>
 								</div>
+								<?php if ($tpl->can('admin.content.node.ownership')): ?>
+								<div class="control-group">
+									<label class="control-label">Ownership</label>
+									<div class="controls">
+										<input data-role="selectUser" name="owner_user_id" value="<?php $tpl->owner_user_id; ?>">
+									</div>
+								</div>
+								<?php endif; ?>
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">

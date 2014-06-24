@@ -29,6 +29,7 @@ namespace application\nutsNBolts\model\base
 			'date_created' => 'timestamp NOT NULL ' ,
 			'date_updated' => 'timestamp NOT NULL ' ,
 			'date_published' => 'timestamp' ,
+			'owner_user_id' => 'int(10)' ,
 			'original_user_id' => 'int(10)' ,
 			'last_user_id' => 'int(10) NOT NULL ' ,
 			'order' => 'int(5) NOT NULL ' ,

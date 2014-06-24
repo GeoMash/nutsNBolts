@@ -126,13 +126,23 @@ namespace application\nutsNBolts\controller\admin
 					
 					$record['site_id']			=$this->getSiteId();
 					$record['content_type_id']	=$typeID;
-					$record['last_user_id']		=$this->getUserId();
+					try
+					{
+						$this->plugin->Auth->can('admin.content.node.ownership');
+						if (empty($record['owner_user_id']))
+						{
+							$record['owner_user_id']=$this->getUserId();
+						}
+					}
+					catch(AuthException $exception)
+					{
+						$record['owner_user_id']=$this->getUserId();
+					}
+					$record['last_user_id']=$this->getUserId();
 					if (!isset($record['id']))
 					{
 						$record['original_user_id']=$this->getUserId();
 					}
-					//TODO last_user_id
-	
 					$id=$this->model->Node->handleRecord($record);				
 					if (is_numeric($id))
 					{
@@ -181,7 +191,27 @@ namespace application\nutsNBolts\controller\admin
 							$record[$key]=$rec;
 						}
 					}
-	
+					$record['last_user_id']=$this->getUserId();
+					if (!empty($record['owner_user_id']))
+					{
+						try
+						{
+							$this->plugin->Auth->can('admin.content.node.ownership');
+							if (!is_numeric($record['owner_user_id']))
+							{
+								$user=$this->model->User->read(['email'=>$record['owner_user_id']]);
+								if (isset($user[0]))
+								{
+									$record['owner_user_id']=$user[0]['id'];
+								}
+							}
+						}
+						catch(AuthException $exception)
+						{
+							unset($record['owner_user_id']);
+						};
+					}
+					
 					if (!$this->contentType['workflow_id'])
 					{
 						if ($this->model->Node->handleRecord($record)!==false)
@@ -246,6 +276,15 @@ HTML;
 					}
 				}
 				$parts[]=$this->JSLoader->getLoaderHTML();
+				if ($node[0]['owner_user_id'])
+				{
+					$owner=$this->model->User->read(['id'=>$node[0]['owner_user_id']]);
+					if (isset($owner[0]))
+					{
+						$this->view->setVar('owner',$owner[0]);
+					}
+				}
+				
 				$this->view->setVars($node[0]);
 				$this->view->setVar('contentType',		$contentType[0]['name']);
 				$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);

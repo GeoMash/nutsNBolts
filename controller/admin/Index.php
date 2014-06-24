@@ -63,7 +63,26 @@ namespace application\nutsNBolts\controller\admin
 				case 'configureContent':
 				case 'configurecontent':
 				{
-					$this->routedController=new ConfigureContent($this->MVC);
+					if ($this->request->node(2))
+					{
+						switch (strtolower($this->request->node(2)))
+						{
+							case 'subscriptions':
+							{
+								$this->routedController=new configureContent\Subscriptions($this->MVC);
+								$this->routeAction(3);
+								break;
+							}
+							default:
+							{
+								$this->routedController=new ConfigureContent($this->MVC);
+							}
+						}
+					}
+					else
+					{
+						$this->routedController=new ConfigureContent($this->MVC);
+					}
 					break;
 				}
 				case 'fileManager':

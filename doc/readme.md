@@ -67,6 +67,7 @@ admin.content.node.read
 admin.content.node.update
 admin.content.node.delete
 admin.content.node.archive
+admin.content.node.ownership
 
 admin.collection.create
 admin.collection.read

@@ -403,3 +403,8 @@ input[disabled]
 {
 	background-color: #f4f4f4;
 }
+
+.control-group .controls .bootstrap-touchspin input[type=number]
+{
+	width:	auto;
+}
