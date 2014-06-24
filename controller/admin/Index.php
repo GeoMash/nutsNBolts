@@ -32,7 +32,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			elseif ($this->isAuthenticated()
 			&& (!$this->plugin->Auth->isImpersonating() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED))
-			{die('222');
+			{
 				$control='logout';
 			}
 			
