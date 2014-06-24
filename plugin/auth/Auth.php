@@ -71,7 +71,23 @@ namespace application\nutsNBolts\plugin\auth
 			}
 			else
 			{
-				throw new AuthException(AuthException::INVALID_USERNAME,'Sorry, username not registered.');
+				throw new AuthException(AuthException::INVALID_EMAIL,'Sorry, email not registered.');
+			}
+		}
+		
+		public function authenticateUser($userId)
+		{
+			$user=$this->plugin->Mvc->model->User->read(['id'=>$userId]);
+			if (isset($user[0]))
+			{
+				$this->plugin->Session->authenticated	=true;
+				$this->plugin->Session->impersonating	=false;
+				$this->plugin->Session->userId			=$user[0]['id'];
+				$this->plugin->Session->originalUserId	=$user[0]['id'];
+			}
+			else
+			{
+				throw new AuthException(AuthException::INVALID_USER_ID,'No user with this ID found.');
 			}
 		}
 
