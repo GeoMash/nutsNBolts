@@ -38,12 +38,17 @@ namespace application\nutsNBolts\plugin\payment\handler
 		{
 			$transaction = new AuthorizeNetAIM($this->login_id,$this->transaction_key);
 			
-			if($cardCode) $transaction->card_code = $cardCode;
+			if($cardCode) 
+			{
+				$transaction->card_code = $cardCode;
+			}
 			
 			$response =  $transaction->authorizeAndCapture($amount,$cardNo,$expDate);
 			
 			if(!$response->approved)
+			{
 				throw new ApplicationException(0, $response->response_reason_text);
+			}
 			
 			return $response;
 		}
@@ -105,14 +110,18 @@ namespace application\nutsNBolts\plugin\payment\handler
         	$arbResponse = $arbRequest->createSubscription($subscription);
 			
 			if($arbResponse->isError())
+			{
 				throw new ApplicationException(1, $arbResponse->getErrorMessage());
+			}
 			
         	$subscription_id = $arbResponse->getSubscriptionId();
         	$status_request = new AuthorizeNetARB($this->login_id,$this->transaction_key);
   		    $status_response = $status_request->getSubscriptionStatus($subscription_id);
 			
 			if($status_response->getSubscriptionStatus() != "active")
+			{
 				throw new ApplicationException(2, $status_response->getMessageText());
+			}
 			
 			return $arbResponse;
 		}
@@ -123,13 +132,17 @@ namespace application\nutsNBolts\plugin\payment\handler
         	$cancel_response = $cancellation->cancelSubscription($subscriptionId);
 			
 			if($cancel_response->isError())
+			{
 				throw new ApplicationException(0, $cancel_response->getErrorMessage());
+			}
 			
 			$status_request = new AuthorizeNetARB($this->login_id,$this->transaction_key);
         	$status_response = $status_request->getSubscriptionStatus($subscriptionId);
 			
 			if($status_response->getSubscriptionStatus() != "canceled")
+			{
 				throw new ApplicationException(1, $status_response->getMessageText());
+			}
 			
 			return true;
 		}

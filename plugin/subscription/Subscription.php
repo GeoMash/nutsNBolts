@@ -20,16 +20,17 @@ namespace application\nutsNBolts\plugin\subscription
 		
 		public function subscribe($userId, $subscriptionId, $subscriptionRequest)
 		{
-			var_dump($userId, $subscriptionId, $subscriptionRequest);
+			//var_dump($userId, $subscriptionId, $subscriptionRequest);
 			
 			$cardNo = $subscriptionRequest['number'];
 			$cardCode = $subscriptionRequest['ccv'];
+			
 			$cardExpiryMonth = str_pad($subscriptionRequest['expiry-month'], 2, '0', STR_PAD_LEFT);
 			$cardExpiryYear = str_pad($subscriptionRequest['expiry-year'], 2, '0', STR_PAD_LEFT);
+			$expDate = $cardExpiryMonth.$cardExpiryYear;
 			
 			$subscription = $this->model->Subscription->read($subscriptionId)[0];			
 			$amount = $subscription['amount'];
-			$expDate = $cardExpiryMonth.$cardExpiryYear;
 				
 			if(!$subscription->status != STATUS_ACTIVE)
 				throw new ApplicationException(0,"Subscription is inactive");
