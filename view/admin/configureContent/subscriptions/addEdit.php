@@ -46,7 +46,7 @@
 							<div class="control-group">
 								<label class="control-label">Recurring</label>
 								<div class="controls">
-									<input type="checkbox" name="recurring" class="validate[required]" data-prompt-position="topLeft" value="1" <?php print (bool)$tpl->get('recurring')?'checked':''; ?>>
+									<input type="checkbox" name="recurring" data-prompt-position="topLeft" value="1" <?php print (bool)$tpl->get('recurring')?'checked':''; ?>>
 								</div>
 							</div>
 							<div class="control-group">
