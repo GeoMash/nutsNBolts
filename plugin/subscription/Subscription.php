@@ -34,12 +34,14 @@ namespace application\nutsNBolts\plugin\subscription
 			$subscription = $this->model->Subscription->read($subscriptionId)[0];			
 			$amount = $subscription['amount'];
 			
-			//Receving the necessary user information
+			//Receiving the necessary user information
 			$user = $this->model->User->read([
 				'id' => $userId
-				]);			
+				])[0];
 			$userFirstName = $user['name_first'];
 			$userLastName = $user['name_last'];
+			
+			//var_dump($userFirstName, $userLastName);
 			
 			//Checking for Subscription Package Activity
 			if(!$subscription->status != STATUS_ACTIVE)
