@@ -101,7 +101,7 @@ namespace application\nutsNBolts\controller\rest
 				$this->setResponseCode(200);
 				$this->respond
 				(
-					true,
+					false,
 					'OK',
 					false
 				);
