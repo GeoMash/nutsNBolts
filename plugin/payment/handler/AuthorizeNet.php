@@ -34,26 +34,42 @@ namespace application\nutsNBolts\plugin\payment\handler
 			echo 'hi';
 		}
 		
-		public function chargeCard($cardNo, $cardCode, $expDate, $amount, $email)
+		public function chargeCard($cardNo, $cardCode, $expDate, $amount)
 		{
 			$transaction = new AuthorizeNetAIM($this->login_id,$this->transaction_key);
 			
 			if($cardCode) $transaction->card_code = $cardCode;
-			if($email) $transaction->email = $email;
 			
-			return $transaction->authorizeAndCapture($amount,$cardNo,$expDate);
+			$response =  $transaction->authorizeAndCapture($amount,$cardNo,$expDate);
+			
+			if(!$response->approved)
+				throw new ApplicationException(0, $response->response_reason_text);
+			
+			return $response;
 		}
 		
-		public function createRecurringSubscription($amount, $cardNo, $cardCode, $expDate, $email = '')
+		public function createRecurringSubscription($amount, $cardNo, $cardCode, $expDate, &$transactionResponse)
 		{
 			$firstTransactionCounter = 0;
+			$firstTransactionSuccess = true;
 			do{
-				$firstTransactionResponse = $this->chargeCard($cardNo, $cardCode,$expDate,$amount,$email);
+				try{
+					$firstTransactionResponse = $this->chargeCard($cardNo, $cardCode,$expDate,$amount);
+					$firstTransactionSuccess = true;
+				}
+				catch(\Exception $ex)
+				{
+					$firstTransactionSuccess = false;
+				}
 			}while(!$firstTransactionResponse->approved && $firstTransactionCounter++ < 5);
 			
-			if(!$firstTransactionResponse->approved)
+			if(!$firstTransactionSuccess)
 			{
 				throw new ApplicationException(0, $firstTransactionResponse->response_reason_text);
+			}
+			else
+			{
+				$transactionResponse = $firstTransactionResponse;
 			}
 			
 			// Set the subscription fields.
@@ -67,24 +83,21 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$subscription->creditCardCardNumber = $cardNo;
 			$subscription->creditCardExpirationDate = $expDate;
 			$subscription->creditCardCardCode = $cardCode;
-			$subscription->billToFirstName = "john";
-			$subscription->billToLastName = "doe";
-			$subscription->customerEmail = $email;
 			
 			$request = new AuthorizeNetARB($this->login_id,$this->transaction_key);
         	$response = $request->createSubscription($subscription);
 			
 			if($response->isError())
-				throw new ApplicationException(0, $response->getErrorMessage());
+				throw new ApplicationException(1, $response->getErrorMessage());
 			
         	$subscription_id = $response->getSubscriptionId();
         	$status_request = new AuthorizeNetARB($this->login_id,$this->transaction_key);
   		    $status_response = $status_request->getSubscriptionStatus($subscription_id);
 			
 			if($status_response->getSubscriptionStatus() != "active")
-				throw new ApplicationException(0, $status_response->getMessageText());
+				throw new ApplicationException(2, $status_response->getMessageText());
 			
-			return true;
+			return $status_response;
 		}
 		
 		public function deleteRecurringSubscription($subscriptionId)
@@ -93,7 +106,7 @@ namespace application\nutsNBolts\plugin\payment\handler
         	$cancel_response = $cancellation->cancelSubscription($subscriptionId);
 			
 			if($cancel_response->isError())
-				throw new ApplicationException(0, $response->getErrorMessage());
+				throw new ApplicationException(0, $cancel_response->getErrorMessage());
 			
 			$status_request = new AuthorizeNetARB($this->login_id,$this->transaction_key);
         	$status_response = $status_request->getSubscriptionStatus($subscriptionId);
