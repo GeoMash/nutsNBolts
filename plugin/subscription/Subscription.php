@@ -22,6 +22,7 @@ namespace application\nutsNBolts\plugin\subscription
 		{
 			//var_dump($userId, $subscriptionId, $subscriptionRequest);
 			
+			//Receiving Credit Card information
 			$cardNo = $subscriptionRequest['number'];
 			$cardCode = $subscriptionRequest['ccv'];
 			
@@ -29,12 +30,22 @@ namespace application\nutsNBolts\plugin\subscription
 			$cardExpiryYear = str_pad($subscriptionRequest['expiry-year'], 2, '0', STR_PAD_LEFT);
 			$expDate = $cardExpiryMonth.$cardExpiryYear;
 			
+			//Receiving Payment Amount
 			$subscription = $this->model->Subscription->read($subscriptionId)[0];			
 			$amount = $subscription['amount'];
-				
+			
+			//Receving the necessary user information
+			$user = $this->model->User->read([
+				'id' => $userId
+				]);			
+			$userFirstName = $user['name_first'];
+			$userLastName = $user['name_last'];
+			
+			//Checking for Subscription Package Activity
 			if(!$subscription->status != STATUS_ACTIVE)
 				throw new ApplicationException(0,"Subscription is inactive");
 			
+			//Starting the payment process
 			$payment = $this->plugin->Payment("AuthorizeNet");
 			
 			//var_dump($userId, $subscriptionId, $cardNo, $cardCode, $cardExpiryMonth, $cardExpiryYear, $amount, $subscription);
@@ -44,7 +55,7 @@ namespace application\nutsNBolts\plugin\subscription
 				//var_dump('Recurring');
 				
 				$transactionResponse = null;
-				$arbStatus = $payment->createRecurringSubscription('Hasan', 'Baidoun', $amount, $cardNo, $cardCode, $expDate, $transactionResponse);
+				$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse);
 				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
 				
 				//var_dump($transactionResponse);
@@ -110,6 +121,11 @@ namespace application\nutsNBolts\plugin\subscription
 		public function addInvoice($subscriptionUserId, $transactionId, $timestamp, $transactionResponseJson)
 		{
 			
+		}
+		
+		public function checkUserHasActiveSubscription($userId)
+		{
+			return true;
 		}
 	}
 }
