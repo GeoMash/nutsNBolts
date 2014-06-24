@@ -798,7 +798,8 @@ namespace application\nutsNBolts\controller
 		public function getProfilePicture($userId)
 		{
 			$user=$this->model->User->read(['id'=>$userId]);
-			if(isset($user[0]['image']) && strlen($user[0]['image']))
+
+			if(strlen($user[0]['image']))
 			{
 				$picture=$user[0]['image'];
 			}

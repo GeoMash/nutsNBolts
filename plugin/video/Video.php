@@ -19,14 +19,22 @@ namespace application\nutsNBolts\plugin\video
 
 		public function getType($url)
 		{
+			$hasReturn=false;
 			if(preg_match("/youtube.com/", $url))
 			{
+				$hasReturn=true;
 				return 'youtube';
 			}
 			
 			if(preg_match("/vimeo.com/", $url))
 			{
+				$hasReturn=true;
 				return 'vimeo';
+			}
+			
+			if(!$hasReturn)
+			{
+				return 'custom';
 			}
 		}
 		
