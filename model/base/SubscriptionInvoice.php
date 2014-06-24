@@ -20,7 +20,7 @@ namespace application\nutsNBolts\model\base
 		(
 			'id' => 'int(10) NOT NULL ',
 			'subscription_user_id' => 'int(10) NOT NULL ',
-			'transaction_id' => 'int(13) NOT NULL ',
+			'subscription_transaction_id' => 'int(10) NOT NULL ',
 			'timestamp' => 'timestamp NOT NULL ',
 			'meta' => 'text'
 		);
