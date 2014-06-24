@@ -4,6 +4,7 @@ namespace application\nutsNBolts\plugin\subscription
 	use nutshell\behaviour\Native;
 	use nutshell\behaviour\Singleton;
 	use application\nutsNBolts\base\Plugin;
+	use nutshell\core\exception\ApplicationException;
 
 	class Subscription extends Plugin implements Singleton, Native
 	{
@@ -17,12 +18,22 @@ namespace application\nutsNBolts\plugin\subscription
 			
 		}
 		
-		public function subscribe($userId, $subscriptionId, $cardNo, $cardCode, $cardExpiryMonth, $cardExpiryYear)
+		public function subscribe($userId, $subscriptionId, $subscriptionRequest)
 		{
-			$subscription = $this->model->Subscription->read($subscriptionId)[0];
+			var_dump($userId, $subscriptionId, $subscriptionRequest);
+			
+			$cardNo = $subscriptionRequest['number'];
+			$cardCode = $subscriptionRequest['ccv'];
+			$cardExpiryMonth = str_pad($subscriptionRequest['expiry-month'], 2, '0', STR_PAD_LEFT);
+			$cardExpiryYear = str_pad($subscriptionRequest['expiry-year'], 2, '0', STR_PAD_LEFT);
+			
+			$subscription = $this->model->Subscription->read($subscriptionId)[0];			
 			$amount = $subscription['amount'];
 			$expDate = $cardExpiryMonth.$cardExpiryYear;
 				
+			if(!$subscription->status != STATUS_ACTIVE)
+				throw new ApplicationException(0,"Subscription is inactive");
+			
 			$payment = $this->plugin->Payment("AuthorizeNet");
 			
 			//var_dump($userId, $subscriptionId, $cardNo, $cardCode, $cardExpiryMonth, $cardExpiryYear, $amount, $subscription);
