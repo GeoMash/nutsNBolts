@@ -19,7 +19,7 @@ namespace application\nutsNBolts\model\base
 		public $columns = array
 		(
 			'id' => 'int(10) NOT NULL ',
-			'gateway_transaction_id' => 'int(13) NOT NULL ',
+			'gateway_transaction_id' => 'int(20) NOT NULL ',
 			'timestamp' => 'timestamp NOT NULL '
 		);
 	}
