@@ -121,5 +121,53 @@ namespace application\nutsNBolts\plugin\blog
 		{
 			return $this->plugin->Mvc->model->Node->getAllBlogs();
 		}
+		
+		public function paginateBlogs($contentTypeId,$offset,$limit)
+		{
+//			$blogs=$this->plugin->Mvc->model->Node->getWithParts
+//			(
+//				[
+//					'content_type_id'			=>$contentTypeId
+//				],
+//				$page,
+//				$limit
+//			);
+			$blogIdArray=[];
+			$blogs=[];
+			$blogIds=$this->plugin->Mvc->model->Node->read
+			(
+				['content_type_id'	=>$contentTypeId],
+				['id'],
+				 " LIMIT $offset,$limit"
+			);
+			
+			if(count($blogIds))
+			{
+				for($i=0,$j=count($blogIds);$i<$j;$i++)
+				{
+					$blogIdArray[]=$blogIds[$i]['id'];
+				}
+				
+				$blogs=$this->plugin->Mvc->model->Node->getWithParts
+				(
+					['id'=>$blogIdArray]
+				);
+			}
+			return $blogs;
+		}
+		
+		public function blogsCount($contentTypeId)
+		{
+			$count=0;
+			$query=<<<SQL
+SELECT COUNT(id) AS total FROM node WHERE content_type_id={$contentTypeId} AND status=2
+SQL;
+
+			if ($result=$this->plugin->Db->nutsnbolts->select($query))
+			{
+				$count=$this->plugin->Db->nutsnbolts->result('assoc')[0]['total'];
+			}
+			return $count;
+		}
 	}
 }
