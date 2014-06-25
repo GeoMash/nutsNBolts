@@ -85,6 +85,25 @@ namespace application\nutsNBolts\controller\admin
 					}
 					break;
 				}
+				case 'subscriptions':
+				{
+					switch (strtolower($this->request->node(2)))
+					{
+						case 'packages':
+						{
+							$this->routedController=new subscriptions\Packages($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
+						case 'subscribers':
+						{
+							$this->routedController=new subscriptions\Subscribers($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
+					}
+					break;
+				}
 				case 'fileManager':
 				case 'filemanager':
 				{
