@@ -17,29 +17,27 @@
 						<table cellpadding="0" cellspacing="0" border="0" class="dTable responsive">
 							<thead>
 								<tr>
-									<th><div>Name</div></th>
-									<th><div>Duration</div></th>
-									<th><div>Amount</div></th>
-									<th><div>Status</div></th>
+									<th><div>First Name</div></th>
+									<th><div>Last Name</div></th>
+									<th><div>Email</div></th>
 									<th><div>Actions</div></th>
 								</tr>
 							</thead>
 							<tbody>
 								<?php
-								$subscriptions=$tpl->getSubscriptions();
+								$subscribers=$tpl->getSubscribers();
 								$canDelete=$tpl->can('admin.content.subscription.delete');
-								for ($i=0,$j=count($subscriptions); $i<$j; $i++):
+								for ($i=0,$j=count($subscribers); $i<$j; $i++):
 								?>
 								<tr>
-									<td><a href="/admin/subscriptions/packages/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
-									<td><?php print $subscriptions[$i]['duration']; ?> Months</td>
-									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
-									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
+									<td><a href="/admin/subscriptions/subscribers/edit/<?php print $subscribers[$i]['id']; ?>"><?php print $subscribers[$i]['name_first']; ?></a></td>
+									<td><?php print $subscribers[$i]['name_last']; ?> Months</td>
+									<td><?php print $subscribers[$i]['email']; ?></td>
 									<td class="center">
 										<?php
 										if ($canDelete):
 										?>
-										<a href="/admin/subscriptions/packages/remove/<?php print $subscriptions[$i]['id']; ?>">
+										<a href="/admin/subscriptions/subscribers/remove/<?php print $subscribers[$i]['id']; ?>">
 											<button title="Remove Subscription" class="btn btn-mini btn-red" data-toggle="tooltip">
 												<i class="icon-remove"></i>
 											</button>
