@@ -32,7 +32,7 @@ namespace application\nutsNBolts\controller\admin
 			}
 			elseif ($this->isAuthenticated()
 			&& (!$this->plugin->Auth->isImpersonating() && (int)$this->getUser()['status']===self::USER_STATUS_DISABLED))
-			{die('222');
+			{
 				$control='logout';
 			}
 			
@@ -82,6 +82,25 @@ namespace application\nutsNBolts\controller\admin
 					else
 					{
 						$this->routedController=new ConfigureContent($this->MVC);
+					}
+					break;
+				}
+				case 'subscriptions':
+				{
+					switch (strtolower($this->request->node(2)))
+					{
+						case 'packages':
+						{
+							$this->routedController=new subscriptions\Packages($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
+						case 'subscribers':
+						{
+							$this->routedController=new subscriptions\Subscribers($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
 					}
 					break;
 				}

@@ -31,7 +31,7 @@
 								for ($i=0,$j=count($subscriptions); $i<$j; $i++):
 								?>
 								<tr>
-									<td><a href="/admin/configurecontent/subscriptions/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
+									<td><a href="/admin/subscriptions/packages/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
 									<td><?php print $subscriptions[$i]['duration']; ?> Weeks</td>
 									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
 									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
@@ -39,7 +39,7 @@
 										<?php
 										if ($canDelete):
 										?>
-										<a href="/admin/configurecontent/subscriptions/remove/<?php print $subscriptions[$i]['id']; ?>">
+										<a href="/admin/subscriptions/packages/remove/<?php print $subscriptions[$i]['id']; ?>">
 											<button title="Remove Subscription" class="btn btn-mini btn-red" data-toggle="tooltip">
 												<i class="icon-remove"></i>
 											</button>
