@@ -127,11 +127,12 @@ namespace application\nutsNBolts\plugin\subscription
 		
 		public function assertUserHasActiveSubscription($userId)
 		{
-			$userSubscriptions = $this->model->SubscriptionUser->read([
-				'user_id' => $userId
+			$userActiveSubscriptions = $this->model->SubscriptionUser->read([
+				'user_id' => $userId,
+				'status' => $this::STATUS_ACTIVE
 				]);
 			
-			return count($userSubscriptions) > 0 && $userSubscriptions[0]['status'] == $this::STATUS_ACTIVE;
+			return count($userActiveSubscriptions) > 0;
 		}
 	}
 }
