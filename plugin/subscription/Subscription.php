@@ -136,8 +136,8 @@ namespace application\nutsNBolts\plugin\subscription {
 SELECT `user`.* 
 FROM `user` INNER JOIN `subscription_user` ON `user`.`id` = `subscription_user`.`user_id`
 SQL;
-			if ($this->db->select($query)) {
-				$records = $this->db->result('assoc');
+			if ($this->plugin->Db->nutsnbolts->select($query)) {
+				$records = $this->plugin->Db->nutsnbolts->result('assoc');
 				return isset($records) ? $records : null;
 			}
 
