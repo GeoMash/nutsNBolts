@@ -3,6 +3,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 {
 	use application\nutsNBolts\base\AdminController;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
+	use nutshell\core\exception\ApplicationException;
 	use nutshell\core\exception\NutshellException;
 	
 	class Subscribers extends AdminController
@@ -36,6 +37,16 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->setContentView('admin/noPermission');
 			}
 			$this->view->render();
+		}
+		
+		public function edit($subscriberId)
+		{
+			throw new ApplicationException(0,"Method not implemented");
+		}
+		
+		public function remove($subscriberId)
+		{
+			throw new ApplicationException(0,"Method not implemented");
 		}
 		
 		private function getSubscribers()
