@@ -31,7 +31,7 @@
 								?>
 								<tr>
 									<td><a href="/admin/subscriptions/subscribers/edit/<?php print $subscribers[$i]['id']; ?>"><?php print $subscribers[$i]['name_first']; ?></a></td>
-									<td><?php print $subscribers[$i]['name_last']; ?> Months</td>
+									<td><?php print $subscribers[$i]['name_last']; ?></td>
 									<td><?php print $subscribers[$i]['email']; ?></td>
 									<td class="center">
 										<?php
