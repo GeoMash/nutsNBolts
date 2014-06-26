@@ -118,6 +118,7 @@ namespace application\nutsNBolts\plugin\subscription {
 
 		public function addInvoice($subscriptionUserId, $transactionId, $timestamp, $transactionResponseJson)
 		{
+			
 		}
 
 		public function assertUserHasActiveSubscription($userId)
@@ -135,6 +136,21 @@ namespace application\nutsNBolts\plugin\subscription {
 			$query = <<<SQL
 SELECT `user`.* 
 FROM `user` INNER JOIN `subscription_user` ON `user`.`id` = `subscription_user`.`user_id`
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query)) {
+				$records = $this->plugin->Db->nutsnbolts->result('assoc');
+				return isset($records) ? $records : null;
+			}
+
+			return null;
+		}
+		
+		public function getUserSubscriptions($userId)
+		{
+			$query = <<<SQL
+SELECT `subscription_user`.*, `subscription`.`name`
+FROM `subscription_user` INNER JOIN `subscription` ON `subscription_user`.`subscription_id` = `subscription`.`id`
+WHERE `subscription_user`.`user_id` = {$userId}
 SQL;
 			if ($this->plugin->Db->nutsnbolts->select($query)) {
 				$records = $this->plugin->Db->nutsnbolts->result('assoc');
