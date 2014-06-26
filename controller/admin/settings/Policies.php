@@ -27,8 +27,8 @@ namespace application\nutsNBolts\controller\admin\settings
 		{
 			try
 			{
-				$this->plugin->Auth	->can('admin.policies.update')
-									->can('admin.policies.read');
+				$this->plugin->Auth	->can('admin.policy.update')
+									->can('admin.policy.read');
 				
 				$this->addBreadcrumb('System Settings','icon-wrench','settings');
 				$this->addBreadcrumb('Policies','icon-lock','policies');

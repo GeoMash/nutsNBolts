@@ -122,6 +122,12 @@ namespace application\nutsNBolts\controller\admin
 								$this->routeAction(3);
 								return;
 							}
+							case 'roles':
+							{
+								$this->routedController=new settings\Roles($this->MVC);
+								$this->routeAction(3);
+								return;
+							}
 							case 'policies':
 							{
 								$this->routedController=new settings\Policies($this->MVC);
