@@ -11,7 +11,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.content.subscription.read');
+				$this->plugin->Auth->can('admin.subscription.package.create');
 				
 				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
@@ -46,7 +46,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Add','icon-plus','add');
 				
-				$this->plugin->Auth->can('admin.content.subscription.create');
+				$this->plugin->Auth->can('admin.subscription.package.create');
 				
 				$record=$this->request->getAll();
 				
@@ -80,8 +80,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Edit','icon-edit','edit/'.$id);
 				
-				$this->plugin->Auth	->can('admin.content.subscription.read')
-									->can('admin.content.subscription.update');
+				$this->plugin->Auth	->can('admin.subscription.package.read')
+									->can('admin.subscription.package.update');
 				
 				$record=$this->request->getAll();
 				
@@ -116,7 +116,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.content.subscription.delete');
+				$this->plugin->Auth->can('admin.subscription.package.delete');
 				
 				if ($this->model->Subscription->delete($id))
 				{
