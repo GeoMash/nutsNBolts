@@ -6,7 +6,7 @@
 					<span class="title">Subscriptions</span>
 					<ul class="box-toolbar">
 						<li>
-							<a href="/admin/configurecontent/subscriptions/add/">
+							<a href="/admin/subscriptions/packages/add/">
 								<span class="triangle-button green"><i class="icon-plus"></i></span>
 							</a>
 						</li>
@@ -27,7 +27,7 @@
 							<tbody>
 								<?php
 								$subscriptions=$tpl->getSubscriptions();
-								$canDelete=$tpl->can('admin.content.subscription.delete');
+								$canDelete=$tpl->can('admin.subscription.package.delete');
 								for ($i=0,$j=count($subscriptions); $i<$j; $i++):
 								?>
 								<tr>
@@ -36,9 +36,7 @@
 									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
 									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
 									<td class="center">
-										<?php
-										if ($canDelete):
-										?>
+										<?php if ($canDelete): ?>
 										<a href="/admin/subscriptions/packages/remove/<?php print $subscriptions[$i]['id']; ?>">
 											<button title="Remove Subscription" class="btn btn-mini btn-red" data-toggle="tooltip">
 												<i class="icon-remove"></i>
