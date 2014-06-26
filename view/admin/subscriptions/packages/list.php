@@ -32,7 +32,7 @@
 								?>
 								<tr>
 									<td><a href="/admin/subscriptions/packages/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
-									<td><?php print $subscriptions[$i]['duration']; ?> Weeks</td>
+									<td><?php print $subscriptions[$i]['duration']; ?> Months</td>
 									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
 									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
 									<td class="center">
