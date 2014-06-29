@@ -35,7 +35,7 @@ namespace application\nutsNBolts\model
 				{
 					unset($record['password']);
 				}
-				$result=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$result=$this->update($this->removeJunk($record),['id'=>$record['id']]);
 				
 				if($removeRoles)
 				{
@@ -46,7 +46,16 @@ namespace application\nutsNBolts\model
 					$roles=$this->extractRoles($record);
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
-						$this->model->UserRole->insert($roles[$i]);
+						$this->model->UserRole->insertAssoc($roles[$i]);
+					}
+				}
+				if (isset($record['permit']))
+				{
+					$this->model->PermissionUser->delete(['user_id'=>$record['id']]);
+					$permissions=$this->extractPermissions($record);
+					for ($i=0,$j=count($permissions); $i<$j; $i++)
+					{
+						$this->model->PermissionUser->insertAssoc($permissions[$i]);
 					}
 				}
 				if ($result!==false)
@@ -71,6 +80,11 @@ namespace application\nutsNBolts\model
 						{
 							$roles[$i]['user_id']=$id;
 							$this->model->UserRole->insert($roles[$i]);
+						}
+						$permissions=$this->extractPermissions($record);
+						for ($i=0,$j=count($permissions); $i<$j; $i++)
+						{
+							$this->model->PermissionUser->insert($permissions[$i]);
 						}
 					}
 					return $this->read($id)[0];
@@ -104,6 +118,25 @@ namespace application\nutsNBolts\model
 				return $roles;
 			}
 			return array();
+		}
+		
+		private function extractPermissions(&$record)
+		{
+			$permissions=[];
+			if(isset($record['permit']))
+			{
+				$id=(!empty($record['id']))?$record['id']:0;
+				for ($i=0,$j=count($record['permit']); $i<$j; $i++)
+				{
+					$permissions[]=
+					[
+						'user_id'		=>$id,
+						'permission_id'	=>$record['permit'][$i]
+					];
+				}
+				unset($record['permit']);
+			}
+			return $permissions;
 		}
 		
 		private function generateSalt(&$record)
