@@ -36,13 +36,13 @@ namespace application\nutsNBolts\model
 					unset($record['password']);
 				}
 				$result=$this->update($this->removeJunk($record),array('id'=>$record['id']));
-
+				
+				if($removeRoles)
+				{
+					$this->model->UserRole->delete(['user_id'=>$record['id']]);
+				}
 				if (isset($record['role']))
 				{
-                    if($removeRoles)
-                    {
-                        $this->model->UserRole->delete(array('user_id'=>$record['id']));
-                    }
 					$roles=$this->extractRoles($record);
 					for ($i=0,$j=count($roles); $i<$j; $i++)
 					{
