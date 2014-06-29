@@ -111,31 +111,6 @@ namespace application\nutsNBolts\model
 			$record['salt']=sha1('nutsnbolts_ce1833cca4627da0751a2dcdde1f0b3b_'.time());
 		}
 		
-		public function authenticate($email,$password)
-		{
-			$user		=$this->read(array('email'=>$email));
-			if (isset($user[0]))
-			{
-				$userSalt	=$user[0]['salt'];
-				$systemSalt	=$this->config->application->salt;
-				
-				$result	=$this->read
-				(
-					array
-					(
-						'email'		=>$email,
-						'password'	=>md5($systemSalt.$userSalt.$password),
-						'status'	=>1
-					)
-				);
-				if (isset($result[0]))
-				{
-					return $result[0];
-				}
-			}
-			return false;
-		}
-		
 		public function getRoles($userId)
 		{
 			if ($userId!=NutsNBolts::USER_SUPER)
