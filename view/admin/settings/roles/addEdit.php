@@ -64,6 +64,7 @@
 													}
 													$groupedPermissions[$permissions[$i]['category']][]=$permissions[$i];
 												}
+												ksort($groupedPermissions);
 												foreach ($groupedPermissions as $category=>$permissionGroup):
 												?>
 												<tr>
@@ -74,10 +75,10 @@
 														$checked=$permissionGroup[$i]['permit']?'checked':'';
 													?>
 													<tr>
-														<td class=""><input type="checkbox" name="permit[]" value="<?php print $permissionGroup[$i]['id']; ?>" <?php print $checked; ?>></td>
-														<td class=""><?php print $permissionGroup[$i]['key']; ?></td>
-														<td class=""><?php print $permissionGroup[$i]['name']; ?></td>
-														<td class=""><?php print $permissionGroup[$i]['description']; ?></td>
+														<td><input type="checkbox" name="permit[]" value="<?php print $permissionGroup[$i]['id']; ?>" <?php print $checked; ?>></td>
+														<td><?php print $permissionGroup[$i]['key']; ?></td>
+														<td><?php print $permissionGroup[$i]['name']; ?></td>
+														<td><?php print $permissionGroup[$i]['description']; ?></td>
 													</tr>
 													<?php
 													endfor;
