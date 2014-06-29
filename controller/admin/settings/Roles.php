@@ -132,7 +132,6 @@ namespace application\nutsNBolts\controller\admin\settings
 		
 		public function removeRole($id)
 		{
-			
 			try
 			{
 				$this->plugin->Auth->can('admin.role.delete');
