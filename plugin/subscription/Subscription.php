@@ -1,5 +1,6 @@
 <?php
 namespace application\nutsNBolts\plugin\subscription {
+	use application\nutsNBolts\plugin\payment\Payment;
 	use nutshell\behaviour\Native;
 	use nutshell\behaviour\Singleton;
 	use application\nutsNBolts\base\Plugin;
@@ -55,7 +56,10 @@ namespace application\nutsNBolts\plugin\subscription {
 
 				$transactionResponse = null;
 				$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse);
+				$duration = 1;
 				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
+				$timestamp_formatted = $timestamp->format('Y-m-d h:i:s');
+				$expiry_timestamp_formatted = $timestamp->add(new \DateInterval("P" . $duration . "M"))->format('Y-m-d h:i:s');
 
 				//var_dump($transactionResponse);
 
@@ -69,19 +73,20 @@ namespace application\nutsNBolts\plugin\subscription {
 					'subscription_id' => $subscriptionId,
 					'user_id' => $userId,
 					'arb_id' => $arbId,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s'),
+					'timestamp' => $timestamp_formatted,
+					'expiry_timestamp' => $expiry_timestamp_formatted,
 					'status' => $this::STATUS_ACTIVE
 				]);
 
 				$subscriptionTransactionId = $this->model->SubscriptionTransaction->insertAssoc([
 					'gateway_transaction_id' => $transactionId,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s')
+					'timestamp' => $timestamp_formatted
 				]);
 
 				$this->model->SubscriptionInvoice->insertAssoc([
 					'subscription_user_id' => $subscriptionUserId,
 					'subscription_transaction_id' => $subscriptionTransactionId,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s'),
+					'timestamp' => $timestamp_formatted,
 					'meta' => json_encode($transactionResponse)
 				]);
 			} else {
@@ -92,25 +97,30 @@ namespace application\nutsNBolts\plugin\subscription {
 				//var_dump($transactionId);
 
 				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
+				$duration = $subscription['duration'];
+
+				$timestamp_formatted = $timestamp->format('Y-m-d h:i:s');
+				$expiry_timestamp_formatted = $timestamp->add(new \DateInterval("P" . $duration . "M"))->format('Y-m-d h:i:s');
 
 				//Activating the subscription for the user
 				$subscriptionUserId = $this->model->SubscriptionUser->insertAssoc([
 					'subscription_id' => $subscriptionId,
 					'user_id' => $userId,
 					'arb_id' => null,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s'),
+					'expiry_timestamp' => $expiry_timestamp_formatted,
+					'timestamp' => $timestamp_formatted,
 					'status' => $this::STATUS_ACTIVE
 				]);
 
 				$subscriptionTransactionId = $this->model->SubscriptionTransaction->insertAssoc([
 					'gateway_transaction_id' => $transactionId,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s')
+					'timestamp' => $timestamp_formatted
 				]);
 
 				$this->model->SubscriptionInvoice->insertAssoc([
 					'subscription_user_id' => $subscriptionUserId,
 					'subscription_transaction_id' => $subscriptionTransactionId,
-					'timestamp' => $timestamp->format('Y-m-d h:i:s'),
+					'timestamp' => $timestamp_formatted,
 					'meta' => json_encode($transactionResponse)
 				]);
 			}
@@ -118,15 +128,16 @@ namespace application\nutsNBolts\plugin\subscription {
 
 		public function addInvoice($subscriptionUserId, $transactionId, $timestamp, $transactionResponseJson)
 		{
-			
 		}
 
 		public function assertUserHasActiveSubscription($userId)
 		{
-			$userActiveSubscriptions = $this->model->SubscriptionUser->read([
-				'user_id' => $userId,
-				'status' => $this::STATUS_ACTIVE
-			]);
+			$whereClause = "AND ( `status` = ".$this::STATUS_ACTIVE." OR `status` = ".$this::STATUS_PENDING." )";
+			$userActiveSubscriptions = $this->model->SubscriptionUser->read(
+				['user_id' => $userId],
+				array(),
+				$whereClause
+			);
 
 			return count($userActiveSubscriptions) > 0;
 		}
@@ -144,7 +155,7 @@ SQL;
 
 			return null;
 		}
-		
+
 		public function getUserSubscriptions($userId)
 		{
 			$query = <<<SQL
@@ -158,6 +169,48 @@ SQL;
 			}
 
 			return null;
+		}
+
+		public function suspendManual($userSubscriptionId)
+		{
+			return $this->suspend($userSubscriptionId, false);
+		}
+
+		public function suspendAuto($userSubscriptionId)
+		{
+			return $this->suspend($userSubscriptionId, true);
+		}
+
+		private function suspend($userSubscriptionId, $isAuto)
+		{
+			$userSubscription = $this->model->SubscriptionUser->read([
+				'id' => $userSubscriptionId
+			])[0];
+
+			$subscriptionId = $userSubscription['subscription_id'];
+			$subscription = $this->model->Subscription->read([
+				'id' => $subscriptionId
+			])[0];
+
+			$isRecurring = $subscription['recurring'];
+			if ($userSubscription['status'] == $this::STATUS_ACTIVE) {
+
+				if ($isRecurring) {
+					$arbId = $userSubscription['arb_id'];
+					$this->plugin->Payment('AuthorizeNet')->deleteRecurringSubscription($arbId);
+					$this->model->SubscriptionUser->setStatus(
+						$userSubscriptionId,
+						$this::STATUS_PENDING
+					);
+					//The scheduled task will later mark it cancelled
+				} else {
+					$this->model->SubscriptionUser->setStatus(
+						$userSubscriptionId,
+						$isAuto ? $this::STATUS_CANCELLED_AUTO : $this::STATUS_CANCELLED_MANUAL
+					);
+				}
+			}
+			return true;
 		}
 	}
 }
