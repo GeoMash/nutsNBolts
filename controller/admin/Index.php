@@ -219,6 +219,7 @@ namespace application\nutsNBolts\controller\admin
 				array($this->routedController,$action),
 				$args
 			);
+			exit();
 		}
 		
 		public function template()
