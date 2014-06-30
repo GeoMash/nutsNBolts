@@ -209,7 +209,7 @@ namespace application\nutsNBolts\controller\admin
 						catch(AuthException $exception)
 						{
 							unset($record['owner_user_id']);
-						};
+						}
 					}
 					
 					if (!$this->contentType['workflow_id'])

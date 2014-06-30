@@ -515,39 +515,39 @@ SQL;
 			$where=null;
 			if(strlen($category) > 0)
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
 SQL;
 			}
 			elseif(strlen($min) > 3)
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
-			AND node.date_created BETWEEN "{$min}" AND "{$max}";	
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
+				AND node.date_created BETWEEN "{$min}" AND "{$max}";	
 SQL;
 			}
 			else
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
 SQL;
 			}
 
