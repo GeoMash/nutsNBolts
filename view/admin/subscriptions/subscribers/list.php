@@ -13,7 +13,7 @@
 					</ul>
 				</div>
 				<div class="box-content">
-					<div class="accordion" id="dataTables">
+					<div class="jquery_accordion" id="dataTables">
 						<table cellpadding="0" cellspacing="0" border="0" class="dTable responsive">
 							<thead>
 							<tr>
@@ -38,11 +38,9 @@
 							for ($i = 0, $j = count($subscribers); $i < $j; $i++):
 								?>
 
-								<tr>
+								<tr class="jquery_accordion_header">
 									<td>
-										<a class="accordion-toggle" data-toggle="collapse"
-										   data-parent="#dataTables"
-										   href="#collapse<?php print $subscribers[$i]['id']; ?>">
+										<a>
 											<?php print $subscribers[$i]['name_first']; ?>
 										</a>
 									</td>
@@ -53,9 +51,9 @@
 									</td>
 								</tr>
 
+<!--								Generating the sub-table that shows user subscriptions-->
 
-								<tr id="collapse<?php print $subscribers[$i]['id']; ?>"
-									class="accordion-body collapse">
+								<tr>
 									<td colspan="4">
 										<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
 											   class="dTable responsive">
@@ -91,9 +89,9 @@
 													<td>
 														<a href="/admin/subscriptions/subscribers/edit/<?php print $userSubscriptions[$i]['id']; ?>"><?php print $userSubscriptions[$i]['name']; ?></a>
 													</td>
-													<td><?php print $userSubscriptions[$i]['arb_id'] ? : "N/A"; ?></td>
+													<td><?php print $userSubscriptions[$i]['arb_id'] ?: "N/A"; ?></td>
 													<td><?php print $userSubscriptions[$i]['timestamp']; ?></td>
-													<td><?php print $userSubscriptions[$i]['expiry_timestamp'] ? : "N/A"; ?></td>
+													<td><?php print $userSubscriptions[$i]['expiry_timestamp'] ?: "N/A"; ?></td>
 													<td><?php
 														switch ($userSubscriptions[$i]['status']) {
 															case \application\nutsNBolts\plugin\subscription\Subscription::STATUS_ACTIVE:
@@ -109,14 +107,13 @@
 																print "Pending";
 																break;
 														}
-														//print $tpl->formatSubscriptionStatus($userSubscriptions[$i]['status']); 
 														?></td>
 													<td class="center">
 														<?php
 														if ($canDelete):
 															?>
-															<a href="/admin/subscriptions/subscribers/remove/<?php print $userSubscriptions[$i]['id']; ?>">
-																<button title="Remove Subscription"
+															<a href="/admin/subscriptions/subscribers/suspend/<?php print $userSubscriptions[$i]['id']; ?>">
+																<button title="Suspend Subscription"
 																		class="btn btn-mini btn-red"
 																		data-toggle="tooltip">
 																	<i class="icon-remove"></i>
@@ -124,7 +121,7 @@
 															</a>
 														<?php else: ?>
 															<a href="javascript:{}">
-																<button title="Remove Subscription"
+																<button title="Suspend Subscription"
 																		class="btn btn-mini btn-red disabled"
 																		data-toggle="tooltip">
 																	<i class="icon-remove"></i>
