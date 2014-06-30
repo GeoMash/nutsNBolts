@@ -223,7 +223,15 @@ namespace application\nutsNBolts\controller\admin\settings
 						$id=$this->request->lastNode();
 						print $this->generateRolesList($id);
 					}
-				);
+				)->registerCallback
+				(
+					'getUserPermissions',
+					function()
+					{
+						$id=$this->request->lastNode();
+						return $this->getUserPermissions($id);
+					}
+				);;
 			
 			$this->view->setVar('extraOptions',array());
 			$this->execHook('onBeforeRender',$renderRef);
@@ -265,6 +273,34 @@ HTML;
 			}
 			$return=implode('',$html);
 			return $return;
+		}
+		
+		public function getUserPermissions($userId=null)
+		{
+			$userPermissions=[];
+			if (is_numeric($userId))
+			{
+				$userPermissions=$this->model->PermissionUser->read(['user_id'=>$userId]);
+			}
+			if (count($userPermissions))
+			{
+				$permissions=$this->model->Permission->read();
+				for ($i=0,$j=count($permissions); $i<$j; $i++)
+				{
+					for ($k=0,$l=count($userPermissions); $k<$l; $k++)
+					{
+						if ($permissions[$i]['id']==$userPermissions[$k]['permission_id'])
+						{
+							$permissions[$i]['checked']=true;
+						}
+					}
+				}
+			}
+			else
+			{
+				$permissions=$this->model->Permission->read();
+			}
+			return $permissions;
 		}
 		
 		private function userHasRole($userRoles,$roleID)

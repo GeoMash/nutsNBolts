@@ -3,8 +3,10 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 || $tpl->can('admin.setting.site.read')
 //|| $tpl->can('admin.dashboard.read')
 || $tpl->can('admin.user.read')
-|| $tpl->can('admin.policies.read')
+|| $tpl->can('admin.policy.read')
 || $tpl->can('admin.user.read')
+|| $tpl->can('admin.permission.read')
+|| $tpl->can('admin.role.read')
 //|| $tpl->can('admin.plugin.read')
 ):
 ?>
@@ -52,7 +54,7 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 		</li>
 		<?php
 			endif;
-			if ($tpl->can('admin.policies.read')):
+			if ($tpl->can('admin.policy.read')):
 		?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='passwordPolicy')print 'active'; ?>">
 			<a href="/admin/settings/policies">
@@ -61,11 +63,20 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 		</li>
 		<?php
 			endif;
-			if ($tpl->can('admin.permissions.role.read')):
+			if ($tpl->can('admin.permission.read')):
 		?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>">
 			<a href="/admin/settings/permissions">
 				<i class="icon-bolt"></i> Permissions
+			</a>
+		</li>
+		<?php
+			endif;
+			if ($tpl->can('admin.role.read')):
+		?>
+		<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>">
+			<a href="/admin/settings/roles">
+				<i class="icon-group"></i> Roles
 			</a>
 		</li>
 		<?php

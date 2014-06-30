@@ -32,12 +32,12 @@
 								?>
 								<tr>
 									<!--<td class="text-center"><input type="checkbox" name="compare[]" value="{$records[$i]['id']}"></td>-->
-									<td class=""><a href="/admin/settings/permissions/editRole/<?php print $roles[$i]['id']; ?>"><?php print $roles[$i]['name']; ?></a></td>
+									<td class=""><a href="/admin/settings/roles/edit/<?php print $roles[$i]['id']; ?>"><?php print $roles[$i]['name']; ?></a></td>
 									<td class=""><?php print $roles[$i]['description']; ?></td>
 									<td class=""><?php print $roles[$i]['ref']; ?></td>
 									<td class=""><?php print $roles[$i]['status']; ?></td>
 									<td class="center">
-										<a href="/admin/settings/permissions/removeRole/<?php print $roles[$i]['id']; ?>">
+										<a href="/admin/settings/roles/edit/<?php print $roles[$i]['id']; ?>">
 											<button title="Archive" class="btn btn-mini btn-red">
 												<i class="icon-remove"></i>
 											</button>

@@ -67,12 +67,6 @@ namespace application\nutsNBolts\controller\admin
 					{
 						switch (strtolower($this->request->node(2)))
 						{
-							case 'subscriptions':
-							{
-								$this->routedController=new configureContent\Subscriptions($this->MVC);
-								$this->routeAction(3);
-								break;
-							}
 							default:
 							{
 								$this->routedController=new ConfigureContent($this->MVC);
@@ -125,6 +119,12 @@ namespace application\nutsNBolts\controller\admin
 							case 'permissions':
 							{
 								$this->routedController=new settings\Permissions($this->MVC);
+								$this->routeAction(3);
+								return;
+							}
+							case 'roles':
+							{
+								$this->routedController=new settings\Roles($this->MVC);
 								$this->routeAction(3);
 								return;
 							}
