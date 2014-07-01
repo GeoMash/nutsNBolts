@@ -1,6 +1,8 @@
-<select data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>">
+<select <?php print($tpl->get('multiselect')=='yes'?'multiple':'');?> data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>">
 	<?php
 	$options=$tpl->get('options');
+
+
 	for ($i=0,$j=count($options); $i<$j; $i++)
 	{
 		$selected=($options[$i]->value!=$tpl->get('value'))?'':'selected';
