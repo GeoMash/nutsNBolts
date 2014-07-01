@@ -92,22 +92,7 @@
 													<td><?php print $userSubscriptions[$i]['arb_id'] ?: "N/A"; ?></td>
 													<td><?php print $userSubscriptions[$i]['timestamp']; ?></td>
 													<td><?php print $userSubscriptions[$i]['expiry_timestamp'] ?: "N/A"; ?></td>
-													<td><?php
-														switch ($userSubscriptions[$i]['status']) {
-															case \application\nutsNBolts\plugin\subscription\Subscription::STATUS_ACTIVE:
-																print "Active";
-																break;
-															case \application\nutsNBolts\plugin\subscription\Subscription::STATUS_CANCELLED_AUTO:
-																print "Cancelled Automatically";
-																break;
-															case \application\nutsNBolts\plugin\subscription\Subscription::STATUS_CANCELLED_MANUAL:
-																print "Cancelled Manually";
-																break;
-															case \application\nutsNBolts\plugin\subscription\Subscription::STATUS_PENDING:
-																print "Pending";
-																break;
-														}
-														?></td>
+													<td><?php print $tpl->formatStatus($userSubscriptions[$i]['status']); ?></td>
 													<td class="center">
 														<?php
 														if ($canDelete):
