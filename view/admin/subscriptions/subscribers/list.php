@@ -52,7 +52,10 @@
 								</tr>
 
 <!--								Generating the sub-table that shows user subscriptions-->
-
+								<?php 
+								$userSubscriptions = $tpl->getUserSubscriptions($subscribers[$i]['id']);
+								if(count($userSubscriptions) > 0):
+								?>
 								<tr>
 									<td colspan="4">
 										<table style="width: 100%" cellpadding="0" cellspacing="0" border="0"
@@ -81,7 +84,6 @@
 											</thead>
 											<tbody>
 											<?php
-											$userSubscriptions = $tpl->getUserSubscriptions($subscribers[$i]['id']);
 											$canDelete = $tpl->can('admin.content.subscription.delete');
 											for ($i = 0, $j = count($userSubscriptions); $i < $j; $i++):
 												?>
@@ -120,7 +122,7 @@
 										</table>
 									</td>
 								</tr>
-
+								<?php endif; ?>
 
 							<?php endfor; ?>
 							</tbody>
