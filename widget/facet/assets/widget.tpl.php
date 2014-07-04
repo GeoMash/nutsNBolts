@@ -1,3 +1,8 @@
+<?php
+$options=$tpl->get('options');
+$value=$tpl->get('value');
+//var_dump($value);die();
+?>
 <select <?php print($tpl->get('multiselect')=='yes'?'multiple':'');?> data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>[]">
 	<?php
 		$value=$tpl->get('value');
@@ -5,7 +10,7 @@
 		$options=$tpl->get('options');
 		for ($i=0,$j=count($options); $i<$j; $i++)
 		{
-			$selected=(in_array($options[$i]->value,$value?'selected':''));
+			$selected=($options[$i]->value!=$value?'selected':'');
 			if(in_array($options[$i]->value,$value))
 			{
 				$selected=' selected ';
