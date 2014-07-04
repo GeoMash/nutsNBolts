@@ -106,6 +106,19 @@
 													</tr>
 												</thead>
 												<tbody>
+													<?php
+													$userAccess=$tpl->get('userAccess');
+													for ($i=0,$j=count($userAccess); $i<$j; $i++):
+													?>
+													<tr class="text-center">
+														<td><?php print $userAccess[$i]['user']['name_first'].' '.$userAccess[$i]['user']['name_last'].' ('.$userAccess[$i]['user']['email'].')'; ?></td>
+														<td><input type="checkbox" name="userAccess[create][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['create']?'checked':''; ?>></td>
+														<td><input type="checkbox" name="userAccess[read][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['read']?'checked':''; ?>></td>
+														<td><input type="checkbox" name="userAccess[update][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['update']?'checked':''; ?>></td>
+														<td><input type="checkbox" name="userAccess[delete][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['delete']?'checked':''; ?>></td>
+														<td><button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button></td>
+													</tr>
+													<?php endfor; ?>
 												</tbody>
 											</table>
 										</div>

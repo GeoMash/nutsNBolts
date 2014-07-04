@@ -231,11 +231,12 @@ namespace application\nutsNBolts\controller\admin
 	
 				}
 	
-				$contentType=$this->model->ContentType->readWithParts($this->typeID);
-				$node		=$this->model->Node->read(array('id'=>$id));
-				$nodeParts	=$this->model->NodePart->read(array('node_id'=>$id));
-				$nodeURLs	=$this->model->NodeMap->read(array('node_id'=>$id));
-				$nodeTags	=array_column($this->model->NodeTag->read(array('node_id'=>$id),array('tag')),'tag');
+				$contentType	=$this->model->ContentType		->readWithParts($this->typeID);
+				$node			=$this->model->Node				->read(['id'=>$id]);
+				$nodeParts		=$this->model->NodePart			->read(['node_id'=>$id]);
+				$nodeURLs		=$this->model->NodeMap			->read(['node_id'=>$id]);
+				$userAccess		=$this->model->PermissionNode	->read(['node_id'=>$id]);
+				$nodeTags	=array_column($this->model->NodeTag	->read(['node_id'=>$id],['tag']),'tag');
 				$parts		=array();
 				
 				for ($i=0,$j=count($contentType); $i<$j; $i++)
@@ -286,11 +287,21 @@ HTML;
 					}
 				}
 				
+				for ($i=0,$j=count($userAccess); $i<$j; $i++)
+				{
+					$user=$this->model->User->read(['id'=>$userAccess[$i]['user_id']]);
+					if (isset($user[0]))
+					{
+						$userAccess[$i]['user']=$user[0];
+					}
+				}
+				
 				$this->view->setVars($node[0]);
 				$this->view->setVar('contentType',		$contentType[0]['name']);
 				$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
 				$this->view->setVar('nodeURLs',			$nodeURLs);
 				$this->view->setVar('nodeTags',			implode(',',$nodeTags));
+				$this->view->setVar('userAccess',		$userAccess);
 				$this->view->setVar('parts',			implode('',$parts));
 				$this->view->setVar('contentTypeId',	$node[0]['content_type_id']);
 				$this->view->setVar('hasWorkflow',		(bool)$contentType[0]['workflow_id']);

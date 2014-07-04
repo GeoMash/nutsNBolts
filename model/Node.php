@@ -54,9 +54,9 @@ namespace application\nutsNBolts\model
 				}
 				//Update User Access
 				$this->model->PermissionNode->delete(['node_id'=>$record['id']]);
-				for ($i=0,$j=count($nodeTags); $i<$j; $i++)
+				for ($i=0,$j=count($userAccess); $i<$j; $i++)
 				{
-					$this->model->PermissionNode->insertAssoc($nodeTags[$i]);
+					$this->model->PermissionNode->insertAssoc($userAccess[$i]);
 				}
 
 				if ($return!==false)
@@ -88,6 +88,10 @@ namespace application\nutsNBolts\model
 					{
 						$nodeTags[$i]['node_id']=$id;
 						$this->model->NodeTag->insertAssoc($nodeTags[$i]);
+					}
+					for ($i=0,$j=count($userAccess); $i<$j; $i++)
+					{
+						$this->model->PermissionNode->insertAssoc($userAccess[$i]);
 					}
 					return $id;
 				}
