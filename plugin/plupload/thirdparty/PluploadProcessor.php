@@ -249,7 +249,7 @@ class PluploadProcessor
 				 );
 			}
 			
-			die('{"jsonrpc" : "2.0", "result" : "complete", "id" : "id"}');
+			die('{"jsonrpc" : "2.0", "result" : "complete", "id" : "id", "fileName": "'.$fileName.'"}');
 		}
 
 		// Return JSON-RPC response
