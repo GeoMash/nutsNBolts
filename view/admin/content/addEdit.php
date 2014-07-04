@@ -84,6 +84,34 @@
 									</div>
 								</div>
 							</div>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-bolt"></i> User Access</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<div class="well relative">
+												<input data-role="selectUser" name="userAccess">
+											</div>
+											<table id="selectUserTable" class="table table-hover">
+												<thead>
+													<tr class="text-center">
+														<th class="span3">User</th>
+														<th class="span3">Create</th>
+														<th class="span3">Read</th>
+														<th class="span3">Update</th>
+														<th class="span3">Delete</th>
+														<th class="span2">Remove</th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 							<?php
 							$extras=$tpl->get('belowForm');
 							foreach ($extras as $extra)

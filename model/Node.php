@@ -23,14 +23,15 @@ namespace application\nutsNBolts\model
 				$nodeParts		=$this->extractContentParts($record);
 				$nodeURLs		=$this->extractURLs($record,'node_id');
 				$nodeTags		=$this->extractTags($record);
-				$return			=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$userAccess		=$this->extractUserAccess($record);
+				$return			=$this->update($this->removeJunk($record),['id'=>$record['id']]);
 				//Update parts.
 				for ($i=0,$j=count($nodeParts); $i<$j; $i++)
 				{
 					//For Update
 					if ($nodeParts[$i]['id']!==0)
 					{
-						$this->model->NodePart->update($nodeParts[$i],array('id'=>$nodeParts[$i]['id']));
+						$this->model->NodePart->update($nodeParts[$i],['id'=>$nodeParts[$i]['id']]);
 						$return=true;
 					}
 					//For Insert
@@ -40,16 +41,22 @@ namespace application\nutsNBolts\model
 					}
 				}
 				//Update URLs
-				$this->model->NodeMap->delete(array('node_id'=>$record['id']));
+				$this->model->NodeMap->delete(['node_id'=>$record['id']]);
 				for ($i=0,$j=count($nodeURLs); $i<$j; $i++)
 				{
 					$this->model->NodeMap->insertAssoc($nodeURLs[$i]);
 				}
 				//Update Tags
-				$this->model->NodeTag->delete(array('node_id'=>$record['id']));
+				$this->model->NodeTag->delete(['node_id'=>$record['id']]);
 				for ($i=0,$j=count($nodeTags); $i<$j; $i++)
 				{
 					$this->model->NodeTag->insertAssoc($nodeTags[$i]);
+				}
+				//Update User Access
+				$this->model->PermissionNode->delete(['node_id'=>$record['id']]);
+				for ($i=0,$j=count($nodeTags); $i<$j; $i++)
+				{
+					$this->model->PermissionNode->insertAssoc($nodeTags[$i]);
 				}
 
 				if ($return!==false)
@@ -64,6 +71,7 @@ namespace application\nutsNBolts\model
 				$nodeParts	=$this->extractContentParts($record);
 				$nodeURLs	=$this->extractURLs($record,'node_id');
 				$nodeTags	=$this->extractTags($record);
+				$userAccess	=$this->extractUserAccess($record);
 				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{
 					for ($i=0,$j=count($nodeParts); $i<$j; $i++)
@@ -133,8 +141,42 @@ namespace application\nutsNBolts\model
 				}
 				unset($record['tags']);				
 			}
-			
-
+			return $return;
+		}
+		
+		public function extractUserAccess(&$record)
+		{
+			$id		=(!empty($record['id']))?$record['id']:0;
+			$return	=array();
+			if (isset($record['userAccess']))
+			{
+				$baseline=null;
+				foreach (['create','read','update','delete'] as $variable)
+				{
+					if (isset($record['userAccess'][$variable]))
+					{
+						$baseline=$variable;
+						break;
+					}
+				}
+				if (!$baseline)
+				{
+					return $return;
+				}
+				foreach ($record['userAccess'][$baseline] as $userId=>$value)
+				{
+					$return[]=array
+					(
+						'node_id'	=>$id,
+						'user_id'	=>$userId,
+						'create'	=>isset($record['userAccess']['create'][$userId]),
+						'read'		=>isset($record['userAccess']['read'][$userId]),
+						'update'	=>isset($record['userAccess']['update'][$userId]),
+						'delete'	=>isset($record['userAccess']['delete'][$userId])
+					);
+				}
+				unset($record['userAccess']);				
+			}
 			return $return;
 		}
 		

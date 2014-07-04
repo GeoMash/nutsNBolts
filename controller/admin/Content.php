@@ -116,7 +116,8 @@ namespace application\nutsNBolts\controller\admin
 					$record=$this->request->getAll();				
 					foreach ($record AS $key=>$rec)
 					{
-						if ($key=='url')continue;
+						if(in_array($key,['url','userAccess']))continue;
+						
 						// checking to see if an array is passed, and converting it to a json object
 						if(is_array($rec))
 						{
@@ -182,7 +183,7 @@ namespace application\nutsNBolts\controller\admin
 					foreach ($this->request->getAll() AS $key=>$rec)
 					{
 						// checking to see if an array is passed, and converting it to a json object
-						if($key != 'url' && is_array($rec))
+						if(!in_array($key,['url','userAccess']) && is_array($rec))
 						{
 							$record[$key]='application/json: '.json_encode($rec);
 						}
