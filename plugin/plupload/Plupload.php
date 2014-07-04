@@ -103,16 +103,18 @@ namespace application\nutsNBolts\plugin\plupload
 					// Move the file to the complete dir
 					rename($filePathAndName, $completed_dir.$basename);
 			}
+			$filepath=null;
 			
 			// process any extra stuff
 			if($this->callback)
 			{
-				call_user_func_array
+				$filepath=call_user_func_array
 				(
 					$this->callback,
 					array($basename)
 				 );
 			}
+			return $filepath;
 		}
 		
 		private function videoScreenshot($originalFile, $newFile, $percentage = 10)
