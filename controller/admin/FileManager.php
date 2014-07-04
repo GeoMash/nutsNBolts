@@ -23,7 +23,7 @@ namespace application\nutsNBolts\controller\admin
 				(
 					[
 						'user_id'		=>$this->plugin->Session->userId
-					]	
+					]
 				);
 
 				$collectionID=$collections[0]['collection_id'];
@@ -47,11 +47,12 @@ namespace application\nutsNBolts\controller\admin
 		{
 			$completedDir=$this->config->plugin->Plupload->completed_dir;
 			
-			
 			//Move the file
 			$moveTo=$completedDir.$this->collectionID._DS_;
+			
 			rename($completedDir.$basename,$moveTo.$basename);
 			$this->makeThumbnail($moveTo,$basename);
+			return $this->collectionID._DS_.$basename;
 		}
 		
 		public function makeThumbnail($dir,$fileName)
