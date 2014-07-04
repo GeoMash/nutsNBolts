@@ -239,7 +239,6 @@ $JSKK.Class.create
 						[
 							'<tr class="text-center">',
 								'<td>',event.added.text,'</td>',
-								'<td><input type="checkbox" name="userAccess[create][',select.val(),']" value="1"></td>',
 								'<td><input type="checkbox" name="userAccess[read][',select.val(),']" value="1"></td>',
 								'<td><input type="checkbox" name="userAccess[update][',select.val(),']" value="1"></td>',
 								'<td><input type="checkbox" name="userAccess[delete][',select.val(),']" value="1"></td>',

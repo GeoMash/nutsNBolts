@@ -155,7 +155,7 @@ namespace application\nutsNBolts\model
 			if (isset($record['userAccess']))
 			{
 				$baseline=null;
-				foreach (['create','read','update','delete'] as $variable)
+				foreach (['read','update','delete'] as $variable)
 				{
 					if (isset($record['userAccess'][$variable]))
 					{
@@ -173,7 +173,6 @@ namespace application\nutsNBolts\model
 					(
 						'node_id'	=>$id,
 						'user_id'	=>$userId,
-						'create'	=>isset($record['userAccess']['create'][$userId]),
 						'read'		=>isset($record['userAccess']['read'][$userId]),
 						'update'	=>isset($record['userAccess']['update'][$userId]),
 						'delete'	=>isset($record['userAccess']['delete'][$userId])

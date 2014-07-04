@@ -75,7 +75,7 @@ values
 ('admin.content.node.delete','Delete Nodes','','Content'),
 ('admin.content.node.ownership','Change Node Ownership','','Content'),
 ('admin.content.node.archive','Archive Node','','Content'),
-('admin.content.node.archive','Archive Node','','Content'),
+('admin.content.node.permit','Permit Access to Nodes','','Content'),
 -- Subscriptions
 ('admin.subscription.package.create','Create Subscription Packages','','Subscriptions'),
 ('admin.subscription.package.read','Read Subscription Packages','','Subscriptions'),

@@ -20,7 +20,6 @@ namespace application\nutsNBolts\model\base
 		(
 			'node_id' => 'int(10) NOT NULL ' ,
 			'user_id' => 'int(10) NOT NULL ' ,
-			'create' => 'tinyint(1) NOT NULL ' ,
 			'read' => 'tinyint(1) NOT NULL ' ,
 			'update' => 'tinyint(1) NOT NULL ' ,
 			'delete' => 'tinyint(1) NOT NULL ' 
