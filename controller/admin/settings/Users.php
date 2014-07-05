@@ -254,7 +254,8 @@ namespace application\nutsNBolts\controller\admin\settings
 			$html	=array();
 			for ($i=0,$j=count($roles); $i<$j; $i++)
 			{
-				if ($roles[$i]['id']==-100)
+				if ($roles[$i]['id']==Auth::ROLE_SUPER
+				|| $roles[$i]['id']==Auth::ROLE_GUEST)
 				{
 					continue;
 				}

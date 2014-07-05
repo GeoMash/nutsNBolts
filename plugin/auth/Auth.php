@@ -11,6 +11,10 @@ namespace application\nutsNBolts\plugin\auth
 	class Auth extends Plugin implements Singleton, Native
 	{
 		const USER_SUPER				=-100;
+		const USER_GUEST				=-200;
+		
+		const ROLE_SUPER				=-100;
+		const ROLE_GUEST				=-200;
 		
 		private $user					=null;
 		private $originalUser			=null;
@@ -31,8 +35,12 @@ namespace application\nutsNBolts\plugin\auth
 				$this->impersonating	=$this->plugin->Session->impersonating;
 				$this->user				=$this->plugin->Mvc->model->User->read($this->plugin->Session->userId)[0];
 				$this->originalUser		=$this->plugin->Mvc->model->User->read($this->plugin->Session->originalUserId)[0];
-				$this->generateUserPermissionsMatrix();
 			}
+			else
+			{
+				$this->user				=$this->plugin->Mvc->model->User->read(self::USER_GUEST)[0];
+			}
+			$this->generateUserPermissionsMatrix();
 		}
 		
 		public function authenticate($email,$password)
@@ -187,53 +195,50 @@ namespace application\nutsNBolts\plugin\auth
 		
 		public function generateUserPermissionsMatrix()
 		{
-			if (is_null($this->permissionFullMatrix))
+			$roles			=$this->getUserRoles();
+			$permissionIDs	=[];
+			//Capture the permission id of every assigned permission in every role assigned to the user.
+			for ($i=0,$j=count($roles); $i<$j; $i++)
 			{
-				$roles			=$this->getUserRoles();
-				$permissionIDs	=[];
-				//Capture the permission id of every assigned permission in every role assigned to the user.
-				for ($i=0,$j=count($roles); $i<$j; $i++)
+				$thesePermissions=$this->model->PermissionRole->read(['role_id'=>$roles[$i]['id']]);
+				for ($k=0,$l=count($thesePermissions); $k<$l; $k++)
 				{
-					$thesePermissions=$this->model->PermissionRole->read(['role_id'=>$roles[$i]['id']]);
-					for ($k=0,$l=count($thesePermissions); $k<$l; $k++)
-					{
-						$permissionIDs[]=$thesePermissions[$k]['permission_id'];
-					}
+					$permissionIDs[]=$thesePermissions[$k]['permission_id'];
 				}
-				//Now capture every permission id which is explicitly assigned to the user.
-				$thesePermissions	=$this->model->PermissionUser->read(['user_id'=>$this->getUserId()]);
-				for ($i=0,$j=count($thesePermissions); $i<$j; $i++)
-				{
-					$permissionIDs[]=$thesePermissions[$i]['permission_id'];
-				}
-				if (count($permissionIDs))
-				{
-					//Generate a single query to capture all the permissions.
-					$permissionIDs=implode(',',$permissionIDs);
-					$query=<<<SQL
-					SELECT * FROM permission
-					WHERE id IN({$permissionIDs});
+			}
+			//Now capture every permission id which is explicitly assigned to the user.
+			$thesePermissions	=$this->model->PermissionUser->read(['user_id'=>$this->getUserId()]);
+			for ($i=0,$j=count($thesePermissions); $i<$j; $i++)
+			{
+				$permissionIDs[]=$thesePermissions[$i]['permission_id'];
+			}
+			if (count($permissionIDs))
+			{
+				//Generate a single query to capture all the permissions.
+				$permissionIDs=implode(',',$permissionIDs);
+				$query=<<<SQL
+				SELECT * FROM permission
+				WHERE id IN({$permissionIDs});
 SQL;
-					$result=$this->plugin->Db->nutsnbolts->select($query);
-					if ($result)
-					{
-						$this->permissionFullMatrix=$this->plugin->Db->nutsnbolts->result('assoc');
-					}
-					else
-					{
-						$this->permissionFullMatrix=[];
-					}
-					$this->permissionKeyMatrix=[];
-					for ($i=0,$j=count($this->permissionFullMatrix); $i<$j; $i++)
-					{
-						$this->permissionKeyMatrix[]=$this->permissionFullMatrix[$i]['key'];
-					}
+				$result=$this->plugin->Db->nutsnbolts->select($query);
+				if ($result)
+				{
+					$this->permissionFullMatrix=$this->plugin->Db->nutsnbolts->result('assoc');
 				}
 				else
 				{
-					$this->permissionFullMatrix	=[];
-					$this->permissionKeyMatrix	=[];
+					$this->permissionFullMatrix=[];
 				}
+				$this->permissionKeyMatrix=[];
+				for ($i=0,$j=count($this->permissionFullMatrix); $i<$j; $i++)
+				{
+					$this->permissionKeyMatrix[]=$this->permissionFullMatrix[$i]['key'];
+				}
+			}
+			else
+			{
+				$this->permissionFullMatrix	=[];
+				$this->permissionKeyMatrix	=[];
 			}
 			return $this;
 		}
