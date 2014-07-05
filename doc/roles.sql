@@ -1,38 +1,52 @@
-/*
-SQLyog Enterprise v10.3 
-MySQL - 5.5.31-MariaDB : Database - nutsnbolts
-*********************************************************************
-*/
-
-/*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`nutsnbolts` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `nutsnbolts`;
-
-/*Table structure for table `role` */
-
 DROP TABLE IF EXISTS `role`;
 
 CREATE TABLE `role` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `ref` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/*Data for the table `role` */
 
-insert  into `role`(`id`,`name`,`description`,`status`) values (-100,'Super','Super User - Super Permissions',1),(1,'Administrator','Admin User - High Permissions',1),(2,'Content Creator','Content Creator',1),(3,'Content Editor','Content Editor',1),(4,'Blogger','Generic Blogger User - Only has permission to their own blog.',1);
+insert into `role`(`id`,`name`,`description`,`ref`,`status`)
+values
+(-100,'Super','Super User - Always has full access.','SUPER',1),
+(-200,'Guest','Guest User - Anonymous','GUEST',1),
+(1,'Admin','System Administrator. Has full access.','ADMIN',1),
+(2,'Standard','Standard Member','MEMBER',1);
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+DROP TABLE IF EXISTS `permission_role`;
+
+CREATE TABLE `permission_role` (
+  `permission_id` int(10) NOT NULL,
+  `role_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+insert into `permission_role`(`permission_id`,`role_id`)
+values
+-- Admin
+(1,1),(2,1),(3,1),(4,1),(5,1),(6,1),(7,1),(8,1),(9,1),
+(10,1),(11,1),(12,1),(13,1),(14,1),(15,1),(16,1),(17,1),(18,1),(19,1),
+(20,1),(21,1),(22,1),(23,1),(24,1),(25,1),(26,1),(27,1),(28,1),(29,1),
+(30,1),(31,1),(32,1),(33,1),(34,1),(35,1),(36,1),(37,1),(38,1),(39,1),
+(40,1),(41,1),(42,1),(43,1),(44,1),(45,1),(46,1),(47,1),(48,1),(49,1),
+(50,1),(51,1),(52,1),(53,1),(54,1),(55,1),(56,1),(57,1),(58,1),(59,1),
+(60,1),(61,1),(62,1),(63,1),(64,1),(65,1),(66,1),(67,1),(68,1),(69,1),
+(70,1),(71,1),(72,1),(73,1),(74,1),(75,1),(76,1),(77,1),(78,1),(79,1),
+(80,1),(81,1),(82,1),
+-- Guest
+(1,-200),
+(61,-200),
+-- Standard
+(1,2),
+(18,2),
+(19,2),
+(20,2),
+(21,2),
+(22,2),
+(23,2),
+(61,2)
+;
