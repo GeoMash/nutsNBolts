@@ -13,6 +13,8 @@ namespace application\nutsNBolts\plugin\subscription {
 		const STATUS_PENDING = 0;
 		const STATUS_ACTIVE = 1;
 
+		const RELAXATION_DAYS = 3;
+
 		public function init()
 		{
 		}
@@ -55,7 +57,24 @@ namespace application\nutsNBolts\plugin\subscription {
 				//var_dump('Recurring');
 
 				$transactionResponse = null;
-				$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse);
+				$arbId = null;
+				$status = null;
+
+				try {
+					$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse);
+					$arbId = $arbStatus->getSubscriptionId();
+					$status = $this::STATUS_ACTIVE;
+				} catch (\Exception $ex) {
+					//If the first transaction is done, just continue and give the user one month of service
+					$arbId = null;
+					$status = $this::STATUS_PENDING;
+
+					//else, fail
+					if ($ex->getCode() != 0) {
+						throw $ex;
+					}
+				}
+
 				$duration = 1;
 				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
 				$timestamp_formatted = $timestamp->format('Y-m-d h:i:s');
@@ -63,7 +82,6 @@ namespace application\nutsNBolts\plugin\subscription {
 
 				//var_dump($transactionResponse);
 
-				$arbId = $arbStatus->getSubscriptionId();
 				$transactionId = $transactionResponse->transaction_id;
 
 				//var_dump($arbId);
@@ -75,7 +93,7 @@ namespace application\nutsNBolts\plugin\subscription {
 					'arb_id' => $arbId,
 					'timestamp' => $timestamp_formatted,
 					'expiry_timestamp' => $expiry_timestamp_formatted,
-					'status' => $this::STATUS_ACTIVE
+					'status' => $status
 				]);
 
 				$subscriptionTransactionId = $this->model->SubscriptionTransaction->insertAssoc([
@@ -126,13 +144,9 @@ namespace application\nutsNBolts\plugin\subscription {
 			}
 		}
 
-		public function addInvoice($subscriptionUserId, $transactionId, $timestamp, $transactionResponseJson)
+		public function assertActiveSubscriber($userId)
 		{
-		}
-
-		public function assertUserHasActiveSubscription($userId)
-		{
-			$whereClause = "AND ( `status` = ".$this::STATUS_ACTIVE." OR `status` = ".$this::STATUS_PENDING." )";
+			$whereClause = "AND ( `status` = " . $this::STATUS_ACTIVE . " OR `status` = " . $this::STATUS_PENDING . " )";
 			$userActiveSubscriptions = $this->model->SubscriptionUser->read(
 				['user_id' => $userId],
 				array(),
@@ -211,6 +225,58 @@ SQL;
 				}
 			}
 			return true;
+		}
+
+		public function addTransaction($gatewayTransactionId, $arbId, $isApproved, $jsonEncodedTransactionResponse)
+		{
+			$currentTimestamp = new \DateTime();
+
+			//Grab the userSubscription to get the userSubscriptionId
+			$userSubscription = $this->model->SubscriptionUser->read([
+				'arb_id' => $arbId
+			]);
+
+			//Insert the new transaction
+			$transactionId = $this->model->SubscriptionTransaction->insertAssoc([
+				'gateway_transaction_id' => $gatewayTransactionId,
+				'timestamp' => $currentTimestamp
+			]);
+
+			//If a approved, we need to create a new Invoice as well.
+			if ($isApproved) {
+				$this->model->SubscriptionInvoice->insertAssoc([
+					'subscription_user_id' => $userSubscription['id'],
+					'subscription_transaction_id' => $transactionId,
+					'timestamp' => $currentTimestamp,
+					'meta' => $jsonEncodedTransactionResponse
+				]);
+
+				$currentExpiryDate = $userSubscription['timestamp'];
+
+				$newExpiryDate = null;
+				if ($currentTimestamp - $currentExpiryDate < $this::RELAXATION_DAYS) {
+					//All previous invoices are done on time. Just Extend one month
+					$newExpiryDate = clone $currentExpiryDate;
+				} else {
+					//The service has been interrupted some time;
+					// one of the transactions were interrupted.
+					//Probably the status of the subscription is "cancelled".
+					//New service span.
+					$newExpiryDate = clone $currentTimestamp;
+				}
+				$newExpiryDate->add('P1M');
+
+				$this->model->SubscriptionUser->update(
+					[
+						'expiry_timestamp' => $newExpiryDate,
+						'status' => $this::STATUS_ACTIVE
+					],
+					[
+						'id' => $userSubscription['id']
+					]);
+			}
+
+			$userSubscriptionId = null;
 		}
 	}
 }
