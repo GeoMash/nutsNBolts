@@ -1,4 +1,4 @@
-<select multiple data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>[]">
+<select <?php print($tpl->get('multiselect')=='yes'?'multiple':'');?> data-id="<?php $tpl->dataId; ?>" name="<?php $tpl->name; ?>[]">
 	<?php
 		$value=$tpl->get('value');
 		$value=json_decode(str_replace('application/json: ','',$value),true);	

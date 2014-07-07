@@ -44,7 +44,8 @@ namespace application\nutsNBolts\model\base
 			'address1' => 'varchar(255)',
 			'address2' => 'varchar(255)',
 			'country' => 'varchar(100)',
-			'zip' => 'int(6)'
+			'zip' => 'int(6)',
+			'video' => 'varchar(100)'
 		);
 	}
 }

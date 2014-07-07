@@ -11,7 +11,8 @@ namespace application\nutsNBolts\controller\rest
 		private $map=array
 		(
 			'{int}'						=>'checkById',
-			'loginByEmail'				=>'loginByEmail'
+			'loginByEmail'				=>'loginByEmail',
+			'forgotPassword'			=>'forgotPassword'
 		);
 		
 		/*
@@ -103,6 +104,58 @@ namespace application\nutsNBolts\controller\rest
 				(
 					false,
 					'OK',
+					false
+				);
+			}
+		}
+		
+		public function forgotPassword()
+		{
+			$emailAddress		=$this->request->get('email');
+			$user				=$this->plugin->Mvc->model->User->read(['email'=>$emailAddress]);
+			if($user[0])
+			{
+				// user found
+				$hash=$_SERVER['HTTP_HOST'].'/forgot/'.sha1($user[0]['name_first'].$user[0]['name_last']);
+				// prep email
+				$emailBody=<<<EMAIL
+Hi,
+
+You have requested for a password change<br/>
+
+To reset your password please click on the link below:</br/>
+
+<a href="{$hash}">CLICK HERE TO RESET</a><br/><br/>
+
+Regards,<br/>
+ - EFTI Memberships
+EMAIL;
+				$email=$this->plugin->Email->smtp;
+				$email->From='membership@efti.com';
+				$email->Subject='EFTI Forgot Password';
+				$email->AltBody=$emailBody;
+				$email->MsgHTML($emailBody);
+				$email->AddAddress($emailAddress);
+				$email->send();
+				
+				$this->setResponseCode(200);
+			
+				$this->respond
+				(
+					true,
+					'OK',
+					true
+				);
+			}
+			else
+			{
+				// error, no user found
+				$this->setResponseCode(200);
+			
+				$this->respond
+				(
+					false,
+					'ERROR',
 					false
 				);
 			}
