@@ -6,7 +6,7 @@
 					<span class="title">Roles</span>
 					<ul class="box-toolbar">
 						<li>
-							<a href="/admin/settings/permissions/addRole/">
+							<a href="/admin/settings/roles/add/">
 								<span class="triangle-button green"><i class="icon-plus"></i></span>
 							</a>
 						</li>
@@ -37,7 +37,7 @@
 									<td class=""><?php print $roles[$i]['ref']; ?></td>
 									<td class=""><?php print $roles[$i]['status']; ?></td>
 									<td class="center">
-										<a href="/admin/settings/roles/edit/<?php print $roles[$i]['id']; ?>">
+										<a href="/admin/settings/roles/remove/<?php print $roles[$i]['id']; ?>">
 											<button title="Archive" class="btn btn-mini btn-red">
 												<i class="icon-remove"></i>
 											</button>
