@@ -13,7 +13,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			{
 				$this->plugin->Auth->can('admin.subscription.package.create');
 				
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				
 				$this->setContentView('admin/subscriptions/packages/list');
@@ -42,7 +41,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 		{
 			try
 			{
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Add','icon-plus','add');
 				
@@ -76,7 +74,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 		{
 			try
 			{
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Edit','icon-edit','edit/'.$id);
 				
@@ -143,7 +140,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
-		
 		
 		public function getSubscriptions()
 		{
