@@ -1,6 +1,30 @@
-TRUNCATE TABLE `permission`;
-TRUNCATE TABLE `permission_role`;
+CREATE TABLE `permission` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `key` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `category` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `permission_role` (
+  `permission_id` int(10) NOT NULL,
+  `role_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `permission_user` (
+  `permission_id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `permission_node` (
+  `node_id` int(10) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `read` tinyint(1) NOT NULL DEFAULT '0',
+  `update` tinyint(1) NOT NULL DEFAULT '0',
+  `delete` tinyint(1) NOT NULL DEFAULT '0',
+  UNIQUE KEY `Unique` (`node_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 insert  into `permission`
 (`id`,`key`,`name`,`description`,`category`)
