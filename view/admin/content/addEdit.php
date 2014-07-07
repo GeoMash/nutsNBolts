@@ -84,6 +84,7 @@
 									</div>
 								</div>
 							</div>
+							<?php if ($tpl->can('admin.content.node.permit')): ?>
 							<div class="container-fluid padded">
 								<div class="box">
 									<div class="box-header">
@@ -106,9 +107,8 @@
 												</thead>
 												<tbody>
 													<?php
-													if ($tpl->can('admin.content.node.permit')):
-														$userAccess=$tpl->get('userAccess');
-														for ($i=0,$j=count($userAccess); $i<$j; $i++):
+													$userAccess=$tpl->get('userAccess');
+													for ($i=0,$j=count($userAccess); $i<$j; $i++):
 													?>
 													<tr class="text-center">
 														<td><?php print $userAccess[$i]['user']['name_first'].' '.$userAccess[$i]['user']['name_last'].' ('.$userAccess[$i]['user']['email'].')'; ?></td>
@@ -117,10 +117,7 @@
 														<td><input type="checkbox" name="userAccess[delete][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['delete']?'checked':''; ?>></td>
 														<td><button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button></td>
 													</tr>
-													<?php
-														endfor;
-													endif;
-													?>
+													<?php endfor; ?>
 												</tbody>
 											</table>
 										</div>
@@ -128,6 +125,7 @@
 								</div>
 							</div>
 							<?php
+							endif;
 							$extras=$tpl->get('belowForm');
 							foreach ($extras as $extra)
 							{
