@@ -178,8 +178,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 			return [
 				Subscription::STATUS_ACTIVE,
 				Subscription::STATUS_CANCELLED_MANUAL,
-				Subscription::STATUS_CANCELLED_AUTO,
-				Subscription::STATUS_PENDING,
+				Subscription::STATUS_CANCELLED_AUTO
 			];
 		}
 
@@ -192,8 +191,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 					return "Cancelled Manually";
 				case Subscription::STATUS_CANCELLED_AUTO:
 					return "Cancelled Automatically";
-				case Subscription::STATUS_PENDING:
-					return "Pending";
 			}
 		}
 	}
