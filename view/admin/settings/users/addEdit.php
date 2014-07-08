@@ -171,6 +171,7 @@
 								</div>
 							</div>
 						</div>
+						<?php if ($tpl->can('admin.permission.user.assign')): ?>
 						<div class="container-fluid padded">
 							<div class="box">
 								<div class="box-header">
@@ -226,6 +227,7 @@
 							</div>
 						</div>
 						<?php
+						endif;
 						$extras=$tpl->get('belowForm');
 						foreach ($extras as $extra)
 						{

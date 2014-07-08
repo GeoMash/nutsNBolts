@@ -35,12 +35,11 @@ $JSKK.Class.create
 			fileManager.hide();
 			var selected=fileManager.getSelected();
 			console.log(selected);
-			alert('salam');
-//			this.widget.find('.imageSelector').addClass('selected');
-//			this.widget.find('input').val(selected.src);
-//			this.widget.find('.thumbs a')	.attr('title',selected.title)
-//											.css('background-image',selected.thumb)
-//											.html('');
+			this.widget.find('.imageSelector').addClass('selected');
+			this.widget.find('input').val(selected.src);
+			this.widget.find('.thumbs a')	.attr('title',selected.title)
+											.css('background-image',selected.thumb)
+											.html('');
 		}
 	}
 );

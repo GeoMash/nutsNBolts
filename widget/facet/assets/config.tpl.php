@@ -1,3 +1,28 @@
+<?php
+$config		=$tpl->get('config');
+$checked	=false;
+if ($tpl->get('multiselect'))
+{
+	$checked=($tpl->get('multiselect')=='yes');
+}
+?>
+<div class="control-group">
+	<label class="control-label">Multi-Select</label>
+	<div class="controls">
+		<div class="row-fluid">
+			<div>
+				<input type="radio" class="icheck" name="widget[<?php $tpl->widgetIndex; ?>][config][multiselect]" id="config_multiselect_yes" value="yes" <?php print $checked?'checked':''; ?>>
+				<label for="config_multiselect_yes">Yes</label>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div>
+				<input type="radio" class="icheck" name="widget[<?php $tpl->widgetIndex; ?>][config][multiselect]" id="config_multiselect_no" value="no" <?php print !$checked?'checked':''; ?>>
+				<label for="config_multiselect_no">No</label>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="control-group">
 	<h5>Options:</h5>
 	<br />

@@ -6,12 +6,12 @@
 		{
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/collections.geomash.dev.lan/"
+				"collectionsDir": "/datastore/www/collections.efti.dev.lan/"
 			},
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/collections.geomash.dev.lan/"
+				"completed_dir":	"/datastore/www/collections.efti.dev.lan/"
 			}
 		}
 	}
