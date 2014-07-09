@@ -67,12 +67,6 @@ namespace application\nutsNBolts\controller\admin
 					{
 						switch (strtolower($this->request->node(2)))
 						{
-							case 'subscriptions':
-							{
-								$this->routedController=new configureContent\Subscriptions($this->MVC);
-								$this->routeAction(3);
-								break;
-							}
 							default:
 							{
 								$this->routedController=new ConfigureContent($this->MVC);
@@ -82,6 +76,25 @@ namespace application\nutsNBolts\controller\admin
 					else
 					{
 						$this->routedController=new ConfigureContent($this->MVC);
+					}
+					break;
+				}
+				case 'subscriptions':
+				{
+					switch (strtolower($this->request->node(2)))
+					{
+						case 'packages':
+						{
+							$this->routedController=new subscriptions\Packages($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
+						case 'subscribers':
+						{
+							$this->routedController=new subscriptions\Subscribers($this->MVC);
+							$this->routeAction(3);
+							break;
+						}
 					}
 					break;
 				}
@@ -106,6 +119,12 @@ namespace application\nutsNBolts\controller\admin
 							case 'permissions':
 							{
 								$this->routedController=new settings\Permissions($this->MVC);
+								$this->routeAction(3);
+								return;
+							}
+							case 'roles':
+							{
+								$this->routedController=new settings\Roles($this->MVC);
 								$this->routeAction(3);
 								return;
 							}
@@ -200,6 +219,7 @@ namespace application\nutsNBolts\controller\admin
 				array($this->routedController,$action),
 				$args
 			);
+			exit();
 		}
 		
 		public function template()

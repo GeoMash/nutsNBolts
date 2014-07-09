@@ -7,26 +7,26 @@ namespace application\nutsNBolts\controller\admin\settings
 	use nutshell\core\exception\NutshellException;
 	use nutshell\helper\ObjectHelper;
 	
-	class Permissions extends AdminController
+	class Roles extends AdminController
 	{
 		public function index()
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.permission.read');
+				$this->plugin->Auth->can('admin.role.read');
 				
 				$this->addBreadcrumb('System','icon-wrench','settings');
 				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
 				
-				$this->setContentView('admin/settings/permissions/list');
+				$this->setContentView('admin/settings/roles/list');
 				
 				$this->view->getContext()
 					->registerCallback
 					(
-						'getPermissions',
+						'getRoles',
 						function()
 						{
-							return $this->getPermissions();
+							return $this->getRoles(null);
 						}
 					);
 				
@@ -45,19 +45,19 @@ namespace application\nutsNBolts\controller\admin\settings
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.permission.create');
+				$this->plugin->Auth->can('admin.role.create');
 				
 				$this->addBreadcrumb('System','icon-wrench','settings');
 				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
-				$this->addBreadcrumb('Add Permission','icon-plus','add');
+				$this->addBreadcrumb('Add Role','icon-pencil','editRole');
 				
 				if ($this->request->get('name'))
 				{
 					$record=$this->request->getAll();
-					if (($id=$this->model->Permission->handleRecord($record))!==false)
+					if ($id=$this->model->Role->handleRecord($record)!==false)
 					{
-						$this->plugin->Notification->setSuccess('Permission successfully added. Would you like to <a href="/admin/settings/permissions/add/">Add another one?</a>');
-						$this->redirect('/admin/settings/permissions/edit/'.$id);
+						$this->plugin->Notification->setSuccess('Role successfully added. Would you like to <a href="/admin/settings/permissions/roles/add/">Add another one?</a>');
+						$this->redirect('/admin/settings/roles/edit/'.$id);
 					}
 					else
 					{
@@ -65,7 +65,7 @@ namespace application\nutsNBolts\controller\admin\settings
 					}
 				}
 				
-				$this->setupAddEdit();
+				$this->setupAddEditRole();
 			}
 			catch (AuthException $exception)
 			{
@@ -78,14 +78,14 @@ namespace application\nutsNBolts\controller\admin\settings
 		{
 			try
 			{
-				$this->plugin->Auth	->can('admin.permission.read')
-									->can('admin.permission.update');
+				$this->plugin->Auth	->can('admin.role.read')
+									->can('admin.role.update');
 				if ($this->request->get('id'))
 				{
 					$record=$this->request->getAll();
-					if ($this->model->Permission->handleRecord($record)!==false)
+					if ($role=$this->model->Role->handleRecord($record)!==false)
 					{
-						$this->plugin->Notification->setSuccess('Permission successfully edited.');
+						$this->plugin->Notification->setSuccess('Role successfully edited.');
 					}
 					else
 					{
@@ -95,13 +95,13 @@ namespace application\nutsNBolts\controller\admin\settings
 				
 				$this->addBreadcrumb('System','icon-wrench','settings');
 				$this->addBreadcrumb('Permissions','icon-bolt','permissions');
-				$this->addBreadcrumb('Edit Permission','icon-pencil','edit');
+				$this->addBreadcrumb('Edit Role','icon-pencil','editRole');
 				
-				if ($record=$this->model->Permission->read($id))
+				if ($record=$this->model->Role->read($id))
 				{
 					$this->view->setVars($record[0]);
 				}
-				$this->setupAddEdit();
+				$this->setupAddEditRole();
 			}
 			catch (AuthException $exception)
 			{
@@ -110,31 +110,40 @@ namespace application\nutsNBolts\controller\admin\settings
 			}
 		}
 		
-		private function setupAddEdit()
+		private function setupAddEditRole()
 		{
-			$this->setContentView('admin/settings/permissions/addEdit');
+			$this->setContentView('admin/settings/roles/addEdit');
 			
-			$renderRef='editPermission';
+			$this->view->getContext()
+				->registerCallback
+				(
+					'getPermissionTable',
+					function()
+					{
+						return $this->getPermissionTable(null);
+					}
+				);
+			
+			$renderRef='edit';
 			$this->execHook('onBeforeRender',$renderRef);
 			
 			$this->view->render();
 		}
 		
-		public function remove($id)
+		public function removeRole($id)
 		{
-			
 			try
 			{
-				$this->plugin->Auth->can('admin.permission.delete');
-				if ($this->model->Permission->delete($id))
+				$this->plugin->Auth->can('admin.role.delete');
+				if ($this->model->Role->handleDeleteRecord($id))
 				{
-					$this->plugin->Notification->setSuccess('Permission successfully removed.');
+					$this->plugin->Notification->setSuccess('Role successfully removed.');
 				}
 				else
 				{
 					$this->plugin->Notification->setError('Oops! Something went wrong, and this is a terrible error message!');
 				}
-				$this->redirect('/admin/settings/permissions/');
+				$this->redirect('/admin/settings/roles/');
 			}
 			catch(AuthException $exception)
 			{
@@ -143,9 +152,33 @@ namespace application\nutsNBolts\controller\admin\settings
 			}
 		}
 		
-		public function getPermissions()
+		public function getRoles()
 		{
-			return $this->model->Permission->read();
+			return $this->model->Role->read();
+		}
+		
+		public function getPermissionTable()
+		{
+			$roleId=$this->request->lastNode();
+			$permissions=$this->model->Permission->read();
+			$rolePermissions=$this->model->PermissionRole->read(['role_id'=>$roleId]);
+			for ($i=0,$j=count($permissions); $i<$j; $i++)
+			{
+				$permissions[$i]['permit']=$this->isPermitted($permissions[$i]['id'],$rolePermissions);
+			}
+			return $permissions;
+		}
+		
+		private function isPermitted($id,&$rolePermissions)
+		{
+			for ($i=0,$j=count($rolePermissions); $i<$j; $i++)
+			{
+				if ($rolePermissions[$i]['permission_id']==$id)
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

@@ -408,3 +408,9 @@ input[disabled]
 {
 	width:	auto;
 }
+
+table tr.text-center th,
+table tr.text-center td
+{
+	text-align: center;
+}

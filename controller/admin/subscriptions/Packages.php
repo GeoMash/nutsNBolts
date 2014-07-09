@@ -1,27 +1,21 @@
 <?php
-namespace application\nutsNBolts\controller\admin\configureContent
+namespace application\nutsNBolts\controller\admin\subscriptions
 {
 	use application\nutsNBolts\base\AdminController;
-	use application\nutsNBolts\plugin\auth\Auth;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
-	use application\nutsNBolts\plugin\plupload\ThumbnailMaker;
-	use application\nutsNBolts\plugin\policy\exception\PolicyException;
-	use application\nutsNBolts\plugin\user\exception\UserException;
 	use nutshell\core\exception\NutshellException;
-	use nutshell\helper\ObjectHelper;
 	
-	class Subscriptions extends AdminController
+	class Packages extends AdminController
 	{
 		public function index()
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.content.subscription.read');
+				$this->plugin->Auth->can('admin.subscription.package.create');
 				
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				
-				$this->setContentView('admin/configureContent/subscriptions/list');
+				$this->setContentView('admin/subscriptions/packages/list');
 				$this->view->getContext()
 				->registerCallback
 				(
@@ -47,20 +41,19 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Add','icon-plus','add');
 				
-				$this->plugin->Auth->can('admin.content.subscription.create');
+				$this->plugin->Auth->can('admin.subscription.package.create');
 				
 				$record=$this->request->getAll();
 				
 				if ($this->request->get('name'))
 				{
 					$subscription=$this->model->Subscription->handleRecord($record);
-					$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/configurecontent/subscriptions/add/">Add another one?</a>');
+					$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/packages/add/">Add another one?</a>');
 					$this->execHook('onAddSubscription',$subscription);
-					$this->redirect('/admin/configurecontent/subscriptions/edit/'.$subscription['id']);
+					$this->redirect('/admin/subscriptions/packages/edit/'.$subscription['id']);
 				}
 			}
 			catch (AuthException $exception)
@@ -81,12 +74,11 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->addBreadcrumb('Configure Content','icon-cogs','configurecontent');
 				$this->addBreadcrumb('Subscriptions','icon-envelope','subscriptions');
 				$this->addBreadcrumb('Edit','icon-edit','edit/'.$id);
 				
-				$this->plugin->Auth	->can('admin.content.subscription.read')
-									->can('admin.content.subscription.update');
+				$this->plugin->Auth	->can('admin.subscription.package.read')
+									->can('admin.subscription.package.update');
 				
 				$record=$this->request->getAll();
 				
@@ -121,12 +113,12 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.content.subscription.delete');
+				$this->plugin->Auth->can('admin.subscription.package.delete');
 				
 				if ($this->model->Subscription->delete($id))
 				{
 					$this->plugin->Notification->setSuccess('Subscription successfully removed.');
-					$this->redirect('/admin/configurecontent/subscriptions/');
+					$this->redirect('/admin/subscriptions/packages/');
 				}
 				else
 				{
@@ -142,13 +134,12 @@ namespace application\nutsNBolts\controller\admin\configureContent
 		
 		private function setupAddEdit(&$renderRef)
 		{
-			$this->setContentView('admin/configureContent/subscriptions/addEdit');
+			$this->setContentView('admin/subscriptions/packages/addEdit');
 			
 			$this->view->setVar('extraOptions',array());
 			$this->execHook('onBeforeRender',$renderRef);
 			$this->view->render();
 		}
-		
 		
 		public function getSubscriptions()
 		{

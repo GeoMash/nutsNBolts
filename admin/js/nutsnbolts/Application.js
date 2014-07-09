@@ -169,7 +169,6 @@ $JSKK.Class.create
 							window.location.reload();
 						}
 					);
-					select.val()
 				}.bind(this)
 			);
 			
@@ -208,7 +207,6 @@ $JSKK.Class.create
 							function(response)
 							{
 								var results=this.handleUserResults(response);
-								console.debug(results.results);
 								callback(results.results[0]);
 							}.bind(this)
 						);
@@ -231,6 +229,27 @@ $JSKK.Class.create
 //					}
 				}
 			)
+			$('[data-role="selectUser"][name="userAccess"]').on
+			(
+				'change',
+				function(event)
+				{console.debug(event);
+					var	select	=$(event.target),
+						row		=
+						[
+							'<tr class="text-center">',
+								'<td>',event.added.text,'</td>',
+								'<td><input type="checkbox" name="userAccess[read][',select.val(),']" value="1"></td>',
+								'<td><input type="checkbox" name="userAccess[update][',select.val(),']" value="1"></td>',
+								'<td><input type="checkbox" name="userAccess[delete][',select.val(),']" value="1"></td>',
+								'<td>',
+									'<button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button>',
+								'</td>',
+							'</tr>'
+						].join('');
+					$('#selectUserTable tbody').append(row);
+				}.bind(this)
+			);
 		},
 		handleUserResults: function(response,page)
 		{

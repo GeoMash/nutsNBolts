@@ -84,7 +84,48 @@
 									</div>
 								</div>
 							</div>
+							<?php if ($tpl->can('admin.content.node.permit')): ?>
+							<div class="container-fluid padded">
+								<div class="box">
+									<div class="box-header">
+										<span class="title"><i class="icon-bolt"></i> User Access</span>
+									</div>
+									<div class="content-box">
+										<div class="padded">
+											<div class="well relative">
+												<input data-role="selectUser" name="userAccess">
+											</div>
+											<table id="selectUserTable" class="table table-hover">
+												<thead>
+													<tr class="text-center">
+														<th class="span3">User</th>
+														<th class="span3">Read</th>
+														<th class="span3">Update</th>
+														<th class="span3">Delete</th>
+														<th class="span2">Remove</th>
+													</tr>
+												</thead>
+												<tbody>
+													<?php
+													$userAccess=$tpl->get('userAccess');
+													for ($i=0,$j=count($userAccess); $i<$j; $i++):
+													?>
+													<tr class="text-center">
+														<td><?php print $userAccess[$i]['user']['name_first'].' '.$userAccess[$i]['user']['name_last'].' ('.$userAccess[$i]['user']['email'].')'; ?></td>
+														<td><input type="checkbox" name="userAccess[read][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['read']?'checked':''; ?>></td>
+														<td><input type="checkbox" name="userAccess[update][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['update']?'checked':''; ?>></td>
+														<td><input type="checkbox" name="userAccess[delete][<?php print $userAccess[$i]['user']['id']; ?>]" value="1" <?php print (bool)(int)$userAccess[$i]['delete']?'checked':''; ?>></td>
+														<td><button data-action="removeRow" class="btn btn-danger btn-mini" type="button">&times;</button></td>
+													</tr>
+													<?php endfor; ?>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
 							<?php
+							endif;
 							$extras=$tpl->get('belowForm');
 							foreach ($extras as $extra)
 							{

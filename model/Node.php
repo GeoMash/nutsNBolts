@@ -23,14 +23,15 @@ namespace application\nutsNBolts\model
 				$nodeParts		=$this->extractContentParts($record);
 				$nodeURLs		=$this->extractURLs($record,'node_id');
 				$nodeTags		=$this->extractTags($record);
-				$return			=$this->update($this->removeJunk($record),array('id'=>$record['id']));
+				$userAccess		=$this->extractUserAccess($record);
+				$return			=$this->update($this->removeJunk($record),['id'=>$record['id']]);
 				//Update parts.
 				for ($i=0,$j=count($nodeParts); $i<$j; $i++)
 				{
 					//For Update
 					if ($nodeParts[$i]['id']!==0)
 					{
-						$this->model->NodePart->update($nodeParts[$i],array('id'=>$nodeParts[$i]['id']));
+						$this->model->NodePart->update($nodeParts[$i],['id'=>$nodeParts[$i]['id']]);
 						$return=true;
 					}
 					//For Insert
@@ -40,16 +41,22 @@ namespace application\nutsNBolts\model
 					}
 				}
 				//Update URLs
-				$this->model->NodeMap->delete(array('node_id'=>$record['id']));
+				$this->model->NodeMap->delete(['node_id'=>$record['id']]);
 				for ($i=0,$j=count($nodeURLs); $i<$j; $i++)
 				{
 					$this->model->NodeMap->insertAssoc($nodeURLs[$i]);
 				}
 				//Update Tags
-				$this->model->NodeTag->delete(array('node_id'=>$record['id']));
+				$this->model->NodeTag->delete(['node_id'=>$record['id']]);
 				for ($i=0,$j=count($nodeTags); $i<$j; $i++)
 				{
 					$this->model->NodeTag->insertAssoc($nodeTags[$i]);
+				}
+				//Update User Access
+				$this->model->PermissionNode->delete(['node_id'=>$record['id']]);
+				for ($i=0,$j=count($userAccess); $i<$j; $i++)
+				{
+					$this->model->PermissionNode->insertAssoc($userAccess[$i]);
 				}
 
 				if ($return!==false)
@@ -64,6 +71,7 @@ namespace application\nutsNBolts\model
 				$nodeParts	=$this->extractContentParts($record);
 				$nodeURLs	=$this->extractURLs($record,'node_id');
 				$nodeTags	=$this->extractTags($record);
+				$userAccess	=$this->extractUserAccess($record);
 				if ($id=$this->insertAssoc($this->removeJunk($record)))
 				{
 					for ($i=0,$j=count($nodeParts); $i<$j; $i++)
@@ -80,6 +88,10 @@ namespace application\nutsNBolts\model
 					{
 						$nodeTags[$i]['node_id']=$id;
 						$this->model->NodeTag->insertAssoc($nodeTags[$i]);
+					}
+					for ($i=0,$j=count($userAccess); $i<$j; $i++)
+					{
+						$this->model->PermissionNode->insertAssoc($userAccess[$i]);
 					}
 					return $id;
 				}
@@ -133,8 +145,41 @@ namespace application\nutsNBolts\model
 				}
 				unset($record['tags']);				
 			}
-			
-
+			return $return;
+		}
+		
+		public function extractUserAccess(&$record)
+		{
+			$id		=(!empty($record['id']))?$record['id']:0;
+			$return	=array();
+			if (isset($record['userAccess']))
+			{
+				$baseline=null;
+				foreach (['read','update','delete'] as $variable)
+				{
+					if (isset($record['userAccess'][$variable]))
+					{
+						$baseline=$variable;
+						break;
+					}
+				}
+				if (!$baseline)
+				{
+					return $return;
+				}
+				foreach ($record['userAccess'][$baseline] as $userId=>$value)
+				{
+					$return[]=array
+					(
+						'node_id'	=>$id,
+						'user_id'	=>$userId,
+						'read'		=>isset($record['userAccess']['read'][$userId]),
+						'update'	=>isset($record['userAccess']['update'][$userId]),
+						'delete'	=>isset($record['userAccess']['delete'][$userId])
+					);
+				}
+				unset($record['userAccess']);				
+			}
 			return $return;
 		}
 		
@@ -515,39 +560,39 @@ SQL;
 			$where=null;
 			if(strlen($category) > 0)
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
 SQL;
 			}
 			elseif(strlen($min) > 3)
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
-			AND node.date_created BETWEEN "{$min}" AND "{$max}";	
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
+				AND node.date_created BETWEEN "{$min}" AND "{$max}";	
 SQL;
 			}
 			else
 			{
-			$query=<<<SQL
-			SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE content_type_user.user_id={$bloggerId}
-			AND node.status=2
+				$query=<<<SQL
+				SELECT node.*,content_part.ref,node_part.value,content_type_user.user_id
+				FROM node
+				LEFT JOIN node_part ON node.id=node_part.node_id
+				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+				LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
+				WHERE content_type_user.user_id={$bloggerId}
+				AND node.status=2
 SQL;
 			}
 

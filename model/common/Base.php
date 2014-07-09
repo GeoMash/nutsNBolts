@@ -28,7 +28,11 @@ namespace application\nutsNBolts\model\common
 		
 		public function handleRecord($record)
 		{
-			if (!isset($record['status']))$record['status']=0;
+			$columns=array_keys($this->columns);
+			if (in_array('status',$columns))
+			{
+				if (!isset($record['status']))$record['status']=0;
+			}
 			//For Updates
 			if (!empty($record['id']) && is_numeric($record['id']))
 			{

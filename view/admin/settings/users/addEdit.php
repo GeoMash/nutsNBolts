@@ -171,7 +171,63 @@
 								</div>
 							</div>
 						</div>
+						<?php if ($tpl->can('admin.permission.user.assign')): ?>
+						<div class="container-fluid padded">
+							<div class="box">
+								<div class="box-header">
+									<span class="title"><i class="icon-bolt"></i> Permissions</span>
+								</div>
+								<div class="content-box">
+									<div class="padded">
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th class="span2"><div>Permit</div></th>
+													<th class="span3"><div>Key</div></th>
+													<th class="span3"><div>Name</div></th>
+													<th><div>Description</div></th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php
+												$permissions		=$tpl->getUserPermissions();
+												$groupedPermissions	=[];
+												for ($i=0,$j=count($permissions); $i<$j; $i++)
+												{
+													if (is_array(!$groupedPermissions[$permissions[$i]['category']]))
+													{
+														$groupedPermissions[$permissions[$i]['category']]=[];
+													}
+													$groupedPermissions[$permissions[$i]['category']][]=$permissions[$i];
+												}
+												ksort($groupedPermissions);
+												foreach ($groupedPermissions as $category=>$permissionGroup):
+												?>
+												<tr>
+													<td colspan="5"><h3><?php print $category; ?></h3></td>
+												</tr>
+													<?php
+													for ($i=0,$j=count($permissionGroup); $i<$j; $i++):
+														$checked=$permissionGroup[$i]['checked']?'checked':'';
+													?>
+													<tr>
+														<td><input type="checkbox" name="permit[]" value="<?php print $permissionGroup[$i]['id']; ?>" <?php print $checked; ?>></td>
+														<td><?php print $permissionGroup[$i]['key']; ?></td>
+														<td><?php print $permissionGroup[$i]['name']; ?></td>
+														<td><?php print $permissionGroup[$i]['description']; ?></td>
+													</tr>
+													<?php
+													endfor;
+												endforeach;
+												?>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
 						<?php
+						endif;
 						$extras=$tpl->get('belowForm');
 						foreach ($extras as $extra)
 						{

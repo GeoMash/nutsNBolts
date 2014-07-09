@@ -239,17 +239,17 @@ class PluploadProcessor
 		{
 			// Strip the temp .part suffix off 
 			rename("{$filePath}.part", $filePath);
+			$filename=null;
 			
 			if($callback)
 			{
-				call_user_func_array
+				$filename=call_user_func_array
 				(
 					$callback,
 					array($filePath)
 				 );
 			}
-			
-			die('{"jsonrpc" : "2.0", "result" : "complete", "id" : "id", "fileName": "'.$fileName.'"}');
+			die('{"jsonrpc" : "2.0", "result" : "complete", "id" : "id","path":"'.$filename.'"}');
 		}
 
 		// Return JSON-RPC response
