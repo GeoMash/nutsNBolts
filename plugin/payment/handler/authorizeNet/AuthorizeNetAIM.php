@@ -9,7 +9,9 @@ require_once 'shared/AuthorizeNetResponse.php';
 require_once 'shared/AuthorizeNetTypes.php';
 require_once 'shared/AuthorizeNetXMLResponse.php';
 
+use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetException;
 use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetRequest;
+use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetResponse;
 
 /**
  * Easily interact with the Authorize.Net AIM API.
@@ -396,7 +398,7 @@ class AuthorizeNetAIM extends AuthorizeNetRequest
  * @package    AuthorizeNet
  * @subpackage AuthorizeNetAIM
  */
-class AuthorizeNetAIM_Response extends shared\AuthorizeNetResponse
+class AuthorizeNetAIM_Response extends AuthorizeNetResponse
 {
     private $_response_array = array(); // An array with the split response.
 

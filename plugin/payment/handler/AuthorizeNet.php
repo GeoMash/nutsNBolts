@@ -2,15 +2,12 @@
 
 namespace application\nutsNBolts\plugin\payment\handler
 {
-	use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetCustomer;
-	use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetPaymentProfile;
 	use nutshell\core\exception\ApplicationException;
 	use nutshell\core\exception\PluginException;
 	use nutshell\core\plugin\PluginExtension;
 	use application\nutsNBolts\plugin\payment\handler\authorizeNet\AuthorizeNetAIM;
 	use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNet_Subscription;
 	use application\nutsNBolts\plugin\payment\handler\authorizeNet\AuthorizeNetARB;
-	use application\nutsNBolts\plugin\payment\handler\authorizeNet\AuthorizeNetCIM;
 
 	class AuthorizeNet extends PluginExtension
 	{
@@ -22,7 +19,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 		private $transaction_key;
 
 		/**
-		 *    Requires the AuthorizeNet SDK files. And Import Authroize.Net LoginID and TransactionID
+		 *  Requires the AuthorizeNet SDK files. And Import Authroize.Net LoginID and TransactionID
 		 */
 		public function init()
 		{
