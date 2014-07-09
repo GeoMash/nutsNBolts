@@ -246,8 +246,13 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$transactionId = $fields["x_trans_id"];
 			$arbId = $fields["x_subscription_id"];
 			$jsonEncodedResponse = json_encode($fields);
-			
-			$this->plugin->Subscription->addTransaction($transactionId, $arbId, $isApproved, $jsonEncodedResponse);
+
+			if ($arbId)
+			{
+				//Only passing the ARB Transactions as normal Transaction responses are handled synchronously
+				// at the transaction issuing time.
+				$this->plugin->Subscription->addTransaction($transactionId, $arbId, $isApproved, $jsonEncodedResponse);
+			}
 		}
 	}
 }
