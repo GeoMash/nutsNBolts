@@ -10,6 +10,7 @@ namespace application\nutsNBolts\plugin\subscription
 	class Subscription extends Plugin implements Singleton, Native
 	{
 		const DATETIME_FORMAT = 'Y-m-d h:i:s';
+		
 		const STATUS_CANCELLED_MANUAL = -2;
 		const STATUS_CANCELLED_AUTO = -1;
 		const STATUS_ACTIVE = 1;
@@ -20,6 +21,13 @@ namespace application\nutsNBolts\plugin\subscription
 		{
 		}
 
+		/**
+		 * This method subscribe a user to any type of subscription packages
+		 * @param $userId, The user ID to be subscribed
+		 * @param $subscriptionId, The Package ID 
+		 * @param $subscriptionRequest, The Credit Card Information
+		 * @throws \nutshell\core\exception\ApplicationException
+		 */
 		public function subscribe($userId, $subscriptionId, $subscriptionRequest)
 		{
 			//Receiving Credit Card information
@@ -120,6 +128,11 @@ namespace application\nutsNBolts\plugin\subscription
 			}
 		}
 
+		/**
+		 * Checks whether a User has at least one active subscription
+		 * @param $userId
+		 * @return bool
+		 */
 		public function assertActiveSubscriber($userId)
 		{
 			$userActiveSubscriptions = $this->model->SubscriptionUser->read(
