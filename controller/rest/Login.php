@@ -89,10 +89,10 @@ namespace application\nutsNBolts\controller\rest
 				$session->userId=$user['id'];
 				$session->authenticated=true;
 				
-				$redirect=false;
+				$data=true;
 				if (!empty($this->plugin->Session->returnURL))
 				{
-					$redirect=$this->plugin->Session->returnURL;
+					$data=$this->plugin->Session->returnURL;
 				}
 				
 				$this->setResponseCode(200);
@@ -100,7 +100,7 @@ namespace application\nutsNBolts\controller\rest
 				(
 					true,
 					'OK',
-					$redirect
+					$data
 				);
 			}
 			else
