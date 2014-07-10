@@ -15,13 +15,16 @@ require_once 'shared/AuthorizeNetResponse.php';
 require_once 'shared/AuthorizeNetTypes.php';
 require_once 'shared/AuthorizeNetXMLResponse.php';
 
+use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetRequest;
+use application\nutsNBolts\plugin\payment\handler\authorizeNet\shared\AuthorizeNetXMLResponse;
+
 /**
  * A class to send a request to the ARB XML API.
  *
  * @package    AuthorizeNet
  * @subpackage AuthorizeNetARB
  */
-class AuthorizeNetARB extends shared\AuthorizeNetRequest
+class AuthorizeNetARB extends AuthorizeNetRequest
 {
 
     const LIVE_URL = "https://api.authorize.net/xml/v1/request.api";
@@ -144,7 +147,7 @@ XML;
  * @package    AuthorizeNet
  * @subpackage AuthorizeNetARB
  */
-class AuthorizeNetARB_Response extends shared\AuthorizeNetXMLResponse
+class AuthorizeNetARB_Response extends AuthorizeNetXMLResponse
 {
 
     /**

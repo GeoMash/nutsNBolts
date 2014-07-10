@@ -193,6 +193,30 @@ namespace application\nutsNBolts\plugin\auth
 			return false;
 		}
 		
+		public function hasRoleByRef($roles)
+		{
+			if (!is_array($roles))
+			{
+				$roles=[$roles];
+			}
+			$userRoles=$this->getUserRoles();
+			for ($i=0,$j=count($roles); $i<$j; $i++)
+			{
+				if (!is_string($roles[$i]))
+				{
+					continue;
+				}
+				for ($k=0,$l=count($userRoles); $k<$l; $k++)
+				{
+					if ($roles[$i]==$userRoles[$i]['ref'])
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		
 		public function generateUserPermissionsMatrix()
 		{
 			$roles			=$this->getUserRoles();
