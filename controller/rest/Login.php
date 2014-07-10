@@ -43,7 +43,7 @@ namespace application\nutsNBolts\controller\rest
 					(
 						true,
 						'OK',
-						'asfasf'
+						false
 					);								
 				}
 
@@ -89,12 +89,18 @@ namespace application\nutsNBolts\controller\rest
 				$session->userId=$user['id'];
 				$session->authenticated=true;
 				
+				$redirect=false;
+				if (!empty($this->plugin->Session->returnURL))
+				{
+					$redirect=$this->plugin->Session->returnURL;
+				}
+				
 				$this->setResponseCode(200);
 				$this->respond
 				(
 					true,
 					'OK',
-					true
+					$redirect
 				);
 			}
 			else
