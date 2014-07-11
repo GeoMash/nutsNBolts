@@ -1,5 +1,6 @@
 <?php
-namespace application\nutsNBolts\controller\admin\subscriptions {
+namespace application\nutsNBolts\controller\admin\subscriptions
+{
 	use application\nutsNBolts\base\AdminController;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use nutshell\core\exception\NutshellException;
@@ -9,7 +10,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 	{
 		public function index()
 		{
-			try {
+			try
+			{
 				$this->plugin->Auth->can('admin.subscription.subscriber.read');
 
 				$this->addBreadcrumb('Subscriptions', 'icon-envelope', 'subscriptions');
@@ -18,7 +20,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 				$this->view->getContext()
 					->registerCallback(
 						'suspend',
-						function ($userSubscriptionId) {
+						function ($userSubscriptionId)
+						{
 							return $this->suspend($userSubscriptionId);
 						}
 					);
@@ -26,21 +29,24 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 					->registerCallback
 					(
 						'getSubscribers',
-						function () {
+						function ()
+						{
 							return $this->getSubscribers();
 						}
 					);
 				$this->view->getContext()
 					->registerCallback(
 						'getUserSubscriptions',
-						function ($userId) {
+						function ($userId)
+						{
 							return $this->getUserSubscriptions($userId);
 						}
 					);
 				$this->view->getContext()
 					->registerCallback(
 						'formatStatus',
-						function ($status) {
+						function ($status)
+						{
 							return $this->formatStatus($status);
 						}
 					);
@@ -48,7 +54,9 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 				$renderRef = 'userSubscriptions';
 				$this->view->setVar('extraOptions', array());
 				$this->execHook('onBeforeRender', $renderRef);
-			} catch (AuthException $exception) {
+			}
+			catch (AuthException $exception)
+			{
 				$this->setContentView('admin/noPermission');
 			}
 			$this->view->render();
@@ -56,7 +64,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 
 		public function edit($userSubscriberId)
 		{
-			try {
+			try
+			{
 				$this->addBreadcrumb('User Subscriptions', 'icon-envelope', 'subscribers');
 				$this->addBreadcrumb('Edit', 'icon-edit', 'edit/' . $userSubscriberId);
 
@@ -66,63 +75,107 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 
 				$record = $this->request->getAll();
 
-				if ($this->request->get('id')) {
+				if ($this->request->get('id'))
+				{
 					$userSubscription = $this->model->SubscriptionUser->handleRecord($record);
 					$this->plugin->Notification->setSuccess('Subscription successfully updated.');
 					$this->execHook('onEditUserSubscription', $userSubscription);
 				}
-			} catch (AuthException $exception) {
+			}
+			catch (AuthException $exception)
+			{
 				$this->setContentView('admin/noPermission');
-			} catch (NutshellException $exception) {
+			}
+			catch (NutshellException $exception)
+			{
 				var_dump($exception);
 				$this->plugin->Notification->setError('Internal nuts n bolts error. Check the logs.');
 			}
-			if ($record = $this->model->SubscriptionUser->read($userSubscriberId)) {
+			if ($record = $this->model->SubscriptionUser->read($userSubscriberId))
+			{
 				$this->view->setVars($record[0]);
-			} else {
+			}
+			else
+			{
 				$this->view->setVar('record', array());
 			}
 			$renderRef = 'userSubscriptions/edit';
 			$this->setupAddEdit($renderRef);
 		}
 
+		public function add()
+		{
+			try
+			{
+				$this->plugin->Auth->can('admin.subscription.subscriber.create');
+				
+				$this->addBreadcrumb('User Subscriptions', 'icon-envelope', 'subscribers');
+				$this->addBreadcrumb('Add Subscription','icon-plus','add');
+
+				if ($this->request->get('user_id'))
+				{
+					$record = $this->request->getAll();
+					if (($id = $this->model->SubscriptionUser->handleRecord($record)) !== false)
+					{
+						$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/subscribers/add/">Add another one?</a>');
+						$this->redirect('/admin/subscriptions/subscribers/edit/' . $id);
+					}
+					else
+					{
+						$this->plugin->Notification->setError('Failed to add a Subscription!');
+					}
+				}
+
+				$renderRef = 'userSubscriptions/add';
+				$this->setupAddEdit($renderRef);
+			}
+			catch (AuthException $exception)
+			{
+				$this->setContentView('admin/noPermission');
+				$this->view->render();
+			}
+		}
+
 		private function setupAddEdit(&$renderRef)
 		{
 			$this->setContentView('admin/subscriptions/subscribers/addEdit');
 			$this->view->getContext()
-				->registerCallback
-				(
+				->registerCallback(
 					'getUsers',
-					function () {
+					function ()
+					{
 						return $this->getUsers();
 					}
 				);
 			$this->view->getContext()
-				->registerCallback
-				(
+				->registerCallback(
 					'getSubscriptions',
-					function () {
+					function ()
+					{
 						return $this->getSubscriptions();
 					}
 				);
 			$this->view->getContext()
 				->registerCallback(
 					'formatStatus',
-					function ($status) {
+					function ($status)
+					{
 						return $this->formatStatus($status);
 					}
 				);
 			$this->view->getContext()
 				->registerCallback(
 					'getSubscriberEmail',
-					function ($userId) {
+					function ($userId)
+					{
 						return $this->getSubscriberEmail($userId);
 					}
 				);
 			$this->view->getContext()
 				->registerCallback(
 					'getStatues',
-					function () {
+					function ()
+					{
 						return $this->getStatues();
 					}
 				);
@@ -134,15 +187,21 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 
 		public function suspend($userSubscriptionId)
 		{
-			try {
+			try
+			{
 				$this->plugin->Auth->can('admin.subscription.subscriber.update');
-				if ($this->plugin->Subscription->suspendManual($userSubscriptionId)) {
+				if ($this->plugin->Subscription->suspendManual($userSubscriptionId))
+				{
 					$this->plugin->Notification->setSuccess('User subscription successfully suspended.');
-				} else {
+				}
+				else
+				{
 					$this->plugin->Notification->setError('Failed suspending user subscription!');
 				}
 				$this->redirect('/admin/subscriptions/subscribers');
-			} catch (AuthException $exception) {
+			}
+			catch (AuthException $exception)
+			{
 				$this->setContentView('admin/noPermission');
 				$this->view->render();
 			}
@@ -184,7 +243,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions {
 
 		public function formatStatus($status)
 		{
-			switch ($status) {
+			switch ($status)
+			{
 				case Subscription::STATUS_ACTIVE:
 					return "Active";
 				case Subscription::STATUS_CANCELLED_MANUAL:
