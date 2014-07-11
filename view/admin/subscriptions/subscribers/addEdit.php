@@ -37,24 +37,17 @@
 									<input data-role="selectUser" name="user_id" value=<?php $tpl->user_id; ?>>
 								</div>
 							</div>
-							
-							<div class="control-group">
-								<label class="control-label">Subscriber Email</label>
-								<div class="controls">
-									<input readonly="true" disabled="true" type="text" name="subscriber_email" class="validate[required]" data-prompt-position="topLeft" value="<?php print $tpl->getSubscriberEmail($tpl->get('user_id')); ?>">
-								</div>
-							</div>
-							
+														
 							<div class="control-group">
 								<label class="control-label">Creation Date</label>
 								<div class="controls">
-									<input type="text" name="timestamp" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->timestamp; ?>">
+									<input type="text" name="timestamp" class="validate[required] datepicker-subscription-timestamp" value="<?php $tpl->timestamp; ?>">
 								</div>
 							</div>
 							<div class="control-group">
 								<label class="control-label">Expiry Date</label>
 								<div class="controls">
-									<input type="text" name="expiry_timestamp" class="validate[required]" data-prompt-position="topLeft" value="<?php $tpl->expiry_timestamp; ?>">
+									<input type="text" name="expiry_timestamp" class="datepicker-subscription-timestamp" data-prompt-position="topLeft" value="<?php $tpl->expiry_timestamp; ?>">
 								</div>
 							</div>
 							

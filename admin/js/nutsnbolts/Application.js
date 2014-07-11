@@ -79,7 +79,13 @@ $JSKK.Class.create
 				}
 			);
 			
-			
+			$('.datepicker-subscription-timestamp').datepicker
+			(
+				{
+					todayBtn:   true,
+					format:     'yyyy-mm-dd'
+				}
+			);
 			
 			$('[data-sortable="true"] tbody').sortable
 			(
