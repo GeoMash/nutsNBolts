@@ -34,14 +34,7 @@
 							<div class="control-group">
 								<label class="control-label">Subscriber Name</label>
 								<div class="controls">
-									<select class="input-small" name="user_id">
-										<?php
-										$users = $tpl->getUsers();
-										for($i = 0; $i < count($users); $i++):
-										?>
-										<option <?php if($tpl->get('user_id') == $users[$i]['id']) print "selected=\"true\""; ?> value="<?php print $users[$i]['id'] ?>"><?php print $users[$i]['name_first'].' '.$users[$i]['name_last'] ?></option>
-										<?php endfor; ?>
-									</select>
+									<input data-role="selectUser" name="user_id" value=<?php $tpl->user_id; ?>>
 								</div>
 							</div>
 							
