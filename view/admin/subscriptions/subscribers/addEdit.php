@@ -34,7 +34,7 @@
 							<div class="control-group">
 								<label class="control-label">Subscriber Name</label>
 								<div class="controls">
-									<select class="input-small" name="subscription_id">
+									<select class="input-small" name="user_id">
 										<?php
 										$users = $tpl->getUsers();
 										for($i = 0; $i < count($users); $i++):
