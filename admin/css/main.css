@@ -205,6 +205,8 @@ footer p
 {
 	margin:		0;
 	height:		94%;
+	overflow-x: hidden;
+	overflow-y: scroll;
 }
 
 
