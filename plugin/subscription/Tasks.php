@@ -23,8 +23,8 @@ namespace application\nutsNBolts\plugin\subscription {
 			$query = <<<SQL
 UPDATE `subscription_user`
 SET `status` = {$statusCancelledManual}
-WHERE `expiry_timestamp` NOT NULL AND CURRENT_TIMESTAMP() > TIMESTAMPADD(DAY,{$relaxationDays},`expiry_timestamp`)
-AND `status` IS NOT IN ({$statusCancelledAuto},{$statusCancelledManual})
+WHERE `expiry_timestamp` IS NOT NULL AND CURRENT_TIMESTAMP() > TIMESTAMPADD(DAY,{$relaxationDays},`expiry_timestamp`)
+AND `status` NOT IN ({$statusCancelledAuto},{$statusCancelledManual})
 SQL;
 			$this->plugin->Db->nutsnbolts->update($query);
 		}
