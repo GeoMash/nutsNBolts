@@ -100,7 +100,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->view->setVar('record', array());
 			}
 			$renderRef = 'userSubscriptions/edit';
-			$this->setupAddEdit($renderRef);
+			$this->setupAddEdit($renderRef, false);
 		}
 
 		public function add()
@@ -127,7 +127,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				}
 
 				$renderRef = 'userSubscriptions/add';
-				$this->setupAddEdit($renderRef);
+				$this->setupAddEdit($renderRef, true);
 			}
 			catch (AuthException $exception)
 			{
@@ -136,7 +136,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			}
 		}
 
-		private function setupAddEdit(&$renderRef)
+		private function setupAddEdit(&$renderRef, $isAdding)
 		{
 			$this->setContentView('admin/subscriptions/subscribers/addEdit');
 			$this->view->getContext()
@@ -180,7 +180,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 					}
 				);
 
-			$this->view->setVar('extraOptions', array());
+			$this->view->setVar('extraOptions', array( 'isAdding' => $isAdding ));
 			$this->execHook('onBeforeRender', $renderRef);
 			$this->view->render();
 		}

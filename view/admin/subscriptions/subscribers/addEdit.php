@@ -44,6 +44,7 @@
 									<input type="text" name="timestamp" class="validate[required] datepicker-subscription-timestamp" value="<?php $tpl->timestamp; ?>">
 								</div>
 							</div>
+							
 							<div class="control-group">
 								<label class="control-label">Expiry Date</label>
 								<div class="controls">
@@ -65,6 +66,35 @@
 								</div>
 							</div>
 							
+							<?php if($tpl->get('extraOptions')['isAdding']): ?>
+							<div class="control-group">
+								<label class="control-label">Is New</label>
+								<div class="controls">
+									<input type="checkbox">
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label">Credit Card No.</label>
+								<div class="controls">
+									<input data-role="selectUser" name="user_id" value=<?php $tpl->user_id; ?>>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label">Credit Card Code</label>
+								<div class="controls">
+									<input data-role="selectUser" name="user_id" value=<?php $tpl->user_id; ?>>
+								</div>
+							</div>
+							
+							<div class="control-group">
+								<label class="control-label">Credit Card Expiry Date</label>
+								<div class="controls">
+									<input data-role="selectUser" name="user_id" value=<?php $tpl->user_id; ?>>
+								</div>
+							</div>
+							<?php endif; ?>
 						</div>
 						<?php
 						$extras=$tpl->get('belowForm');
