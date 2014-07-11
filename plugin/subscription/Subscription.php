@@ -151,7 +151,7 @@ namespace application\nutsNBolts\plugin\subscription
 		public function getSubscribedUsers()
 		{
 			$query = <<<SQL
-SELECT `user`.* 
+SELECT DISTINCT `user`.* 
 FROM `user` INNER JOIN `subscription_user` ON `user`.`id` = `subscription_user`.`user_id`
 SQL;
 			if ($this->plugin->Db->nutsnbolts->select($query))
