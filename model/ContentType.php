@@ -2,8 +2,9 @@
 namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\NutsNBolts;
+	use nutshell\core\exception\NutshellException;
 	use application\nutsNBolts\model\base\ContentType as ContentTypeBase;
-	
+
 	class ContentType extends ContentTypeBase	
 	{
 		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
