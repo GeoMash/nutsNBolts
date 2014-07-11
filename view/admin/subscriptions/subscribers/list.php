@@ -6,7 +6,7 @@
 					<span class="title">Subscriptions</span>
 					<ul class="box-toolbar">
 						<li>
-							<a href="/admin/configurecontent/subscriptions/add/">
+							<a href="/admin/subscriptions/subscribers/add/">
 								<span class="triangle-button green"><i class="icon-plus"></i></span>
 							</a>
 						</li>
@@ -85,21 +85,21 @@
 											<tbody>
 											<?php
 											$canDelete = $tpl->can('admin.content.subscription.delete');
-											for ($i = 0, $j = count($userSubscriptions); $i < $j; $i++):
+											for ($i1 = 0, $j1 = count($userSubscriptions); $i1 < $j1; $i1++):
 												?>
 												<tr>
 													<td>
-														<a href="/admin/subscriptions/subscribers/edit/<?php print $userSubscriptions[$i]['id']; ?>"><?php print $userSubscriptions[$i]['name']; ?></a>
+														<a href="/admin/subscriptions/subscribers/edit/<?php print $userSubscriptions[$i1]['id']; ?>"><?php print $userSubscriptions[$i1]['name']; ?></a>
 													</td>
-													<td><?php print $userSubscriptions[$i]['arb_id'] ?: "N/A"; ?></td>
-													<td><?php print $userSubscriptions[$i]['timestamp']; ?></td>
-													<td><?php print $userSubscriptions[$i]['expiry_timestamp'] ?: "N/A"; ?></td>
-													<td><?php print $tpl->formatStatus($userSubscriptions[$i]['status']); ?></td>
+													<td><?php print $userSubscriptions[$i1]['arb_id'] ?: "N/A"; ?></td>
+													<td><?php print $userSubscriptions[$i1]['timestamp']; ?></td>
+													<td><?php print $userSubscriptions[$i1]['expiry_timestamp'] ?: "N/A"; ?></td>
+													<td><?php print $tpl->formatStatus($userSubscriptions[$i1]['status']); ?></td>
 													<td class="center">
 														<?php
 														if ($canDelete):
 															?>
-															<a href="/admin/subscriptions/subscribers/suspend/<?php print $userSubscriptions[$i]['id']; ?>">
+															<a href="/admin/subscriptions/subscribers/suspend/<?php print $userSubscriptions[$i1]['id']; ?>">
 																<button title="Suspend Subscription"
 																		class="btn btn-mini btn-red"
 																		data-toggle="tooltip">
