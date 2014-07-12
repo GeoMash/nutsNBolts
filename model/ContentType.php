@@ -303,7 +303,7 @@ SQL;
 			WHERE node.content_type_id=?
 			ORDER BY node.id ASC;
 SQL;
-			if ($result=$this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
+			if ($this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
 				for ($i=0,$j=count($records); $i<$j; $i++)
@@ -314,30 +314,66 @@ SQL;
 					}
 					$nodeGroups[$records[$i]['id']][]=$records[$i]['content_part_id'];
 				}
-//				print '<pre>';
-//				print_r($nodeGroups);
-//				print '</pre>';
-//				exit();
 				for ($i=0,$j=count($contentType['parts']); $i<$j; $i++)
 				{
-					foreach ($nodeGroups as $nodeId=>$nodePartIds)
+					foreach ($nodeGroups as $nodeId=>$contentPartIds)
 					{
 						$found=false;
-						for ($k=0,$l=count($nodePartIds); $k<$l; $k++)
+						for ($k=0,$l=count($contentPartIds); $k<$l; $k++)
 						{
-							if ($nodePartIds[$k]==$contentType['parts'][$i]['id'])
+							if ($contentPartIds[$k]==$contentType['parts'][$i]['id'])
 							{
 								$found=true;
+								break;
 							}
 						}
 						if (!$found)
 						{
-//							print $contentType['parts'][$i]['id'].'::<br>';
-//							print 'NOT FOUND<br>';
 							$this->insertNullPart($nodeId,$contentType['parts'][$i]['id']);
 						}
 					}
-					
+				}
+			}
+			unset($nodeGroups);
+			$nodeGroups	=[];
+			$query		=<<<SQL
+			SELECT node.id,
+			node_part.id AS node_part_id,
+			node_part.content_part_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			WHERE node.content_type_id=5
+			ORDER BY node.id ASC;
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!is_array($nodeGroups[$records[$i]['id']]))
+					{
+						$nodeGroups[$records[$i]['id']]=[];
+					}
+					$nodeGroups[$records[$i]['id']][]=$records[$i]['content_part_id'];
+				}
+				foreach ($nodeGroups as $nodeId=>$contentPartIds)
+				{
+					for ($i=0,$j=count($contentPartIds); $i<$j; $i++)
+					{
+						$found=false;
+						for ($k=0,$l=count($contentType['parts']); $k<$l; $k++)
+						{
+							if ($contentPartIds[$i]==$contentType['parts'][$k]['id'])
+							{
+								$found=true;
+								break;
+							}
+						}
+						if (!$found)
+						{
+							$this->model->NodePart->delete(['content_part_id'=>$contentPartIds[$i]]);
+						}
+					}
 				}
 			}
 			return $this;
