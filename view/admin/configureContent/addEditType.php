@@ -48,23 +48,7 @@
 											<?php $tpl->getWorkflowOptions($tpl->get('workflow_id')); ?>
 										</select>
 									</div>
-								</div>
-								<div class="control-group">
-									<label class="control-label">Page</label>
-									<div class="controls">
-										<select name="page_name">
-											<option <?php echo ($tpl->get("page_name")=='Home' ? "selected='selected'":""); ?> value="Home">Home</option>
-											<option <?php echo ($tpl->get("page_name")=='About' ? "selected='selected'":""); ?> value="About">About</option>
-											<option <?php echo ($tpl->get("page_name")=='Knowledge Bank' ? "selected='selected'":""); ?> value="Knowledge Bank">Knowledge Bank</option>
-											<option <?php echo ($tpl->get("page_name")=='Academic Calendar' ? "selected='selected'":""); ?> value="Academic Calendar">Academic Calendar</option>
-											<option <?php echo ($tpl->get("page_name")=='SME challenge' ? "selected='selected'":""); ?> value="SME challenge">SME Challenge</option>
-											<option <?php echo ($tpl->get("page_name")=='Contact' ? "selected='selected'":""); ?> value="Contact">Contact</option>
-											<option <?php echo ($tpl->get("page_name")=='Search' ? "selected='selected'":""); ?> value="Search">Search</option>
-											<option <?php echo ($tpl->get("page_name")=='Blog' ? "selected='selected'":""); ?> value="Blog">Blog</option>
-											<option <?php echo ($tpl->get("page_name")=='Video' ? "selected='selected'":""); ?> value="Video">Video</option>
-										</select>
-									</div>
-								</div>								
+								</div>							
 							</div>
 							<div class="container-fluid padded">
 								<div class="box">
