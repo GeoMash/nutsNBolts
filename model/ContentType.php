@@ -198,22 +198,31 @@ namespace application\nutsNBolts\model
 		
 		public function readWithParts($id)
 		{
-			$query=<<<SQL
+			$contentType=$this->read($id);
+			if (isset($contentType[0]))
+			{
+				$contentType=$contentType[0];
+				$query=<<<SQL
 			SELECT	content_type.name,
-					content_type.workflow_id,
+				SELECT	content_part.id,
 					content_type.icon,
 					content_part.id AS content_part_id,
-					content_part.label,
-					content_part.widget,
-					content_part.config
-			FROM content_type
-			LEFT JOIN content_part ON content_part.content_type_id=content_type.id
-			WHERE content_type.id=?
+						content_part.label,
+						content_part.widget,
+						content_part.config
+				FROM content_type
+				LEFT JOIN content_part ON content_part.content_type_id=content_type.id
+				WHERE content_type.id=?
 SQL;
-			if ($this->db->select($query,array($id)))
-			{
-				$records=$this->db->result('assoc');
-				return isset($records)?$records:false;
+				if ($this->db->select($query,array($id)))
+				{
+					$contentType['parts']=$this->db->result('assoc');
+				}
+				else
+				{
+					$contentType['parts']=[];
+				}
+				return $contentType;
 			}
 			return false;
 		}
