@@ -271,8 +271,8 @@ HTML;
 							(
 								array('application\\','\\'),
 								array('','.'),
-								$contentType[$i]['widget']
-							)).'.Main('.$contentType[$i]['id'].','.(!empty($contentType['parts'][$i]['config'])?$contentType['parts'][$i]['config']:'null').')';
+								$contentType['parts'][$i]['widget']
+							)).'.Main('.$contentType['parts'][$i]['id'].','.(!empty($contentType['parts'][$i]['config'])?$contentType['parts'][$i]['config']:'null').')';
 							$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType['parts'][$i]['widget'],$exec);
 						}
 					}
