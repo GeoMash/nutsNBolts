@@ -26,7 +26,7 @@ namespace application\nutsNBolts\model
 			//For Updates
 			if (!empty($record['id']) && is_numeric($record['id']))
 			{
-
+				$return			=false;
 				$existingParts	=$this->model->ContentPart->read(array('content_type_id'=>$record['id']));
 				$contentParts	=$this->extractContentParts($record);
 				$contentRoles	=$this->extractRoles($record);
@@ -35,7 +35,6 @@ namespace application\nutsNBolts\model
 				//Update parts.
 				for ($i=0,$j=count($contentParts); $i<$j; $i++)
 				{
-
 					//For Update
 					/*
 						# MD 8 August 2012
@@ -84,6 +83,7 @@ namespace application\nutsNBolts\model
 				{
 					$this->model->ContentTypeUser->insert($contentUsers[$i]);
 				}
+				$this->syncContentPartsOnAllNodes($record['id']);
 				return $return;
 			}
 			//For Inserts
@@ -203,10 +203,7 @@ namespace application\nutsNBolts\model
 			{
 				$contentType=$contentType[0];
 				$query=<<<SQL
-			SELECT	content_type.name,
 				SELECT	content_part.id,
-					content_type.icon,
-					content_part.id AS content_part_id,
 						content_part.label,
 						content_part.widget,
 						content_part.config
@@ -289,6 +286,74 @@ SQL;
 				}
 			}
 			return null;
+		}
+		
+		public function syncContentPartsOnAllNodes($contentTypeId)
+		{
+			$found			=false;
+			$nodeGroups		=[];
+			$contentType	=$this->readWithParts($contentTypeId);
+			$query			=<<<SQL
+			SELECT node.id,
+			node_part.id AS node_part_id,
+			content_part.id AS content_part_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			WHERE node.content_type_id=?
+			ORDER BY node.id ASC;
+SQL;
+			if ($result=$this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!is_array($nodeGroups[$records[$i]['id']]))
+					{
+						$nodeGroups[$records[$i]['id']]=[];
+					}
+					$nodeGroups[$records[$i]['id']][]=$records[$i]['content_part_id'];
+				}
+//				print '<pre>';
+//				print_r($nodeGroups);
+//				print '</pre>';
+//				exit();
+				for ($i=0,$j=count($contentType['parts']); $i<$j; $i++)
+				{
+					foreach ($nodeGroups as $nodeId=>$nodePartIds)
+					{
+						$found=false;
+						for ($k=0,$l=count($nodePartIds); $k<$l; $k++)
+						{
+							if ($nodePartIds[$k]==$contentType['parts'][$i]['id'])
+							{
+								$found=true;
+							}
+						}
+						if (!$found)
+						{
+//							print $contentType['parts'][$i]['id'].'::<br>';
+//							print 'NOT FOUND<br>';
+							$this->insertNullPart($nodeId,$contentType['parts'][$i]['id']);
+						}
+					}
+					
+				}
+			}
+			return $this;
+		}
+		
+		private function insertNullPart($nodeId,$contentPartId)
+		{
+			$this->model->NodePart->insertAssoc
+			(
+				[
+					'node_id'			=>$nodeId,
+					'content_part_id'	=>$contentPartId,
+					'value'				=>null
+				]
+			);
+			return $this;
 		}
 	}
 }
