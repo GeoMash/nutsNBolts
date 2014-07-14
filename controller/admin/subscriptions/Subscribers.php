@@ -88,7 +88,6 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			}
 			catch (NutshellException $exception)
 			{
-				var_dump($exception);
 				$this->plugin->Notification->setError('Internal nuts n bolts error. Check the logs.');
 			}
 			if ($record = $this->model->SubscriptionUser->read($userSubscriberId))
@@ -100,7 +99,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->view->setVar('record', array());
 			}
 			$renderRef = 'userSubscriptions/edit';
-			$this->setupAddEdit($renderRef);
+			$this->setupAddEdit($renderRef, false);
 		}
 
 		public function add()
@@ -108,26 +107,122 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			try
 			{
 				$this->plugin->Auth->can('admin.subscription.subscriber.create');
-				
-				$this->addBreadcrumb('User Subscriptions', 'icon-envelope', 'subscribers');
-				$this->addBreadcrumb('Add Subscription','icon-plus','add');
 
-				if ($this->request->get('user_id'))
+				$this->addBreadcrumb('User Subscriptions', 'icon-envelope', 'subscribers');
+				$this->addBreadcrumb('Add Subscription', 'icon-plus', 'add');
+
+				$request = $this->request->getAll();
+				if ($request['user_id'])
 				{
-					$record = $this->request->getAll();
-					if (($id = $this->model->SubscriptionUser->handleRecord($record)) !== false)
+					$error = false;
+					if (!isset($request['subscription_id']) || !is_numeric($request['subscription_id']))
 					{
-						$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/subscribers/add/">Add another one?</a>');
-						$this->redirect('/admin/subscriptions/subscribers/edit/' . $id);
+						$this->plugin->Notification->setError('Please select a package.');
+						$error = true;
+					}
+					if (!isset($request['user_id']) || !is_numeric($request['user_id']))
+					{
+						$this->plugin->Notification->setError('Please select a user.');
+						$error = true;
+					}
+
+					if (!isset($request['timestamp']))
+					{
+						$this->plugin->Notification->setError('Please select a Creation Date.');
+						$error = true;
 					}
 					else
 					{
-						$this->plugin->Notification->setError('Failed to add a Subscription!');
+						try
+						{
+							$temp = new \DateTime($request['timestamp']);
+						}
+						catch (\Exception $ex)
+						{
+							$this->plugin->Notification->setError('Please select a Valid Creation Date.');
+							$error = true;
+						}
+					}
+
+					if (isset($request['expiry_timestamp']))
+					{
+						try
+						{
+							$temp = new \DateTime($request['expiry_timestamp']);
+						}
+						catch (\Exception $ex)
+						{
+							$this->plugin->Notification->setError('Please select a Valid Expiry Date.');
+							$error = true;
+						}
+					}
+
+					if ($request['is_new'])
+					{
+						if (empty($request['cc']['number']))
+						{
+							$this->plugin->Notification->setError('Please profile a valid Credit Card Number.');
+							$error = true;
+						}
+						if (empty($request['cc']['expiry-month']))
+						{
+							$this->plugin->Notification->setError('Please specify the expiry month of your Credit Card.');
+							$error = true;
+						}
+						if (empty($request['cc']['expiry-year']))
+						{
+							$this->plugin->Notification->setError('Please specify the year month of your Credit Card.');
+							$error = true;
+						}
+						if (empty($request['cc']['ccv']))
+						{
+							$this->plugin->Notification->setError('Please specify the CCV number of your Credit Card.');
+							$error = true;
+						}
+						if (!$error)
+						{
+							try
+							{
+								$userId = $request['user_id'];
+								$subscriptionId = $request['subscription_id'];
+								$subscriptionRequest = $request['cc'];
+
+								$timestamp = new \DateTime($request['timestamp']);
+								$expiryTimestamp = isset($request['expiry_timestamp']) && $request['expiry_timestamp'] != '' ? new \DateTime($request['expiry_timestamp']) : null;
+
+								$subscriptionUserId = $this->plugin->Subscription->subscribe($userId, $subscriptionId, $subscriptionRequest, $timestamp, $expiryTimestamp);
+								$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/subscribers/add/">Add another one?</a>');
+								$this->redirect('/admin/subscriptions/subscribers/edit/' . $subscriptionUserId);
+							}
+							catch (\Exception $exception)
+							{
+								$this->plugin->Notification->setError($exception->getMessage());
+							}
+						}
+					}
+					else
+					{
+						if (!$error)
+						{
+							$record = $this->request->getAll();
+							unset($record['is_new']);
+							unset($record['cc']);
+
+							if (($id = $this->model->SubscriptionUser->handleRecord($record)) !== false)
+							{
+								$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/subscribers/add/">Add another one?</a>');
+								$this->redirect('/admin/subscriptions/subscribers/edit/' . $id);
+							}
+							else
+							{
+								$this->plugin->Notification->setError('Failed to add a Subscription!');
+							}
+						}
 					}
 				}
 
 				$renderRef = 'userSubscriptions/add';
-				$this->setupAddEdit($renderRef);
+				$this->setupAddEdit($renderRef, true);
 			}
 			catch (AuthException $exception)
 			{
@@ -136,7 +231,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			}
 		}
 
-		private function setupAddEdit(&$renderRef)
+		private function setupAddEdit(&$renderRef, $isAdding)
 		{
 			$this->setContentView('admin/subscriptions/subscribers/addEdit');
 			$this->view->getContext()
@@ -180,7 +275,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 					}
 				);
 
-			$this->view->setVar('extraOptions', array());
+			$this->view->setVar('extraOptions', array('isAdding' => $isAdding));
 			$this->execHook('onBeforeRender', $renderRef);
 			$this->view->render();
 		}
