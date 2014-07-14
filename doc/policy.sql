@@ -7,7 +7,7 @@ CREATE TABLE `policy` (
   `password_upper_lower_characters` tinyint(1) DEFAULT NULL,
   `password_expiry` tinyint(1) DEFAULT NULL,
   `password_past_passwords` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 insert into `policy`

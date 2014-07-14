@@ -21,8 +21,7 @@
 		{
 			"mode": 		"production",
 			"dataDir":		"./data/",
-			"salt":			"Squirrels love nuts!",
-			"smsQuotaAlert":0.9
+			"salt":			"Squirrels love nuts!"
 		},
 		"plugin":
 		{
@@ -43,11 +42,11 @@
 					"nutsnbolts":
 					{
 						"handler":		"MySQL",
-						"username":		"developer",
-						"password":		"g30m@5h",
-						"host":			"192.168.1.160",
+						"username":		"",
+						"password":		"",
+						"host":			"",
 						"port":			"3306",
-						"database":		"geomash_com"
+						"database":		""
 					}
 				}
 			},
@@ -137,7 +136,7 @@
 			"Plupload":
 			{
 				"temporary_dir":	"/tmp/",
-				"completed_dir":	"/datastore/www/wtp/shared/_collections/",
+				"completed_dir":	"/datastore/www/<WEBSITE>/_collections/",
 				"thumbnails":
                 [
                     {
@@ -149,25 +148,7 @@
 			},
 			"FileSystem":
 			{
-				"collectionsDir": "/datastore/www/wtp/shared/_collections/"
-			},
-			"FaceBook":
-			{
-				"app_id":		"1376270492601764",
-				"app_secret":	"eb916a0b516c15e3b0e930cc258e77be"
-			},
-			"Sms":
-			{
-				"timezone": "Asia/Kuala_Lumpur",
-				"M3Tech":
-				{
-					"serviceURL":   "https://www.wcdma.com.my/imp/golden_pesona/submitsm.asp",
-					"UserKey":      "golden_pesona",
-					"Password":     "wtpclub808",
-					"ServiceId":    "000",
-                    "aSource":      "Where to party",
-					"MCN":          "push"
-				}
+				"collectionsDir": "/datastore/www/<WEBSITE>/_collections/"
 			},
 			"Rest":
 			{

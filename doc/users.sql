@@ -26,6 +26,7 @@ CREATE TABLE `user` (
   `address2` varchar(255) DEFAULT NULL,
   `country` varchar(100) DEFAULT NULL,
   `zip` int(6) DEFAULT NULL,
+  `video` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

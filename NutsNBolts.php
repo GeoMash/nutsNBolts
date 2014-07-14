@@ -162,6 +162,7 @@ namespace application\nutsNBolts
 		
 		public function getWidgetList()
 		{
+			$widget=[];
 			foreach ($this->application->getLoaded() as $applicationRef=>$application)
 			{
 				$folder	=__DIR__._DS_.'widget';
@@ -184,7 +185,6 @@ namespace application\nutsNBolts
 						}
 					}
 				}
-						
 			}
 			return $widget;
 		}
