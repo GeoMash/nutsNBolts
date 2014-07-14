@@ -92,12 +92,6 @@ namespace application\nutsNBolts\controller\rest
 				if (!empty($this->plugin->Session->returnURL))
 				{
 					$data=$this->plugin->Session->returnURL;
-					$this->plugin->Session->returnURL=null;
-				}
-				
-				if($this->request->get(['returnUrl']))
-				{
-					$data=$this->request->get(['returnUrl']);
 				}
 				
 				$this->setResponseCode(200);
