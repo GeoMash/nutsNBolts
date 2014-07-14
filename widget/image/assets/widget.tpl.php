@@ -7,7 +7,7 @@ if ($hasValue)
 	$thumb		=implode('/',$parts).'/_thumbs/120x120/'.$name;
 }
 ?>
-<div data-id="<?php $tpl->dataId; ?>" class="box span2">
+<div id="image-<?php $tpl->dataId; ?>" data-id="<?php $tpl->dataId; ?>" class="box span2">
 	<input type="hidden" name="<?php $tpl->name; ?>" value="<?php $tpl->value; ?>">
 	<div class="box-header">
 		<span class="title"><a href="javascript:{}" data-action="widget.image.main.browseImage" title="Image Not Selected"><i class="icon-picture"></i> Select Image</a></span>
