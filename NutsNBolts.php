@@ -27,7 +27,8 @@ namespace application\nutsNBolts
 		 */
 		const USER_SUPER				=-100;//TODO Remove
 		
-		private $siteBindings=array();
+		private $siteBindings			=array();
+		private $doneModelBindings		=false;
 		
 		public $widget=null;
 		
@@ -66,9 +67,23 @@ namespace application\nutsNBolts
 		public function exec()
 		{
 			$this->plugin->Mvc('nutsNBolts',true);
-			$this->bindApplicationModelLoaders();
+			$result=$this->plugin->Mvc->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
+			if (!isset($result[0]))
+			{
+				die('No site registered for this domain!');
+			}
+			if (!$this->getSiteBinding($result[0]['ref']))
+			{
+				//Not for me!
+//				die('No site bound for this domain! Site should be "'.$this->getSiteRef().'".');
+				return;
+			}
 			
-			//Initiate the MVC.
+			if (!$this->doneModelBindings)
+			{
+				$this->bindApplicationModelLoaders();
+			}
+			
 			try
 			{
 				if (NS_INTERFACE!=Nutshell::INTERFACE_CLI
@@ -83,7 +98,6 @@ namespace application\nutsNBolts
 			}
 			catch(NutshellException $exception)//TODO: Change this - its not always a 404 (It can sometimes be a 500).
 			{
-				//exit('mvc failed');
 				if(NS_INTERFACE != Nutshell::INTERFACE_CLI)
 				{
 					header('HTTP/1.1 404 Controller Not Found');
@@ -204,6 +218,7 @@ namespace application\nutsNBolts
 					'application\\'.lcfirst($applicationRef).'\\model\\'
 				);
 			}
+			$this->doneModelBindings=true;
 		}
 		
 		public function loadPHPPatches()
