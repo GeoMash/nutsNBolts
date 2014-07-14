@@ -239,27 +239,27 @@ namespace application\nutsNBolts\controller\admin
 				$nodeTags	=array_column($this->model->NodeTag	->read(['node_id'=>$id],['tag']),'tag');
 				$parts		=array();
 				
-				for ($i=0,$j=count($contentType); $i<$j; $i++)
+				for ($i=0,$j=count($contentType['parts']); $i<$j; $i++)
 				{
 					$thisNodePart=null;
 					for ($k=0,$l=count($nodeParts); $k<$l; $k++)
 					{
-						if ($nodeParts[$k]['content_part_id']==$contentType[$i]['content_part_id'])
+						if ($nodeParts[$k]['content_part_id']==$contentType['parts'][$i]['id'])
 						{
 							$thisNodePart=$nodeParts[$k];
 						}
 					}
-					$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_';
+					$formElId='node_part_id_'.$contentType['parts'][$i]['id'].'_';
 					$formElId.=($thisNodePart)?$thisNodePart['id']:'0';
-					if (!is_null($contentType[$i]['widget']))
+					if (!is_null($contentType['parts'][$i]['widget']))
 					{
-						$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+						$widget	=$this->getWidgetInstance($contentType['parts'][$i]['widget']);
 						$widget->setProperty('name',$formElId);
 						$widget->setProperty('value',$thisNodePart['value']);
-						$input	=$widget->getWidgetHTML($contentType[$i]['content_part_id'],$contentType[$i]['config']);
+						$input	=$widget->getWidgetHTML($contentType['parts'][$i]['id'],$contentType['parts'][$i]['config']);
 						$parts[]=<<<HTML
 	<div class="control-group">
-		<label class="control-label">{$contentType[$i]['label']}</label>
+		<label class="control-label">{$contentType['parts'][$i]['label']}</label>
 		<div class="controls">
 			{$input}
 		</div>
@@ -271,9 +271,9 @@ HTML;
 							(
 								array('application\\','\\'),
 								array('','.'),
-								$contentType[$i]['widget']
-							)).'.Main('.$contentType[$i]['content_part_id'].','.(!empty($contentType[$i]['config'])?$contentType[$i]['config']:'null').')';
-							$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+								$contentType['parts'][$i]['widget']
+							)).'.Main('.$contentType['parts'][$i]['id'].','.(!empty($contentType['parts'][$i]['config'])?$contentType['parts'][$i]['config']:'null').')';
+							$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType['parts'][$i]['widget'],$exec);
 						}
 					}
 				}
@@ -297,14 +297,14 @@ HTML;
 				}
 				
 				$this->view->setVars($node[0]);
-				$this->view->setVar('contentType',		$contentType[0]['name']);
-				$this->view->setVar('contentTypeIcon',	$contentType[0]['icon']);
+				$this->view->setVar('contentType',		$contentType['name']);
+				$this->view->setVar('contentTypeIcon',	$contentType['icon']);
 				$this->view->setVar('nodeURLs',			$nodeURLs);
 				$this->view->setVar('nodeTags',			implode(',',$nodeTags));
 				$this->view->setVar('userAccess',		$userAccess);
 				$this->view->setVar('parts',			implode('',$parts));
 				$this->view->setVar('contentTypeId',	$node[0]['content_type_id']);
-				$this->view->setVar('hasWorkflow',		(bool)$contentType[0]['workflow_id']);
+				$this->view->setVar('hasWorkflow',		(bool)$contentType['workflow_id']);
 				$this->view->getContext()
 					->registerCallback
 					(
@@ -316,7 +316,7 @@ HTML;
 					);
 				$this->setContentView('admin/content/addEdit');
 				$this->addBreadcrumb('Content','icon-edit','content');
-				$this->addBreadcrumb($contentType[0]['name'],$contentType[0]['icon'],'view/'.$id);
+				$this->addBreadcrumb($contentType['name'],$contentType['icon'],'view/'.$id);
 				$this->addBreadcrumb('Edit Content','icon-pencil',$id);
 				$renderRef='content/edit';
 				$this->execHook('onBeforeRender',$renderRef);			
@@ -362,19 +362,18 @@ HTML;
 		{
 			$contentType=$this->model->ContentType->readWithParts($contentTypeId);
 			$parts		=array();
-			
-			for ($i=0,$j=count($contentType); $i<$j; $i++)
+			for ($i=0,$j=count($contentType['parts']); $i<$j; $i++)
 			{
-				$formElId='node_part_id_'.$contentType[$i]['content_part_id'].'_0';
-				if (!is_null($contentType[$i]['widget']))
+				$formElId='node_part_id_'.$contentType['parts'][$i]['id'].'_0';
+				if (!is_null($contentType['parts'][$i]['widget']))
 				{
-					$widget	=$this->getWidgetInstance($contentType[$i]['widget']);
+					$widget	=$this->getWidgetInstance($contentType['parts'][$i]['widget']);
 					$widget->setProperty('name',$formElId);
 					$widget->setProperty('value','');
-					$input	=$widget->getWidgetHTML($contentType[$i]['content_part_id'],$contentType[$i]['config']);
+					$input	=$widget->getWidgetHTML($contentType['parts'][$i]['id'],$contentType[$i]['config']);
 					$parts[]=<<<HTML
 <div class="control-group">
-	<label class="control-label">{$contentType[$i]['label']}</label>
+	<label class="control-label">{$contentType['parts'][$i]['label']}</label>
 	<div class="controls">
 		{$input}
 	</div>
@@ -386,15 +385,15 @@ HTML;
 						(
 							array('application\\','\\'),
 							array('','.'),
-							$contentType[$i]['widget']
-						)).'.Main('.$contentType[$i]['content_part_id'].','.(!empty($contentType[$i]['config'])?$contentType[$i]['config']:'null').')';
-						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType[$i]['widget'],$exec);
+							$contentType['parts'][$i]['widget']
+						)).'.Main('.$contentType['parts'][$i]['id'].','.(!empty($contentType['parts'][$i]['config'])?$contentType['parts'][$i]['config']:'null').')';
+						$this->JSLoader->loadScript('/admin/script/widget/main/'.$contentType['parts'][$i]['widget'],$exec);
 					}
 				}
 			}
 			$parts[]=$this->JSLoader->getLoaderHTML();
-			$this->view->setVar('contentType',$contentType[0]['name']);
-			$this->view->setVar('contentTypeIcon',$contentType[0]['icon']);
+			$this->view->setVar('contentType',$contentType['name']);
+			$this->view->setVar('contentTypeIcon',$contentType['icon']);
 			$this->view->setVar('parts',implode('',$parts));
 		}
 		

@@ -37,6 +37,12 @@ namespace application\nutsNBolts\plugin\fileSystem
 						);
 					}
 				}
+				
+				foreach ($fileList as $key => $file)
+				{
+					$files[$key] = $file['name'];
+				}
+				array_multisort($files, SORT_ASC, $fileList);
 				return $fileList;
 			}
 			else

@@ -2,8 +2,9 @@
 namespace application\nutsNBolts\model
 {
 	use application\nutsNBolts\NutsNBolts;
+	use nutshell\core\exception\NutshellException;
 	use application\nutsNBolts\model\base\ContentType as ContentTypeBase;
-	
+
 	class ContentType extends ContentTypeBase	
 	{
 		public function read($whereKeyVals = array(), $readColumns = array(), $additionalPartSQL='')
@@ -25,7 +26,7 @@ namespace application\nutsNBolts\model
 			//For Updates
 			if (!empty($record['id']) && is_numeric($record['id']))
 			{
-
+				$return			=false;
 				$existingParts	=$this->model->ContentPart->read(array('content_type_id'=>$record['id']));
 				$contentParts	=$this->extractContentParts($record);
 				$contentRoles	=$this->extractRoles($record);
@@ -34,7 +35,6 @@ namespace application\nutsNBolts\model
 				//Update parts.
 				for ($i=0,$j=count($contentParts); $i<$j; $i++)
 				{
-
 					//For Update
 					/*
 						# MD 8 August 2012
@@ -83,6 +83,7 @@ namespace application\nutsNBolts\model
 				{
 					$this->model->ContentTypeUser->insert($contentUsers[$i]);
 				}
+				$this->syncContentPartsOnAllNodes($record['id']);
 				return $return;
 			}
 			//For Inserts
@@ -197,22 +198,28 @@ namespace application\nutsNBolts\model
 		
 		public function readWithParts($id)
 		{
-			$query=<<<SQL
-			SELECT	content_type.name,
-					content_type.workflow_id,
-					content_type.icon,
-					content_part.id AS content_part_id,
-					content_part.label,
-					content_part.widget,
-					content_part.config
-			FROM content_type
-			LEFT JOIN content_part ON content_part.content_type_id=content_type.id
-			WHERE content_type.id=?
-SQL;
-			if ($this->db->select($query,array($id)))
+			$contentType=$this->read($id);
+			if (isset($contentType[0]))
 			{
-				$records=$this->db->result('assoc');
-				return isset($records)?$records:false;
+				$contentType=$contentType[0];
+				$query=<<<SQL
+				SELECT	content_part.id,
+						content_part.label,
+						content_part.widget,
+						content_part.config
+				FROM content_type
+				LEFT JOIN content_part ON content_part.content_type_id=content_type.id
+				WHERE content_type.id=?
+SQL;
+				if ($this->db->select($query,array($id)))
+				{
+					$contentType['parts']=$this->db->result('assoc');
+				}
+				else
+				{
+					$contentType['parts']=[];
+				}
+				return $contentType;
 			}
 			return false;
 		}
@@ -279,6 +286,110 @@ SQL;
 				}
 			}
 			return null;
+		}
+		
+		public function syncContentPartsOnAllNodes($contentTypeId)
+		{
+			$found			=false;
+			$nodeGroups		=[];
+			$contentType	=$this->readWithParts($contentTypeId);
+			$query			=<<<SQL
+			SELECT node.id,
+			node_part.id AS node_part_id,
+			content_part.id AS content_part_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
+			WHERE node.content_type_id=?
+			ORDER BY node.id ASC;
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!is_array($nodeGroups[$records[$i]['id']]))
+					{
+						$nodeGroups[$records[$i]['id']]=[];
+					}
+					$nodeGroups[$records[$i]['id']][]=$records[$i]['content_part_id'];
+				}
+				for ($i=0,$j=count($contentType['parts']); $i<$j; $i++)
+				{
+					foreach ($nodeGroups as $nodeId=>$contentPartIds)
+					{
+						$found=false;
+						for ($k=0,$l=count($contentPartIds); $k<$l; $k++)
+						{
+							if ($contentPartIds[$k]==$contentType['parts'][$i]['id'])
+							{
+								$found=true;
+								break;
+							}
+						}
+						if (!$found)
+						{
+							$this->insertNullPart($nodeId,$contentType['parts'][$i]['id']);
+						}
+					}
+				}
+			}
+			unset($nodeGroups);
+			$nodeGroups	=[];
+			$query		=<<<SQL
+			SELECT node.id,
+			node_part.id AS node_part_id,
+			node_part.content_part_id
+			FROM node
+			LEFT JOIN node_part ON node.id=node_part.node_id
+			WHERE node.content_type_id=5
+			ORDER BY node.id ASC;
+SQL;
+			if ($this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
+			{
+				$records=$this->plugin->Db->nutsnbolts->result('assoc');
+				for ($i=0,$j=count($records); $i<$j; $i++)
+				{
+					if (!is_array($nodeGroups[$records[$i]['id']]))
+					{
+						$nodeGroups[$records[$i]['id']]=[];
+					}
+					$nodeGroups[$records[$i]['id']][]=$records[$i]['content_part_id'];
+				}
+				foreach ($nodeGroups as $nodeId=>$contentPartIds)
+				{
+					for ($i=0,$j=count($contentPartIds); $i<$j; $i++)
+					{
+						$found=false;
+						for ($k=0,$l=count($contentType['parts']); $k<$l; $k++)
+						{
+							if ($contentPartIds[$i]==$contentType['parts'][$k]['id'])
+							{
+								$found=true;
+								break;
+							}
+						}
+						if (!$found)
+						{
+							$this->model->NodePart->delete(['content_part_id'=>$contentPartIds[$i]]);
+						}
+					}
+				}
+			}
+			return $this;
+		}
+		
+		private function insertNullPart($nodeId,$contentPartId)
+		{
+			$this->model->NodePart->insertAssoc
+			(
+				[
+					'node_id'			=>$nodeId,
+					'content_part_id'	=>$contentPartId,
+					'value'				=>null
+				]
+			);
+			return $this;
 		}
 	}
 }
