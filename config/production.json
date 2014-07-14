@@ -175,14 +175,6 @@
 				{
 					"controllers":	"controller/rest"
 				}
-			},
-			"Payment":
-			{
-				"authorize_net" :
-				{
-					"login_id" : "6Z42nQf36Q",
-					"transaction_key" : "2W82au95NQ7supuA"
-				}
 			}
 		}
 	}
