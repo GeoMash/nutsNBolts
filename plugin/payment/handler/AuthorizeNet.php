@@ -113,7 +113,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 		 * @throws \Exception
 		 * @throws \nutshell\core\exception\ApplicationException
 		 */
-		public function createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, &$transactionResponse, $duration = 1)
+		public function createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, &$transactionResponse, $duration = 1, $startDate = null)
 		{
 //			$firstTransactionCounter = 0;
 //			$firstTransactionSuccess = true;
@@ -133,7 +133,8 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$authCode = $authenticationResponse->authorization_code;
 			$authenticationTransactionId = $authenticationResponse->transaction_id;
 
-			$myStartDate = (new \DateTime())->add(new \DateInterval("P" . $duration . "M"));
+			$myStartDate = $startDate? : new \DateTime('now');
+			$myStartDate->add(new \DateInterval("P" . $duration . "M"));
 
 			// Set the subscription fields.
 			$subscription = new AuthorizeNet_Subscription;
