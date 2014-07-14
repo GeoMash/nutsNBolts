@@ -370,7 +370,7 @@ HTML;
 					$widget	=$this->getWidgetInstance($contentType['parts'][$i]['widget']);
 					$widget->setProperty('name',$formElId);
 					$widget->setProperty('value','');
-					$input	=$widget->getWidgetHTML($contentType['parts'][$i]['id'],$contentType[$i]['config']);
+					$input	=$widget->getWidgetHTML($contentType['parts'][$i]['id'],$contentType['parts'][$i]['config']);
 					$parts[]=<<<HTML
 <div class="control-group">
 	<label class="control-label">{$contentType['parts'][$i]['label']}</label>
