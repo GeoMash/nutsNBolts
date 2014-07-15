@@ -208,7 +208,7 @@ namespace application\nutsNBolts\plugin\auth
 				}
 				for ($k=0,$l=count($userRoles); $k<$l; $k++)
 				{
-					if ($roles[$i]==$userRoles[$i]['ref'])
+					if ($roles[$i]==$userRoles[$k]['ref'])
 					{
 						return true;
 					}
