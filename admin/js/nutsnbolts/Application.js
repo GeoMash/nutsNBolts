@@ -5,7 +5,8 @@ $JSKK.Class.create
 		$name:		'Application',
 		$requires:
 		[
-			'nutsnbolts.FileManager'
+			'nutsnbolts.FileManager',
+			'nutsnbolts.Image'
 		]
 	}
 )
@@ -15,9 +16,11 @@ $JSKK.Class.create
 		actionRegistry:	{},
 		fileManager:	null,
 		spinner:		null,
+		image:			null,
 		init: function()
 		{
 			this.fileManager=new nutsnbolts.FileManager();
+			this.image		=new nutsnbolts.Image(this);
 			this.initAll();
 			this.bindActions();
 		},
