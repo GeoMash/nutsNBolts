@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\base
 {
+	use application\nutsNBolts\exception\NutsNBoltsException;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use nutshell\plugin\mvc\Mvc;
 	use nutshell\plugin\mvc\Controller as MvcController;
@@ -16,19 +17,6 @@ namespace application\nutsNBolts\base
 			parent::__construct($MVC);
 			$this->MVC=$MVC;
 			$this->plugin->Session();
-			$result=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
-			if (isset($result[0]))
-			{
-				$this->site=$result[0];
-			}
-			else
-			{
-				die('No site registered for this domain!');
-			}
-			if (!$this->application->NutsNBolts->getSiteBinding($this->getSiteRef()))
-			{
-				die('No site bound for this domain! Site should be "'.$this->getSiteRef().'".');
-			}
 			$this->plugin->Auth();
 			if ($this->plugin->Auth->isAuthenticated())
 			{
@@ -81,17 +69,29 @@ namespace application\nutsNBolts\base
 		
 		public function getSite()
 		{
+			if (is_null($this->site))
+			{
+				$site=$this->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
+				if (isset($site[0]))
+				{
+					$this->site=$site[0];
+				}
+				else
+				{
+					throw new NutsNBoltsException('Unable to get site. Actually, you should never have reached this error!');
+				}
+			}
 			return $this->site;
 		}
 		
 		public function getSiteId()
 		{
-			return $this->site['id'];
+			return $this->getSite()['id'];
 		}
 		
 		public function getSiteRef()
 		{
-			return $this->site['ref'];
+			return $this->getSite()['ref'];
 		}
 		
 		public function redirect($path)
