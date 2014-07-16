@@ -13,6 +13,6 @@
     {
 		"geomash/installer": "dev-master",
         "nutshell/nutshell": "dev-1.1.0.dev",
-		"nutshell/rest":	"1.2.0"
+		"nutshell/rest":	"1.3.1"
     }
 }
