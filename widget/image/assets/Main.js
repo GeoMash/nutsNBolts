@@ -11,7 +11,7 @@ $JSKK.Class.create
 		widget:	null,
 		init: function(id)
 		{
-			this.widget=$('[data-id="'+id+'"]')
+			this.widget=$('#image-'+id);
 			$application.registerAction('widget.image.main.browseImage',this.browseImage.bind(this))
 		},
 		browseImage: function()

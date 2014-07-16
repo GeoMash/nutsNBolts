@@ -26,9 +26,11 @@ namespace application\nutsNBolts\plugin\subscription
 		 * @param $userId, The user ID to be subscribed
 		 * @param $subscriptionId, The Package ID 
 		 * @param $subscriptionRequest, The Credit Card Information
+		 * @param $preset_timestamp, A preset for the creation time of the subscription
+		 * @param $preset_expiry_timestamp, A preset for the expiry time of the subscription
 		 * @throws \nutshell\core\exception\ApplicationException
 		 */
-		public function subscribe($userId, $subscriptionId, $subscriptionRequest)
+		public function subscribe($userId, $subscriptionId, $subscriptionRequest, $preset_timestamp = null, $preset_expiry_timestamp = null)
 		{
 			//Receiving Credit Card information
 			$cardNo = $subscriptionRequest['number'];
@@ -59,15 +61,16 @@ namespace application\nutsNBolts\plugin\subscription
 
 			if ($subscription['recurring'])
 			{
-
+				$timestamp = $preset_timestamp? : new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
+				$timestamp_formatted = $timestamp->format($this::DATETIME_FORMAT);
+				$expiry_timestamp = $preset_expiry_timestamp? : clone $timestamp;
+				$expiry_timestamp->add(new \DateInterval("P" . $duration . "M"));
+				$expiry_timestamp_formatted = $expiry_timestamp->format($this::DATETIME_FORMAT);
+				
 				$transactionResponse = null;
-				$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse, $duration);
+				$arbStatus = $payment->createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, $transactionResponse, $duration, $timestamp);
 				$arbId = $arbStatus->getSubscriptionId();
 				$status = $this::STATUS_ACTIVE;
-
-				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
-				$timestamp_formatted = $timestamp->format($this::DATETIME_FORMAT);
-				$expiry_timestamp_formatted = $timestamp->add(new \DateInterval("P" . $duration . "M"))->format($this::DATETIME_FORMAT);
 
 				$transactionId = $transactionResponse->transaction_id;
 
@@ -97,12 +100,14 @@ namespace application\nutsNBolts\plugin\subscription
 			{
 				$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $expDate, $amount);
 				$transactionId = $transactionResponse->transaction_id;
-
-				$timestamp = new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
+				
 				$duration = $subscription['duration'];
-
+				
+				$timestamp = $preset_timestamp? : new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
 				$timestamp_formatted = $timestamp->format($this::DATETIME_FORMAT);
-				$expiry_timestamp_formatted = $timestamp->add(new \DateInterval("P" . $duration . "M"))->format($this::DATETIME_FORMAT);
+				$expiry_timestamp = $preset_expiry_timestamp? : clone $timestamp;
+				$expiry_timestamp->add(new \DateInterval("P" . $duration . "M"));
+				$expiry_timestamp_formatted = $expiry_timestamp->format($this::DATETIME_FORMAT);
 
 				//Activating the subscription for the user
 				$subscriptionUserId = $this->model->SubscriptionUser->insertAssoc([
@@ -126,6 +131,8 @@ namespace application\nutsNBolts\plugin\subscription
 					'meta' => json_encode($transactionResponse)
 				]);
 			}
+			
+			return $subscriptionUserId;
 		}
 
 		/**

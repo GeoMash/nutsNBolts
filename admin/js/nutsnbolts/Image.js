@@ -1,20 +1,22 @@
 $JSKK.Class.create
 (
 	{
-		$namespace:	'nutsnbolts.widget.file',
-		$name:		'Main'
+		$namespace:	'nutsnbolts',
+		$name:		'Image'
 	}
 )
 (
 	{},
 	{
 		widget:	null,
-		init: function(id)
+		mainApplication:null,
+		init: function(mainApplication)
 		{
-			this.widget=$('#image-'+id);
-			$application.registerAction('widget.file.main.browseFile',this.browseFile.bind(this))
+			this.mainApplication=mainApplication;
+			this.widget=$('#profilePictureSelect');
+			this.mainApplication.registerAction('image.browseImage',this.browseImage.bind(this));
 		},
-		browseFile: function()
+		browseImage: function()
 		{
 			$application.fileManager.show
 			(
@@ -22,7 +24,7 @@ $JSKK.Class.create
 					buttons:
 					[
 						{
-							label:		'Select File',
+							label:		'Select Image',
 							icon:		'icon-ok',
 							handler:	this.onSelect.bind(this)
 						}
@@ -34,7 +36,6 @@ $JSKK.Class.create
 		{
 			fileManager.hide();
 			var selected=fileManager.getSelected();
-			console.log(selected);
 			this.widget.find('.imageSelector').addClass('selected');
 			this.widget.find('input').val(selected.src);
 			this.widget.find('.thumbs a')	.attr('title',selected.title)
