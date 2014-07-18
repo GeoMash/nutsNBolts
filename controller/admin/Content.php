@@ -113,6 +113,7 @@ namespace application\nutsNBolts\controller\admin
 				}
 				else
 				{
+					$this->execHook('onBeforeAddContent',$renderRef);
 					$record=$this->request->getAll();				
 					foreach ($record AS $key=>$rec)
 					{
@@ -176,9 +177,10 @@ namespace application\nutsNBolts\controller\admin
 					$this->redirect('/admin/dashboard/');
 				}
 				unset($this->plugin->Session->returnToAction);
-		
+				
 				if ($this->request->get('id'))
 				{
+					$this->execHook('onBeforeEditContent',$renderRef);
 					$record=array();
 					foreach ($this->request->getAll() AS $key=>$rec)
 					{
@@ -319,7 +321,7 @@ HTML;
 				$this->addBreadcrumb($contentType['name'],$contentType['icon'],'view/'.$id);
 				$this->addBreadcrumb('Edit Content','icon-pencil',$id);
 				$renderRef='content/edit';
-				$this->execHook('onBeforeRender',$renderRef);			
+				$this->execHook('onBeforeRender',$renderRef);
 				$this->view->render();
 			}
 			catch(AuthException $exception)
