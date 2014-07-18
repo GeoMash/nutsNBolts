@@ -10,7 +10,8 @@ namespace application\nutsNBolts\controller\rest
 	{
 		private $map=array
 		(
-			'saveComment'				=>'comment'
+			'saveComment'				=>'comment',
+			'deleteComment'				=>'delete'
 		);
 
 		public function comment()
@@ -18,7 +19,7 @@ namespace application\nutsNBolts\controller\rest
 			$userId		=$this->plugin->Session->userId;
 			$comment	=$this->request->get('comment');
 			$nodeId		=$this->request->get('nodeId');
-			
+//			$userRole	=$this->plugin->Mvc->model->User->getRoles($userId)[0]['ref'];
 			$record=
 			[
 				'node_id'		=>$nodeId,
@@ -32,7 +33,7 @@ namespace application\nutsNBolts\controller\rest
 				$allComments=$this->plugin->Comment->getCommentsWithUserDetails($nodeId,50);
 				for($i=0,$j=count($allComments);$i<$j;$i++)
 				{
-					$allComments[$i]['user']=$this->plugin->Mvc->model->User->read(['id'=>$allComments[$i]['user_id']])[0];
+					$allComments[$i]['user']=$this->plugin->Mvc->model->User->read(['id'=>$allComments[$i]['user_id']],['id'])[0];
 				}
 				$this->setResponseCode(200);
 				$this->respond
@@ -56,7 +57,40 @@ namespace application\nutsNBolts\controller\rest
 					]
 				);
 			}
-		}	
+		}
+		
+		public function delete()
+		{
+			$commentId			=$this->request->get('comment');
+			
+			if($this->plugin->Auth->hasRoleByRef(['ADMIN']) && isset($commentId) && is_numeric($commentId))
+			{
+				$this->plugin->Mvc->model->NodeComment->delete
+				(
+					[
+						'id'		=>$commentId
+					]
+				);
+				
+				$this->setResponseCode(200);
+				$this->respond
+				(
+					true,
+					'OK',
+					true
+				);
+			}
+			else
+			{
+				$this->setResponseCode(401);
+				$this->respond
+				(
+					false,
+					'ERROR',
+					false
+				);
+			}
+		}
 	}
 }
 ?>
