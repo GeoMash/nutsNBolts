@@ -342,7 +342,7 @@ SQL;
 			node_part.content_part_id
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
-			WHERE node.content_type_id=5
+			WHERE node.content_type_id=?
 			ORDER BY node.id ASC;
 SQL;
 			if ($this->plugin->Db->nutsnbolts->select($query,[$contentTypeId]))
