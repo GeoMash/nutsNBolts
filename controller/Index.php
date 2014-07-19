@@ -738,13 +738,14 @@ namespace application\nutsNBolts\controller
 
 			if(strlen($user[0]['image']))
 			{
-				$picture=$user[0]['image'];
-				
-				$pictureArray	=explode('/',$picture);
-				$fileName		=$pictureArray[3];
-				$collectionId	=$pictureArray[2];
-				
-				$pictureString='/_collections/'.$collectionId.'/_thumbs/120x120/'.$fileName;
+//				$picture=$user[0]['image'];
+//				
+//				$pictureArray	=explode('/',$picture);
+//				$fileName		=$pictureArray[3];
+//				$collectionId	=$pictureArray[2];
+//				
+//				$pictureString='/_collections/'.$collectionId.'/_thumbs/120x120/'.$fileName;
+				$pictureString=$user[0]['image'];
 			}
 			else
 			{
