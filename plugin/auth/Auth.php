@@ -70,6 +70,14 @@ namespace application\nutsNBolts\plugin\auth
 					$this->user								=$user[0];
 					$this->originalUser						=$user[0];
 					$this->generateUserPermissionsMatrix();
+					
+					//Update the last login timestamp for this user.
+					$dateTime=new DateTime();
+					$this->plugin->Mvc->model->User->update
+					(
+						['date_lastlogin'=> $dateTime->format('Y-m-d H:i:s')],
+						['email'=>$user[0]['email']]
+					);
 					return $user[0];
 				}
 				else
