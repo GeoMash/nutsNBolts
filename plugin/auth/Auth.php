@@ -7,6 +7,7 @@ namespace application\nutsNBolts\plugin\auth
 	use nutshell\Nutshell;
 	use application\nutsNBolts\base\Plugin;
 	use application\nutsNBolts\NutsNBolts;
+	use DateTime;
 
 	class Auth extends Plugin implements Singleton, Native
 	{
