@@ -214,32 +214,6 @@ HTML;
 			return false;
 		}
 
-		public function authenticate(Array $array,$password)
-		{
-			$user=$this->plugin->Mvc->model->User->read($array);
-			if (isset($user[0]))
-			{
-				$userSalt	=$user[0]['salt'];
-				$systemSalt	=Nutshell::getInstance()->config->application->salt;
-				$email		=$user[0]['email'];
-				$result		=$this->plugin->Mvc->model->User->read
-				(
-					array
-					(
-						'email'			=>$email,
-						'password'		=>md5($systemSalt.$userSalt.$password),
-						'status'		=>1
-					)
-				);
-
-				if (isset($result[0]))
-				{
-					return $result[0];
-				}
-			}
-			return false;
-		}
-
 		public function getUser()
 		{
 			return $this->user;
