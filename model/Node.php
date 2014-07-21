@@ -345,7 +345,9 @@ SQL;
 							array
 							(
 								'site_id',
-								'status'
+								'status',
+								'ref',
+								'value'
 							)
 						);
 						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
