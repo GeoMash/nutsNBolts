@@ -289,6 +289,7 @@ SQL_PART;
 			{
 				$or='';
 			}
+			$userId=$this->plugin->Auth->getUserId();
 			if($offset && $limit)
             {
                 $limitSql=<<<SQL_PART
@@ -300,7 +301,13 @@ SQL_PART;
                 $limitSql='';
             }
 			$query=<<<SQL
-			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*
+			SELECT node.*,content_part.label,content_part.ref,node_part.value, content_type_user.*,
+			(
+				SELECT 1
+				FROM node_read
+				WHERE node_id=node.id
+				AND user_id={$userId}
+			) AS `read`
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
 			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
