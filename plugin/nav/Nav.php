@@ -72,5 +72,10 @@ namespace application\nutsNBolts\plugin\nav
 			}
 			return false;
 		}
+		
+		public function getByRef($ref)
+		{
+			return $this->getById($ref);
+		}
 	}
 }
