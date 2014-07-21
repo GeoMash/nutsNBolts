@@ -70,7 +70,31 @@ namespace application\nutsNBolts
 			$result=$this->plugin->Mvc->model->Site->read(array('domain'=>$_SERVER['HTTP_HOST']));
 			if (!isset($result[0]))
 			{
-				die('No site registered for this domain!');
+				$msg=<<<MSG
+Tried to find a registered site against <strong>{$_SERVER['HTTP_HOST']}</strong>.<br><br>
+No website has been registered against this domain.<br><br>
+Sites are registered in the <i>site</i> table in your database.<br><br>
+Example:<br>
+<table>
+	<tr>
+		<th>id</th>
+		<th>ref</th>
+		<th>domain</th>
+		<th>name</th>
+		<th>description</th>
+		<th>status</th>
+	</tr>
+	<tr>
+		<td>1</td>
+		<td>website</td>
+		<td>website.dev.lan</td>
+		<td>Website</td>
+		<td>My first website!</td>
+		<td>1</td>
+	</tr>
+</table>
+MSG;
+				die($msg);
 			}
 			if (!$this->getSiteBinding($result[0]['ref']))
 			{
