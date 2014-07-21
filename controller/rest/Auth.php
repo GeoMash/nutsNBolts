@@ -61,6 +61,17 @@ namespace application\nutsNBolts\controller\rest
 			}
 		}
 		
+		public function unauthenticate()
+		{
+			$this->plugin->Auth->unauthenticate();
+			$this->respond
+			(
+				true,
+				'OK',
+				null
+			);
+		}
+		
 		public function validateSession()
 		{
 			$this->setResponseCode(200);
