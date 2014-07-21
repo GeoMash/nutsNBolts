@@ -17,6 +17,7 @@ namespace application\nutsNBolts\controller\rest\content
 //			'test8/{string}/{int}'			=>'test8',
 //			'test9/{string}/{int}/[...]'	=>'test9',
 			''								=>'getAll',
+			'getCount'						=>'getCount',
 			'{int}'							=>'getById',
 			'getByTag/{string}'				=>'getByTag'
 		);
@@ -43,6 +44,18 @@ namespace application\nutsNBolts\controller\rest\content
 					'Node not found.'
 				);
 			}
+		}
+		
+		public function getCount()
+		{
+			$this->setResponseCode(200);
+			$this->respond
+			(
+				true,
+				'OK',
+				$this->model->Node->count($this->request->getAll())
+			);
+			return;
 		}
 		
 		public function getByTag($tags)
