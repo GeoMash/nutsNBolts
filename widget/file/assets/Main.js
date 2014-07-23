@@ -11,7 +11,7 @@ $JSKK.Class.create
 		widget:	null,
 		init: function(id)
 		{
-			this.widget=$('#image-'+id);
+			this.widget=$('#file-'+id);
 			$application.registerAction('widget.file.main.browseFile',this.browseFile.bind(this))
 		},
 		browseFile: function()
@@ -36,6 +36,7 @@ $JSKK.Class.create
 			var selected=fileManager.getSelected();
 			console.log(selected);
 			this.widget.find('.imageSelector').addClass('selected');
+			console.log(this.widget.find('.imageSelector'));
 			this.widget.find('input').val(selected.src);
 			this.widget.find('.thumbs a')	.attr('title',selected.title)
 											.css('background-image',selected.thumb)
