@@ -10,7 +10,9 @@ namespace application\nutsNBolts\controller\rest
 		private $map=array
 		(
 			'authenticate'				=>'authenticate',
-			'validateSession'			=>'validateSession'
+			'validateSession'			=>'validateSession',
+			'unauthenticate'			=>'unauthenticate',
+			'getUser'					=>'getUser'
 		);
 		
 		public function authenticate()
@@ -80,6 +82,16 @@ namespace application\nutsNBolts\controller\rest
 				$this->plugin->Auth->isAuthenticated(),
 				'OK'
 			);
+		}
+		
+		public function getUser()
+		{
+			$userId=$this->plugin->Session->userId;
+			$user=$this->model->User->read($userId);
+			unset($user[0]['password']);
+			unset($user[0]['salt']);
+			$this->setResponseCode(200);
+			$this->respond(true,'OK',$user);
 		}
 	}
 }
