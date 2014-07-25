@@ -68,6 +68,18 @@
 									</select>
 								</div>
 							</div>
+							<div class="control-group">
+								<label class="control-label">Trial Occurrences</label>
+								<div class="controls">
+									<input type="number" min="0" name="trial_occurrences" data-prompt-position="topLeft" value="<?php $tpl->trial_occurrences; ?>">
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Total Occurrences</label>
+								<div class="controls">
+									<input type="number" min="0" name="total_occurrences" data-prompt-position="topLeft" value="<?php $tpl->total_occurrences; ?>">
+								</div>
+							</div>
 						</div>
 						<?php
 						$extras=$tpl->get('belowForm');

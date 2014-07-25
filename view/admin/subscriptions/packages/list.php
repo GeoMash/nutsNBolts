@@ -20,6 +20,8 @@
 									<th><div>Name</div></th>
 									<th><div>Duration</div></th>
 									<th><div>Amount</div></th>
+									<th><div>Trial Occurrences</div></th>
+									<th><div>Total Occurrences</div></th>
 									<th><div>Status</div></th>
 									<th><div>Actions</div></th>
 								</tr>
@@ -34,6 +36,8 @@
 									<td><a href="/admin/subscriptions/packages/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
 									<td><?php print $subscriptions[$i]['duration']; ?> Months</td>
 									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
+									<td><?php print $subscriptions[$i]['trial_occurrences']? : "N/A"; ?></td>
+									<td><?php print $subscriptions[$i]['total_occurrences']? : "N/A"; ?></td>
 									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
 									<td class="center">
 										<?php if ($canDelete): ?>
