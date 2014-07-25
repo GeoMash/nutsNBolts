@@ -86,12 +86,30 @@ namespace application\nutsNBolts\controller\rest
 		
 		public function getUser()
 		{
-			$userId=$this->plugin->Session->userId;
+			$userId=$this->plugin->Auth->getUserId();
 			$user=$this->model->User->read($userId);
-			unset($user[0]['password']);
-			unset($user[0]['salt']);
-			$this->setResponseCode(200);
-			$this->respond(true,'OK',$user);
+			if(isset($user[0]))
+			{
+				unset($user[0]['password']);
+				unset($user[0]['salt']);
+				$this->setResponseCode(200);
+				$this->respond
+				(
+					true,
+					'OK',
+					$user[0]
+				);
+			}
+			else
+			{
+				$this->setResponseCode(200);
+				$this->respond
+				(
+					false,
+					'OK',
+					null
+				);
+			}
 		}
 	}
 }
