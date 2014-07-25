@@ -102,35 +102,18 @@ namespace application\nutsNBolts\controller\rest
 			try
 			{
 				$this->plugin->Auth->can('admin.user.update');
-				$userId=$this->plugin->Session->userId;
-				if (isset($userId) && is_numeric($userId))
-				{
-					// logged in
-					$key		=$this->request->get('key');
-					$value		=$this->request->get('value');
-					
-					$this->model->User->update
-					(
-						[
-							$key	=>$value
-						],
-						[
-							'id'	=>$userId
-						]
-					);
-					
-					$this->setResponseCode(200);
-					$this->respond(true,'OK');
-				}
-				else
-				{
-					$this->setResponseCode(404);
-					$this->respond
-					(
-						false,
-						'Expecting user id to be an integer.'
-					);
-				}
+				$userId=$this->plugin->Auth->getUserId();
+				
+				$this->model->User->update
+				(
+					$this->request->getAll(),
+					[
+						'id'=>$userId
+					]
+				);
+				
+				$this->setResponseCode(200);
+				$this->respond(true,'OK');
 			}
 			catch(AuthException $exception)
 			{
