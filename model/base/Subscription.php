@@ -25,6 +25,8 @@ namespace application\nutsNBolts\model\base
 			'recurring' => 'tinyint(1) NOT NULL ',
 			'amount' => 'int(10) NOT NULL ',
 			'currency' => 'varchar(3) NOT NULL ',
+			'trial_occurrences' => 'int(10) NULL',
+			'total_occurrences' => 'int(10) NULL',
 			'status' => 'tinyint(1) NOT NULL '
 		);
 	}
