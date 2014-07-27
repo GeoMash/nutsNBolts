@@ -14,7 +14,9 @@ namespace application\nutsNBolts\controller\rest
 			''								=>'getAll',
 			'search'						=>'search',
 			'{int}'							=>'getById',
-			'edit'							=>'edit',
+			'upsert'						=>'upsert',
+			'update'						=>'upsert',
+			'insert'						=>'upsert',
 			'impersonate/{string}/[*]'		=>'impersonate'
 		);
 		
@@ -97,23 +99,50 @@ namespace application\nutsNBolts\controller\rest
 			}
 		}	
 		
-		public function edit()
+		public function upsert()
 		{
+			if (!count($this->request->getAll()))
+			{
+				$this->setResponseCode(400);
+				$this->respond
+				(
+					false,
+					'Invalid Request'
+				);
+			}
+			$userId=$this->plugin->Auth->getUserId();
 			try
 			{
-				$this->plugin->Auth->can('admin.user.update');
-				$userId=$this->plugin->Auth->getUserId();
-				
-				$this->model->User->update
-				(
-					$this->request->getAll(),
-					[
-						'id'=>$userId
-					]
-				);
-				
-				$this->setResponseCode(200);
-				$this->respond(true,'OK');
+				if ($this->request->get('id'))
+				{
+					//Is the user allowed to update profiles?
+					$this->plugin->Auth->can('user.profile.update');
+					
+					
+					//Is the user updating their own profile?
+					if ($this->request->get('id')!=$userId)
+					{
+						$this->plugin->Auth->can('admin.user.update');
+					}
+					$this->model->User->update
+					(
+						$this->request->getAll(),
+						['id'=>$userId]
+					);
+					$this->setResponseCode(200);
+					$this->respond(true,'OK');
+				}
+				else
+				{
+					//Is the user allowed to create users?
+					$this->plugin->Auth->can('admin.user.create');
+					$user=$this->model->User->create
+					(
+						$this->request->getAll()
+					);
+					$this->setResponseCode(200);
+					$this->respond(true,'OK',$user);
+				}
 			}
 			catch(AuthException $exception)
 			{
