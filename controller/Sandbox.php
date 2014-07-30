@@ -8,8 +8,8 @@ namespace application\nutsNBolts\controller
 		public function index()
 		{
 			$search=$this->plugin->Search('Announcements');
-			$search->setContentType(2);
 			$search->clearCache();
+			$search->setContentType(2);
 			$search->addFilter
 			(
 				[
