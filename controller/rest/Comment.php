@@ -33,8 +33,10 @@ namespace application\nutsNBolts\controller\rest
 				$allComments=$this->plugin->Comment->getCommentsWithUserDetails($nodeId,50);
 				for($i=0,$j=count($allComments);$i<$j;$i++)
 				{
-					$allComments[$i]['user']=$this->plugin->Mvc->model->User->read(['id'=>$allComments[$i]['user_id']],['id'])[0];
+					$allComments[$i]['user']=$this->plugin->Mvc->model->User->read(['id'=>$allComments[$i]['user_id']],['id','name_first','name_last'])[0];
 				}
+				
+//				print_r($allComments);
 				$this->setResponseCode(200);
 				$this->respond
 				(
