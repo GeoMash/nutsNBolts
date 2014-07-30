@@ -96,7 +96,7 @@ namespace application\nutsNBolts\controller\admin
 					{
 						try
 						{
-							$this->plugin->Auth->can('admin.pages.read');
+							$this->plugin->Auth->can('admin.page.read');
 							$this->setContentView('admin/configurePages/pages');
 							$this->view->getContext()
 							->registerCallback
@@ -170,7 +170,7 @@ namespace application\nutsNBolts\controller\admin
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.pages.create');
+				$this->plugin->Auth->can('admin.page.create');
 				// MD we dont have field with "name", checking the next best thing which is URL
 				if (!$this->request->get('url'))
 				{
@@ -239,8 +239,8 @@ namespace application\nutsNBolts\controller\admin
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.pages.read');
-				$this->plugin->Auth->can('admin.pages.update');
+				$this->plugin->Auth->can('admin.page.read');
+				$this->plugin->Auth->can('admin.page.update');
 				if ($this->request->get('id'))
 				{
 					if ($this->model->Page->handleRecord($this->request->getAll())!==false)
@@ -299,7 +299,7 @@ namespace application\nutsNBolts\controller\admin
 		{
 			try
 			{
-				$this->plugin->Auth->can('admin.pages.delete');
+				$this->plugin->Auth->can('admin.page.delete');
 				if ($this->model->Page->handleDeleteRecord($id))
 				{
 					$this->plugin->Notification->setSuccess('Page successfully removed.');

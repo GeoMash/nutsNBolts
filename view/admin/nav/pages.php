@@ -1,5 +1,5 @@
 <?php
-if ($tpl->can('admin.pages.read')
+if ($tpl->can('admin.page.read')
 || $tpl->can('admin.pageType.read')
 || $tpl->can('admin.template.read')):
 ?>
@@ -12,7 +12,7 @@ if ($tpl->can('admin.pages.read')
 		</span>
 	</a>
 	<ul class="dropdown-menu">
-		<?php if ($tpl->can('admin.pages.read')): ?>
+		<?php if ($tpl->can('admin.page.read')): ?>
 		<li class="<?php if ($tpl->get('nav_active_sub')=='types')print 'active'; ?>">
 			<a href="/admin/configurepages/types">
 				<i class="icon-th"></i> Types
