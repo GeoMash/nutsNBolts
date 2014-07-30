@@ -11,11 +11,16 @@ namespace application\nutsNBolts\plugin\search
 	class Search extends Plugin implements Factory, Native
 	{
 		const TABLE_NAME_PREFIX='search_';
+		const ORDER_ASCENDING	='ASC';
+		const ORDER_DECENDING	='DESC';
 
 		private $db			=null;
 		private $contentType=null;
 		private $name		=null;
 		private $filter		=[];
+		private $limit		=100;
+		private $offset		=0;
+		private $orderBy	=[];
 		
 		public function init($name)
 		{
@@ -35,6 +40,37 @@ namespace application\nutsNBolts\plugin\search
 		public function setContentType($contentTypeId)
 		{
 			$this->contentType=$contentTypeId;
+			return $this;
+		}
+		
+		public function limit($num)
+		{
+			$this->limit=$num;
+			return $this;
+		}
+		
+		public function offset($num)
+		{
+			$this->offset=$num;
+			return $this;
+		}
+		
+		public function orderBy()
+		{
+			unset($this->orderBy);
+			$this->orderBy=[];
+			$args=func_get_args();
+			if (count($args))
+			{
+				if (!is_array($args[0]))
+				{
+					$this->orderBy[$args[0]]=$args[1];
+				}
+				else
+				{
+					$this->orderBy=$args[0];
+				}
+			}
 			return $this;
 		}
 		
@@ -104,12 +140,27 @@ SQL;
 			{
 				$where='';
 			}
-			
+			$orderBy=[];
+			foreach ($this->orderBy as $column=>$direction)
+			{
+				$orderBy[]='`'.$column.'` '.$direction;
+			}
+			if (count($orderBy))
+			{
+				$orderBy='ORDER BY '.implode(',',$orderBy);
+			}
+			else
+			{
+				$orderBy='';
+			}
 			$query=<<<SQL
 SELECT *
 FROM `{$tableName}`
 {$where}
+{$orderBy}
+LIMIT {$this->offset},{$this->limit};
 SQL;
+			print $query;
 			$this->getDb()->query($query,$values);
 			return $this->getDb()->result('assoc');
 		}
