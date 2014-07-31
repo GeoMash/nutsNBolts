@@ -19,10 +19,10 @@ namespace application\nutsNBolts\controller
 //				]
 //			);
 			
-			$search=$this->plugin->Search('News')
+			$search=$this->plugin->Search('EFTI_PLAYLIST')
+					->joinWithContentType('EFTI_PLAYLIST_ITEM','playlist')
 					->clearCache()
-					->setContentType(2)
-					->limit(3)
+					->limit(100)
 					->offset(0)
 //					->orderBy('id',Search::ORDER_ASCENDING)
 					->orderBy
