@@ -148,10 +148,10 @@ namespace application\nutsNBolts\plugin\blog
 					$blogIdArray[]=$blogIds[$i]['id'];
 				}
 				
-				$blogs=$this->plugin->Mvc->model->Node->getWithParts
+				$blogs=array_reverse($this->plugin->Mvc->model->Node->getWithParts
 				(
 					['id'=>$blogIdArray]
-				);
+				));
 			}
 			return $blogs;
 		}
