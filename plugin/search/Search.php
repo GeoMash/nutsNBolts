@@ -194,7 +194,7 @@ namespace application\nutsNBolts\plugin\search
 					}
 					$where[]='`'.$tableName.'`.`'.$column.'`'.$operand.'?';
 				}
-				$where='WHERE '.implode(' AND ',$where);
+				$where='WHERE '.implode(' OR ',$where);
 			}
 			else
 			{
