@@ -89,7 +89,7 @@ namespace application\nutsNBolts\plugin\subscription
 				}
 				else
 				{
-					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
+					$expiryTimestamp = (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$duration}M"));
 				}
 
@@ -114,7 +114,7 @@ namespace application\nutsNBolts\plugin\subscription
 					$arbProfileSettings['startDate'] = clone $timestamp;
 					$arbProfileSettings['startDate']->add(new \DateInterval("P{$trialPeriod}D"));
 
-					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
+					$expiryTimestamp = (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$trialPeriod}D"));
 
 					$status = self::STATS_TRIAL;
@@ -141,7 +141,7 @@ namespace application\nutsNBolts\plugin\subscription
 					$arbProfileSettings['startDate'] = clone $timestamp;
 					$arbProfileSettings['startDate']->add(new \DateInterval("P{$billingInterval}M"));
 
-					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
+					$expiryTimestamp = (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$billingInterval}M"));
 
 					$status = self::STATUS_ACTIVE;
@@ -202,7 +202,10 @@ namespace application\nutsNBolts\plugin\subscription
 			}
 
 			//Managing the DB side
-			$expiryTimestampFormatted = is_null($expiryTimestamp) ? null : $expiryTimestamp->format(self::DATETIME_FORMAT);
+			$expiryTimestampFormatted = is_null($preset_expiry_timestamp) ?
+				(is_null($expiryTimestamp) ? null : $expiryTimestamp->format(self::DATETIME_FORMAT))
+				:
+				$preset_expiry_timestamp->format(self::DATETIME_FORMAT);
 
 			$subscriptionUserId = $this->model->SubscriptionUser->insertAssoc([
 				'subscription_id' => $subscriptionId,
@@ -436,8 +439,8 @@ SQL;
 					{
 						$records = $this->plugin->Db->nutsnbolts->result('assoc');
 						$invoiceCount = $records[0]['invoice_count'];
-						
-						if($invoiceCount > $totalBills)
+
+						if ($invoiceCount > $totalBills)
 						{
 							throw new PluginException(1, "Extra invoice received");
 						}
