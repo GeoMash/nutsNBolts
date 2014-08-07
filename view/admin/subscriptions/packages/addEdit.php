@@ -37,19 +37,6 @@
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label">Duration</label>
-								<div class="controls">
-									<input class="input-small" type="number" name="duration" data-prompt-position="topLeft" value="<?php $tpl->duration; ?>">
-									<span class="help-inline">Months</span>
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label">Recurring</label>
-								<div class="controls">
-									<input type="checkbox" name="recurring" data-prompt-position="topLeft" value="1" <?php print (bool)$tpl->get('recurring')?'checked':''; ?>>
-								</div>
-							</div>
-							<div class="control-group">
 								<label class="control-label">Amount</label>
 								<div class="controls">
 									<input type="number" name="amount" data-prompt-position="topLeft" value="<?php $tpl->amount; ?>">
@@ -59,25 +46,39 @@
 								<label class="control-label">Currency</label>
 								<div class="controls">
 									<select class="input-small" name="currency">
-										<option value="USD">USD</option>
-										<option value="CAD">CAD</option>
-										<option value="EUR">EUR</option>
-										<option value="GBP">GBP</option>
-										<option value="AUD">AUD</option>
-										<option value="NZD">NZD</option>
+										<option "<?php print $tpl->get('currency') == 'USD'? 'selected' : ''; ?>" value="USD">USD</option>
+										<option "<?php print $tpl->get('currency') == 'CAD'? 'selected' : ''; ?>" value="USD">CAD</option>
+										<option "<?php print $tpl->get('currency') == 'EUR'? 'selected' : ''; ?>" value="USD">EUR</option>
+										<option "<?php print $tpl->get('currency') == 'GBP'? 'selected' : ''; ?>" value="USD">GBP</option>
+										<option "<?php print $tpl->get('currency') == 'AUD'? 'selected' : ''; ?>" value="USD">AUD</option>
+										<option "<?php print $tpl->get('currency') == 'NZD'? 'selected' : ''; ?>" value="USD">NZD</option>
 									</select>
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label">Trial Occurrences</label>
+								<label class="control-label">Duration</label>
 								<div class="controls">
-									<input type="number" min="0" name="trial_occurrences" data-prompt-position="topLeft" value="<?php $tpl->trial_occurrences; ?>">
+									<input type="number" min="0" name="duration" data-prompt-position="topLeft" value="<?php $tpl->duration; ?>">
 								</div>
 							</div>
 							<div class="control-group">
-								<label class="control-label">Total Occurrences</label>
+								<label class="control-label">Total Bills</label>
 								<div class="controls">
-									<input type="number" min="0" name="total_occurrences" data-prompt-position="topLeft" value="<?php $tpl->total_occurrences; ?>">
+									<input type="number" min="0" name="total_bills" data-prompt-position="topLeft" value="<?php $tpl->total_bills; ?>">
+								</div>
+							</div>
+							<div class="control-group">
+								<label class="control-label">Trial Period</label>
+								<div class="controls">
+									<input type="number" min="0" name="trial_period" data-prompt-position="topLeft" value="<?php $tpl->trial_period; ?>">
+									<span class="help-inline">Days</span>
+								</div>
+							</div>							
+							<div class="control-group">
+								<label class="control-label">Billing Interval</label>
+								<div class="controls">
+									<input class="input-small" type="number" min=0 name="billing_interval" data-prompt-position="topLeft" value="<?php $tpl->billing_interval; ?>">
+									<span class="help-inline">Months</span>
 								</div>
 							</div>
 						</div>

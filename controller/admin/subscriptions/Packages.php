@@ -50,6 +50,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				
 				if ($this->request->get('name'))
 				{
+					$this->defaultRecordFields($record);
+					
 					$subscription=$this->model->Subscription->handleRecord($record);
 					$this->plugin->Notification->setSuccess('Subscription successfully added. Would you like to <a href="/admin/subscriptions/packages/add/">Add another one?</a>');
 					$this->execHook('onAddSubscription',$subscription);
@@ -84,6 +86,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				
 				if ($this->request->get('name'))
 				{
+					$this->defaultRecordFields($record);
+					
 					$subscription=$this->model->Subscription->handleRecord($record);
 					$this->plugin->Notification->setSuccess('Subscription successfully updated.');
 					$this->execHook('onEditSubscription',$subscription);
@@ -130,6 +134,14 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 				$this->setContentView('admin/noPermission');
 				$this->view->render();
 			}
+		}
+		
+		private function defaultRecordFields(&$record)
+		{
+			//Defaulting
+			$record['duration'] = $record['duration'] == 0? null : $record['duration'];
+			$record['billing_interval'] = $record['billing_interval'] == 0? null : $record['billing_interval'];
+			$record['total_bills'] = $record['total_bills'] == 0? null : $record['total_bills'];
 		}
 		
 		private function setupAddEdit(&$renderRef)

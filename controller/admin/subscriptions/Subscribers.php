@@ -331,6 +331,7 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 		{
 			return [
 				Subscription::STATUS_ACTIVE,
+				Subscription::STATS_TRIAL,
 				Subscription::STATUS_CANCELLED_MANUAL,
 				Subscription::STATUS_CANCELLED_AUTO
 			];
@@ -342,6 +343,8 @@ namespace application\nutsNBolts\controller\admin\subscriptions
 			{
 				case Subscription::STATUS_ACTIVE:
 					return "Active";
+				case Subscription::STATS_TRIAL:
+					return "Trial";
 				case Subscription::STATUS_CANCELLED_MANUAL:
 					return "Cancelled Manually";
 				case Subscription::STATUS_CANCELLED_AUTO:
