@@ -31,7 +31,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 
 			require_once 'authorizeNet/AuthorizeNetAIM.php';
 			require_once 'authorizeNet/AuthorizeNetARB.php';
-			
+
 			$this->login_id = $this->config->authorize_net->login_id;
 			$this->transaction_key = $this->config->authorize_net->transaction_key;
 		}
@@ -116,24 +116,22 @@ namespace application\nutsNBolts\plugin\payment\handler
 		public function createRecurringSubscription(
 			$userFirstName, $userLastName,
 			$amount, $cardNo, $cardCode, $expDate,
-			$arbProfileSettings = null)
+			$billingInterval, $totalOccurrences = null, $startDate = null)
 		{
-			if($arbProfileSettings != null)
+var_dump('0.1');
+			if ($billingInterval == null)
 			{
-				if(
-				!isset($arbProfileSettings['totalOccurrences'])
-				OR !isset($arbProfileSettings['billingInterval'])
-				OR !isset($arbProfileSettings['startDate'])
-				)
-				{
-					throw new PluginException(0, 'ARB Profile Settings array is invalid');
-				}
+var_dump('0.1');
+				//Deferred single payment
+				
 			}
 			
-			$startDate = is_null($arbProfileSettings) ? new \DateTime() : $arbProfileSettings['startDate'];
-			$totalOccurrences = is_null($arbProfileSettings) ? '9999' : $arbProfileSettings['totalOccurrences']; // 9999 means Unlimited
-			$billingInterval = is_null($arbProfileSettings) ? null : $arbProfileSettings['billingInterval'];
-
+			//Defaulting
+			$startDate = !is_null($startDate) ? $startDate: new \DateTime();
+			$totalOccurrences = !is_null($totalOccurrences) ? $totalOccurrences: '9999'; // 9999 means Unlimited
+			$billingInterval = !is_null($billingInterval)? $billingInterval : 1;
+			
+var_dump('0.2',$startDate, $totalOccurrences, $billingInterval);
 			// Set the subscription fields.
 			$subscription = new AuthorizeNet_Subscription;
 			$subscription->name = "EFTI_RECURRING";
@@ -141,19 +139,21 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$subscription->intervalUnit = "months";
 			$subscription->startDate = $startDate->format('Y-m-d');
 			$subscription->amount = $amount;
-			$subscription->totalOccurrences = $totalOccurrences; 
+			$subscription->totalOccurrences = $totalOccurrences;
 			$subscription->creditCardCardNumber = $cardNo;
 			$subscription->creditCardExpirationDate = $expDate;
 			$subscription->creditCardCardCode = $cardCode;
 			$subscription->billToFirstName = $userFirstName;
 			$subscription->billToLastName = $userLastName;
 
+var_dump('0.3');
 			$subscription_Request = new AuthorizeNetARB($this->login_id, $this->transaction_key);
 			$subscription_Response = $subscription_Request->createSubscription($subscription);
 
+var_dump('0.4s');
 			if ($subscription_Response->isError())
 			{
-				throw new PluginException(1, $subscription_Response->getErrorMessage());
+				throw new PluginException(2, $subscription_Response->getErrorMessage());
 			}
 
 			$subscription_id = $subscription_Response->getSubscriptionId();
@@ -162,7 +162,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 
 			if ($subscription_status_response->getSubscriptionStatus() != "active")
 			{
-				throw new PluginException(2, $subscription_status_response->getMessageText());
+				throw new PluginException(3, $subscription_status_response->getMessageText());
 			}
 
 			return $subscription_Response;
