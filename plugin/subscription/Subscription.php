@@ -2,6 +2,7 @@
 namespace application\nutsNBolts\plugin\subscription
 {
 	use application\nutsNBolts\model\base\NodeRead;
+	use application\nutsNBolts\plugin\payment\handler\AuthorizeNet;
 	use application\nutsNBolts\plugin\payment\Payment;
 	use nutshell\behaviour\Native;
 	use nutshell\behaviour\Singleton;
@@ -61,7 +62,7 @@ namespace application\nutsNBolts\plugin\subscription
 
 			$duration = $subscription['duration'];
 			$trialPeriod = $subscription['trial_period'];
-			$totalOccurrences = is_null($subscription['total_bills'])? null : intval($subscription['total_bills'],10);
+			$totalOccurrences = is_null($subscription['total_bills']) ? null : intval($subscription['total_bills'], 10);
 			$billingInterval = $subscription['billing_interval'];
 
 			$timestamp = $preset_timestamp ?: new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
@@ -101,7 +102,7 @@ namespace application\nutsNBolts\plugin\subscription
 				$arbProfileSettings = [
 					'totalOccurrences' => null,
 					'startDate' => null,
-					'billingInterval' => is_null($billingInterval)? null : $billingInterval
+					'billingInterval' => is_null($billingInterval) ? null : $billingInterval
 				];
 
 				if ($trialPeriod > 0)
@@ -122,17 +123,15 @@ namespace application\nutsNBolts\plugin\subscription
 				{
 
 					//No Trial Period
-					$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $cardExpDate, $amount);
+					$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $cardExpDate, $amount, AuthorizeNet::TRANS_TYPE_AUTH);
 
 					if ($totalOccurrences === null)
 					{
-
 						//Infinite Recurring
 						$arbProfileSettings['totalOccurrences'] = null;
 					}
 					elseif ($totalOccurrences > 1)
 					{
-
 						//Installment plan
 						$arbProfileSettings['totalOccurrences'] = $totalOccurrences - 1;
 					}
@@ -149,27 +148,59 @@ namespace application\nutsNBolts\plugin\subscription
 				}
 
 				//Create ARB
-				$arbStatus = $payment->createRecurringSubscription(
-					$userFirstName, $userLastName, 
-					$amount, $cardNo, $cardCode, $cardExpDate, 
-					$arbProfileSettings['billingInterval'], $arbProfileSettings['totalOccurrences'], $arbProfileSettings['startDate']);
+				try
+				{
+					$arbStatus = $payment->createRecurringSubscription(
+						$userFirstName, $userLastName,
+						$amount, $cardNo, $cardCode, $cardExpDate,
+						$arbProfileSettings['billingInterval'], $arbProfileSettings['totalOccurrences'], $arbProfileSettings['startDate']);
+
+					if (!is_null($transactionResponse))
+					{
+						try
+						{
+							$authCode = $transactionResponse->authorization_code;
+							$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $cardExpDate, $amount, AuthorizeNet::TRANS_TYPE_CAPTURE, $authCode);
+						}
+						catch (\Exception $exp)
+						{
+							try
+							{
+								$payment->deleteRecurringSubscription($arbId);
+							}
+							catch (\Exception $exp2)
+							{
+							}
+							try
+							{
+								if (!is_null($transactionResponse))
+								{
+									$payment->voidTransaction($transactionResponse->transaction_id);
+								}
+							}
+							catch (\Exception $exp2)
+							{
+							}
+						}
+					}
+				}
+				catch (\Exception $exp)
+				{
+					if (!is_null($transactionResponse))
+					{
+						try
+						{
+							$payment->voidTransaction($transactionResponse->transaction_id);
+						}
+						catch (\Exception $exp2)
+						{
+						}
+					}
+				}
 				$arbId = $arbStatus->getSubscriptionId();
 				$transactionId = is_null($transactionResponse) ? null : $transactionResponse->transaction_id;
-
 			}
 
-//			if ($subscription_Response->isError())
-//			{
-//				try
-//				{
-//					$this->voidTransaction($authenticationTransactionId);
-//				}
-//				catch (\Exception $exp)
-//				{
-//				}
-//
-//				throw new ApplicationException(1, $subscription_Response->getErrorMessage());
-//			}
 			//Managing the DB side
 			$expiryTimestampFormatted = is_null($expiryTimestamp) ? null : $expiryTimestamp->format(self::DATETIME_FORMAT);
 
@@ -182,7 +213,7 @@ namespace application\nutsNBolts\plugin\subscription
 				'status' => $status
 			]);
 
-			if ($transactionId !== null)
+			if (!is_null($transactionResponse))
 			{
 
 				$subscriptionTransactionId = $this->model->SubscriptionTransaction->insertAssoc([
@@ -409,9 +440,9 @@ SQL;
 					}
 					else
 					{
-						throw new PluginException(0, "IDK ...");	
+						throw new PluginException(0, "IDK ...");
 					}
-					
+
 					if ($isLastPayment)
 					{
 						if (is_null($duration))

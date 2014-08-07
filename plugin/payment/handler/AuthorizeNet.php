@@ -59,20 +59,20 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$response = null;
 			switch ($transactionType)
 			{
-				case $this::TRANS_TYPE_AUTH:
+				case self::TRANS_TYPE_AUTH:
 					$response = $transaction->authorizeOnly($amount, $cardNo, $expDate);
 					break;
-				case $this::TRANS_TYPE_CAPTURE:
+				case self::TRANS_TYPE_CAPTURE:
 					$response = $transaction->captureOnly($authCode, $amount, $cardNo, $expDate);
 					break;
-				case $this::TRANS_TYPE_AUTHCAPTURE:
+				case self::TRANS_TYPE_AUTHCAPTURE:
 					$response = $transaction->authorizeAndCapture($amount, $cardNo, $expDate);
 					break;
 			}
 
 			if (!$response->approved)
 			{
-				throw new ApplicationException(0, $response->response_reason_text);
+				throw new PluginException(0, $response->response_reason_text);
 			}
 
 			return $response;
@@ -122,12 +122,12 @@ namespace application\nutsNBolts\plugin\payment\handler
 			{
 				//Deferred single payment
 			}
-			
+
 			//Defaulting
-			$startDate = !is_null($startDate) ? $startDate: new \DateTime();
-			$totalOccurrences = !is_null($totalOccurrences) ? $totalOccurrences: '9999'; // 9999 means Unlimited
-			$billingInterval = !is_null($billingInterval)? $billingInterval : 1;
-			
+			$startDate = !is_null($startDate) ? $startDate : new \DateTime();
+			$totalOccurrences = !is_null($totalOccurrences) ? $totalOccurrences : '9999'; // 9999 means Unlimited
+			$billingInterval = !is_null($billingInterval) ? $billingInterval : 1;
+
 			// Set the subscription fields.
 			$subscription = new AuthorizeNet_Subscription;
 			$subscription->name = "EFTI_RECURRING";
@@ -156,6 +156,13 @@ namespace application\nutsNBolts\plugin\payment\handler
 
 			if ($subscription_status_response->getSubscriptionStatus() != "active")
 			{
+				try
+				{
+					$this->deleteRecurringSubscription($subscription_id);
+				}
+				catch (\Exception $exp)
+				{
+				}
 				throw new PluginException(3, $subscription_status_response->getMessageText());
 			}
 
