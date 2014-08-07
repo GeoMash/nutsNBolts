@@ -118,12 +118,9 @@ namespace application\nutsNBolts\plugin\payment\handler
 			$amount, $cardNo, $cardCode, $expDate,
 			$billingInterval, $totalOccurrences = null, $startDate = null)
 		{
-var_dump('0.1');
 			if ($billingInterval == null)
 			{
-var_dump('0.1');
 				//Deferred single payment
-				
 			}
 			
 			//Defaulting
@@ -131,7 +128,6 @@ var_dump('0.1');
 			$totalOccurrences = !is_null($totalOccurrences) ? $totalOccurrences: '9999'; // 9999 means Unlimited
 			$billingInterval = !is_null($billingInterval)? $billingInterval : 1;
 			
-var_dump('0.2',$startDate, $totalOccurrences, $billingInterval);
 			// Set the subscription fields.
 			$subscription = new AuthorizeNet_Subscription;
 			$subscription->name = "EFTI_RECURRING";
@@ -146,11 +142,9 @@ var_dump('0.2',$startDate, $totalOccurrences, $billingInterval);
 			$subscription->billToFirstName = $userFirstName;
 			$subscription->billToLastName = $userLastName;
 
-var_dump('0.3');
 			$subscription_Request = new AuthorizeNetARB($this->login_id, $this->transaction_key);
 			$subscription_Response = $subscription_Request->createSubscription($subscription);
 
-var_dump('0.4s');
 			if ($subscription_Response->isError())
 			{
 				throw new PluginException(2, $subscription_Response->getErrorMessage());
