@@ -390,7 +390,7 @@ SQL;
 
 				if ($userSubscription['expiry_timestamp'] == null)
 				{
-					return true;
+					throw new PluginException(1, "Extra invoice received");
 				}
 				else
 				{
@@ -436,6 +436,11 @@ SQL;
 					{
 						$records = $this->plugin->Db->nutsnbolts->result('assoc');
 						$invoiceCount = $records[0]['invoice_count'];
+						
+						if($invoiceCount > $totalBills)
+						{
+							throw new PluginException(1, "Extra invoice received");
+						}
 						$isLastPayment = $invoiceCount == $totalBills;
 					}
 					else
