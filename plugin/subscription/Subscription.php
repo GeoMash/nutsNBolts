@@ -39,43 +39,43 @@ namespace application\nutsNBolts\plugin\subscription
 			//Receiving Credit Card information
 			$cardNo = $subscriptionRequest['number'];
 			$cardCode = $subscriptionRequest['ccv'];
-var_dump('1');
+
 			$cardExpiryMonth = str_pad($subscriptionRequest['expiry-month'], 2, '0', STR_PAD_LEFT);
 			$cardExpiryYear = str_pad($subscriptionRequest['expiry-year'], 2, '0', STR_PAD_LEFT);
 			$cardExpDate = $cardExpiryMonth . $cardExpiryYear;
-var_dump('2');
+
 			//Receiving Payment Amount
 			$subscription = $this->model->Subscription->read($subscriptionId)[0];
 			$amount = $subscription['amount'];
-var_dump('3');
+
 			//Receiving the necessary user information
 			$user = $this->model->User->read([
 				'id' => $userId
 			])[0];
 			$userFirstName = $user['name_first'];
 			$userLastName = $user['name_last'];
-var_dump('4');
+
 			//Checking for Subscription Package Activity
 			if ($subscription['status'] != self::STATUS_ACTIVE)
 				throw new ApplicationException(0, "Subscription is inactive");
-var_dump('5');
+
 			$duration = $subscription['duration'];
 			$trialPeriod = $subscription['trial_period'];
 			$totalOccurrences = is_null($subscription['total_bills'])? null : intval($subscription['total_bills'],10);
 			$billingInterval = $subscription['billing_interval'];
-var_dump('6');
+
 			$timestamp = $preset_timestamp ?: new \DateTime('now'); //Use this? or take from TransactionResponse? How precise we want it?
 			$timestampFormatted = $timestamp->format(self::DATETIME_FORMAT);
-var_dump('7');
+
 			//Starting the payment process
 			$payment = $this->plugin->Payment("AuthorizeNet");
-var_dump('8');
+
 			//DB registration fields : to be set for DB management section
 			$arbId = null;
 			$transactionId = null;
 			$transactionResponse = null;
 			$status = null;
-var_dump('9');
+
 			if ($trialPeriod == 0 && $totalOccurrences === 1)
 			{
 var_dump('10');
@@ -100,57 +100,57 @@ var_dump('14');
 			else
 			{
 				//Installment or Recurring
-var_dump('15');
+
 				$arbProfileSettings = [
 					'totalOccurrences' => null,
 					'startDate' => null,
 					'billingInterval' => is_null($billingInterval)? null : $billingInterval
 				];
-var_dump('16');
+
 				if ($trialPeriod > 0)
 				{
 					$transactionResponse = null;
-var_dump('17');
+
 					//Trial Period exist: Installment or Recurring, either way an ARB is created
 					$arbProfileSettings['totalOccurrences'] = $totalOccurrences;
 					$arbProfileSettings['startDate'] = clone $timestamp;
 					$arbProfileSettings['startDate']->add(new \DateInterval("P{$trialPeriod}D"));
-var_dump('18');
+
 					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$trialPeriod}D"));
-var_dump('19');
+
 					$status = self::STATS_TRIAL;
 				}
 				elseif ($trialPeriod == 0 && $totalOccurrences !== 1)
 				{
-var_dump('20');
+
 					//No Trial Period
 					$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $cardExpDate, $amount);
-var_dump('21');
+
 					if ($totalOccurrences === null)
 					{
-var_dump('22');
+
 						//Infinite Recurring
 						$arbProfileSettings['totalOccurrences'] = null;
 					}
 					elseif ($totalOccurrences > 1)
 					{
-var_dump('23');
+
 						//Installment plan
 						$arbProfileSettings['totalOccurrences'] = $totalOccurrences - 1;
 					}
-var_dump('24');
+
 					$billingInterval = $subscription['billing_interval'];
-var_dump('25');
+
 					$arbProfileSettings['startDate'] = clone $timestamp;
 					$arbProfileSettings['startDate']->add(new \DateInterval("P{$billingInterval}M"));
-var_dump('26');
+
 					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$billingInterval}M"));
-var_dump('27');
+
 					$status = self::STATUS_ACTIVE;
 				}
-var_dump('27.1', $arbProfileSettings);
+
 				//Create ARB
 				$arbStatus = $payment->createRecurringSubscription(
 					$userFirstName, $userLastName, 
@@ -158,7 +158,7 @@ var_dump('27.1', $arbProfileSettings);
 					$arbProfileSettings['billingInterval'], $arbProfileSettings['totalOccurrences'], $arbProfileSettings['startDate']);
 				$arbId = $arbStatus->getSubscriptionId();
 				$transactionId = is_null($transactionResponse) ? null : $transactionResponse->transaction_id;
-var_dump('28',$arbId,$transactionId);
+
 			}
 
 //			if ($subscription_Response->isError())
@@ -175,7 +175,7 @@ var_dump('28',$arbId,$transactionId);
 //			}
 			//Managing the DB side
 			$expiryTimestampFormatted = is_null($expiryTimestamp) ? null : $expiryTimestamp->format(self::DATETIME_FORMAT);
-var_dump('29');
+
 			$subscriptionUserId = $this->model->SubscriptionUser->insertAssoc([
 				'subscription_id' => $subscriptionId,
 				'user_id' => $userId,
@@ -184,15 +184,15 @@ var_dump('29');
 				'expiry_timestamp' => $expiryTimestampFormatted,
 				'status' => $status
 			]);
-var_dump('30');
+
 			if ($transactionId !== null)
 			{
-var_dump('31');
+
 				$subscriptionTransactionId = $this->model->SubscriptionTransaction->insertAssoc([
 					'gateway_transaction_id' => $transactionId,
 					'timestamp' => $timestampFormatted
 				]);
-var_dump('32');
+
 				$this->model->SubscriptionInvoice->insertAssoc([
 					'subscription_user_id' => $subscriptionUserId,
 					'subscription_transaction_id' => $subscriptionTransactionId,
@@ -304,11 +304,6 @@ SQL;
 				//Idempotence: subscription is already cancelled
 				return true;
 			}
-
-			$subscriptionId = $userSubscription['subscription_id'];
-			$subscription = $this->model->Subscription->read([
-				'id' => $subscriptionId
-			])[0];
 
 			if (isset($userSubscription['arb_id']))
 			{
