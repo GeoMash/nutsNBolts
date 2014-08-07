@@ -78,23 +78,20 @@ namespace application\nutsNBolts\plugin\subscription
 
 			if ($trialPeriod == 0 && $totalOccurrences === 1)
 			{
-var_dump('10');
 				//OTP with No Trial: One Payment, then subscription is open until the end of the package duration
 				$transactionResponse = $payment->chargeCard($cardNo, $cardCode, $cardExpDate, $amount);
 				$transactionId = $transactionResponse->transaction_id;
-var_dump('11');
+
 				if ($duration == null)
 				{
 					$expiryTimestamp = null;
-var_dump('12');
 				}
 				else
 				{
 					$expiryTimestamp = $preset_expiry_timestamp ?: (clone $timestamp);
 					$expiryTimestamp->add(new \DateInterval("P{$duration}M"));
-var_dump('13');
 				}
-var_dump('14');
+
 				$status = self::STATUS_ACTIVE;
 			}
 			else
