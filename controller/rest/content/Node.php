@@ -19,7 +19,8 @@ namespace application\nutsNBolts\controller\rest\content
 			''								=>'getAll',
 			'getCount'						=>'getCount',
 			'{int}'							=>'getById',
-			'getByTag/{string}'				=>'getByTag'
+			'getByTag/{string}'				=>'getByTag',
+			'search'						=>'search'
 		);
 
 		public function getById($id)
@@ -157,6 +158,112 @@ namespace application\nutsNBolts\controller\rest\content
 					false,
 					'Expected Content Type ID or REF.'
 				);
+			}
+		}
+		
+		public function search()
+		{
+			$json=json_decode($this->request->getRaw(),true);
+			if (!is_null($json))
+			{
+				if (isset($json['contentType']))
+				{
+					$search=$this->plugin->Search($json['contentType']);
+					if (isset($json['filter']))
+					{
+						$search->addFilter($json['filter']);
+					}
+					if (isset($json['limit']))
+					{
+						$search->limit($json['limit']);
+					}
+					if (isset($json['offset']))
+					{
+						$search->offset($json['offset']);
+					}
+					if (isset($json['orderBy']))
+					{
+						$search->orderBy($json['orderBy']);
+					}
+					if (isset($json['joins']))
+					{
+						foreach ($json['joins'] as $contentType=>$column)
+						{
+							$search->joinWithContentType($contentType,$column);
+						}
+					}
+					$this->respond
+					(
+						true,
+						'OK',
+						$search->execute()
+					);
+				}
+				else
+				{
+					$this->setResponseCode(417);
+					$this->respond
+					(
+						false,
+						'Expected Content Type ID or REF.'
+					);
+				}
+			}
+			else
+			{
+				//TODO - Non-JSON request
+				$this->setResponseCode(501);
+				$this->respond
+				(
+					false,
+					'Not implemented. Use a raw JSON request instead.'
+				);
+				exit();
+				$contentType=$this->request->get('contentType');
+				if ($contentType)
+				{
+					$search			=$this->plugin->Search($contentType);
+					$filter			=$this->request->get('filter');
+					$limit			=$this->request->get('limit');
+					$offset			=$this->request->get('offset');
+					$orderBy		=$this->request->get('orderBy');
+					$orderDirection	=$this->request->get('orderBy');
+					$joins			=$this->request->get('joins');
+					if ($filter)
+					{
+						
+					}
+					if ($limit)
+					{
+						$search->limit($limit);
+					}
+					if ($offset)
+					{
+						$search->offset($offset);
+					}
+					if ($orderBy)
+					{
+						if (!$orderDirection)
+						{
+							$orderDirection='ASC';
+						}
+						$search->orderBy($orderBy,$orderDirection);
+					}
+					if ($joins)
+					{
+						
+					}
+					
+				}
+				else
+				{
+					$this->setResponseCode(417);
+					$this->respond
+					(
+						false,
+						'Expected Content Type ID or REF.'
+					);
+				}
 			}
 		}
 	}

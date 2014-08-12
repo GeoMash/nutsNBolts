@@ -198,7 +198,21 @@ namespace application\nutsNBolts\model
 		
 		public function readWithParts($id)
 		{
-			$contentType=$this->read($id);
+			if (is_numeric($id))
+			{
+				$column='id';
+				$contentType=$this->read($id);
+			}
+			else if (is_string($id))
+			{
+				$column='ref';
+				$contentType=$this->read(['ref'=>$id]);
+			}
+			if (!$column)
+			{
+				return false;
+			}
+			
 			if (isset($contentType[0]))
 			{
 				$contentType=$contentType[0];
@@ -209,7 +223,7 @@ namespace application\nutsNBolts\model
 						content_part.config
 				FROM content_type
 				LEFT JOIN content_part ON content_part.content_type_id=content_type.id
-				WHERE content_type.id=?
+				WHERE content_type.{$column}=?
 SQL;
 				if ($this->db->select($query,array($id)))
 				{
