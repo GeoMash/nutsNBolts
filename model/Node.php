@@ -286,7 +286,7 @@ SQL_PART;
 			{
 				$where='';
 			}
-			if($or)
+			if ($or)
 			{
 				$or='WHERE '.implode(' OR ',$or);
 			}
