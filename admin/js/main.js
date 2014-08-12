@@ -37,11 +37,11 @@ requirejs
 		'jquery/tags_input',
 		'jquery/autosize',
 		'jquery/fancybox/source/jquery.fancybox',
-		'jquery/fancybox/source/helpers/jquery.fancybox-buttons',
 		// 'jquery/jstree/jstree',
 		'bootstrap/bootstrap',
 		'bootstrap/bootstrap-datepicker',
 		'bootstrap/bigmodel',
+		'wizard/bootstrap-wizard',
 		'ckeditor/ckeditor',
 		'jskk',
 		'plupload/plupload.full',
@@ -54,6 +54,7 @@ requirejs
 		requirejs
 		(
 			[
+				'jquery/fancybox/source/helpers/jquery.fancybox-buttons',
 				'pagedown/Markdown.Sanitizer',
 				'pagedown/Markdown.Editor',
 				'jskk-optional',

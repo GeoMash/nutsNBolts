@@ -6,7 +6,8 @@ $JSKK.Class.create
 		$requires:
 		[
 			'nutsnbolts.FileManager',
-			'nutsnbolts.Image'
+			'nutsnbolts.Image',
+			'nutsnbolts.BackupRestore'
 		]
 	}
 )
@@ -17,10 +18,21 @@ $JSKK.Class.create
 		fileManager:	null,
 		spinner:		null,
 		image:			null,
+		backupRestore:	null,
 		init: function()
+		{
+			$(this.onReady.bind(this));
+		},
+		onReady: function()
 		{
 			this.fileManager=new nutsnbolts.FileManager();
 			this.image		=new nutsnbolts.Image(this);
+			
+			if ($('#open-wizard-backup,#open-wizard-restore').length)
+			{
+				this.backupRestore=new nutsnbolts.BackupRestore();
+			}
+			
 			this.initAll();
 			this.bindActions();
 		},
