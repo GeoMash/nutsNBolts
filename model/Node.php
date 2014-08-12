@@ -305,6 +305,10 @@ SQL_PART;
             {
                 $limitSql='';
             }
+			if (!empty($status))
+			{
+				$status=' AND node.status='.(int)$status;
+			}
 			$query=<<<SQL
 			SELECT	node.*,
 					content_part.label,
@@ -329,7 +333,7 @@ SQL_PART;
 				{$where}
 				{$or}
 			)
-			AND node.status={$status}
+			{$status}
 			ORDER BY node.id ASC
 			{$limitSql}
 			;
