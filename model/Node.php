@@ -183,6 +183,11 @@ namespace application\nutsNBolts\model
 			return $return;
 		}
 		
+		private function syncPartsOnNode($nodeId)
+		{
+			
+		}
+		
 		public function getCount($contentTypeId)
 		{
 			$query=<<<SQL
@@ -329,7 +334,6 @@ SQL_PART;
 			{$limitSql}
 			;
 SQL;
-			
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');

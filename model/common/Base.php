@@ -23,7 +23,7 @@ namespace application\nutsNBolts\model\common
 				$this->getDb()->query('SELECT COUNT(*) AS count FROM '.$this->name.';');
 			}
 			$result=$this->getDb()->result('assoc');
-			return $result[0]['count'];
+			return (int)$result[0]['count'];
 		}
 		
 		public function handleRecord($record)

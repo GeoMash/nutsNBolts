@@ -7,6 +7,7 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 || $tpl->can('admin.user.read')
 || $tpl->can('admin.permission.read')
 || $tpl->can('admin.role.read')
+|| ($tpl->can('admin.backupRestore.backup') || $tpl->can('admin.backupRestore.restore'))
 //|| $tpl->can('admin.plugin.read')
 ):
 ?>
@@ -20,11 +21,13 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 	</a>
 	<ul class="dropdown-menu">
 		<?php if ($tpl->can('admin.setting.nutsNBolts.read')): ?>
+		<!--
 		<li class="<?php if ($tpl->get('nav_active_sub')=='nnb')print 'active'; ?>">
 			<a href="/admin/settings/nnb">
 				<i class="icon-circle-blank"></i> Nuts n Bolts Settings
 			</a>
 		</li>
+		-->
 		<?php
 			endif;
 			if ($tpl->can('admin.setting.site.read')):
@@ -86,6 +89,15 @@ if ($tpl->can('admin.setting.nutsNBolts.read')
 		<li class="<?php if ($tpl->get('nav_active_sub')=='plugins')print 'active'; ?>" style="display:none;">
 			<a href="/admin/settings/plugins">
 				<i class="icon-bolt"></i> Plugins
+			</a>
+		</li>
+		<?php
+			endif;
+			if ($tpl->can('admin.backupRestore.backup') || $tpl->can('admin.backupRestore.restore')):
+		?>
+		<li class="<?php if ($tpl->get('nav_active_sub')=='backupRestore')print 'active'; ?>">
+			<a href="/admin/settings/backupRestore">
+				<i class="icon-refresh"></i> Backup / Restore
 			</a>
 		</li>
 		<?php endif; ?>
