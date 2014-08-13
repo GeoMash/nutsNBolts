@@ -295,7 +295,7 @@ SQL_PART;
 				$or='';
 			}
 			$userId=$this->plugin->Auth->getUserId();
-			if($offset && $limit)
+			if(is_numeric($offset) && is_numeric($limit))
             {
                 $limitSql=<<<SQL_PART
              	LIMIT {$offset},{$limit}
