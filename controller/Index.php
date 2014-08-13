@@ -194,13 +194,6 @@ namespace application\nutsNBolts\controller
 					}
 				)->registerCallback
 				(
-					'getSiteSetting',
-					function($key)
-					{
-						return $this->getSiteSetting($key);
-					}
-				)->registerCallback
-				(
 					'getNav',
 					function($id)
 					{

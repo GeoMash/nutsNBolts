@@ -60,6 +60,13 @@ namespace application\nutsNBolts\base
 					{
 						return $this->plugin->Policy->getPolicyValue($category,$policy);
 					}
+				)->registerCallback
+				(
+					'getSiteSetting',
+					function($key)
+					{
+						return $this->getSiteSetting($key);
+					}
 				);
 			if (method_exists($this,'init'))
 			{
@@ -92,6 +99,20 @@ namespace application\nutsNBolts\base
 		public function getSiteRef()
 		{
 			return $this->getSite()['ref'];
+		}
+		
+		public function getSiteSetting($key)
+		{
+			$value=$this->model->SiteSetting->read(['key'=>$key])[0];
+			if ($value=='true')
+			{
+				$value=true;
+			}
+			else if ($value=='false')
+			{
+				$value=false;
+			}
+			return $value;
 		}
 		
 		public function redirect($path)
