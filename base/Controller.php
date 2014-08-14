@@ -103,7 +103,7 @@ namespace application\nutsNBolts\base
 		
 		public function getSiteSetting($key)
 		{
-			$value=$this->model->SiteSetting->read(['key'=>$key])[0];
+			$value=$this->model->SiteSettings->read(['key'=>$key])[0];
 			if ($value=='true')
 			{
 				$value=true;
