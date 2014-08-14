@@ -379,7 +379,6 @@ SQL;
 							array
 							(
 								'site_id',
-								'status',
 								'ref',
 								'value'
 							)
