@@ -371,6 +371,7 @@ SQL;
 				$nodes=array();
 				for ($i=0,$j=count($records); $i<$j; $i++)
 				{
+					unset($records[$i]['label']);
 					if (!isset($nodes[$records[$i]['id']]))
 					{
 						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
