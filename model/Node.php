@@ -229,8 +229,9 @@ SQL;
 		
 		public function getWithParts($whereKeyVals=array(),$offset=null,$limit=null,$status=self::STATUS_PUBLISHED)
 		{
-			$where=array();
-			$or=array();
+			$where=	array();
+			$or		=array();
+			$read	='';
 			if (count($whereKeyVals))
 			{
 				if (is_numeric($whereKeyVals))
@@ -257,6 +258,26 @@ SQL;
 									$where[]='node.id="'.addslashes($value).'"';
 								}
 								
+								break;
+							}
+							case 'read':
+							{
+								if ($value===true)
+								{
+									$read='WHERE `read`';
+								}
+								else if ($value===false)
+								{
+									$read='WHERE NOT `read`';
+								}
+								else if (is_array($value))
+								{
+									$read='WHERE `read`'.$value[0].$value[1];
+								}
+								else
+								{
+									$read='WHERE `read`='.$value;
+								}
 								break;
 							}
 							case 'content_type_id':
@@ -310,34 +331,40 @@ SQL_PART;
 				$status=' AND node.status='.(int)$status;
 			}
 			$query=<<<SQL
-			SELECT	node.*,
-					content_part.label,
-					content_part.ref,
-					node_part.value,
-					(
-						SELECT 1
-						FROM node_read
-						WHERE node_id=node.id
-						AND user_id={$userId}
-					) AS `read`
-			FROM node
-			LEFT JOIN node_part ON node.id=node_part.node_id
-			LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-			LEFT JOIN content_type_user ON node.content_type_id=content_type_user.content_type_id
-			WHERE node.id IN
+			SELECT *
+			FROM
 			(
-				SELECT node.id
-				FROM node
-				LEFT JOIN node_part ON node.id=node_part.node_id
-				LEFT JOIN content_part ON node_part.content_part_id=content_part.id
-				{$where}
-				{$or}
-			)
-			{$status}
-			ORDER BY node.id ASC
-			{$limitSql}
-			;
+				SELECT `node`.*,
+				`content_part`.`label`,
+				`content_part`.`ref`,
+				`node_part`.`value`,
+				(
+					SELECT COUNT(*)
+					FROM `node_read`
+					WHERE node_id=`node`.`id`
+					AND `user_id`={$userId}
+					LIMIT 1
+				) AS `read`
+				FROM `node`
+				LEFT JOIN `node_part` ON `node`.`id`=`node_part`.`node_id`
+				LEFT JOIN `content_part` ON `node_part`.`content_part_id`=`content_part`.`id`
+				LEFT JOIN `content_type_user` ON `node`.`content_type_id`=`content_type_user`.`content_type_id`
+				WHERE node.id IN
+				(
+					SELECT `node`.`id`
+					FROM `node`
+					LEFT JOIN `node_part` ON `node`.`id`=`node_part`.`node_id`
+					LEFT JOIN `content_part` ON `node_part`.`content_part_id`=`content_part`.`id`
+					{$where}
+					{$or}
+				)
+				{$status}
+				ORDER BY `node`.`id` ASC
+				{$limitSql}
+			) AS `read`
+			{$read}
 SQL;
+			die($query);
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
