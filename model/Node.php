@@ -364,7 +364,6 @@ SQL_PART;
 			) AS `read`
 			{$read}
 SQL;
-			die($query);
 			if ($result=$this->plugin->Db->nutsnbolts->select($query))
 			{
 				$records=$this->plugin->Db->nutsnbolts->result('assoc');
