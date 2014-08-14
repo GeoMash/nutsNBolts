@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\controller\rest\content
 {
+	use application\nutsNBolts\model\Node as NodeModel;
 	use application\plugin\rest\RestController;
 
 	class Node extends RestController
@@ -17,6 +18,7 @@ namespace application\nutsNBolts\controller\rest\content
 //			'test8/{string}/{int}'			=>'test8',
 //			'test9/{string}/{int}/[...]'	=>'test9',
 			''								=>'getAll',
+			'getWithParts/{int}/{int}/[*]'	=>'getWithParts',
 			'getCount'						=>'getCount',
 			'{int}'							=>'getById',
 			'getByTag/{string}'				=>'getByTag',
@@ -159,6 +161,24 @@ namespace application\nutsNBolts\controller\rest\content
 					'Expected Content Type ID or REF.'
 				);
 			}
+		}
+		
+		public function getWithParts($offset=null,$limit=null,$status=NodeModel::STATUS_PUBLISHED)
+		{
+			$this->setResponseCode(200);
+			$this->respond
+			(
+				true,
+				'OK',
+				$this->model->Node->getWithParts
+				(
+					$this->request->getAll(),
+					$offset,
+					$limit,
+					$status
+				)
+			);
+			return;
 		}
 		
 		public function search()
