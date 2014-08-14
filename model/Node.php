@@ -961,18 +961,14 @@ SQL;
 				$user=$this->model->User->read(['id'=>$userId]);
 				if (isset($user[0]))
 				{
-					
-					$query=
-					[
-						'node_id'			=>$nodeId,
-						'user_id'			=>$userId,
-						'content_type_id'	=>$node[0]['content_type_id']
-					];
-					$result=$this->model->NodeRead->read($query);
-					if (!isset($result[0]))
-					{
-						$this->model->NodeRead->insertAssoc($query);
-					}
+					$this->model->NodeRead->insertAssoc
+					(
+						[
+							'node_id'			=>$nodeId,
+							'user_id'			=>$userId,
+							'content_type_id'	=>$node[0]['content_type_id']
+						]
+					);
 					return true;
 				}
 				else
