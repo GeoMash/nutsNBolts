@@ -22,7 +22,7 @@
 
 		
 	</head>
-	<body>
+	<body class="topBodyPadding">
 		<div class="navbar navbar-top navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container-fluid">
