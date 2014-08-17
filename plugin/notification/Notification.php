@@ -36,8 +36,6 @@ HTML;
 			{
 				$this->session->errors=array();
 			}
-			
-			
 		}
 		
 		public function setSuccess($message)
@@ -98,6 +96,7 @@ HTML;
 			$this->session->infos		=array();
 			$this->session->warnings	=array();
 			$this->session->errors		=array();
+			return $this;
 		}
 		
 		public function getSucessesHTML()
@@ -178,6 +177,15 @@ HTML;
 			);
 		}
 		
+		public function getCount()
+		{
+			$total=0;
+			$total+=count($this->getSuccesses());
+			$total+=count($this->getInfos());
+			$total+=count($this->getWarnings());
+			$total+=count($this->getErrors());
+			return $total;
+		}
 		
 		public function getAll($clear=true)
 		{
