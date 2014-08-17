@@ -19,7 +19,7 @@ namespace application\nutsNBolts\plugin\user
 			
 		}
 		
-		public function create($record)
+		public function create($record,$emailForRandom=true)
 		{
 			$this->validate($record);
 			if (isset($record['set_random']))
@@ -34,17 +34,77 @@ namespace application\nutsNBolts\plugin\user
 			{
 				throw new UserException(UserException::PASSWORD_BLANK,'Password cannot be blank');
 			}
-			return $this->model->User->handleRecord($record);
+			$result=$this->model->User->handleRecord($record);
+			if ($result && isset($record['set_random']) && $emailForRandom)
+			{
+				$this->sendEmail($record,'NEW_ACCOUNT_PASSWORD');
+			}
+			return $result;
 		}
 		
-		public function update($record,$removeRoles=false)
+		public function update($record,$removeRoles=false,$emailForRandom=true)
 		{
 			$this->validate($record);
 			if (isset($record['set_random']))
 			{
 				$record['password']=$this->generateRandomPassword();
 			}
-			return $this->model->User->handleRecord($record,$removeRoles);
+			$result=$this->model->User->handleRecord($record,$removeRoles);
+			if ($result && isset($record['set_random']) && $emailForRandom)
+			{
+				$this->sendEmail($record,'ACCOUNT_PASSWORD_RESET');
+			}
+		}
+		
+		private function sendEmail($user,$templateRef)
+		{
+			//Get the email content type.
+			$contentType	=$this->model->ContentType->read(['ref'=>'SYSTEM_EMAILS']);
+			$emailTemplate	=null;
+			//Get the email.
+			if (isset($contentType[0]))
+			{
+				$emailTemplate=$this->model->Node->getWithParts
+				(
+					[
+						'content_type_id'	=>$contentType[0]['id'],
+						'ref'				=>$templateRef
+					]
+				);
+				if (isset($emailTemplate[0]))
+				{
+					$emailTemplate=$emailTemplate[0];
+				}
+			}
+			if ($emailTemplate)
+			{
+				//Email the user their password.
+				$emailTemplate['message']=str_replace
+				(
+					[
+						'{email}',
+						'{password}',
+						'{name_first}',
+						'{name_last}',
+						'{website}'
+					],
+					[
+						$user['email'],
+						$user['password'],
+						$user['name_first'],
+						$user['name_last'],
+						'http://'.$_SERVER['HTTP_HOST'].'/'
+					],
+					$emailTemplate['message']
+				);
+				
+				$email			=$this->plugin->Email->smtp;
+				$email->Subject	=$emailTemplate['subject'];
+				$email->AltBody	=$emailTemplate['non_html_message'];
+				$email->MsgHTML($emailTemplate['message']);
+				$email->AddAddress($user['email']);
+				$email->send();
+			}
 		}
 		
 		private function validate(&$record)
@@ -182,15 +242,14 @@ namespace application\nutsNBolts\plugin\user
 			$longURL = <<<HTML
 <a href="{$confirmationUrl}">{$confirmationUrl}</a>
 HTML;
-			$masterTemplate = str_replace('[NAME_FIRST]', $user['name_first'], $masterTemplate);
-			$masterTemplate = str_replace('[NAME_LAST]', $user['name_last'], $masterTemplate);
-			$masterTemplate = str_replace('[FULL_LINK]', $longURL, $masterTemplate);
-			$masterTemplate = str_replace('[SHORT_LINK]', $user['confirmation_code'], $masterTemplate);
+			$masterTemplate = str_replace('{name_first}',	$user['name_first'], $masterTemplate);
+			$masterTemplate = str_replace('{name_last}',	$user['name_last'], $masterTemplate);
+			$masterTemplate = str_replace('{full_link}',	$longURL, $masterTemplate);
+			$masterTemplate = str_replace('{short_link}',	$user['confirmation_code'], $masterTemplate);
 
-			$email = $this->plugin->Email->smtp;
-			$email->From = 'notifications@praxisbt.com';
-			$email->Subject = $subject;
-			$email->AltBody = nl2br($masterTemplate);
+			$email			=$this->plugin->Email->smtp;
+			$email->Subject	=$subject;
+			$email->AltBody	=nl2br($masterTemplate);
 			$email->MsgHTML(nl2br($masterTemplate));
 			$email->AddAddress($user['email']);
 			$email->send();
