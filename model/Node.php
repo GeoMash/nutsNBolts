@@ -310,6 +310,7 @@ SQL_PART;
 						FROM node_read
 						WHERE node_id=node.id
 						AND user_id={$userId}
+						LIMIT 1
 					) AS `read`
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
