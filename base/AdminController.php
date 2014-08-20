@@ -98,6 +98,13 @@ namespace application\nutsNBolts\base
 					}
 				)->registerCallback
 				(
+					'getNotificationCount',
+					function()
+					{
+						return $this->plugin->Notification->getCount();
+					}
+				)->registerCallback
+				(
 					'getUnreadMessages',
 					function()
 					{

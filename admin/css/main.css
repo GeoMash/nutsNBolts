@@ -1,6 +1,6 @@
 body
 {
-	margin: 48px 0 20px;
+	margin: 0 0 20px;
 }
 footer
 {
@@ -31,6 +31,11 @@ footer p
 		padding-left: 20px;
 		padding-right: 20px;
 	}
+}
+
+.topBodyPadding
+{
+	margin-top: 48px;
 }
 
 .btn-red

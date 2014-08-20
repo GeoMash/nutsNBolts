@@ -323,7 +323,7 @@ namespace application\nutsNBolts\controller\admin
 		
 		public function handleLogin()
 		{
-			if (!$this->request->get('username'))
+			if (is_null($this->request->get('username')))
 			{
 				$this->view->setTemplate('login');
 			}
@@ -350,13 +350,13 @@ namespace application\nutsNBolts\controller\admin
 				$code=$exception->getCode();
 				if ($code==AuthException::PERMISSION_DENIED)
 				{
-					$this->plugin->Notification->setError('['.$code.'] You are not allowed to login here.');
+					$this->plugin->Notification->setError('You are not allowed to login here.');
 				}
 				else
 				{
-					$this->plugin->Notification->setError('['.$code.'] Your login details were incorrect.');
+					$this->plugin->Notification->setError('Your login details were incorrect.');
 				}
-				$this->plugin->Auth->unauthenticate();
+//				$this->plugin->Auth->unauthenticate();
 				$this->view->setTemplate('login');
 			}
 		}

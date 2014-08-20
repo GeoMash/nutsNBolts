@@ -36,6 +36,11 @@
 						</div>
 
 						<div class="box-content padded">
+							<?php if ($tpl->getNotificationCount()): ?>
+							<div class="container-fluid padded">
+								<?php $tpl->getNotifications(); ?>
+							</div>
+							<?php endif; ?>
 							<form class="separate-sections" method="post">
 								<div class="input-prepend">
 								<span class="add-on" href="#">

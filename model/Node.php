@@ -310,6 +310,7 @@ SQL_PART;
 						FROM node_read
 						WHERE node_id=node.id
 						AND user_id={$userId}
+						LIMIT 1
 					) AS `read`
 			FROM node
 			LEFT JOIN node_part ON node.id=node_part.node_id
@@ -961,18 +962,14 @@ SQL;
 				$user=$this->model->User->read(['id'=>$userId]);
 				if (isset($user[0]))
 				{
-					
-					$query=
-					[
-						'node_id'			=>$nodeId,
-						'user_id'			=>$userId,
-						'content_type_id'	=>$node[0]['content_type_id']
-					];
-					$result=$this->model->NodeRead->read($query);
-					if (!isset($result[0]))
-					{
-						$this->model->NodeRead->insertAssoc($query);
-					}
+					$this->model->NodeRead->insertAssoc
+					(
+						[
+							'node_id'			=>$nodeId,
+							'user_id'			=>$userId,
+							'content_type_id'	=>$node[0]['content_type_id']
+						]
+					);
 					return true;
 				}
 				else
