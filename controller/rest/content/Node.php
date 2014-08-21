@@ -212,6 +212,7 @@ namespace application\nutsNBolts\controller\rest\content
 							$search->joinWithContentType($contentType,$column);
 						}
 					}
+					$search->clearCache();
 					$this->respond
 					(
 						true,
