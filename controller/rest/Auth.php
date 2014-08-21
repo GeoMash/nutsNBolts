@@ -53,11 +53,11 @@ namespace application\nutsNBolts\controller\rest
 			}
 			else
 			{
-				$this->setResponseCode(200);
+				$this->setResponseCode(401);
 				$this->respond
 				(
 					false,
-					'OK',
+					'Authentication failed.',
 					null
 				);
 			}
@@ -76,40 +76,41 @@ namespace application\nutsNBolts\controller\rest
 		
 		public function validateSession()
 		{
-			$this->setResponseCode(200);
-			$this->respond
-			(
-				$this->plugin->Auth->isAuthenticated(),
-				'OK'
-			);
+			$authenticated=$this->plugin->Auth->isAuthenticated();
+			if ($authenticated)
+			{
+				$this->setResponseCode(200);
+				$this->respond(true,'OK');
+			}
+			else
+			{
+				$this->setResponseCode(401);
+				$this->respond(false,'Session No Longer Valid');
+			}
 		}
 		
 		public function getUser()
 		{
-			$userId=$this->plugin->Auth->getUserId();
-			$user=$this->model->User->read($userId);
-			if(isset($user[0]))
+			if ($this->plugin->Auth->isAuthenticated())
 			{
-				unset($user[0]['password']);
-				unset($user[0]['salt']);
-				$this->setResponseCode(200);
-				$this->respond
-				(
-					true,
-					'OK',
-					$user[0]
-				);
+				$userId=$this->plugin->Auth->getUserId();
+				$user=$this->model->User->read($userId);
+				if(isset($user[0]))
+				{
+					unset($user[0]['password']);
+					unset($user[0]['salt']);
+					$this->setResponseCode(200);
+					$this->respond
+					(
+						true,
+						'OK',
+						$user[0]
+					);
+					exit();
+				}
 			}
-			else
-			{
-				$this->setResponseCode(200);
-				$this->respond
-				(
-					false,
-					'OK',
-					null
-				);
-			}
+			$this->setResponseCode(401);
+			$this->respond(false,'Not Authenticated');
 		}
 	}
 }
