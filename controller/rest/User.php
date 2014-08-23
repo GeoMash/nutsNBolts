@@ -4,7 +4,6 @@ namespace application\nutsNBolts\controller\rest
 	use application\nutsNBolts\plugin\auth\Auth;
 	use application\nutsNBolts\plugin\auth\exception\AuthException;
 	use application\plugin\rest\RestController;
-	use nutshell\Nutshell;
 	use nutshell\plugin\session; 
 
 	class User extends RestController
@@ -25,32 +24,49 @@ namespace application\nutsNBolts\controller\rest
 		 */
 		public function getAll()
 		{
-			$users=$this->model->User->read($this->request->getAll());
-			$this->filterUserData($users);
-			$this->setResponseCode(200);
-			$this->respond(true,'OK',$users);
+			try
+			{
+				$this->plugin->Auth->can('admin.user.read');
+				$users=$this->model->User->read($this->request->getAll());
+				$this->filterUserData($users);
+				$this->setResponseCode(200);
+				$this->respond(true,'OK',$users);
+			}
+			catch (AuthException $exception)
+			{
+				$this->setResponseCode(401);
+				$this->respond(false,'Permission Denied');
+			}
 		}
 		
 		public function search()
 		{
-			$search=$this->request->get('query');
-			if (is_numeric($search))
+			try
 			{
-				$query='SELECT * FROM user WHERE id=?;';
+				$search=$this->request->get('query');
+				if (is_numeric($search))
+				{
+					$query='SELECT * FROM user WHERE id=?;';
+				}
+				else
+				{
+					$query	='SELECT * FROM user WHERE email LIKE ?;';
+					$search	='%'.$search.'%';
+				}
+				$users=[];
+				if ($result=$this->plugin->Db->nutsnbolts->select($query,[$search]))
+				{
+					$users=$this->plugin->Db->nutsnbolts->result('assoc');
+					$this->filterUserData($users);
+				}
+				$this->setResponseCode(200);
+				$this->respond(true,'OK',$users);
 			}
-			else
+			catch (AuthException $exception)
 			{
-				$query	='SELECT * FROM user WHERE email LIKE ?;';
-				$search	='%'.$search.'%';
+				$this->setResponseCode(401);
+				$this->respond(false,'Permission Denied');
 			}
-			$users=[];
-			if ($result=$this->plugin->Db->nutsnbolts->select($query,[$search]))
-			{
-				$users=$this->plugin->Db->nutsnbolts->result('assoc');
-				$this->filterUserData($users);
-			}
-			$this->setResponseCode(200);
-			$this->respond(true,'OK',$users);
 		}
 		
 		private function filterUserData(Array &$users)
@@ -118,7 +134,6 @@ namespace application\nutsNBolts\controller\rest
 					//Is the user allowed to update profiles?
 					$this->plugin->Auth->can('user.profile.update');
 					
-					
 					//Is the user updating their own profile?
 					if ($this->request->get('id')!=$userId)
 					{
@@ -150,7 +165,7 @@ namespace application\nutsNBolts\controller\rest
 				$this->respond
 				(
 					false,
-					'Permission denied'
+					'Permission Denied'
 				);
 			}
 		}
@@ -212,7 +227,7 @@ namespace application\nutsNBolts\controller\rest
 				$this->respond
 				(
 					false,
-					'Permission denied'
+					'Permission Denied'
 				);
 			}
 			
