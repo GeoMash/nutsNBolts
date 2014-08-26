@@ -376,16 +376,24 @@ SQL;
 						$nodes[$records[$i]['id']]=ArrayHelper::withoutKey
 						(
 							$records[$i],
-							array
-							(
+							[
 								'site_id',
 								'ref',
 								'value'
-							)
+							]
 						);
-						$nodes[$records[$i]['id']]['date_created']	=new DateTime($nodes[$records[$i]['id']]['date_created']);
-						$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
-						$nodes[$records[$i]['id']]['date_updated']	=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+						if (!is_null($nodes[$records[$i]['id']]['date_created']))
+						{
+							$nodes[$records[$i]['id']]['date_created']=new DateTime($nodes[$records[$i]['id']]['date_created']);
+						}
+						if (!is_null($nodes[$records[$i]['id']]['date_published']))
+						{
+							$nodes[$records[$i]['id']]['date_published']=new DateTime($nodes[$records[$i]['id']]['date_published']);
+						}
+						if (!is_null($nodes[$records[$i]['id']]['date_updated']))
+						{
+							$nodes[$records[$i]['id']]['date_updated']=new DateTime($nodes[$records[$i]['id']]['date_updated']);
+						}
 					}
 					$nodes[$records[$i]['id']][$records[$i]['ref']]=$records[$i]['value'];
 				}
