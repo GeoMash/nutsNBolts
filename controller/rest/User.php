@@ -113,7 +113,7 @@ namespace application\nutsNBolts\controller\rest
 					'Expecting user id to be an integer.'
 				);
 			}
-		}	
+		}
 		
 		public function upsert()
 		{
@@ -139,7 +139,7 @@ namespace application\nutsNBolts\controller\rest
 					{
 						$this->plugin->Auth->can('admin.user.update');
 					}
-					$this->model->User->update
+					$this->plugin->User->update
 					(
 						$this->request->getAll(),
 						['id'=>$userId]
@@ -151,7 +151,7 @@ namespace application\nutsNBolts\controller\rest
 				{
 					//Is the user allowed to create users?
 					$this->plugin->Auth->can('admin.user.create');
-					$user=$this->model->User->create
+					$user=$this->plugin->User->create
 					(
 						$this->request->getAll()
 					);
