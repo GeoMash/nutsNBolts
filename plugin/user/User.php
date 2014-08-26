@@ -54,6 +54,7 @@ namespace application\nutsNBolts\plugin\user
 			{
 				$this->sendEmail($record,'ACCOUNT_PASSWORD_RESET');
 			}
+			return $result;
 		}
 		
 		private function sendEmail($user,$templateRef)
