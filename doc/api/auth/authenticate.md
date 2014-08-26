@@ -30,7 +30,7 @@ None
 
 **Success Response:**
 	
-* **Code:** 200 <br>
+* **Code:** 200
 * **Content:** 
 ```
 	{
@@ -42,7 +42,7 @@ None
 
 **Error Response:**
 
-* **Code:** 401 UNAUTHORIZED <br>
+* **Code:** 401 UNAUTHORIZED
 * **Content:**
 ```
 	{

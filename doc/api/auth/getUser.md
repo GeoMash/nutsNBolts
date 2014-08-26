@@ -25,7 +25,7 @@ None
 
 **Success Response:**
 	
-* **Code:** 200 <br>
+* **Code:** 200
 *  **Content:** 
 ```
 	{
@@ -37,7 +37,7 @@ None
 
 **Error Response:**
 
-* **Code:** 401 <br>
+* **Code:** 401
 * **Content:** 
 ```
 	{
