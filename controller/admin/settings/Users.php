@@ -134,11 +134,11 @@ namespace application\nutsNBolts\controller\admin\settings
 			if ($record=$this->model->User->read($id))
 			{
 					$this->view->setVars($record[0]);
-				}
-				else
-				{
-					$this->view->setVar('record',array());
-				}
+			}
+			else
+			{
+				$this->view->setVar('record',array());
+			}
 			$renderRef='users/edit';
 			$this->setupAddEdit($renderRef);
 		}
