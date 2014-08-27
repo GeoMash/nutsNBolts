@@ -24,7 +24,8 @@ namespace application\nutsNBolts\plugin\user
 			$this->validate($record);
 			if (isset($record['set_random']))
 			{
-				$record['password']=$this->generateRandomPassword();
+				$record['password']	=$this->generateRandomPassword();
+				$record['status']	=self::STATUS_CONFIRMED;
 			}
 			if ($this->model->User->count(['email'=>$record['email']]))
 			{
@@ -39,6 +40,7 @@ namespace application\nutsNBolts\plugin\user
 			{
 				$this->sendEmail($record,'NEW_ACCOUNT_PASSWORD');
 			}
+			//TODO: Alternate account activation email for if set_random is not set.
 			return $result;
 		}
 		
@@ -57,7 +59,7 @@ namespace application\nutsNBolts\plugin\user
 			return $result;
 		}
 		
-		private function sendEmail($user,$templateRef)
+		public function sendEmail($user,$templateRef)
 		{
 			//Get the email content type.
 			$contentType	=$this->model->ContentType->read(['ref'=>'SYSTEM_EMAILS']);
