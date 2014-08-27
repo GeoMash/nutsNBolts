@@ -163,7 +163,7 @@ class AuthorizeNetARB_Response extends AuthorizeNetXMLResponse
      */
     public function getSubscriptionStatus()
     {
-        return $this->_getElementContents("Status");
+        return $this->_getElementContents("status");
     }
 
 }

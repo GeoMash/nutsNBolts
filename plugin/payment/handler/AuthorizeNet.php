@@ -56,22 +56,23 @@ namespace application\nutsNBolts\plugin\payment\handler
 				$transaction->card_code = $cardCode;
 			}
 
+			$response = null;
 			switch ($transactionType)
 			{
-				case $this::TRANS_TYPE_AUTH:
+				case self::TRANS_TYPE_AUTH:
 					$response = $transaction->authorizeOnly($amount, $cardNo, $expDate);
 					break;
-				case $this::TRANS_TYPE_CAPTURE:
+				case self::TRANS_TYPE_CAPTURE:
 					$response = $transaction->captureOnly($authCode, $amount, $cardNo, $expDate);
 					break;
-				case $this::TRANS_TYPE_AUTHCAPTURE:
+				case self::TRANS_TYPE_AUTHCAPTURE:
 					$response = $transaction->authorizeAndCapture($amount, $cardNo, $expDate);
 					break;
 			}
 
 			if (!$response->approved)
 			{
-				throw new ApplicationException(0, $response->response_reason_text);
+				throw new PluginException(0, $response->response_reason_text);
 			}
 
 			return $response;
@@ -90,7 +91,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 
 			if (!$transactionResponse->approved)
 			{
-				throw new ApplicationException(0, $transactionResponse->response_reason_text);
+				throw new PluginException(0, $transactionResponse->response_reason_text);
 			}
 			else
 			{
@@ -107,43 +108,34 @@ namespace application\nutsNBolts\plugin\payment\handler
 		 * @param $cardNo , Credit Card No.
 		 * @param $cardCode , Credit Card Security No.
 		 * @param $expDate , Credit Card Expiry Date formatted as : 'mmyy', e.g. '0919' is September 2019
-		 * @param $transactionResponse , After call returns, this have the first payment transaction respose
-		 * @param int $duration , The interval of the recurring
+		 * @param $arbProfileSettings , an array that contains 'totalOccurrences', 'billingInterval', and 'startDate'
 		 * @return authorizeNet\AuthorizeNetARB_Response
 		 * @throws \Exception
 		 * @throws \nutshell\core\exception\ApplicationException
 		 */
-		public function createRecurringSubscription($userFirstName, $userLastName, $amount, $cardNo, $cardCode, $expDate, &$transactionResponse, $duration = 1, $startDate = null)
+		public function createRecurringSubscription(
+			$userFirstName, $userLastName,
+			$amount, $cardNo, $cardCode, $expDate,
+			$billingInterval, $totalOccurrences = null, $startDate = null)
 		{
-//			$firstTransactionCounter = 0;
-//			$firstTransactionSuccess = true;
-//			do{
-//				try{
-			$authenticationResponse = $this->chargeCard($cardNo, $cardCode, $expDate, $amount, $this::TRANS_TYPE_AUTH);
-//					$firstTransactionSuccess = true;
-//				}
-//				catch(\Exception $ex)
-//				{
-//					$firstTransactionSuccess = false;
-//				}
-//			}while(!$firstTransactionResponse->approved && $firstTransactionCounter++ < 5);
-//			
-//			if(!$firstTransactionSuccess)
+			if ($billingInterval == null)
+			{
+				//Deferred single payment
+			}
 
-			$authCode = $authenticationResponse->authorization_code;
-			$authenticationTransactionId = $authenticationResponse->transaction_id;
-
-			$myStartDate = $startDate? : new \DateTime('now');
-			$myStartDate->add(new \DateInterval("P" . $duration . "M"));
+			//Defaulting
+			$startDate = !is_null($startDate) ? $startDate : new \DateTime();
+			$totalOccurrences = !is_null($totalOccurrences) ? $totalOccurrences : '9999'; // 9999 means Unlimited
+			$billingInterval = !is_null($billingInterval) ? $billingInterval : 1;
 
 			// Set the subscription fields.
 			$subscription = new AuthorizeNet_Subscription;
 			$subscription->name = "EFTI_RECURRING";
-			$subscription->intervalLength = $duration;
+			$subscription->intervalLength = $billingInterval;
 			$subscription->intervalUnit = "months";
-			$subscription->startDate = $myStartDate->format('Y-m-d');
+			$subscription->startDate = $startDate->format('Y-m-d');
 			$subscription->amount = $amount;
-			$subscription->totalOccurrences = "9999"; //On-Going
+			$subscription->totalOccurrences = $totalOccurrences;
 			$subscription->creditCardCardNumber = $cardNo;
 			$subscription->creditCardExpirationDate = $expDate;
 			$subscription->creditCardCardCode = $cardCode;
@@ -155,15 +147,7 @@ namespace application\nutsNBolts\plugin\payment\handler
 
 			if ($subscription_Response->isError())
 			{
-				try
-				{
-					$this->voidTransaction($authenticationTransactionId);
-				}
-				catch (\Exception $exp)
-				{
-				}
-
-				throw new ApplicationException(1, $subscription_Response->getErrorMessage());
+				throw new PluginException(2, $subscription_Response->getErrorMessage());
 			}
 
 			$subscription_id = $subscription_Response->getSubscriptionId();
@@ -174,31 +158,12 @@ namespace application\nutsNBolts\plugin\payment\handler
 			{
 				try
 				{
-					$this->voidTransaction($authenticationTransactionId);
+					$this->deleteRecurringSubscription($subscription_id);
 				}
 				catch (\Exception $exp)
 				{
 				}
-
-				throw new ApplicationException(2, $subscription_status_response->getMessageText());
-			}
-
-			try
-			{
-				$captureResponse = $this->chargeCard($cardNo, $cardCode, $expDate, $amount, $this::TRANS_TYPE_CAPTURE, $authCode);
-				$transactionResponse = $captureResponse;
-			}
-			catch (\Exception $ex)
-			{
-				$this->deleteRecurringSubscription($subscription_id);
-				try
-				{
-					$this->voidTransaction($authenticationTransactionId);
-				}
-				catch (\Exception $exp)
-				{
-				}
-				throw $ex;
+				throw new PluginException(3, $subscription_status_response->getMessageText());
 			}
 
 			return $subscription_Response;
@@ -210,22 +175,22 @@ namespace application\nutsNBolts\plugin\payment\handler
 		 * @return bool, always true
 		 * @throws \nutshell\core\exception\ApplicationException
 		 */
-		public function deleteRecurringSubscription($subscriptionId)
+		public function deleteRecurringSubscription($arbId)
 		{
 			$cancellation = new AuthorizeNetARB($this->login_id, $this->transaction_key);
-			$cancel_response = $cancellation->cancelSubscription($subscriptionId);
+			$cancel_response = $cancellation->cancelSubscription($arbId);
 
 			if ($cancel_response->isError())
 			{
-				throw new ApplicationException(0, $cancel_response->getErrorMessage());
+				throw new PluginException(0, $cancel_response->getErrorMessage());
 			}
 
 			$status_request = new AuthorizeNetARB($this->login_id, $this->transaction_key);
-			$status_response = $status_request->getSubscriptionStatus($subscriptionId);
+			$status_response = $status_request->getSubscriptionStatus($arbId);
 
 			if ($status_response->getSubscriptionStatus() != "canceled")
 			{
-				throw new ApplicationException(1, $status_response->getMessageText());
+				throw new PluginException(1, $status_response->getMessageText());
 			}
 
 			return true;

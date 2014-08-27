@@ -20,8 +20,9 @@
 									<th><div>Name</div></th>
 									<th><div>Duration</div></th>
 									<th><div>Amount</div></th>
-									<th><div>Trial Occurrences</div></th>
-									<th><div>Total Occurrences</div></th>
+									<th><div>Total Bills</div></th>
+									<th><div>Billing Interval</div></th>
+									<th><div>Trial Period</div></th>
 									<th><div>Status</div></th>
 									<th><div>Actions</div></th>
 								</tr>
@@ -34,10 +35,11 @@
 								?>
 								<tr>
 									<td><a href="/admin/subscriptions/packages/edit/<?php print $subscriptions[$i]['id']; ?>"><?php print $subscriptions[$i]['name']; ?></a></td>
-									<td><?php print $subscriptions[$i]['duration']; ?> Months</td>
+									<td><?php print $subscriptions[$i]['duration']? $subscriptions[$i]['duration'] . ' Months' : 'N/A'; ?></td>
 									<td><?php print $subscriptions[$i]['amount'].' '.$subscriptions[$i]['currency']; ?></td>
-									<td><?php print $subscriptions[$i]['trial_occurrences']? : "N/A"; ?></td>
-									<td><?php print $subscriptions[$i]['total_occurrences']? : "N/A"; ?></td>
+									<td><?php print $subscriptions[$i]['total_bills']? : "N/A"; ?></td>
+									<td><?php print $subscriptions[$i]['billing_interval']? $subscriptions[$i]['billing_interval'] . ' Months': "N/A"; ?></td>
+									<td><?php print $subscriptions[$i]['trial_period']? $subscriptions[$i]['trial_period'] . ' Days': "N/A"; ?></td>
 									<td><?php print (bool)$subscriptions[$i]['status']?'Enabled':'Disabled'; ?></td>
 									<td class="center">
 										<?php if ($canDelete): ?>

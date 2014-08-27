@@ -22,12 +22,12 @@ namespace application\nutsNBolts\model\base
 			'name' => 'varchar(100) NOT NULL ',
 			'description' => 'text NOT NULL ',
 			'duration' => 'tinyint(3) NOT NULL ',
-			'recurring' => 'tinyint(1) NOT NULL ',
 			'amount' => 'int(10) NOT NULL ',
 			'currency' => 'varchar(3) NOT NULL ',
-			'trial_occurrences' => 'int(10) NULL',
-			'total_occurrences' => 'int(10) NULL',
-			'status' => 'tinyint(1) NOT NULL '
+			'total_bills' => 'int(10) DEFAULT NULL',
+			'billing_interval' => 'int(10) DEFAULT NULL',
+			'trial_period' => 'int(10) DEFAULT \'0\'',
+			'status' => 'tinyint(1) NOT NULL  DEFAULT \'0\''
 		);
 	}
 }
