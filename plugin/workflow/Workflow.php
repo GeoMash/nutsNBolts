@@ -52,7 +52,7 @@ namespace application\nutsNBolts\plugin\workflow
 			if ($this->plugin->UserAuth->isSuper())
 			{
 				$query	=<<<SQL
-				SELECT workflow_step_transition.*,workflow_transition.name,workflow_transition.description
+				SELECT DISTINCT(workflow_step_transition.id),workflow_step_transition.*,workflow_transition.name,workflow_transition.description
 				FROM workflow_transition
 				LEFT JOIN workflow_step_transition ON workflow_step_transition.transition_id=workflow_transition.id
 				LEFT JOIN workflow_transition_role ON workflow_transition_role.transition_id=workflow_step_transition.transition_id
@@ -62,7 +62,7 @@ SQL;
 			else
 			{
 				$query	=<<<SQL
-				SELECT workflow_step_transition.*,workflow_transition.name,workflow_transition.description
+				SELECT DISTINCT(workflow_step_transition.id),workflow_step_transition.*,workflow_transition.name,workflow_transition.description
 				FROM workflow_transition
 				LEFT JOIN workflow_step_transition ON workflow_step_transition.transition_id=workflow_transition.id
 				LEFT JOIN workflow_transition_role ON workflow_transition_role.transition_id=workflow_step_transition.transition_id
