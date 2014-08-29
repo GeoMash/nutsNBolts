@@ -45,7 +45,9 @@ namespace application\nutsNBolts\model\base
 			'address2' => 'varchar(255)',
 			'country' => 'varchar(100)',
 			'zip' => 'int(6)',
-			'video' => 'varchar(100)'
+			'video' => 'varchar(100)',
+			'ic' => 'bigint(20)',
+			'ces_account' => 'varchar(100)'
 		);
 	}
 }
