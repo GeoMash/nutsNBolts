@@ -591,11 +591,20 @@ CREATE TABLE `workflow_step_action` (
 DROP TABLE IF EXISTS `workflow_step_transition`;
 
 CREATE TABLE `workflow_step_transition` (
+  `id` INT(10) NOT NULL AUTO_INCREMENT,
+  `transition_id` INT(10) NOT NULL,
+  `from_step_id` INT(10) NOT NULL,
+  `to_step_id` INT(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `workflow_transition` */
+
+CREATE TABLE `workflow_transition` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `step_transition_id` int(10) NOT NULL,
-  `action_id` int(10) NOT NULL,
-  `params` text NOT NULL,
-  `order` int(5) NOT NULL DEFAULT '0',
+  `name` varchar(200) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -609,3 +618,14 @@ CREATE TABLE `workflow_transition_role` (
   `role_id` int(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `workflow_step_transition_action` */
+
+CREATE TABLE `workflow_step_transition_action` (
+  `id` INT(10) NOT NULL AUTO_INCREMENT,
+  `step_transition_id` INT(10) NOT NULL,
+  `action_id` INT(10) NOT NULL,
+  `params` TEXT NOT NULL,
+  `order` INT(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
