@@ -214,7 +214,6 @@ namespace application\nutsNBolts\controller\admin
 							unset($record['owner_user_id']);
 						}
 					}
-					
 					if (!$this->contentType['workflow_id'])
 					{
 						if ($this->model->Node->handleRecord($record)!==false)
@@ -230,7 +229,6 @@ namespace application\nutsNBolts\controller\admin
 					{
 						$this->plugin->Workflow->doTransition($this->request->get('id'),$this->request->get('transition_id'));
 					}
-	
 				}
 	
 				$contentType	=$this->model->ContentType		->readWithParts($this->typeID);
