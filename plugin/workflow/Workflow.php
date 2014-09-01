@@ -1,6 +1,7 @@
 <?php
 namespace application\nutsNBolts\plugin\workflow
 {
+	use application\nutsNBolts\plugin\workflow\exception\WorkflowException;
 	use nutshell\Nutshell;
 	use nutshell\behaviour\Singleton;
 	use nutshell\core\plugin\Plugin;
@@ -79,28 +80,21 @@ SQL;
 
 		public function doTransition($nodeId,$transitionId)
 		{
-			//Get the node.
-//			$node=$this->model->Node->read(array('id'=>$nodeId));
-			if (isset($node[0]))
-			{
-				$node=$node[0];
-			}
-			else
-			{
-				//TODO: Throw exception here.
-			}
 			//Get the transition
-			$transition=$this->model->WorkflowStepTransition->read($transitionId);
+			$transition=$this->model->WorkflowStepTransition->read(['transition_id'=>$transitionId]);
 			if (isset($transition[0]))
 			{
 				$transition=$transition[0];
+				//Perform the actions for the current step.
+				$this->performActionsForTransition($transitionId,$nodeId);
+	
+				//Update step.
+				$this->model->Node->update(['workflow_step_id'=>$transition['to_step_id']],$nodeId);
+			}		
+			else
+			{
+				throw new WorkflowException(WorkflowException::INVALID_TRANSITION,'Could not find the transition.');
 			}
-
-			//Perform the actions for the current step.
-			$this->performActionsForTransition($transitionId,$nodeId);
-
-			//Update step.
-			$this->model->Node->update(array('workflow_step_id'=>$transition['to_step_id']),array('id'=>$nodeId));
 		}
 
 		public function performActionsForTransition($transitionId,$nodeId)
