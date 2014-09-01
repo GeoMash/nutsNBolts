@@ -58,10 +58,9 @@ namespace application\nutsNBolts\model
 				{
 					$this->model->PermissionNode->insertAssoc($userAccess[$i]);
 				}
-
 				if ($return!==false)
 				{
-					return $this->getWithParts($record['id'])[0];
+					return $this->getWithParts($record['id'],null,null,null)[0];
 				}
 			}
 			//For Inserts
